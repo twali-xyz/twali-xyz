@@ -4,8 +4,7 @@ import styles from './layout.module.css'
 import utilStyles from '../styles/utils.module.css'
 import Link from 'next/link'
 
-const name = '[Your Name]'
-export const siteTitle = 'Next.js Sample Website'
+export const siteTitle = 'Twali';
 
 export default function Layout({
   children,
@@ -18,31 +17,27 @@ export default function Layout({
     <div className={styles.container}>
       <Head>
         <link rel="icon" href="/favicon.ico" />
-        <meta
-          name="description"
-          content="Learn how to build a personal website using Next.js"
-        />
-        <meta
-          property="og:image"
-          content={`https://og-image.vercel.app/${encodeURI(
-            siteTitle
-          )}.png?theme=light&md=0&fontSize=75px&images=https%3A%2F%2Fassets.zeit.co%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fnextjs-black-logo.svg`}
-        />
         <meta name="og:title" content={siteTitle} />
-        <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <header className={styles.header}>
         {home ? (
           <>
-            <Image
-              priority
-              src="/images/profile.jpg"
-              className={utilStyles.borderCircle}
-              height={144}
-              width={144}
-              alt={name}
-            />
-            <h1 className={utilStyles.heading2Xl}>{name}</h1>
+            <h1>{siteTitle}</h1>
+            <p>
+
+I, Twali, am the sum of many parts. A decentralized professional services platform interacting, operating, and servicing on-chain. 
+
+A collective composed of individuals, experts, builders, educators, & advisors, intent on destroying the hegemony of so-called "consultancies" by developing a peer-reviewed, validated body of knowledge and an expertise-as-a-service platform. 
+
+It may be easy for you to think of me as an on-chain consultancy, a professional services DAO, and that's a good place to start. Start there. Here. Come with me.
+            </p>
+            <p>
+            In Twali, there are two types of people: Builders and Experts. 
+
+Experts provide their knowledge and expertise to Builders, who book it, who come to experts for help on projects. 
+
+Which are you
+            </p>
           </>
         ) : (
           <>
