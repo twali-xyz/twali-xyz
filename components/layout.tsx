@@ -49,13 +49,13 @@ Which are you
                   className={utilStyles.borderCircle}
                   height={108}
                   width={108}
-                  alt={name}
+                  alt={siteTitle}
                 />
               </a>
             </Link>
             <h2 className={utilStyles.headingLg}>
               <Link href="/">
-                <a className={utilStyles.colorInherit}>{name}</a>
+                <a className={utilStyles.colorInherit}>{siteTitle}</a>
               </Link>
             </h2>
           </>

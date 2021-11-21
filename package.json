@@ -6,7 +6,18 @@
     "start": "next start"
   },
   "dependencies": {
+    "@3id/connect": "^0.2.5",
+    "@ceramicnetwork/3id-did-resolver": "^1.4.9",
+    "@ceramicnetwork/http-client": "^1.5.0",
+    "@ceramicstudio/idx": "^0.12.2",
+    "@chakra-ui/icons": "^1.1.1",
+    "@chakra-ui/react": "^1.7.2",
+    "@emotion/react": "^11.6.0",
+    "@emotion/styled": "^11.6.0",
     "date-fns": "^2.11.1",
+    "dids": "^2.4.2",
+    "ethers": "^5.5.1",
+    "framer-motion": "^4.1.17",
     "gray-matter": "^4.0.2",
     "next": "latest",
     "react": "17.0.2",
