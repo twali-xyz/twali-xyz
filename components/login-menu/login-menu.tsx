@@ -7,6 +7,7 @@ import {
     Input,
     Text,
    } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 
 import { ChevronDownIcon } from '@chakra-ui/icons';
 
@@ -25,10 +26,10 @@ const endpoint = "https://ceramic-clay.3boxlabs.com";
 
 const LoginMenu = () => {
     const [name, setName] = useState('');
-    // const [image, setImage] = useState('');
     const [email, setEmail] = useState('');
     const [accType, setAccType] = useState('');
     const [loaded, setLoaded] = useState(false);
+    const router = useRouter();
 
     // Get user's eth address
     async function connect() {
@@ -52,6 +53,16 @@ const LoginMenu = () => {
           console.log('data: ', data);
           if (data.name) setName(data.name)
           if (data.email) setEmail(data.email)
+          if (data.accType) setAccType(data.accType)
+          console.log(accType);
+          console.log(data.accType);
+
+          if(name && email && accType) {
+            router.push('/profile');
+          } else {
+            console.log('No profile, pls create one...');
+          }
+          
         } catch(err) {
           console.log("error: ", err);
           setLoaded(true);
@@ -81,10 +92,15 @@ const LoginMenu = () => {
         await idx.set('basicProfile', {
           name,
           email,
+          accType,
         })
     
         console.log("Profile updated!");
-    
+        if(name && email && accType) {
+            router.push('/profile');
+        } else {
+            console.log('No profile, pls create one...');
+          }
       }
 
        return (
@@ -108,11 +124,6 @@ const LoginMenu = () => {
             <Button onClick={readProfile} colorScheme="teal" variant="outline">
                 Connect Wallet
             </Button>
-
-            { name && <h3>{name}</h3>}
-      { email && <h3>{email}</h3>} src={email}
-      { accType && <h3>{accType}</h3>} src={accType}
-      { !email && !name && !accType && loaded && <h4>No profile, pls create one...</h4>}
         </>
        )
    }

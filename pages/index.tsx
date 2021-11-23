@@ -1,21 +1,16 @@
 import { 
   Container, 
   Flex, 
-  VStack, 
-  HStack,
-  Heading
+  VStack
  } from '@chakra-ui/react';
 
 import LoginMenu from '../components/login-menu/login-menu';
+import HeaderNav from '../components/header-nav/header-nav';
 
 const IndexPage = () => {
   return (
     <Container maxW="container.xl" p={0}>
-        <Flex h={10} py={10}>
-        <HStack w="full" p={10} spacing={10} alignItems="flex-start">
-        <Heading>Twali 👁‍🗨</Heading>
-        </HStack>
-        </Flex>
+      <HeaderNav isHome={true}/>
       <Flex h="full" py={20}>
         <VStack w="full" h="full" p={10} spacing={10} alignItems="flex-start">
 
