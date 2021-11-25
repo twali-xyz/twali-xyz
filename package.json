@@ -12,6 +12,7 @@
     "@ceramicstudio/idx": "^0.12.2",
     "@chakra-ui/icons": "^1.1.1",
     "@chakra-ui/react": "^1.7.2",
+    "@chakra-ui/transition": "^1.4.1",
     "@emotion/react": "^11.6.0",
     "@emotion/styled": "^11.6.0",
     "chakra-ui-steps": "^1.5.0",

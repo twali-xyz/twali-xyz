@@ -4,15 +4,15 @@ import {
     VStack
    } from '@chakra-ui/react';
 
-import SignUpMenu from '../components/sign-up-menu/sign-up-menu';
-import HeaderNav from '../components/header-nav/header-nav';
+import SignUpMenu from '../components/SignUpMenu/SignUpMenu';
+import HeaderNav from '../components/HeaderNav/HeaderNav';
 
 const SignUp = () => {
     return (
-        <Container maxW="container.xl" p={12}>
-            <HeaderNav isHome={true}/>
+        <Container maxW="container.xl">
+            <HeaderNav whichPage="sign-up"/>
             <Flex h="full">
-            <VStack w="full" h="full" p={10} spacing={10} alignItems="flex-start">
+            <VStack w="full" h="full" spacing={10} alignItems="flex-start">
             <SignUpMenu/>
             </VStack>
             </Flex>

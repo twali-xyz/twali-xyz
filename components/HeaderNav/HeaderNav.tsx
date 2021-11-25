@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Flex, Box, Heading, HStack, Button, CircularProgress } from '@chakra-ui/react';
+import { Flex, Box, Heading, HStack, Button, CircularProgress, Text } from '@chakra-ui/react';
 import { useDisclosure } from "@chakra-ui/react"
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
@@ -28,7 +28,7 @@ const HamburgerItem = ({ children, isLast, to = '/' }) => {
 };
 
 const HeaderNav = (props) => {
-  const isHome = props.isHome;
+  const whichPage = props.whichPage;
   const [show, setShow] = useState(false);
   const toggleMenu = () => setShow(!show);
   const [isSubmitted, setIsSubmitted] = React.useState(false);
@@ -77,9 +77,9 @@ const HeaderNav = (props) => {
         }
       }
 
-  
-  return isHome ? (
-    <Flex
+  if (whichPage === "index") {
+      return (
+        <Flex
         h={10}
         mb={8}
         p={10}
@@ -107,41 +107,73 @@ const HeaderNav = (props) => {
         <WalletsModal isOpen={isOpen} onClose={onClose} selectMetamask={readProfile}/>
       </Box>
     </Flex>
-    ):(
-    <Flex
-      h={10}
-      mb={8}
-      p={10}
-      as="nav"
-      align="center"
-      justify="space-between"
-      wrap="wrap"
-      w="100%"
-    >
-        <HStack spacing={10} alignItems="flex-start">
-            <Heading w="300px">Twali 👁‍🗨</Heading>
-        </HStack>
-
-        <Box display={{ base: 'block', md: 'none'}} onClick={toggleMenu}>
-            {show ? <CloseIcon /> : <HamburgerIcon />}
-        </Box>
-
-      <Box
-        display={{ base: show ? 'block' : 'none', md: 'block' }}
-        flexBasis={{ base: '100%', md: 'auto' }}
-      >
+      )
+  } else if (whichPage === "sign-up" || whichPage === "steps") {
+    return (
         <Flex
-          align="center"
-          justify={['center', 'space-between', 'flex-end', 'flex-end']}
-          direction={['column', 'row', 'row', 'row']}
-          pt={[4, 4, 0, 0]}
+        h={10}
+        mb={8}
+        p={10}
+        as="nav"
+        align="left"
+        justify="space-between"
+        wrap="wrap"
+        w="100%"
         >
-          <HamburgerItem isLast={false} to="/directory">Directory</HamburgerItem>
-          <HamburgerItem isLast={false} to="/profile">Profile</HamburgerItem>
-        </Flex>
-      </Box>
+    <HStack alignItems="flex-start">
+        <Heading as="h4" size="md" w="300px">Twali 👁‍🗨</Heading>
+    </HStack>
+    <HStack alignItems="flex-end">
+        <Box
+            ml="2"
+            mt="1"
+            w="150px"
+            backgroundColor="teal"
+            borderRadius={16}
+            >
+        <Text pl={6} color="white" size="xs">0xP0...Z0p4</Text>
+        </Box>
+    </HStack>
     </Flex>
-  );
+    )
+  } else {
+      return (
+        <Flex
+        h={10}
+        mb={8}
+        p={10}
+        as="nav"
+        align="center"
+        justify="space-between"
+        wrap="wrap"
+        w="100%"
+      >
+          <HStack spacing={10} alignItems="flex-start">
+              <Heading w="300px">Twali 👁‍🗨</Heading>
+          </HStack>
+  
+          <Box display={{ base: 'block', md: 'none'}} onClick={toggleMenu}>
+              {show ? <CloseIcon /> : <HamburgerIcon />}
+          </Box>
+  
+        <Box
+          display={{ base: show ? 'block' : 'none', md: 'block' }}
+          flexBasis={{ base: '100%', md: 'auto' }}
+        >
+          <Flex
+            align="center"
+            justify={['center', 'space-between', 'flex-end', 'flex-end']}
+            direction={['column', 'row', 'row', 'row']}
+            pt={[4, 4, 0, 0]}
+          >
+            <HamburgerItem isLast={false} to="/directory">Directory</HamburgerItem>
+            <HamburgerItem isLast={false} to="/profile">Profile</HamburgerItem>
+          </Flex>
+        </Box>
+      </Flex>
+      )
+  }
+  
 };
 
 export default HeaderNav;

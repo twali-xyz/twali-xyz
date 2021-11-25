@@ -7,7 +7,7 @@ import {
 
 import { useState } from 'react';
 
-import HeaderNav from '../components/header-nav/header-nav';
+import HeaderNav from '../components/HeaderNav/HeaderNav';
 import CeramicClient from '@ceramicnetwork/http-client';
 import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver';
 
@@ -56,7 +56,7 @@ const Profile = () => {
 
     return (
         <Container maxW="container.xl" p={12}>
-            <HeaderNav isHome={false}/>
+            <HeaderNav whichPage="profile"/>
             <Flex h="full">
                 <VStack w="full" h="full" p={10} spacing={10} alignItems="flex-start">
                     <Button onClick={readProfile} colorScheme="teal" variant="outline">
