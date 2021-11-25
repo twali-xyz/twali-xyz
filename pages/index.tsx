@@ -4,14 +4,14 @@ import {
   VStack
  } from '@chakra-ui/react';
 
-import LoginMenu from '../components/login-menu/login-menu';
+import LoginMenu from '../components/sign-up-menu/sign-up-menu';
 import HeaderNav from '../components/header-nav/header-nav';
 
 const IndexPage = () => {
   return (
-    <Container maxW="container.xl" p={0}>
+    <Container maxW="container.xl" p={12}>
       <HeaderNav isHome={true}/>
-      <Flex h="full" py={20}>
+      <Flex h="full">
         <VStack w="full" h="full" p={10} spacing={10} alignItems="flex-start">
 
         <p>
@@ -34,11 +34,11 @@ Which are you
 Experts provide their knowledge and expertise to Builders, who book it, who come to experts for help on projects.</p>
         <p>Which are you?</p>
         </VStack>
-          <VStack w="50rem" h="full" p={10} spacing={10} alignItems="flex-start" bg="gray.50">
+          {/* <VStack w="50rem" h="full" p={10} spacing={10} alignItems="flex-start" bg="gray.50">
             <p>JOIN TWALI as an...</p>
             <p>Expert 🔑 or Builder 🛠</p>
             <LoginMenu/>
-          </VStack>
+          </VStack> */}
       </Flex>
     </Container>
   )

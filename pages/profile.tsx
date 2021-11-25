@@ -1,5 +1,8 @@
 import { 
-    Button
+    Button,
+    Container, 
+    Flex, 
+    VStack
    } from '@chakra-ui/react';
 
 import { useState } from 'react';
@@ -52,16 +55,20 @@ const Profile = () => {
       }
 
     return (
-        <>
+        <Container maxW="container.xl" p={12}>
             <HeaderNav isHome={false}/>
-            <Button onClick={readProfile} colorScheme="teal" variant="outline">
-                Connect Wallet
-            </Button>
-                { name && <h3>{name}</h3>}
-                { email && <h3>{email}</h3>}
-                { accType && <h3>{accType}</h3>}
-                { !email && !name && !accType && loaded && <h4>No profile, pls create one...</h4>}
-        </>
+            <Flex h="full">
+                <VStack w="full" h="full" p={10} spacing={10} alignItems="flex-start">
+                    <Button onClick={readProfile} colorScheme="teal" variant="outline">
+                        Connect Wallet
+                    </Button>
+                        { name && <h3>{name}</h3>}
+                        { email && <h3>{email}</h3>}
+                        { accType && <h3>{accType}</h3>}
+                        { !email && !name && !accType && loaded && <h4>No profile, pls create one...</h4>}
+                </VStack>
+            </Flex>
+        </Container>
     )
 }
 

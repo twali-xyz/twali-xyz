@@ -1,7 +1,21 @@
-import { useState } from 'react';
-import { Flex, Box, Heading, HStack, Button } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Flex, Box, Heading, HStack, Button, CircularProgress } from '@chakra-ui/react';
+import { useDisclosure } from "@chakra-ui/react"
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
+import WalletsModal from '../WalletsModal/WalletsModal';
+import { useRouter } from 'next/router';
+
+import CeramicClient from '@ceramicnetwork/http-client';
+import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver';
+
+import { EthereumAuthProvider, ThreeIdConnect } from '@3id/connect';
+import { DID } from 'dids';
+import { IDX } from '@ceramicstudio/idx';
+
+// network node that we're interacting with, can be local/prod
+// we're using a test network here
+const endpoint = "https://ceramic-clay.3boxlabs.com";
 
 const HamburgerItem = ({ children, isLast, to = '/' }) => {
   return (
@@ -17,6 +31,53 @@ const HeaderNav = (props) => {
   const isHome = props.isHome;
   const [show, setShow] = useState(false);
   const toggleMenu = () => setShow(!show);
+  const [isSubmitted, setIsSubmitted] = React.useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [accType, setAccType] = useState('');
+    const [loaded, setLoaded] = useState(false);
+    const router = useRouter();
+
+        // Get user's eth address
+    async function connect() {
+        const addresses = await window.ethereum.request({
+        method: 'eth_requestAccounts'
+        })
+        return addresses;
+    }
+
+    async function readProfile() {
+        const [address] = await connect(); // first address in the array
+        const ceramic = new CeramicClient(endpoint);
+        const idx = new IDX({ ceramic });
+        setIsSubmitted(true);
+        try {
+          // does not require signing to get user's public data
+          const data = await idx.get(
+            'basicProfile',
+            `${address}@eip155:1`
+          )
+          console.log('data: ', data);
+          
+          if (data.name && data.email && data.accType) {
+            setName(data.name);
+            setEmail(data.email);
+            setAccType(data.accType);
+            setIsSubmitted(false);
+            router.push('/profile');
+          } else {
+            console.log('No profile, pls create one...');
+          }
+          
+        } catch(err) {
+          console.log("error: ", err);
+          router.push('/sign-up');
+          setLoaded(true);
+        }
+      }
+
+  
   return isHome ? (
     <Flex
         h={10}
@@ -31,6 +92,20 @@ const HeaderNav = (props) => {
     <HStack spacing={10} alignItems="flex-start">
         <Heading w="300px">Twali 👁‍🗨</Heading>
     </HStack>
+        <Box
+        display={{ base: 'block', md: 'block' }}
+        flexBasis={{ base: '100%', md: 'auto' }}
+      >
+        <Button
+            mb={{ base: 8, sm: 0 }}
+            mr={{ base: 0, sm: 8 }}
+            display="block" 
+            onClick={onOpen}
+            colorScheme="teal">
+                Connect Wallet {isSubmitted ? <CircularProgress size="22px" thickness="4px" isIndeterminate color="#3C2E26" /> : null}
+        </Button>
+        <WalletsModal isOpen={isOpen} onClose={onClose} selectMetamask={readProfile}/>
+      </Box>
     </Flex>
     ):(
     <Flex

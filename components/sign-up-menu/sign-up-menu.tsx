@@ -6,12 +6,13 @@ import {
     MenuItem,
     Input,
     Text,
+    CircularProgress
    } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 
 import { ChevronDownIcon } from '@chakra-ui/icons';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import CeramicClient from '@ceramicnetwork/http-client';
 import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver';
@@ -24,11 +25,13 @@ import { IDX } from '@ceramicstudio/idx';
 // we're using a test network here
 const endpoint = "https://ceramic-clay.3boxlabs.com";
 
-const LoginMenu = () => {
+const SignUpMenu = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [accType, setAccType] = useState('');
     const [loaded, setLoaded] = useState(false);
+    const [isSubmitted, setIsSubmitted] = React.useState(false);
+
     const router = useRouter();
 
     // Get user's eth address
@@ -39,41 +42,13 @@ const LoginMenu = () => {
         return addresses;
     }
 
-    async function readProfile() {
-        const [address] = await connect(); // first address in the array
-        const ceramic = new CeramicClient(endpoint);
-        const idx = new IDX({ ceramic });
-    
-        try {
-          // does not require signing to get user's public data
-          const data = await idx.get(
-            'basicProfile',
-            `${address}@eip155:1`
-          )
-          console.log('data: ', data);
-          if (data.name) setName(data.name)
-          if (data.email) setEmail(data.email)
-          if (data.accType) setAccType(data.accType)
-          console.log(accType);
-          console.log(data.accType);
-
-          if(name && email && accType) {
-            router.push('/profile');
-          } else {
-            console.log('No profile, pls create one...');
-          }
-          
-        } catch(err) {
-          console.log("error: ", err);
-          setLoaded(true);
-        }
-      }
-
       async function updateProfile() {
         const [address] = await connect(); // first address in the array
         const ceramic = new CeramicClient(endpoint);
         const threeIdConnect = new ThreeIdConnect();
         const provider = new EthereumAuthProvider(window.ethereum, address);
+
+        setIsSubmitted(true);
     
         await threeIdConnect.connect(provider);
     
@@ -97,6 +72,7 @@ const LoginMenu = () => {
     
         console.log("Profile updated!");
         if(name && email && accType) {
+            setIsSubmitted(false);
             router.push('/profile');
         } else {
             console.log('No profile, pls create one...');
@@ -118,14 +94,10 @@ const LoginMenu = () => {
             <Input placeholder="Email" size="md" onChange={e => setEmail(e.target.value)}/>
             <Text fontSize="xs">By signing up, I agree to the Privacy Policy and the Terms of Services.</Text>
             <Button onClick={updateProfile} colorScheme="teal" variant="outline">
-                Sign Up
-            </Button>
-            <p>Already have an account?</p>
-            <Button onClick={readProfile} colorScheme="teal" variant="outline">
-                Connect Wallet
+                Sign Up {isSubmitted ? <CircularProgress size="22px" thickness="4px" isIndeterminate color="#3C2E26" /> : null}
             </Button>
         </>
        )
    }
 
-export default LoginMenu;
+export default SignUpMenu;
