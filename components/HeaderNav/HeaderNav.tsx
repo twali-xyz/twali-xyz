@@ -8,6 +8,12 @@ import { useRouter } from 'next/router';
 
 import CeramicClient from '@ceramicnetwork/http-client';
 import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver';
+import Web3 from 'web3';
+import { providers } from "ethers";
+import Web3Modal from "web3modal";
+
+import WalletConnectProvider from "@walletconnect/web3-provider";
+
 
 import { EthereumAuthProvider, ThreeIdConnect } from '@3id/connect';
 import { DID } from 'dids';
@@ -16,6 +22,7 @@ import { IDX } from '@ceramicstudio/idx';
 // network node that we're interacting with, can be local/prod
 // we're using a test network here
 const endpoint = "https://ceramic-clay.3boxlabs.com";
+
 
 const HamburgerItem = ({ children, isLast, to = '/' }) => {
   return (
@@ -39,16 +46,50 @@ const HeaderNav = (props) => {
     const [loaded, setLoaded] = useState(false);
     const router = useRouter();
 
-        // Get user's eth address
+  //  Create WalletConnect Provider
+  // const walletConnectProvider = new WalletConnectProvider({
+  //   rpc: {
+  //     1: "https://eth-rinkeby.alchemyapi.io/v2/QtLM8rW9nB6DobDu8KQx-7fYMS2rBlky",
+  //   },
+  // });
+
+    // Get user's eth address
     async function connect() {
-        const addresses = await window.ethereum.request({
-        method: 'eth_requestAccounts'
-        })
-        return addresses;
+        const ethereum = window.ethereum;
+        let address = '';
+
+        if (!ethereum) return {
+          error: "No ethereum wallet detected"
+        }
+        if (!address) {
+          const addresses = await ethereum.request({ method: 'eth_requestAccounts' })
+          address = addresses[0]
+        }
+        return address;
     }
 
-    async function readProfile() {
-        const [address] = await connect(); // first address in the array
+      const handleWalletConnect = async() => {
+        const web3Modal = new Web3Modal({
+          disableInjectedProvider: false,
+          network: "rinkeby",
+          cacheProvider: false,
+          providerOptions: {
+            walletconnect: {
+              package: WalletConnectProvider,
+              options: {
+                rpc: {
+                  1: "https://eth-rinkeby.alchemyapi.io/v2/QtLM8rW9nB6DobDu8KQx-7fYMS2rBlky",
+                },
+              },
+            },
+          },
+        });
+        const provider = await web3Modal.connect();
+        console.log(provider);
+        const web3 = new Web3(provider);
+        console.log(web3);
+        const accounts = await web3.eth.getAccounts();
+        const currAccount = accounts[0];
         const ceramic = new CeramicClient(endpoint);
         const idx = new IDX({ ceramic });
         setIsSubmitted(true);
@@ -56,7 +97,7 @@ const HeaderNav = (props) => {
           // does not require signing to get user's public data
           const data = await idx.get(
             'basicProfile',
-            `${address}@eip155:1`
+            `${currAccount}@eip155:1`
           )
           console.log('data: ', data);
           
@@ -72,10 +113,13 @@ const HeaderNav = (props) => {
           
         } catch(err) {
           console.log("error: ", err);
-          router.push('/sign-up');
+          router.push('/steps');
           setLoaded(true);
         }
-      }
+
+        // var threeIdConnect = new ThreeIdConnect()
+        // await threeIdConnect.connect(provider);
+    }
 
   if (whichPage === "index") {
       return (
@@ -100,11 +144,10 @@ const HeaderNav = (props) => {
             mb={{ base: 8, sm: 0 }}
             mr={{ base: 0, sm: 8 }}
             display="block" 
-            onClick={onOpen}
+            onClick={handleWalletConnect}
             colorScheme="teal">
                 Connect Wallet {isSubmitted ? <CircularProgress size="22px" thickness="4px" isIndeterminate color="#3C2E26" /> : null}
         </Button>
-        <WalletsModal isOpen={isOpen} onClose={onClose} selectMetamask={readProfile}/>
       </Box>
     </Flex>
       )

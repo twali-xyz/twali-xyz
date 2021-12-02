@@ -5,7 +5,7 @@ import {
    } from '@chakra-ui/react';
 
 import HeaderNav from '../components/HeaderNav/HeaderNav';
-import SignUpSteps from '../components/Steps/Steps';
+import SignUpSteps from '../components/SignUpSteps/SignUpSteps';
 
 const Steps = () => {
     return (
