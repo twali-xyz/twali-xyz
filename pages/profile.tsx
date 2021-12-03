@@ -96,13 +96,14 @@ const Profile = () => {
           );
 
           console.log('profileData: ', profileData.content.identity);
-          let tileData = profileData.content.identity;
+          let identity = profileData.content.identity;
+          let profileAccType = profileData.content.accType;
 
           if (data.name) setName(data.name)
-          if (tileData.firstName) setFirstName(tileData.firstName)
-          if (tileData.lastName) setLastName(tileData.lastName)
-          if (tileData.email) setEmail(tileData.email)
-          if (tileData.accType) setAccType(tileData.accType)
+          if (identity.firstName) setFirstName(identity.firstName)
+          if (identity.lastName) setLastName(identity.lastName)
+          if (identity.email) setEmail(identity.email)
+          if (profileAccType) setAccType(profileAccType)
         } catch(err) {
           console.log("error: ", err);
           setLoaded(true);

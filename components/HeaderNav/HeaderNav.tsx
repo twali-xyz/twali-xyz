@@ -123,13 +123,14 @@ const HeaderNav = (props) => {
             { anchor: false, publish: false }
           );
 
-          console.log('profileData: ', profileData.content.identity);
-          let tileData = profileData.content.identity;
+          console.log('profileData: ', profileData.content);
+          let identity = profileData.content.identity;
+          let profileAccType = profileData.content.accType;
           
-          if (data.name && tileData.email && tileData.accType) {
+          if (data.name && identity.email && profileAccType) {
             setName(data.name);
-            setEmail(tileData.email);
-            setAccType(tileData.accType);
+            setEmail(identity.email);
+            setAccType(profileAccType);
             setIsSubmitted(false);
             router.push('/profile');
           } else {
