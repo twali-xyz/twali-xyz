@@ -11,6 +11,7 @@ import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver';
 import Web3 from 'web3';
 import { providers } from "ethers";
 import Web3Modal from "web3modal";
+import { TileDocument } from '@ceramicnetwork/stream-tile';
 
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
@@ -94,21 +95,46 @@ const HeaderNav = (props) => {
         const idx = new IDX({ ceramic });
         setIsSubmitted(true);
         try {
+
+          const threeIdConnect = new ThreeIdConnect();
+          const ethProvider = new EthereumAuthProvider(window.ethereum, currAccount);
+          await threeIdConnect.connect(ethProvider);
+      
+          const did = new DID({
+            provider: threeIdConnect.getDidProvider(),
+            resolver: {
+              ...ThreeIdResolver.getResolver(ceramic)
+            }
+          })
+          
+          ceramic.setDID(did);
+          await ceramic.did.authenticate();
+
           // does not require signing to get user's public data
           const data = await idx.get(
             'basicProfile',
             `${currAccount}@eip155:1`
           )
           console.log('data: ', data);
+
+          const profileData = await TileDocument.deterministic(
+            ceramic,
+            { family: 'user-profile-data' },
+            { anchor: false, publish: false }
+          );
+
+          console.log('profileData: ', profileData.content.identity);
+          let tileData = profileData.content.identity;
           
-          if (data.name && data.email && data.accType) {
+          if (data.name && tileData.email && tileData.accType) {
             setName(data.name);
-            setEmail(data.email);
-            setAccType(data.accType);
+            setEmail(tileData.email);
+            setAccType(tileData.accType);
             setIsSubmitted(false);
             router.push('/profile');
           } else {
             console.log('No profile, pls create one...');
+            router.push('/steps');
           }
           
         } catch(err) {

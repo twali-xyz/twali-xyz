@@ -14,6 +14,7 @@ import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver';
 import { EthereumAuthProvider, ThreeIdConnect } from '@3id/connect';
 import { DID } from 'dids';
 import { IDX } from '@ceramicstudio/idx';
+import { TileDocument } from '@ceramicnetwork/stream-tile';
 
 // network node that we're interacting with, can be local/prod
 // we're using a test network here
@@ -66,6 +67,19 @@ const Profile = () => {
         const address = await connect(); // first address in the array
         const ceramic = new CeramicClient(endpoint);
         const idx = new IDX({ ceramic });
+        const threeIdConnect = new ThreeIdConnect();
+        const authProvider = new EthereumAuthProvider(window.ethereum, address);
+        await threeIdConnect.connect(authProvider);
+        const provider = await threeIdConnect.getDidProvider();
+
+        ceramic.did = new DID({
+            provider: provider,
+            resolver: {
+                ...ThreeIdResolver.getResolver(ceramic)
+              }
+          });
+        await ceramic.did.authenticate();
+
         console.log(address);
         try {
           // does not require signing to get user's public data
@@ -74,11 +88,21 @@ const Profile = () => {
             `${address}@eip155:1`
           )
           console.log('data: ', data);
+
+          const profileData = await TileDocument.deterministic(
+            ceramic,
+            { family: 'user-profile-data' },
+            { anchor: false, publish: false }
+          );
+
+          console.log('profileData: ', profileData.content.identity);
+          let tileData = profileData.content.identity;
+
           if (data.name) setName(data.name)
-          if (data.firstName) setFirstName(data.firstName)
-          if (data.lastName) setLastName(data.lastName)
-          if (data.email) setEmail(data.email)
-          if (data.accType) setAccType(data.accType)
+          if (tileData.firstName) setFirstName(tileData.firstName)
+          if (tileData.lastName) setLastName(tileData.lastName)
+          if (tileData.email) setEmail(tileData.email)
+          if (tileData.accType) setAccType(tileData.accType)
         } catch(err) {
           console.log("error: ", err);
           setLoaded(true);
