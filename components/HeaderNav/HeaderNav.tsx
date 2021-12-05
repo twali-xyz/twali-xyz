@@ -49,6 +49,10 @@ export interface Identity {
   industryExpertise: string;
 }
 
+export interface BasicProfile {
+  name: string;
+}
+
 const HamburgerItem = ({ children, isLast, to = '/' }) => {
   return (
     <Button 
@@ -135,7 +139,7 @@ const HeaderNav = (props) => {
           await ceramic.did.authenticate();
 
           // does not require signing to get user's public data
-          const data = await idx.get(
+          const data: BasicProfile = await idx.get(
             'basicProfile',
             `${currAccount}@eip155:1`
           )
