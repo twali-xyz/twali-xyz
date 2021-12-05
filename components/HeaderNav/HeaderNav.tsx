@@ -11,6 +11,7 @@ import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver';
 import Web3 from 'web3';
 import { providers } from "ethers";
 import Web3Modal from "web3modal";
+import { TileDocument } from '@ceramicnetwork/stream-tile';
 
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
@@ -23,6 +24,34 @@ import { IDX } from '@ceramicstudio/idx';
 // we're using a test network here
 const endpoint = "https://ceramic-clay.3boxlabs.com";
 
+export interface ProfileData {
+  content: {
+    identity: Identity;
+    accType: string;
+  }
+
+}
+
+export interface Identity {
+  firstName: string;
+  lastName: string;
+  email: string;
+  displayName: string;
+  twitterUsrName?: string;
+  linkedInUsrName?: string;
+  website?: string;
+  businessName: string;
+  businessType: string;
+  businessLocation: string;
+  currCompanyTitle: string;
+  currLocation?: string;
+  funcExpertise: string;
+  industryExpertise: string;
+}
+
+export interface BasicProfile {
+  name: string;
+}
 
 const HamburgerItem = ({ children, isLast, to = '/' }) => {
   return (
@@ -94,21 +123,47 @@ const HeaderNav = (props) => {
         const idx = new IDX({ ceramic });
         setIsSubmitted(true);
         try {
+
+          const threeIdConnect = new ThreeIdConnect();
+          const ethProvider = new EthereumAuthProvider(window.ethereum, currAccount);
+          await threeIdConnect.connect(ethProvider);
+      
+          const did = new DID({
+            provider: threeIdConnect.getDidProvider(),
+            resolver: {
+              ...ThreeIdResolver.getResolver(ceramic)
+            }
+          })
+          
+          ceramic.setDID(did);
+          await ceramic.did.authenticate();
+
           // does not require signing to get user's public data
-          const data = await idx.get(
+          const data: BasicProfile = await idx.get(
             'basicProfile',
             `${currAccount}@eip155:1`
           )
           console.log('data: ', data);
+
+          const profileData: ProfileData = await TileDocument.deterministic(
+            ceramic,
+            { family: 'user-profile-data' },
+            { anchor: false, publish: false }
+          );
+
+          console.log('profileData: ', profileData.content);
+          let identity = profileData.content.identity;
+          let profileAccType = profileData.content.accType;
           
-          if (data.name && data.email && data.accType) {
+          if (data.name && identity.email && profileAccType) {
             setName(data.name);
-            setEmail(data.email);
-            setAccType(data.accType);
+            setEmail(identity.email);
+            setAccType(profileAccType);
             setIsSubmitted(false);
             router.push('/profile');
           } else {
             console.log('No profile, pls create one...');
+            router.push('/steps');
           }
           
         } catch(err) {

@@ -4,7 +4,6 @@ import {
   VStack
  } from '@chakra-ui/react';
 
-import LoginMenu from '../components/SignUpMenu/SignUpMenu';
 import HeaderNav from '../components/HeaderNav/HeaderNav';
 
 const IndexPage = () => {

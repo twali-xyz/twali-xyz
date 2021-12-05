@@ -14,10 +14,41 @@ import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver';
 import { EthereumAuthProvider, ThreeIdConnect } from '@3id/connect';
 import { DID } from 'dids';
 import { IDX } from '@ceramicstudio/idx';
+import { TileDocument } from '@ceramicnetwork/stream-tile';
 
 // network node that we're interacting with, can be local/prod
 // we're using a test network here
 const endpoint = "https://ceramic-clay.3boxlabs.com";
+
+export interface ProfileData {
+    content: {
+      identity: Identity;
+      accType: string;
+    }
+  
+  }
+  
+  export interface Identity {
+    firstName: string;
+    lastName: string;
+    email: string;
+    displayName: string;
+    twitterUsrName?: string;
+    linkedInUsrName?: string;
+    website?: string;
+    businessName: string;
+    businessType: string;
+    businessLocation: string;
+    currCompanyTitle: string;
+    currLocation?: string;
+    funcExpertise: string;
+    industryExpertise: string;
+  }
+  
+  export interface BasicProfile {
+    name: string;
+  }
+  
 
 const Profile = () => {
     const [name, setName] = useState('');
@@ -66,19 +97,43 @@ const Profile = () => {
         const address = await connect(); // first address in the array
         const ceramic = new CeramicClient(endpoint);
         const idx = new IDX({ ceramic });
+        const threeIdConnect = new ThreeIdConnect();
+        const authProvider = new EthereumAuthProvider(window.ethereum, address);
+        await threeIdConnect.connect(authProvider);
+        const provider = await threeIdConnect.getDidProvider();
+
+        ceramic.did = new DID({
+            provider: provider,
+            resolver: {
+                ...ThreeIdResolver.getResolver(ceramic)
+              }
+          });
+        await ceramic.did.authenticate();
+
         console.log(address);
         try {
           // does not require signing to get user's public data
-          const data = await idx.get(
+          const data: BasicProfile = await idx.get(
             'basicProfile',
             `${address}@eip155:1`
           )
           console.log('data: ', data);
+
+          const profileData: ProfileData = await TileDocument.deterministic(
+            ceramic,
+            { family: 'user-profile-data' },
+            { anchor: false, publish: false }
+          );
+
+          console.log('profileData: ', profileData.content.identity);
+          let identity = profileData.content.identity;
+          let profileAccType = profileData.content.accType;
+
           if (data.name) setName(data.name)
-          if (data.firstName) setFirstName(data.firstName)
-          if (data.lastName) setLastName(data.lastName)
-          if (data.email) setEmail(data.email)
-          if (data.accType) setAccType(data.accType)
+          if (identity.firstName) setFirstName(identity.firstName)
+          if (identity.lastName) setLastName(identity.lastName)
+          if (identity.email) setEmail(identity.email)
+          if (profileAccType) setAccType(profileAccType)
         } catch(err) {
           console.log("error: ", err);
           setLoaded(true);
