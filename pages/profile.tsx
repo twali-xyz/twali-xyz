@@ -20,6 +20,36 @@ import { TileDocument } from '@ceramicnetwork/stream-tile';
 // we're using a test network here
 const endpoint = "https://ceramic-clay.3boxlabs.com";
 
+export interface ProfileData {
+    content: {
+      identity: Identity;
+      accType: string;
+    }
+  
+  }
+  
+  export interface Identity {
+    firstName: string;
+    lastName: string;
+    email: string;
+    displayName: string;
+    twitterUsrName?: string;
+    linkedInUsrName?: string;
+    website?: string;
+    businessName: string;
+    businessType: string;
+    businessLocation: string;
+    currCompanyTitle: string;
+    currLocation?: string;
+    funcExpertise: string;
+    industryExpertise: string;
+  }
+  
+  export interface BasicProfile {
+    name: string;
+  }
+  
+
 const Profile = () => {
     const [name, setName] = useState('');
     const [firstName, setFirstName] = useState('');
@@ -83,13 +113,13 @@ const Profile = () => {
         console.log(address);
         try {
           // does not require signing to get user's public data
-          const data = await idx.get(
+          const data: BasicProfile = await idx.get(
             'basicProfile',
             `${address}@eip155:1`
           )
           console.log('data: ', data);
 
-          const profileData = await TileDocument.deterministic(
+          const profileData: ProfileData = await TileDocument.deterministic(
             ceramic,
             { family: 'user-profile-data' },
             { anchor: false, publish: false }
