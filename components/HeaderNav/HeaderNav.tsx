@@ -24,6 +24,30 @@ import { IDX } from '@ceramicstudio/idx';
 // we're using a test network here
 const endpoint = "https://ceramic-clay.3boxlabs.com";
 
+export interface ProfileData {
+  content: {
+    identity: Identity;
+    accType: string;
+  }
+
+}
+
+export interface Identity {
+  firstName: string;
+  lastName: string;
+  email: string;
+  displayName: string;
+  twitterUsrName?: string;
+  linkedInUsrName?: string;
+  website?: string;
+  businessName: string;
+  businessType: string;
+  businessLocation: string;
+  currCompanyTitle: string;
+  currLocation?: string;
+  funcExpertise: string;
+  industryExpertise: string;
+}
 
 const HamburgerItem = ({ children, isLast, to = '/' }) => {
   return (
@@ -117,7 +141,7 @@ const HeaderNav = (props) => {
           )
           console.log('data: ', data);
 
-          const profileData = await TileDocument.deterministic(
+          const profileData: ProfileData = await TileDocument.deterministic(
             ceramic,
             { family: 'user-profile-data' },
             { anchor: false, publish: false }
