@@ -6,7 +6,9 @@ import {
     HStack,
     Stack,
     Text,
-    CircularProgress
+    CircularProgress,
+    useDisclosure,
+    IconButton
    } from '@chakra-ui/react';
 
 import { useState, useEffect } from 'react';
@@ -18,6 +20,9 @@ import { EthereumAuthProvider, ThreeIdConnect } from '@3id/connect';
 import { DID } from 'dids';
 import { IDX } from '@ceramicstudio/idx';
 import { TileDocument } from '@ceramicnetwork/stream-tile';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import EditProfileModal from './EditProfileModal/EditProfileModal';
+import EditExperienceModal from './EditExperienceModal/EditExperienceModal';
 
 // network node that we're interacting with, can be local/prod
 // we're using a test network here
@@ -36,6 +41,7 @@ export interface ProfileData {
     lastName: string;
     email: string;
     displayName: string;
+    bio: string;
     twitterUsrName?: string;
     linkedInUsrName?: string;
     website?: string;
@@ -64,6 +70,8 @@ const ProfilePage = () => {
     const [currCompanyTitle, setCurrCompanyTitle] = useState('');
     const [funcExpertise, setFuncExpertise] = useState('');
     const [industryExpertise, setIndustryExpertise] = useState('');
+    const { isOpen: isProfileModalOpen , onOpen: onProfileModalOpen, onClose: onProfileModalClose } = useDisclosure()
+    const { isOpen: isExpModalOpen , onOpen: onExpModalOpen, onClose: onExpModalClose } = useDisclosure()
 
     const [email, setEmail] = useState('');
     const [accType, setAccType] = useState('');
@@ -162,6 +170,10 @@ const ProfilePage = () => {
           readProfile();
         }, []);
 
+        const handleEditProfileClick = () => {
+            console.log('Edit Profile Clicked!');
+        }
+
     return (
         
         <>
@@ -189,32 +201,74 @@ const ProfilePage = () => {
                 src='fox-pfp.png'
                 alt='fox stock img'
             />
-        <VStack
-            spacing={4}
-            align='stretch'
-            w="full"
-            pl={12}
-            mt={0}
-            pt={0}
-            >
-                <Box w="full" overflow='hidden'>
+                <Box alignSelf="flex-start" w="full" pt={16} pl={10} overflow='hidden'>
                     { !accType && !firstName && !lastName && name && loaded && <h4>Profile needs to be created. </h4>}
-                    <Stack spacing={3}>
-                    { accType && name && <Text fontSize='xl'>{name + ', ' + accType}</Text>}
-                        { email && <Text fontSize='md'>{email}</Text>}
-                        { businessLocation && <Text fontSize='md'>{businessLocation}</Text>}
+                    <Stack spacing={6}>
+                    { accType && name && (
+                        <HStack>
+                        <Text fontSize='xl'>{name + ', ' + accType}</Text>
+                        <FontAwesomeIcon size="lg" icon={['fas', 'map-pin']} />{ businessLocation && <Text fontSize='md'>{businessLocation}</Text>}
+                        </HStack>
+                    )}
+                    {/* { bio && <Text fontSize='md'>{bio}</Text>} */}
+                    <VStack>
+                        <Box alignSelf="flex-start" w="full" overflow='hidden'>
+                            <Text pb={8} fontSize='xl'>Company Experience</Text>
+                            <HStack spacing={4}>
+                                <Img
+                                    borderRadius='full'
+                                    width="100px"
+                                    src='https://miro.medium.com/fit/c/160/160/1*pF_x_Qm-EGxym_Ag7mBJ4w.png'
+                                    alt='fox stock img'
+                                />
+                                <Img
+                                    borderRadius='full'
+                                    width="100px"
+                                    src='https://s2.coinmarketcap.com/static/img/coins/200x200/10052.png'
+                                    alt='fox stock img'
+                                />
+                                <Img
+                                    borderRadius='full'
+                                    width="100px"
+                                    src='https://s2.coinmarketcap.com/static/img/coins/200x200/5632.png'
+                                    alt='fox stock img'
+                                />
+                                <Img
+                                    borderRadius='full'
+                                    width="100px"
+                                    src='https://c.gitcoin.co/grants/84461dbb55ae43f2edc28f375cb74059/ethereum_logo_-_6250754.png'
+                                    alt='fox stock img'
+                                />
+                                <Img
+                                    borderRadius='full'
+                                    width="100px"
+                                    src='fox-pfp.png'
+                                    alt='fox stock img'
+                                />
+                            </HStack>
+                        </Box>
+                        <Box alignSelf="flex-start" w="full" overflow='hidden'>
+                            <Text pt={8} pb={4} fontSize='xl'>Book a session with {firstName}</Text>
+                            <Button size='md' colorScheme='teal'>Book</Button>
+                        </Box>
+                        </VStack>
                     </Stack>
                 </Box>
-            </VStack>
+                <Box marginTop={8} w="150px" alignSelf="flex-start" overflow='hidden'>
+                <IconButton onClick={onProfileModalOpen} alignSelf='flex-end' variant='ghost' aria-label='Update experience' icon={<FontAwesomeIcon size="sm" icon={['fas', 'edit']} />} />
+                <EditProfileModal isOpen={isProfileModalOpen} onClose={onProfileModalClose} />
+            </Box>
             </HStack>
-        <HStack w="full" spacing={32}>
         <VStack
-            spacing={4}
+            marginTop={0}
             align='flex-start'
-            // w="full"
-            ml={8}
+            pl={8}
+            pt={0}
             >
+            <IconButton onClick={onExpModalOpen} alignSelf='flex-end' variant='ghost' aria-label='Update experience' icon={<FontAwesomeIcon size="sm" icon={['fas', 'edit']} />} />
+            <EditExperienceModal isOpen={isExpModalOpen} onClose={onExpModalClose}/>
             { displayName && <Text fontSize='xl'>@{displayName}</Text>}
+            { email && <Text fontSize='md'>{email}</Text>}
             <Box p={4} ml={8} borderWidth='1px' borderRadius='lg' overflow='hidden' backgroundColor='gray.200'>
             { funcExpertise && <Text fontSize='md'>{funcExpertise}</Text>}
             </Box>
@@ -222,48 +276,6 @@ const ProfilePage = () => {
             { industryExpertise && <Text fontSize='md'>{industryExpertise}</Text>}
             </Box>
         </VStack>
-        <VStack>
-        <Box alignSelf="flex-start" w="full" overflow='hidden'>
-            <Text pb={8} fontSize='xl'>Company Experience</Text>
-            <HStack spacing={4}>
-            <Img
-                borderRadius='full'
-                width="100px"
-                src='https://miro.medium.com/fit/c/160/160/1*pF_x_Qm-EGxym_Ag7mBJ4w.png'
-                alt='fox stock img'
-            />
-            <Img
-                borderRadius='full'
-                width="100px"
-                src='https://s2.coinmarketcap.com/static/img/coins/200x200/10052.png'
-                alt='fox stock img'
-            />
-            <Img
-                borderRadius='full'
-                width="100px"
-                src='https://s2.coinmarketcap.com/static/img/coins/200x200/5632.png'
-                alt='fox stock img'
-            />
-            <Img
-                borderRadius='full'
-                width="100px"
-                src='https://c.gitcoin.co/grants/84461dbb55ae43f2edc28f375cb74059/ethereum_logo_-_6250754.png'
-                alt='fox stock img'
-            />
-            <Img
-                borderRadius='full'
-                width="100px"
-                src='fox-pfp.png'
-                alt='fox stock img'
-            />
-            </HStack>
-        </Box>
-        <Box alignSelf="flex-start" w="full" overflow='hidden'>
-            <Text pt={8} pb={4} fontSize='xl'>Book a session with {firstName}</Text>
-            <Button size='md' colorScheme='teal'>Book</Button>
-        </Box>
-        </VStack>
-        </HStack>
         </>)}
         </>
     )

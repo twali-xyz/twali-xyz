@@ -37,6 +37,7 @@ export interface Identity {
   lastName: string;
   email: string;
   displayName: string;
+  bio: string;
   twitterUsrName?: string;
   linkedInUsrName?: string;
   website?: string;
