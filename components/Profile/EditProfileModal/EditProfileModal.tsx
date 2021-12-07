@@ -36,9 +36,6 @@ const EditProfileModal = (props) => {
             <FormLabel>{'Update profile picture'}</FormLabel>
 
                 <FileUpload
-                    accept={'image/*'}
-                    multiple
-                    // register={register('file_', { validate: validateFiles })}
                 >
                     <Button>
                     Upload
