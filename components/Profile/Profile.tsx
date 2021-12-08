@@ -57,24 +57,17 @@ export interface ProfileData {
   export interface BasicProfile {
     name: string;
   }
-  
+  export interface Profile {
+      identity: Identity;
+      name: string;
+      accType: string;
+  }
 
 const ProfilePage = () => {
+    const [profileData, setProfileData]  = useState<ProfileData>();
     const [name, setName] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [displayName, setDisplayName] = useState('');
-    const [businessLocation, setBusinessLocation] = useState('');
-    const [businessName, setBusinessName] = useState('');
-    const [businessType, setBusinessType] = useState('');
-    const [currCompanyTitle, setCurrCompanyTitle] = useState('');
-    const [funcExpertise, setFuncExpertise] = useState('');
-    const [industryExpertise, setIndustryExpertise] = useState('');
     const { isOpen: isProfileModalOpen , onOpen: onProfileModalOpen, onClose: onProfileModalClose } = useDisclosure()
     const { isOpen: isExpModalOpen , onOpen: onExpModalOpen, onClose: onExpModalClose } = useDisclosure()
-
-    const [email, setEmail] = useState('');
-    const [accType, setAccType] = useState('');
     const [loaded, setLoaded] = useState(false);
 
     // Get user's eth address
@@ -111,7 +104,53 @@ const ProfilePage = () => {
         // return addresses;
         return account;
     }
+    async function readProfile() {
+      const address = await connect(); // first address in the array
+      const ceramic = new CeramicClient(endpoint);
+      const idx = new IDX({ ceramic });
+      const threeIdConnect = new ThreeIdConnect();
+      const authProvider = new EthereumAuthProvider(window.ethereum, address);
+      await threeIdConnect.connect(authProvider);
+      const provider = await threeIdConnect.getDidProvider();
 
+      ceramic.did = new DID({
+          provider: provider,
+          resolver: {
+              ...ThreeIdResolver.getResolver(ceramic)
+            }
+        });
+      await ceramic.did.authenticate();
+
+      console.log(address);
+      try {
+        // does not require signing to get user's public data
+        const data: BasicProfile = await idx.get(
+          'basicProfile',
+          `${address}@eip155:1`
+        )
+        console.log('data: ', data);
+
+        const profile: ProfileData = await TileDocument.deterministic(
+          ceramic,
+          { family: 'user-profile-data' },
+          { anchor: false, publish: false }
+        );
+
+        console.log(profile);
+        
+        if (data.name) setName(data.name)
+        if (profile) {
+          console.log('hello');
+          setProfileData(profile);
+        }
+        console.log('profileData: ', profileData);
+        setLoaded(true);
+        
+      } catch(err) {
+        console.log("error: ", err);
+        setLoaded(false);
+      }
+    }
       useEffect(() => {
         async function readProfile() {
             const address = await connect(); // first address in the array
@@ -139,39 +178,40 @@ const ProfilePage = () => {
               )
               console.log('data: ', data);
     
-              const profileData: ProfileData = await TileDocument.deterministic(
+              const profile: ProfileData = await TileDocument.deterministic(
                 ceramic,
                 { family: 'user-profile-data' },
                 { anchor: false, publish: false }
               );
-    
-              console.log('profileData: ', profileData.content.identity);
-              let identity = profileData.content.identity;
-              let profileAccType = profileData.content.accType;
-    
+
+              console.log(profile);
+              
               if (data.name) setName(data.name)
-              if (profileAccType) setAccType(profileAccType)
-              if (identity.displayName) setDisplayName(identity.displayName)
-              if (identity.firstName) setFirstName(identity.firstName)
-              if (identity.lastName) setLastName(identity.lastName)
-              if (identity.email) setEmail(identity.email)
-              if (identity.businessName) setBusinessName(identity.businessName)
-              if (identity.businessType) setBusinessType(identity.businessType)
-              if (identity.businessLocation) setBusinessLocation(identity.businessLocation)
-              if (identity.currCompanyTitle) setCurrCompanyTitle(identity.currCompanyTitle)
-              if (identity.funcExpertise) setFuncExpertise(identity.funcExpertise)
-              if (identity.industryExpertise) setIndustryExpertise(identity.industryExpertise)
+              if (profile) {
+                console.log('hello');
+                setProfileData(profile);
+              }
+              console.log('profileData: ', profileData);
               setLoaded(true);
+              
             } catch(err) {
               console.log("error: ", err);
-              setLoaded(true);
+              setLoaded(false);
             }
           }
           readProfile();
         }, []);
 
-        const handleEditProfileClick = () => {
-            console.log('Edit Profile Clicked!');
+        const handleUpdatedProfile = (profileData) => {
+          console.log(profileData);
+          setProfileData({...profileData});
+          readProfile();
+        }
+
+        const handleUpdatedExperiences = (profileData) => {
+          console.log(profileData);
+          setProfileData({...profileData});
+          readProfile();
         }
 
     return (
@@ -202,15 +242,19 @@ const ProfilePage = () => {
                 alt='fox stock img'
             />
                 <Box alignSelf="flex-start" w="full" pt={16} pl={10} overflow='hidden'>
-                    { !accType && !firstName && !lastName && name && loaded && <h4>Profile needs to be created. </h4>}
+                    { !profileData && !profileData.content && !profileData.content.accType && !name && loaded && <h4>Profile needs to be created. </h4>}
                     <Stack spacing={6}>
-                    { accType && name && (
+                    { profileData && name && profileData.content.accType && (
+                      <>
                         <HStack>
-                        <Text fontSize='xl'>{name + ', ' + accType}</Text>
-                        <FontAwesomeIcon size="lg" icon={['fas', 'map-pin']} />{ businessLocation && <Text fontSize='md'>{businessLocation}</Text>}
+                        <Text fontSize='xl'>{name + ', ' + profileData.content.accType}</Text>
+                        <FontAwesomeIcon size="lg" icon={['fas', 'map-pin']} />{ profileData.content.identity.businessLocation && <Text fontSize='md'>{profileData.content.identity.businessLocation}</Text>}
                         </HStack>
+                        <Text fontSize='md'>{profileData.content.identity.currCompanyTitle}</Text>
+                        { profileData.content.identity.bio && <Text fontSize='md'>{profileData.content.identity.bio}</Text>}
+                      </>
                     )}
-                    {/* { bio && <Text fontSize='md'>{bio}</Text>} */}
+                    
                     <VStack>
                         <Box alignSelf="flex-start" w="full" overflow='hidden'>
                             <Text pb={8} fontSize='xl'>Company Experience</Text>
@@ -248,7 +292,7 @@ const ProfilePage = () => {
                             </HStack>
                         </Box>
                         <Box alignSelf="flex-start" w="full" overflow='hidden'>
-                            <Text pt={8} pb={4} fontSize='xl'>Book a session with {firstName}</Text>
+                            <Text pt={8} pb={4} fontSize='xl'>Book a session with {profileData.content.identity.firstName}</Text>
                             <Button size='md' colorScheme='teal'>Book</Button>
                         </Box>
                         </VStack>
@@ -256,7 +300,7 @@ const ProfilePage = () => {
                 </Box>
                 <Box marginTop={8} w="150px" alignSelf="flex-start" overflow='hidden'>
                 <IconButton onClick={onProfileModalOpen} alignSelf='flex-end' variant='ghost' aria-label='Update experience' icon={<FontAwesomeIcon size="sm" icon={['fas', 'edit']} />} />
-                <EditProfileModal isOpen={isProfileModalOpen} onClose={onProfileModalClose} />
+                <EditProfileModal isOpen={isProfileModalOpen} onClose={onProfileModalClose} profileData={profileData} handleUpdatedProfile={handleUpdatedProfile}/>
             </Box>
             </HStack>
         <VStack
@@ -266,14 +310,14 @@ const ProfilePage = () => {
             pt={0}
             >
             <IconButton onClick={onExpModalOpen} alignSelf='flex-end' variant='ghost' aria-label='Update experience' icon={<FontAwesomeIcon size="sm" icon={['fas', 'edit']} />} />
-            <EditExperienceModal isOpen={isExpModalOpen} onClose={onExpModalClose}/>
-            { displayName && <Text fontSize='xl'>@{displayName}</Text>}
-            { email && <Text fontSize='md'>{email}</Text>}
+            <EditExperienceModal isOpen={isExpModalOpen} onClose={onExpModalClose} profileData={profileData} handleUpdatedExperiences={handleUpdatedExperiences}/>
+            { profileData.content.identity.displayName && <Text fontSize='xl'>@{profileData.content.identity.displayName}</Text>}
+            { profileData.content.identity.email && <Text fontSize='md'>{profileData.content.identity.email}</Text>}
             <Box p={4} ml={8} borderWidth='1px' borderRadius='lg' overflow='hidden' backgroundColor='gray.200'>
-            { funcExpertise && <Text fontSize='md'>{funcExpertise}</Text>}
+            { profileData && profileData.content.identity && profileData.content.identity.funcExpertise && <Text fontSize='md'>{profileData.content.identity.funcExpertise}</Text>}
             </Box>
             <Box p={4} ml={8} borderWidth='1px' borderRadius='lg' overflow='hidden' backgroundColor='gray.200'>
-            { industryExpertise && <Text fontSize='md'>{industryExpertise}</Text>}
+            { profileData && profileData.content.identity && profileData.content.identity.industryExpertise && <Text fontSize='md'>{profileData.content.identity.industryExpertise}</Text>}
             </Box>
         </VStack>
         </>)}

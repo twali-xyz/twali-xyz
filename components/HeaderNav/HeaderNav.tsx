@@ -83,21 +83,6 @@ const HeaderNav = (props) => {
   //   },
   // });
 
-    // Get user's eth address
-    async function connect() {
-        const ethereum = window.ethereum;
-        let address = '';
-
-        if (!ethereum) return {
-          error: "No ethereum wallet detected"
-        }
-        if (!address) {
-          const addresses = await ethereum.request({ method: 'eth_requestAccounts' })
-          address = addresses[0]
-        }
-        return address;
-    }
-
       const handleWalletConnect = async() => {
         const web3Modal = new Web3Modal({
           disableInjectedProvider: false,
