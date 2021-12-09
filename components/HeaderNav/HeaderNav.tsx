@@ -37,6 +37,7 @@ export interface Identity {
   lastName: string;
   email: string;
   displayName: string;
+  bio: string;
   twitterUsrName?: string;
   linkedInUsrName?: string;
   website?: string;
@@ -81,21 +82,6 @@ const HeaderNav = (props) => {
   //     1: "https://eth-rinkeby.alchemyapi.io/v2/QtLM8rW9nB6DobDu8KQx-7fYMS2rBlky",
   //   },
   // });
-
-    // Get user's eth address
-    async function connect() {
-        const ethereum = window.ethereum;
-        let address = '';
-
-        if (!ethereum) return {
-          error: "No ethereum wallet detected"
-        }
-        if (!address) {
-          const addresses = await ethereum.request({ method: 'eth_requestAccounts' })
-          address = addresses[0]
-        }
-        return address;
-    }
 
       const handleWalletConnect = async() => {
         const web3Modal = new Web3Modal({
