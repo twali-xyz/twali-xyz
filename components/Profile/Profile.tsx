@@ -222,7 +222,7 @@ const ProfilePage = () => {
         <CircularProgress size="50px" thickness="8px" isIndeterminate color="#3C2E26"/>
         <Text fontSize='2xl'>Loading</Text>
         </VStack>
-        ) : (
+        ) : profileData && name && profileData.content && profileData.content.accType && profileData.content.identity && (
         <>
         <Box w="full" borderWidth='1px' borderRadius='lg' overflow='hidden'>
                 <Img
@@ -242,19 +242,14 @@ const ProfilePage = () => {
                 alt='fox stock img'
             />
                 <Box alignSelf="flex-start" w="full" pt={16} pl={10} overflow='hidden'>
-                    { !profileData && !profileData.content && !profileData.content.accType && !name && loaded && <h4>Profile needs to be created. </h4>}
                     <Stack spacing={6}>
-                    { profileData && name && profileData.content.accType && (
-                      <>
                         <HStack>
                         <Text fontSize='xl'>{name + ', ' + profileData.content.accType}</Text>
                         <FontAwesomeIcon size="lg" icon={['fas', 'map-pin']} />{ profileData.content.identity.businessLocation && <Text fontSize='md'>{profileData.content.identity.businessLocation}</Text>}
                         </HStack>
                         <Text fontSize='md'>{profileData.content.identity.currCompanyTitle}</Text>
                         { profileData.content.identity.bio && <Text fontSize='md'>{profileData.content.identity.bio}</Text>}
-                      </>
-                    )}
-                    
+                    )
                     <VStack>
                         <Box alignSelf="flex-start" w="full" overflow='hidden'>
                             <Text pb={8} fontSize='xl'>Company Experience</Text>

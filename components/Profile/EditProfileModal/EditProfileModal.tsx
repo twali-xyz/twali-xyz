@@ -67,6 +67,7 @@ const EditProfileModal = (props) => {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [accType, setAccType] = useState(props.profileData.content.accType);
     const [identity, setIdentity] = useState(props.profileData.content.identity);
+    const [fileUploaded, setFileUploaded] = useState();
     const [profileData, setProfileData] = useState(props.profileData);
 
             // Get user's eth address
@@ -122,6 +123,11 @@ const EditProfileModal = (props) => {
           `${address}@eip155:1`
         )
         console.log('data: ', data);
+
+        if (fileUploaded) {
+          // await idx.merge('basicProfile', { image: '💻' })
+          console.log(fileUploaded);
+        }
   
         await updateProfileData(ceramic, identity, accType);
   
@@ -166,6 +172,10 @@ const EditProfileModal = (props) => {
     console.log(profileData);
     console.log(identity);
   }
+
+  const handleFile = (fileUploaded) => {
+    setFileUploaded(fileUploaded);
+  }
   
     return (
       <>  
@@ -181,6 +191,7 @@ const EditProfileModal = (props) => {
             <FormLabel>{'Update profile picture'}</FormLabel>
 
                 <FileUpload
+                handleFile={handleFile}
                 >
                     <Button>
                     Upload

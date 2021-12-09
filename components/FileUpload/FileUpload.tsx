@@ -5,6 +5,7 @@ import { InputGroup } from '@chakra-ui/react'
 
 type FileUploadProps = {
 //   register: any;
+  handleFile: Function;
   children?: ReactNode
 }
 
@@ -21,7 +22,7 @@ const handleClick = event => {
 
 const handleChange = event => {
     const fileUploaded = event.target.files[0];
-    // props.handleFile(fileUploaded);
+    props.handleFile(fileUploaded);
 };
 
   return (
