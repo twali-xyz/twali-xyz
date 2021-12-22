@@ -3,13 +3,11 @@ import { Flex, Box, Heading, HStack, Button, CircularProgress, Text } from '@cha
 import { useDisclosure } from "@chakra-ui/react"
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
-import WalletsModal from '../WalletsModal/WalletsModal';
 import { useRouter } from 'next/router';
 
 import CeramicClient from '@ceramicnetwork/http-client';
 import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver';
 import Web3 from 'web3';
-import { providers } from "ethers";
 import Web3Modal from "web3modal";
 import { TileDocument } from '@ceramicnetwork/stream-tile';
 
@@ -71,17 +69,10 @@ const HeaderNav = (props) => {
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [accType, setAccType] = useState('');
-    const [loaded, setLoaded] = useState(false);
-    const router = useRouter();
-
-  //  Create WalletConnect Provider
-  // const walletConnectProvider = new WalletConnectProvider({
-  //   rpc: {
-  //     1: "https://eth-rinkeby.alchemyapi.io/v2/QtLM8rW9nB6DobDu8KQx-7fYMS2rBlky",
-  //   },
-  // });
+  const [email, setEmail] = useState('');
+  const [accType, setAccType] = useState('');
+  const [loaded, setLoaded] = useState(false);
+  const router = useRouter();
 
       const handleWalletConnect = async() => {
         const web3Modal = new Web3Modal({
@@ -157,9 +148,6 @@ const HeaderNav = (props) => {
           router.push('/steps');
           setLoaded(true);
         }
-
-        // var threeIdConnect = new ThreeIdConnect()
-        // await threeIdConnect.connect(provider);
     }
 
   if (whichPage === "index") {
