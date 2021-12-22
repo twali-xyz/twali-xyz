@@ -74,7 +74,7 @@ const ProfilePage = () => {
     const { isOpen: isExpModalOpen , onOpen: onExpModalOpen, onClose: onExpModalClose } = useDisclosure()
     const { isOpen: isSnapshotModalOpen , onOpen: onSnapshotModalOpen, onClose: onSnapshotModalClose } = useDisclosure()
     const [loaded, setLoaded] = useState(false);
-    const [snapshotData, setSnapshotData] = useState();
+    const [snapshotData, setSnapshotData] = useState<any>();
     const [currentSnapshot, setCurrentSnapshot] = useState();
 
     async function readProfile() {
