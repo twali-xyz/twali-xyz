@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
+import { connect } from '../../utils/walletUtils';
 import { Heading, FormControl, Input, Box, Button, FormLabel, Select, HStack, CircularProgress, Text } from "@chakra-ui/react"
 import router from 'next/router';
 
@@ -339,41 +340,11 @@ const SignUpSteps = () => {
     console.log(errors);
   }
 
-  // useEffect(() => {
-  //   if (Object.keys(errors).length === 0) {
-  //     console.log("CONTINUE FORTH");
-  //     // handleSubmit();
-  //     // setIsContinueDisabled(false);
-  //   }
-  // }, [errors]);
-
   const steps = [
     { label: 'User Profile', content: userProfileStep({ handleChange, values, errors })},
     { label: 'Merchant Profile', content: merchantProfileStep({ handleChange, values, errors })},
     { label: 'Professional Profile', content: professionalProfileStep({ handleChange, values, errors })},
   ];
-
-    // Get user's eth address
-    async function connect() {
-        const { ethereum } = window;
-        let account;
-
-        if (!ethereum) {
-          console.log("Connect your ethereum wallet!");
-          return
-        }
-    
-        await ethereum.request({ method: 'eth_requestAccounts' })
-          .then(accounts => {
-            if (accounts.length !== 0) {
-              account = accounts[0];
-              console.log("Found an authorized account: ", account);
-            } else {
-              console.log("No authorized account found!");
-            }
-          })
-        return account;
-    }
 
   async function updateAccType() {
     const address = await connect(); // first address in the array
