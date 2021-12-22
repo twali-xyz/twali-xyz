@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react';
 import { 
-    Box,
     Button,
     Modal,
     ModalOverlay,
@@ -9,15 +8,12 @@ import {
     ModalBody,
     ModalContent,
     ModalFooter,
-    useDisclosure,
     FormControl,
     FormLabel,
     Select,
-    Text,
-    Textarea,
-    Input,
     CircularProgress
    } from '@chakra-ui/react';
+   import { connect } from '../../../utils/walletUtils';
 
    import CeramicClient from '@ceramicnetwork/http-client';
    import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver';
@@ -69,28 +65,6 @@ const EditExperienceModal = (props) => {
     const [identity, setIdentity] = useState(props.profileData.content.identity);
     const [profileData, setProfileData] = useState(props.profileData);
 
-        // Get user's eth address
-        async function connect() {
-          const { ethereum } = window;
-          let account;
-  
-          if (!ethereum) {
-            console.log("Connect your ethereum wallet!");
-            return
-          }
-      
-          await ethereum.request({ method: 'eth_requestAccounts' })
-            .then(accounts => {
-              if (accounts.length !== 0) {
-                account = accounts[0];
-                console.log("Found an authorized account: ", account);
-              } else {
-                console.log("No authorized account found!");
-              }
-            })
-          return account;
-      }
-  
     async function updateExperiences() {
       const address = await connect(); // first address in the array
       console.log(address);
@@ -153,17 +127,12 @@ const EditExperienceModal = (props) => {
   };
 
   const handleChange = (evt) => {
-    console.log(evt);
-    console.log(props.profileData);
     setIdentity({
       ...identity,
       [evt.target.name]: evt.target.value
     });
     const newProfileData: ProfileData = { content: {identity: identity, accType: props.profileData.content.accType }};
-    console.log(newProfileData);
     setProfileData(newProfileData);
-    console.log(profileData);
-    console.log(identity);
   }
   
     return (

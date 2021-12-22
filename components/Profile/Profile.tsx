@@ -12,6 +12,7 @@ import {
    } from '@chakra-ui/react';
 
 import { useState, useEffect } from 'react';
+import { connect } from '../../utils/walletUtils';
 
 import CeramicClient from '@ceramicnetwork/http-client';
 import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver';
@@ -23,6 +24,9 @@ import { TileDocument } from '@ceramicnetwork/stream-tile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import EditProfileModal from './EditProfileModal/EditProfileModal';
 import EditExperienceModal from './EditExperienceModal/EditExperienceModal';
+import { request, gql } from 'graphql-request';
+import SnapshotModal from './SnapshotModal/SnapshotModal';
+
 
 // network node that we're interacting with, can be local/prod
 // we're using a test network here
@@ -68,42 +72,11 @@ const ProfilePage = () => {
     const [name, setName] = useState('');
     const { isOpen: isProfileModalOpen , onOpen: onProfileModalOpen, onClose: onProfileModalClose } = useDisclosure()
     const { isOpen: isExpModalOpen , onOpen: onExpModalOpen, onClose: onExpModalClose } = useDisclosure()
+    const { isOpen: isSnapshotModalOpen , onOpen: onSnapshotModalOpen, onClose: onSnapshotModalClose } = useDisclosure()
     const [loaded, setLoaded] = useState(false);
+    const [snapshotData, setSnapshotData] = useState<any>();
+    const [currentSnapshot, setCurrentSnapshot] = useState();
 
-    // Get user's eth address
-    async function connect() {
-        const { ethereum } = window;
-        let account;
-
-        if (!ethereum) {
-          console.log("Connect your ethereum wallet!");
-          return
-        }
-    
-        await ethereum.request({ method: 'eth_requestAccounts' })
-          .then(accounts => {
-            if (accounts.length !== 0) {
-              account = accounts[0];
-              console.log("Found an authorized account: ", account);
-              console.log("all accounts: ", accounts);
-              // setCurrAccount(account);
-              // getAllSpellsCast();
-              // setIsFormVisible(true);
-              // if (account) {
-              //   web3.eth.getBalance(account).then(e => setCurrBalance(e/10**18));
-              // }
-            } else {
-              // setIsFormVisible(false);
-              console.log("No authorized account found!");
-            }
-          })
-
-        // const addresses = await window.ethereum.request({
-        // method: 'eth_requestAccounts'
-        // })
-        // return addresses;
-        return account;
-    }
     async function readProfile() {
       const address = await connect(); // first address in the array
       const ceramic = new CeramicClient(endpoint);
@@ -140,7 +113,6 @@ const ProfilePage = () => {
         
         if (data.name) setName(data.name)
         if (profile) {
-          console.log('hello');
           setProfileData(profile);
         }
         console.log('profileData: ', profileData);
@@ -188,7 +160,6 @@ const ProfilePage = () => {
               
               if (data.name) setName(data.name)
               if (profile) {
-                console.log('hello');
                 setProfileData(profile);
               }
               console.log('profileData: ', profileData);
@@ -198,18 +169,103 @@ const ProfilePage = () => {
               console.log("error: ", err);
               setLoaded(false);
             }
+
+            const query = gql`
+            query getSnapshotVotes($wallet: String!)
+            {
+              votes (where: { voter: $wallet }) {
+                id
+                space {
+                  id
+                  avatar
+                }
+              }
+            }
+              `
+            const walletVar = {
+              wallet: address,
+            }
+
+            // Run GraphQL queries
+            request('https://hub.snapshot.org/graphql', query, walletVar).then((data) => {
+
+              data.votes.find(v => { if (v.space.avatar) {
+                v.space.avatar = v.space.avatar.replace('ipfs://','https://ipfs.io/ipfs/')
+              }});
+
+              getVoterSnapshotQueries(data, address);
+            });
+            
+          }
+
+          async function getVoterSnapshotQueries(data, address) {
+            let finalData: any = [];
+            if (data) {
+              data.votes.forEach(snapshot => {
+                let finalObj = {
+                  spaceID: '',
+                  totalVotes: 0,
+                  walletVotes: 0,
+                  voter: '',
+                  avatar: snapshot.space.avatar
+                };
+
+                const variables = {
+                  spaceID: snapshot.space.id,
+                  wallet: address,
+                }
+
+                const query2 = gql`
+                query getProposals($spaceID: String!) {
+                  proposals (where: { space: $spaceID }) {
+                    title
+                    scores
+                    scores_total
+                    votes
+                  }
+                }`
+                request('https://hub.snapshot.org/graphql', query2, variables).then((propData) => {
+                    let totalVotes = 0;
+                    propData.proposals.forEach(proposal => {
+                        totalVotes += proposal.votes;
+                    });
+
+                    finalObj.totalVotes = totalVotes;
+                });
+        
+                const query3 = gql`
+                    query getVotes($spaceID: String!, $wallet: String!) {
+                            votes (where: { voter: $wallet, space: $spaceID }) {
+                            id
+                        }
+                    }`
+                
+                request('https://hub.snapshot.org/graphql', query3, variables).then((totals) => {
+                  // setWalletVotes(totals.votes.length)
+                  finalObj.walletVotes = totals.votes.length;
+                  finalObj.voter = address;
+                });
+                finalObj.spaceID = snapshot.space.id;
+                finalData.push(finalObj);
+              })
+
+            }
+
+            let resArr: any = [];
+
+            finalData.forEach(function(item){
+              var i = resArr.findIndex(x => x.spaceID == item.spaceID);
+              if(i <= -1){
+                resArr.push(item);
+              }
+            });
+            setSnapshotData(resArr);
+  
           }
           readProfile();
         }, []);
 
         const handleUpdatedProfile = (profileData) => {
-          console.log(profileData);
-          setProfileData({...profileData});
-          readProfile();
-        }
-
-        const handleUpdatedExperiences = (profileData) => {
-          console.log(profileData);
           setProfileData({...profileData});
           readProfile();
         }
@@ -287,6 +343,30 @@ const ProfilePage = () => {
                             </HStack>
                         </Box>
                         <Box alignSelf="flex-start" w="full" overflow='hidden'>
+                            <Text pt={8} pb={4} fontSize='xl'>Snapshot</Text>
+                            {snapshotData ? (
+                              <>
+                            <HStack spacing={4}>
+                              {snapshotData.map(vote => 
+                                <Img
+                                  style={{ cursor: 'pointer'}}
+                                  key={vote.spaceID}
+                                  borderRadius='full'
+                                  width="100px"
+                                  src={vote.avatar}
+                                  alt='fox stock img'
+                                  onClick={() => {
+                                    setCurrentSnapshot(vote);
+                                    onSnapshotModalOpen();
+                                  }}
+                                />
+                          )}
+                          </HStack>
+                          <SnapshotModal isOpen={isSnapshotModalOpen} onClose={onSnapshotModalClose} snapshotData={currentSnapshot}/>
+                          </>
+                          ): null}
+                        </Box>
+                        <Box alignSelf="flex-start" w="full" overflow='hidden'>
                             <Text pt={8} pb={4} fontSize='xl'>Book a session with {profileData.content.identity.firstName}</Text>
                             <Button size='md' colorScheme='teal'>Book</Button>
                         </Box>
@@ -305,7 +385,7 @@ const ProfilePage = () => {
             pt={0}
             >
             <IconButton onClick={onExpModalOpen} alignSelf='flex-end' variant='ghost' aria-label='Update experience' icon={<FontAwesomeIcon size="sm" icon={['fas', 'edit']} />} />
-            <EditExperienceModal isOpen={isExpModalOpen} onClose={onExpModalClose} profileData={profileData} handleUpdatedExperiences={handleUpdatedExperiences}/>
+            <EditExperienceModal isOpen={isExpModalOpen} onClose={onExpModalClose} profileData={profileData} handleUpdatedExperiences={handleUpdatedProfile}/>
             { profileData.content.identity.displayName && <Text fontSize='xl'>@{profileData.content.identity.displayName}</Text>}
             { profileData.content.identity.email && <Text fontSize='md'>{profileData.content.identity.email}</Text>}
             <Box p={4} ml={8} borderWidth='1px' borderRadius='lg' overflow='hidden' backgroundColor='gray.200'>
