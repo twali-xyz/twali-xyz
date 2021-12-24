@@ -27,7 +27,6 @@ import EditExperienceModal from './EditExperienceModal/EditExperienceModal';
 import { request, gql } from 'graphql-request';
 import SnapshotModal from './SnapshotModal/SnapshotModal';
 
-
 // network node that we're interacting with, can be local/prod
 // we're using a test network here
 const endpoint = "https://ceramic-clay.3boxlabs.com";
@@ -37,7 +36,6 @@ export interface ProfileData {
       identity: Identity;
       accType: string;
     }
-  
   }
   
   export interface Identity {
@@ -52,7 +50,7 @@ export interface ProfileData {
     businessName: string;
     businessType: string;
     businessLocation: string;
-    currCompanyTitle: string;
+    currTitle: string;
     currLocation?: string;
     funcExpertise: string;
     industryExpertise: string;
@@ -290,20 +288,39 @@ const ProfilePage = () => {
                     alt='aesthetic brown'
                 />
             </Box>
-        <HStack w="full" spacing={12}>
-        <Img
-                borderRadius='full'
-                width="300px"
-                src='fox-pfp.png'
-                alt='fox stock img'
-            />
-                <Box alignSelf="flex-start" w="full" pt={16} pl={10} overflow='hidden'>
+        <HStack w="full" spacing={24}>
+        <VStack
+            marginTop={0}
+            paddingTop={0}
+            align='flex-start'
+            spacing={6}
+            >
+            <Box alignSelf="flex-start" overflow='hidden'>
+              <Img
+                  borderRadius='full'
+                  width="500px"
+                  src='fox-pfp.png'
+                  alt='fox stock img'
+              />
+              </Box>
+            <IconButton onClick={onExpModalOpen} alignSelf='flex-end' variant='ghost' aria-label='Update experience' icon={<FontAwesomeIcon size="sm" icon={['fas', 'edit']} />} />
+            <EditExperienceModal isOpen={isExpModalOpen} onClose={onExpModalClose} profileData={profileData} handleUpdatedExperiences={handleUpdatedProfile}/>
+            { profileData.content.identity.displayName && <Text fontSize='xl'>@{profileData.content.identity.displayName}</Text>}
+            { profileData.content.identity.email && <Text fontSize='md'>{profileData.content.identity.email}</Text>}
+            <Box p={4} ml={8} borderWidth='1px' color='rgb(0, 0, 0)' borderRadius='lg' overflow='hidden' backgroundColor='rgb(222, 222, 222)'>
+            { profileData && profileData.content.identity && profileData.content.identity.funcExpertise && <Text fontSize='md'>{profileData.content.identity.funcExpertise}</Text>}
+            </Box>
+            <Box p={4} ml={8} borderWidth='1px' borderRadius='lg' overflow='hidden' color='rgb(0, 0, 0)' backgroundColor='rgb(222, 222, 222)'>
+            { profileData && profileData.content.identity && profileData.content.identity.industryExpertise && <Text fontSize='md'>{profileData.content.identity.industryExpertise}</Text>}
+            </Box>
+        </VStack>
+                <Box alignSelf="flex-start" w="full" pt={16} pl={4} overflow='hidden'>
                     <Stack spacing={6}>
                         <HStack>
                         <Text fontSize='xl'>{name + ', ' + profileData.content.accType}</Text>
                         <FontAwesomeIcon size="lg" icon={['fas', 'map-pin']} />{ profileData.content.identity.businessLocation && <Text fontSize='md'>{profileData.content.identity.businessLocation}</Text>}
                         </HStack>
-                        <Text fontSize='md'>{profileData.content.identity.currCompanyTitle}</Text>
+                        <Text fontSize='md'>{profileData.content.identity.currTitle}</Text>
                         { profileData.content.identity.bio && <Text fontSize='md'>{profileData.content.identity.bio}</Text>}
                     )
                     <VStack>
@@ -378,23 +395,6 @@ const ProfilePage = () => {
                 <EditProfileModal isOpen={isProfileModalOpen} onClose={onProfileModalClose} profileData={profileData} handleUpdatedProfile={handleUpdatedProfile}/>
             </Box>
             </HStack>
-        <VStack
-            marginTop={0}
-            align='flex-start'
-            pl={8}
-            pt={0}
-            >
-            <IconButton onClick={onExpModalOpen} alignSelf='flex-end' variant='ghost' aria-label='Update experience' icon={<FontAwesomeIcon size="sm" icon={['fas', 'edit']} />} />
-            <EditExperienceModal isOpen={isExpModalOpen} onClose={onExpModalClose} profileData={profileData} handleUpdatedExperiences={handleUpdatedProfile}/>
-            { profileData.content.identity.displayName && <Text fontSize='xl'>@{profileData.content.identity.displayName}</Text>}
-            { profileData.content.identity.email && <Text fontSize='md'>{profileData.content.identity.email}</Text>}
-            <Box p={4} ml={8} borderWidth='1px' borderRadius='lg' overflow='hidden' backgroundColor='gray.200'>
-            { profileData && profileData.content.identity && profileData.content.identity.funcExpertise && <Text fontSize='md'>{profileData.content.identity.funcExpertise}</Text>}
-            </Box>
-            <Box p={4} ml={8} borderWidth='1px' borderRadius='lg' overflow='hidden' backgroundColor='gray.200'>
-            { profileData && profileData.content.identity && profileData.content.identity.industryExpertise && <Text fontSize='md'>{profileData.content.identity.industryExpertise}</Text>}
-            </Box>
-        </VStack>
         </>)}
         </>
     )

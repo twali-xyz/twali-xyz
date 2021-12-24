@@ -137,9 +137,9 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
               isTruncated>
                       <FormControl p={4} id="current-company-title" isRequired>
                         <FormLabel>Current title</FormLabel>
-                        <Input isInvalid={errors.currCompanyTitle} errorBorderColor='red.300' value={values.currCompanyTitle || ''} required placeholder="Current company title" name="currCompanyTitle" onChange={handleChange}/>
-                        {errors.currCompanyTitle && (
-                          <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.currCompanyTitle}</Text>
+                        <Input isInvalid={errors.currTitle} errorBorderColor='red.300' value={values.currTitle || ''} required placeholder="Current company title" name="currTitle" onChange={handleChange}/>
+                        {errors.currTitle && (
+                          <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.currTitle}</Text>
                         )}
                       </FormControl>
                       <FormControl p={4} id="current-location">
@@ -275,7 +275,7 @@ const SignUpSteps = () => {
 
   const validate = (values) => {
     let errors: any = {};
-    console.log(values);
+
     if (!values.firstName) {
       errors.firstName = 'First name is required';
     }
@@ -306,8 +306,8 @@ const SignUpSteps = () => {
     //   errors.businessType = 'Business location is required';
     // }
 
-    if (!values.currCompanyTitle) {
-      errors.currCompanyTitle = 'Current company is required';
+    if (!values.currTitle) {
+      errors.currTitle = 'Current title is required';
     }
 
     // if (!values.funcExpertise) {
@@ -325,19 +325,11 @@ const SignUpSteps = () => {
     evt.persist();
     setValues(values => ({ ...values, [evt.target.name]: evt.target.value }));
     setErrors(validate(values));
-    console.log(errors);
     const value = evt.target.value;
     setIdentity({
       ...identity,
       [evt.target.name]: value
     });
-    console.log(values);
-    console.log(identity);
-  }
-
-  const handleSubmit = () => {
-    setErrors(validate(values));
-    console.log(errors);
   }
 
   const steps = [
@@ -420,7 +412,7 @@ const SignUpSteps = () => {
            <Heading alignSelf="center">Sign Up</Heading>
            <Box
                     alignSelf="center"
-                    color="gray.500"
+                    color="rgb(255, 255, 255)"
                     fontWeight="semibold"
                     fontSize="sm"
                     p={0}

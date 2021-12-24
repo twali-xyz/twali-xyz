@@ -11,6 +11,7 @@ import {
     FormControl,
     FormLabel,
     Textarea,
+    Text,
     CircularProgress,
     Input,
    } from '@chakra-ui/react';
@@ -49,7 +50,7 @@ export interface Identity {
  businessName: string;
  businessType: string;
  businessLocation: string;
- currCompanyTitle: string;
+ currTitle: string;
  currLocation?: string;
  funcExpertise: string;
  industryExpertise: string;
@@ -66,7 +67,22 @@ const EditProfileModal = (props) => {
     const [identity, setIdentity] = useState(props.profileData.content.identity);
     const [fileUploaded, setFileUploaded] = useState();
     const [profileData, setProfileData] = useState(props.profileData);
-
+    const [values, setValues] = useState({
+        firstName: props.profileData.content.identity.firstName,
+        lastName: props.profileData.content.identity.lastName,
+        currTitle: props.profileData.content.identity.currTitle,
+        bio: props.profileData.content.identity.bio,
+        linkedIn: props.profileData.content.identity.linkedIn,
+        twitter: props.profileData.content.identity.twitter,
+    });
+    const [errors, setErrors] = useState({
+        firstName: null,
+        lastName: null,
+        currTitle: null,
+        bio: null,
+        linkedIn: null,
+        twitter: null,
+    });
   
     async function updateProfileInfo() {
       const address = await connect(); // first address in the array
@@ -136,6 +152,9 @@ const EditProfileModal = (props) => {
 
 
   const handleChange = (evt) => {
+    evt.persist();
+    setValues(values => ({ ...values, [evt.target.name]: evt.target.value }));
+    setErrors(validate(values));
     setIdentity({
       ...identity,
       [evt.target.name]: evt.target.value
@@ -147,6 +166,38 @@ const EditProfileModal = (props) => {
   const handleFile = (fileUploaded) => {
     setFileUploaded(fileUploaded);
   }
+
+  const validate = (values) => {
+    let errors: any = {};
+
+    if (!values.firstName) {
+      errors.firstName = 'First name is required';
+    }
+
+    if (!values.lastName) {
+      errors.lastName = 'Last name is required';
+    }
+
+    if (!values.currTitle) {
+      errors.currTitle = 'Current title is required';
+    }
+
+    if (values.bio && values.bio.length > 280) {
+      errors.bio = 'Bio is too long. It should be less than 280 characters.';
+    }
+
+    var urlPattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
+
+    if (values.linkedIn && !urlPattern.test(values.linkedIn)) {
+      errors.linkedIn = 'Please enter a valid URL';
+    } 
+
+    if (values.twitter && !urlPattern.test(values.twitter)) {
+      errors.twitter = 'Please enter a valid URL';
+    }
+  
+    return errors;
+  };
   
     return (
       <>  
@@ -157,7 +208,7 @@ const EditProfileModal = (props) => {
             <ModalCloseButton />
             <ModalBody>
             <form style={{ alignSelf: "center"}}>
-            <FormControl>
+            <FormControl p={2}>
             {/* isInvalid={!!errors.file_} */}
             <FormLabel>{'Update profile picture'}</FormLabel>
 
@@ -173,49 +224,51 @@ const EditProfileModal = (props) => {
                     {errors.file_ && errors?.file_.message}
                 </FormErrorMessage> */}
             </FormControl>
-                <FormControl p={2} id="name" isRequired>
-                    <FormLabel>What do you want us to call you?</FormLabel>
-                    <Input required  errorBorderColor='red.300' defaultValue={props.profileData.content.identity.firstName || ''} name="name" onChange={handleChange}/>
-                    {/* isInvalid={errors.name} */}
-                    {/* value={values.name || ''} */}
-                    {/* {errors.firstName && (
+                <FormControl p={2} id="first-name" isRequired>
+                    <FormLabel>First name</FormLabel>
+                    <Input required isInvalid={errors.firstName && (!props.profileData.content.identity.firstName || !values.firstName)} errorBorderColor='red.300' placeholder="First name" name="firstName" defaultValue={props.profileData.content.identity.firstName || ''} onChange={handleChange}/>
+                    {errors.firstName && (!props.profileData.content.identity.firstName || !values.firstName) && (
                       <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.firstName}</Text>
-                    )} */}
+                    )}
+                  </FormControl>
+                  <FormControl p={2} id="last-name" isRequired>
+                    <FormLabel>Last name</FormLabel>
+                    <Input required isInvalid={errors.lastName && (!props.profileData.content.identity.lastName || !values.lastName)} errorBorderColor='red.300' placeholder="Last name" name="lastName" defaultValue={props.profileData.content.identity.lastName || ''} onChange={handleChange}/>
+                    {errors.lastName && (!props.profileData.content.identity.lastName || !values.lastName) && (
+                      <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.lastName}</Text>
+                    )}
                   </FormControl>
                   <FormControl p={2} id="current-title" isRequired>
                     <FormLabel>What's your current title?</FormLabel>
-                    <Input required  errorBorderColor='red.300' defaultValue={props.profileData.content.identity.currCompanyTitle || ''} name="currCompanyTitle" onChange={handleChange}/>
-                    {/* isInvalid={errors.name} */}
-                    {/* value={values.name || ''} */}
-                    {/* {errors.firstName && (
-                      <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.firstName}</Text>
-                    )} */}
+                    <Input isInvalid={errors.currTitle && (!props.profileData.content.identity.currTitle || !values.currTitle)} required errorBorderColor='red.300' defaultValue={props.profileData.content.identity.currTitle || ''} name="currTitle" onChange={handleChange}/>
+                    {errors.currTitle && (!props.profileData.content.identity.currTitle || !values.currTitle) && (
+                      <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.currTitle}</Text>
+                    )}
                   </FormControl>
                   <FormControl p={2} id="currLocation" isRequired>
                     <FormLabel>Where do you call home?</FormLabel>
-                    <Input required  errorBorderColor='red.300' defaultValue={props.profileData.content.identity.currLocation || ''} name="currLocation" onChange={handleChange}/>
-                    {/* isInvalid={errors.name} */}
-                    {/* value={values.name || ''} */}
-                    {/* {errors.firstName && (
-                      <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.firstName}</Text>
-                    )} */}
+                    <Input defaultValue={props.profileData.content.identity.currLocation || ''} name="currLocation" onChange={handleChange}/>
                   </FormControl>
                   <FormControl p={2} id="bio">
                     <FormLabel>Bio</FormLabel>
-                    <Textarea errorBorderColor='red.300' defaultValue={props.profileData.content.identity.bio || ''} name="bio" onChange={handleChange}/>
-                    {/* isInvalid={errors.name} */}
-                    {/* value={values.name || ''} */}
-                    {/* {errors.firstName && (
-                      <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.firstName}</Text>
-                    )} */}
+                    <Textarea isInvalid={errors.bio} errorBorderColor='red.300' defaultValue={props.profileData.content.identity.bio || ''} name="bio" onChange={handleChange}/>
+                    {errors.bio && (
+                      <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.bio}</Text>
+                    )}
                   </FormControl>
                   <FormControl p={2} id="linkedIn">
                     <FormLabel>LinkedIn URL</FormLabel>
-                    <Input name="linkedIn" defaultValue={props.profileData.content.identity.linkedIn || ''} onChange={handleChange}/>
+                    <Input isInvalid={errors.linkedIn} errorBorderColor='red.300' name="linkedIn" defaultValue={props.profileData.content.identity.linkedIn || ''} onChange={handleChange}/>
+                    {errors.linkedIn && (
+                          <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.linkedIn}</Text>
+                      )}
                   </FormControl>
                   <FormControl p={2} id="twitter">
                     <FormLabel>Twitter URL</FormLabel>
-                    <Input name="twitter" defaultValue={props.profileData.content.identity.twitter || ''} onChange={handleChange}/>
+                    <Input isInvalid={errors.twitter} errorBorderColor='red.300' name="twitter" defaultValue={props.profileData.content.identity.twitter || ''} onChange={handleChange}/>
+                    {errors.twitter && (
+                          <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.twitter}</Text>
+                      )}
                   </FormControl>
             </form>
             </ModalBody>
