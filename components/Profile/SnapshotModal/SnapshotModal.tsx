@@ -30,7 +30,7 @@ import {
     businessName: string;
     businessType: string;
     businessLocation: string;
-    currCompanyTitle: string;
+    currTitle: string;
     currLocation?: string;
     funcExpertise: string;
     industryExpertise: string;

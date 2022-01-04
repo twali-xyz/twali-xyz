@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { 
     Button,
+    Input,
     Modal,
     ModalOverlay,
     ModalHeader,
@@ -11,6 +12,7 @@ import {
     FormControl,
     FormLabel,
     Select,
+    Text,
     CircularProgress
    } from '@chakra-ui/react';
    import { connect } from '../../../utils/walletUtils';
@@ -48,7 +50,7 @@ import {
     businessName: string;
     businessType: string;
     businessLocation: string;
-    currCompanyTitle: string;
+    currTitle: string;
     currLocation?: string;
     funcExpertise: string;
     industryExpertise: string;
@@ -64,8 +66,17 @@ const EditExperienceModal = (props) => {
     const [accType, setAccType] = useState(props.profileData.content.accType);
     const [identity, setIdentity] = useState(props.profileData.content.identity);
     const [profileData, setProfileData] = useState(props.profileData);
+    const [values, setValues] = useState({
+      displayName: props.profileData.content.identity.displayName,
+      email: props.profileData.content.identity.email,
+  });
+  const [errors, setErrors] = useState({
+      displayName: null,
+      email: null,
+  });
 
     async function updateExperiences() {
+      setErrors(validate(values));
       const address = await connect(); // first address in the array
       console.log(address);
   
@@ -126,7 +137,39 @@ const EditExperienceModal = (props) => {
       await profileData.update({identity, accType});
   };
 
+
+  const validate = (values) => {
+    let errors: any = {};
+
+    if (!values.displayName) {
+      errors.displayName = 'Display name is required';
+    }
+  
+    var emailPattern = /(.+)@(.+){1,}\.(.+){1,}/
+    
+    if (!values.email) {
+      errors.email = 'Email address is required';
+    } 
+    
+    if (values.email && !emailPattern.test(values.email)) {
+      errors.email = 'Email address is invalid';
+    }
+
+    if (values.funcExpertise === '') {
+      errors.funcExpertise = 'Functional expertise is required';
+    }
+
+    if (values.industryExpertise === '') {
+      errors.industryExpertise = 'Industry expertise is required';
+    }
+  
+    return errors;
+  };
+
   const handleChange = (evt) => {
+    evt.persist();
+    setValues(values => ({ ...values, [evt.target.name]: evt.target.value }));
+    setErrors(validate(values));
     setIdentity({
       ...identity,
       [evt.target.name]: evt.target.value
@@ -144,9 +187,23 @@ const EditExperienceModal = (props) => {
             <ModalCloseButton />
             <ModalBody>
             <form style={{ alignSelf: "center"}}>
-                <FormControl p={4} id="functional-expertise">
+                <FormControl p={2} id="display-name" isRequired>
+                    <FormLabel>Display name</FormLabel>
+                    <Input required isInvalid={errors.displayName && (!props.profileData.content.identity.displayName || !values.displayName)} errorBorderColor='red.300' placeholder="Display name" name="displayName" defaultValue={props.profileData.content.identity.displayName || ''} onChange={handleChange}/>
+                    {errors.displayName && (!props.profileData.content.identity.displayName || !values.displayName) && (
+                      <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.displayName}</Text>
+                    )}
+                  </FormControl>
+                  <FormControl p={2} id="email" isRequired>
+                    <FormLabel>Email</FormLabel>
+                    <Input required isInvalid={errors.email && props.profileData.content.identity.email === values.email} errorBorderColor='red.300' placeholder="Email" name="email" defaultValue={props.profileData.content.identity.email || ''} onChange={handleChange}/>
+                    {errors.email && props.profileData.content.identity.email !== values.email && (
+                      <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.email}</Text>
+                    )}
+                  </FormControl>
+                <FormControl p={2} id="functional-expertise" isRequired>
                         <FormLabel>So...what would you say you do?</FormLabel>
-                        <Select placeholder="Select functional expertise" name="funcExpertise" onChange={handleChange}>
+                        <Select required defaultValue={props.profileData.content.identity.funcExpertise} errorBorderColor='red.300' placeholder="Select functional expertise" name="funcExpertise" onChange={handleChange}>
                           <option>Accounting</option>
                           <option>Creative</option>
                           <option>Audit</option>
@@ -194,9 +251,9 @@ const EditExperienceModal = (props) => {
                           <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.funcExpertise}</Text>
                         )} */}
                     </FormControl>
-                    <FormControl p={4} id="industry-expertise">
+                    <FormControl p={2} id="industry-expertise" isRequired>
                         <FormLabel>Where would you say you work?</FormLabel>
-                        <Select placeholder="Select industry expertise" name="industryExpertise" onChange={handleChange}>
+                        <Select required defaultValue={props.profileData.content.identity.industryExpertise} placeholder="Select industry expertise" name="industryExpertise" onChange={handleChange}>
                           <option>Accounting</option>
                           <option>Angel Investment</option>
                           <option>Asset Management</option>
