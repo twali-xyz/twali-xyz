@@ -293,7 +293,7 @@ const ProfilePage = () => {
           var elements = [];
           let totalLen = profileData.content.identity.companyInfo.length;
           for(let i = 0; i < number; i++){
-            if (i < totalLen) {
+            if (profileData.content.identity.companyInfo && i < totalLen) {
               elements.push(<GetCompany companyName={profileData.content.identity.companyInfo[i].companyName} currCompany={i} setCurrCompany={setCurrCompany} onCompanyModalOpen={onCompanyModalOpen}/>);
             } else {
               elements.push(<Img
@@ -326,7 +326,6 @@ const ProfilePage = () => {
         <>
         <Box w="full" borderWidth='1px' borderRadius='lg' overflow='hidden'>
                 <Img
-                    // onClick={() => getCompany('')}
                     objectFit="cover"
                     width="100%"
                     height="200px"
@@ -373,8 +372,6 @@ const ProfilePage = () => {
                     <VStack>
                         <Box alignSelf="flex-start" w="full" overflow='hidden'>
                             <Text pb={8} fontSize='xl'>Company Experience</Text>
-                            {/* <HStack spacing={4}> */}
-                            {/* { profileData.content.identity.companyInfo[0].companyName && <GetCompany companyName={profileData.content.identity.companyInfo[0].companyName}/>} */}
                             <HStack spacing={4}>
                             {createElements(5)}
                             </HStack>
@@ -440,13 +437,11 @@ const GetCompany = (companyName) => {
   return (
     <>
       { data && data.message && data.message.logo ? (
-        <Box w="100px" height="100px" borderRadius='50%' backgroundColor='lightgray' borderWidth='2px' overflow='hidden' p={4}>
+        <Box w="100px" height="100px" borderRadius='full' backgroundColor='rgb(222, 222, 222)' overflow='hidden' p={4}>
           <Img
-            backgroundColor='lightgray'
+            backgroundColor='rgb(222, 222, 222)'
             style={{ cursor: 'pointer'}}
             key={data.message.name}
-            // borderRadius='
-            width="100px"
             alignSelf="center"
             src={data.message.logo}
             alt='fox stock img'
