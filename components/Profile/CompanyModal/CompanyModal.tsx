@@ -84,7 +84,6 @@ const CompanyModal = (props) => {
     const finalRef = useRef();
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [companyName, setCompanyName] = useState('');
-    const [companyImg, setCompanyImg] = useState('');
     const [companyInfo, setCompanyInfo] = useState();
     const [shouldFetch, setShouldFetch] = useState(false);
     const [accType, setAccType] = useState(props.profileData.content.accType);
@@ -128,9 +127,9 @@ const CompanyModal = (props) => {
         `${address}@eip155:1`
       )
       console.log('data: ', data);
-      identity.companyInfo = [{
+      identity.companyInfo[props.currCompany] = {
         companyName: companyName
-      }]
+      }
 
       await updateProfileData(ceramic, identity, accType);
 
@@ -341,7 +340,6 @@ const handleCompanyData = (companyData) => {
   };
 
  function CompanyInfoData(props) {
-    // const [companyInfo, setCompanyInfo] = useState();
     console.log('PARAMS', props);
     const fetcher = (companyDomain: string,...args: Parameters<typeof fetch>) => fetch(companyDomain).then(response => response.json());
     let paramsObj = {params: props.companyName};

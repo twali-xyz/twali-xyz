@@ -89,32 +89,7 @@ const ProfilePage = () => {
     const [loaded, setLoaded] = useState(false);
     const [snapshotData, setSnapshotData] = useState<any>();
     const [currentSnapshot, setCurrentSnapshot] = useState();
-    const [isOnMouseOver, setOnMouseOver] = useState(false);
-    const [companyData, setCompanyData] = useState<any>();
-    // const [companyName, setCompanyName] = useState();
-
-    // const fetcher = (companyDomain: string,...args: Parameters<typeof fetch>) => fetch(companyDomain).then(response => response.json());
-    // const { data, error } = useSWR('/api/cors', fetcher);
-
-    // const address = `https://company.clearbit.com/v2/companies/find?domain=segment.com`;
-
-    // const fetcher = async (url) => await axios.get(url, {
-    //   headers: { key: 'sk_6bcc4eeacc2e0695ccd95e414e0633a6' },
-    // }).then((res) => res.data);
-
-    
-
-    // console.log(data);
-
-  //   const fetcher = async(...args: Parameters<typeof fetch>) => { 
-  //     fetch('https://company.clearbit.com/v2/companies/find?domain=segment.com', {
-  //     headers: {
-  //         'Authorization': 'Basic sk_6bcc4eeacc2e0695ccd95e414e0633a6'
-  //     }
-  //   }).then(response => response.json())
-  // };
-
-    // const { data, error } = useSWR('https://company.clearbit.com/v2/companies/find?domain=segment.com', fetcher)
+    const [currCompany, setCurrCompany] = useState(0);
 
     async function readProfile() {
       const address = await connect(); // first address in the array
@@ -280,7 +255,6 @@ const ProfilePage = () => {
                     }`
                 
                 request('https://hub.snapshot.org/graphql', query3, variables).then((totals) => {
-                  // setWalletVotes(totals.votes.length)
                   finalObj.walletVotes = totals.votes.length;
                   finalObj.voter = address;
                 });
@@ -313,6 +287,31 @@ const ProfilePage = () => {
         const handleUpdatedCompanyInfo = (profileData) => {
           setProfileData({...profileData});
           readProfile();
+        }
+
+        function createElements(number){
+          var elements = [];
+          let totalLen = profileData.content.identity.companyInfo.length;
+          for(let i = 0; i < number; i++){
+            if (i < totalLen) {
+              elements.push(<GetCompany companyName={profileData.content.identity.companyInfo[i].companyName} currCompany={i} setCurrCompany={setCurrCompany} onCompanyModalOpen={onCompanyModalOpen}/>);
+            } else {
+              elements.push(<Img
+                key={`${i}--empty-company-exp`}
+                borderRadius='full'
+                style={{ cursor: 'pointer'}}
+                backgroundColor='lightgray'
+                width="100px"
+                src='add.svg'
+                alt='add img'
+                onClick={() => {
+                  setCurrCompany(i);
+                  onCompanyModalOpen();
+                }}
+            />);
+            }
+          }
+          return elements;
         }
 
     return (
@@ -375,55 +374,11 @@ const ProfilePage = () => {
                         <Box alignSelf="flex-start" w="full" overflow='hidden'>
                             <Text pb={8} fontSize='xl'>Company Experience</Text>
                             {/* <HStack spacing={4}> */}
-                            {companyData ? (
-                              <>
+                            {/* { profileData.content.identity.companyInfo[0].companyName && <GetCompany companyName={profileData.content.identity.companyInfo[0].companyName}/>} */}
                             <HStack spacing={4}>
-                              {companyData.map(company =>
-                                company ? (
-                                <Img
-                                  style={{ cursor: 'pointer'}}
-                                  key={company.companyName}
-                                  borderRadius='full'
-                                  width="100px"
-                                  src={company.companyImg}
-                                  alt='fox stock img'
-                                  onClick={() => {
-                                    onCompanyModalOpen();
-                                  }}
-                                />
-                              ): (
-                                <Img
-                                      borderRadius='full'
-                                      style={{ cursor: 'pointer'}}
-                                      backgroundColor='lightgray'
-                                      width="100px"
-                                      src='add.svg'
-                                      alt='add img'
-                                  />
-                              ))}
+                            {createElements(5)}
                             </HStack>
-                            </>
-                            ):
-                              <>
-                              <HStack spacing={4}>
-                              {/* {new Array(5).fill(0).map((_, index) => (
-                                  <Img
-                                    key={index}
-                                    borderRadius='full'
-                                    style={{ cursor: 'pointer'}}
-                                    backgroundColor='lightgray'
-                                    width="100px"
-                                    src='add.svg'
-                                    alt='add img'
-                                    onClick={() => {
-                                      onCompanyModalOpen();
-                                    }}
-                                />
-                              ))} */}
-                              { profileData.content.identity.companyInfo[0].companyName && <GetCompany companyName={profileData.content.identity.companyInfo[0].companyName}/>}
-                              </HStack>
-                              </>}
-                            <CompanyModal isOpen={isCompanyModalOpen} onClose={onCompanyModalClose} profileData={profileData} handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}/>
+                            <CompanyModal isOpen={isCompanyModalOpen} onClose={onCompanyModalClose} currCompany={currCompany} profileData={profileData} handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}/>
                         </Box>
                         <Box alignSelf="flex-start" w="full" overflow='hidden'>
                             <Text pt={8} pb={4} fontSize='xl'>Snapshot</Text>
@@ -486,14 +441,7 @@ const GetCompany = (companyName) => {
     <>
       { data && data.message && data.message.logo ? (
         <Box w="100px" height="100px" borderRadius='50%' backgroundColor='lightgray' borderWidth='2px' overflow='hidden' p={4}>
-         {/* <Img
-              height="30px"
-              src={data.message.logo}
-              alt={data.message.domain}
-          /> */}
-
           <Img
-            paddingTop={4}
             backgroundColor='lightgray'
             style={{ cursor: 'pointer'}}
             key={data.message.name}
@@ -502,6 +450,13 @@ const GetCompany = (companyName) => {
             alignSelf="center"
             src={data.message.logo}
             alt='fox stock img'
+            onMouseEnter={(e) => e.currentTarget.src = 'edit.svg'}
+            onMouseLeave={(e) => e.currentTarget.src = data.message.logo}
+            onClick={ () => {
+              companyName.setCurrCompany(companyName.currCompany);
+              companyName.onCompanyModalOpen();
+            }
+            }
           />
       </Box>
       ) : null}
