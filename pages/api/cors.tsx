@@ -28,7 +28,7 @@ export default async function handler(req, res) {
 
   // Rest of the API logic
 
-  var clearbit = require('clearbit')('sk_6bcc4eeacc2e0695ccd95e414e0633a6');
+  var clearbit = require('clearbit')(process.env.CLEARBIT_APIKEY);
 var Autocomplete = clearbit.NameToDomain;
 console.log('USER SENT REQUEST', req.query.params);
 
