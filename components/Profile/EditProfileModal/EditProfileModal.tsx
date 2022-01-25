@@ -86,7 +86,6 @@ const EditProfileModal = (props) => {
   
     async function updateProfileInfo() {
       const address = await connect(); // first address in the array
-      console.log(address);
   
       if (address) {
         const ceramic = new CeramicClient(endpoint);      
@@ -125,7 +124,6 @@ const EditProfileModal = (props) => {
   
         console.log("Profile updated!");
         console.log(identity);
-        console.log(accType);
   
         if(identity.firstName && identity.lastName && identity.email) {
             setIsSubmitted(false);

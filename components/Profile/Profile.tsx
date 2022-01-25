@@ -26,6 +26,9 @@ import EditProfileModal from './EditProfileModal/EditProfileModal';
 import EditExperienceModal from './EditExperienceModal/EditExperienceModal';
 import { request, gql } from 'graphql-request';
 import SnapshotModal from './SnapshotModal/SnapshotModal';
+import CompanyModal from './CompanyModal/CompanyModal';
+import useSWR from 'swr'
+
 
 // network node that we're interacting with, can be local/prod
 // we're using a test network here
@@ -54,6 +57,7 @@ export interface ProfileData {
     currLocation?: string;
     funcExpertise: string;
     industryExpertise: string;
+    companyInfo?: CompanyInfo[];
   }
   
   export interface BasicProfile {
@@ -65,15 +69,27 @@ export interface ProfileData {
       accType: string;
   }
 
+  export interface CompanyInfo {
+    companyName: string;
+    companyTitle: string;
+    companyImg: any;
+    companyStart: Date;
+    companyEnd: Date;
+    companyFunc: string;
+    companyIndustry: string;
+}
+
 const ProfilePage = () => {
     const [profileData, setProfileData]  = useState<ProfileData>();
     const [name, setName] = useState('');
     const { isOpen: isProfileModalOpen , onOpen: onProfileModalOpen, onClose: onProfileModalClose } = useDisclosure()
     const { isOpen: isExpModalOpen , onOpen: onExpModalOpen, onClose: onExpModalClose } = useDisclosure()
     const { isOpen: isSnapshotModalOpen , onOpen: onSnapshotModalOpen, onClose: onSnapshotModalClose } = useDisclosure()
+    const { isOpen: isCompanyModalOpen , onOpen: onCompanyModalOpen, onClose: onCompanyModalClose } = useDisclosure()
     const [loaded, setLoaded] = useState(false);
     const [snapshotData, setSnapshotData] = useState<any>();
     const [currentSnapshot, setCurrentSnapshot] = useState();
+    const [currCompany, setCurrCompany] = useState(0);
 
     async function readProfile() {
       const address = await connect(); // first address in the array
@@ -92,7 +108,6 @@ const ProfilePage = () => {
         });
       await ceramic.did.authenticate();
 
-      console.log(address);
       try {
         // does not require signing to get user's public data
         const data: BasicProfile = await idx.get(
@@ -106,14 +121,12 @@ const ProfilePage = () => {
           { family: 'user-profile-data' },
           { anchor: false, publish: false }
         );
-
-        console.log(profile);
         
         if (data.name) setName(data.name)
         if (profile) {
           setProfileData(profile);
         }
-        console.log('profileData: ', profileData);
+
         setLoaded(true);
         
       } catch(err) {
@@ -139,7 +152,6 @@ const ProfilePage = () => {
               });
             await ceramic.did.authenticate();
     
-            console.log(address);
             try {
               // does not require signing to get user's public data
               const data: BasicProfile = await idx.get(
@@ -154,13 +166,10 @@ const ProfilePage = () => {
                 { anchor: false, publish: false }
               );
 
-              console.log(profile);
-              
               if (data.name) setName(data.name)
               if (profile) {
                 setProfileData(profile);
               }
-              console.log('profileData: ', profileData);
               setLoaded(true);
               
             } catch(err) {
@@ -190,10 +199,8 @@ const ProfilePage = () => {
               data.votes.find(v => { if (v.space.avatar) {
                 v.space.avatar = v.space.avatar.replace('ipfs://','https://ipfs.io/ipfs/')
               }});
-
               getVoterSnapshotQueries(data, address);
             });
-            
           }
 
           async function getVoterSnapshotQueries(data, address) {
@@ -239,7 +246,6 @@ const ProfilePage = () => {
                     }`
                 
                 request('https://hub.snapshot.org/graphql', query3, variables).then((totals) => {
-                  // setWalletVotes(totals.votes.length)
                   finalObj.walletVotes = totals.votes.length;
                   finalObj.voter = address;
                 });
@@ -258,7 +264,6 @@ const ProfilePage = () => {
               }
             });
             setSnapshotData(resArr);
-  
           }
           readProfile();
         }, []);
@@ -266,6 +271,36 @@ const ProfilePage = () => {
         const handleUpdatedProfile = (profileData) => {
           setProfileData({...profileData});
           readProfile();
+        }
+
+        const handleUpdatedCompanyInfo = (profileData) => {
+          setProfileData({...profileData});
+          readProfile();
+        }
+
+        function createElements(number){
+          var elements = [];
+          let totalLen = profileData.content.identity.companyInfo ? profileData.content.identity.companyInfo.length: 0;
+          for(let i = 0; i < number; i++){
+            if (profileData.content.identity.companyInfo && i < totalLen && profileData.content.identity.companyInfo[i].companyName) {
+              elements.push(<GetCompany companyName={profileData.content.identity.companyInfo[i].companyName} currCompany={i} setCurrCompany={setCurrCompany} onCompanyModalOpen={onCompanyModalOpen}/>);
+            } else {
+              elements.push(<Img
+                key={`${i}--empty-company-exp`}
+                borderRadius='full'
+                style={{ cursor: 'pointer'}}
+                backgroundColor='lightgray'
+                width="100px"
+                src='add.svg'
+                alt='add img'
+                onClick={() => {
+                  setCurrCompany(i);
+                  onCompanyModalOpen();
+                }}
+            />);
+            }
+          }
+          return elements;
         }
 
     return (
@@ -327,37 +362,9 @@ const ProfilePage = () => {
                         <Box alignSelf="flex-start" w="full" overflow='hidden'>
                             <Text pb={8} fontSize='xl'>Company Experience</Text>
                             <HStack spacing={4}>
-                                <Img
-                                    borderRadius='full'
-                                    width="100px"
-                                    src='https://miro.medium.com/fit/c/160/160/1*pF_x_Qm-EGxym_Ag7mBJ4w.png'
-                                    alt='fox stock img'
-                                />
-                                <Img
-                                    borderRadius='full'
-                                    width="100px"
-                                    src='https://s2.coinmarketcap.com/static/img/coins/200x200/10052.png'
-                                    alt='fox stock img'
-                                />
-                                <Img
-                                    borderRadius='full'
-                                    width="100px"
-                                    src='https://s2.coinmarketcap.com/static/img/coins/200x200/5632.png'
-                                    alt='fox stock img'
-                                />
-                                <Img
-                                    borderRadius='full'
-                                    width="100px"
-                                    src='https://c.gitcoin.co/grants/84461dbb55ae43f2edc28f375cb74059/ethereum_logo_-_6250754.png'
-                                    alt='fox stock img'
-                                />
-                                <Img
-                                    borderRadius='full'
-                                    width="100px"
-                                    src='fox-pfp.png'
-                                    alt='fox stock img'
-                                />
+                            {createElements(5)}
                             </HStack>
+                            <CompanyModal isOpen={isCompanyModalOpen} onClose={onCompanyModalClose} currCompany={currCompany} profileData={profileData} handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}/>
                         </Box>
                         <Box alignSelf="flex-start" w="full" overflow='hidden'>
                             <Text pt={8} pb={4} fontSize='xl'>Snapshot</Text>
@@ -398,6 +405,57 @@ const ProfilePage = () => {
         </>)}
         </>
     )
+}
+
+const GetCompany = (companyName) => {
+  const fetcher = (companyDomain: string,...args: Parameters<typeof fetch>) => fetch(companyDomain).then(response => response.json());
+  let paramsObj = {params: companyName.companyName};
+  let searchParams = new URLSearchParams(paramsObj);
+
+  // Create a stable key for SWR
+  searchParams.sort();
+  const qs = searchParams.toString();
+
+  const { data, error } = useSWR(`/api/cors?${qs}`, fetcher);
+  console.log('DATA: ', data);
+
+  return (
+    <>
+      { data && data.message && data.message.logo ? (
+        <Box w="100px" height="100px" borderRadius='full' backgroundColor='rgb(222, 222, 222)' overflow='hidden' p={4}>
+          <Img
+            backgroundColor='rgb(222, 222, 222)'
+            style={{ cursor: 'pointer'}}
+            key={data.message.name}
+            alignSelf="center"
+            src={data.message.logo}
+            alt='fox stock img'
+            onMouseEnter={(e) => e.currentTarget.src = 'edit.svg'}
+            onMouseLeave={(e) => e.currentTarget.src = data.message.logo}
+            onClick={ () => {
+              companyName.setCurrCompany(companyName.currCompany);
+              companyName.onCompanyModalOpen();
+            }
+            }
+          />
+      </Box>
+      ) : (
+        <Img
+                key={`${companyName.currCompany}--empty-company-exp`}
+                borderRadius='full'
+                style={{ cursor: 'pointer'}}
+                backgroundColor='lightgray'
+                width="100px"
+                src='add.svg'
+                alt='add img'
+                onClick={() => {
+                  companyName.setCurrCompany(companyName.currCompany);
+                  companyName.onCompanyModalOpen();
+                }}
+            />
+      )}
+    </>
+  )
 }
 
 export default ProfilePage;
