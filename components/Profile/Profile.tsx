@@ -360,7 +360,7 @@ const ProfilePage = () => {
                     )
                     <VStack>
                         <Box alignSelf="flex-start" w="full" overflow='hidden'>
-                            <Text pb={8} fontSize='xl'>Company Experience</Text>
+                            <Text pb={8} fontSize='xl'>Work Experience</Text>
                             <HStack spacing={4}>
                             {createElements(5)}
                             </HStack>
