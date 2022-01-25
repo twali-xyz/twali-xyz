@@ -108,7 +108,6 @@ const ProfilePage = () => {
         });
       await ceramic.did.authenticate();
 
-      console.log(address);
       try {
         // does not require signing to get user's public data
         const data: BasicProfile = await idx.get(
@@ -122,14 +121,12 @@ const ProfilePage = () => {
           { family: 'user-profile-data' },
           { anchor: false, publish: false }
         );
-
-        console.log(profile);
         
         if (data.name) setName(data.name)
         if (profile) {
           setProfileData(profile);
         }
-        console.log('profileData: ', profileData);
+
         setLoaded(true);
         
       } catch(err) {
@@ -155,7 +152,6 @@ const ProfilePage = () => {
               });
             await ceramic.did.authenticate();
     
-            console.log(address);
             try {
               // does not require signing to get user's public data
               const data: BasicProfile = await idx.get(
@@ -170,13 +166,10 @@ const ProfilePage = () => {
                 { anchor: false, publish: false }
               );
 
-              console.log(profile);
-
               if (data.name) setName(data.name)
               if (profile) {
                 setProfileData(profile);
               }
-              console.log('profileData: ', profileData);
               setLoaded(true);
               
             } catch(err) {
@@ -206,8 +199,6 @@ const ProfilePage = () => {
               data.votes.find(v => { if (v.space.avatar) {
                 v.space.avatar = v.space.avatar.replace('ipfs://','https://ipfs.io/ipfs/')
               }});
-
-              console.log(data);
               getVoterSnapshotQueries(data, address);
             });
           }
@@ -260,7 +251,6 @@ const ProfilePage = () => {
                 });
                 finalObj.spaceID = snapshot.space.id;
                 finalData.push(finalObj);
-                console.log(finalObj);
               })
 
             }
@@ -276,7 +266,6 @@ const ProfilePage = () => {
             setSnapshotData(resArr);
           }
           readProfile();
-          console.log(snapshotData);
         }, []);
 
         const handleUpdatedProfile = (profileData) => {
@@ -293,7 +282,7 @@ const ProfilePage = () => {
           var elements = [];
           let totalLen = profileData.content.identity.companyInfo ? profileData.content.identity.companyInfo.length: 0;
           for(let i = 0; i < number; i++){
-            if (profileData.content.identity.companyInfo && i < totalLen) {
+            if (profileData.content.identity.companyInfo && i < totalLen && profileData.content.identity.companyInfo[i].companyName) {
               elements.push(<GetCompany companyName={profileData.content.identity.companyInfo[i].companyName} currCompany={i} setCurrCompany={setCurrCompany} onCompanyModalOpen={onCompanyModalOpen}/>);
             } else {
               elements.push(<Img
@@ -419,17 +408,13 @@ const ProfilePage = () => {
 }
 
 const GetCompany = (companyName) => {
-  console.log(companyName);
   const fetcher = (companyDomain: string,...args: Parameters<typeof fetch>) => fetch(companyDomain).then(response => response.json());
   let paramsObj = {params: companyName.companyName};
   let searchParams = new URLSearchParams(paramsObj);
-  console.log(searchParams);
 
   // Create a stable key for SWR
   searchParams.sort();
   const qs = searchParams.toString();
-
-  console.log(qs);
 
   const { data, error } = useSWR(`/api/cors?${qs}`, fetcher);
   console.log('DATA: ', data);
@@ -454,7 +439,21 @@ const GetCompany = (companyName) => {
             }
           />
       </Box>
-      ) : null}
+      ) : (
+        <Img
+                key={`${companyName.currCompany}--empty-company-exp`}
+                borderRadius='full'
+                style={{ cursor: 'pointer'}}
+                backgroundColor='lightgray'
+                width="100px"
+                src='add.svg'
+                alt='add img'
+                onClick={() => {
+                  companyName.setCurrCompany(companyName.currCompany);
+                  companyName.onCompanyModalOpen();
+                }}
+            />
+      )}
     </>
   )
 }

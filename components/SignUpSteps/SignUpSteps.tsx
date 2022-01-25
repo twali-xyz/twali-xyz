@@ -340,7 +340,6 @@ const SignUpSteps = () => {
 
   async function updateAccType() {
     const address = await connect(); // first address in the array
-    console.log(address);
 
     if (address) {
       const ceramic = new CeramicClient(endpoint);      
@@ -371,7 +370,6 @@ const SignUpSteps = () => {
 
       console.log("Profile updated!");
       console.log(identity);
-      console.log(accType);
 
       if(identity.firstName && identity.lastName && identity.email) {
           setIsSubmitted(false);
@@ -478,7 +476,6 @@ const SignUpSteps = () => {
       <Steps activeStep={activeStep} colorScheme="teal">
         {steps.map(({ label, content }) => (
           <Step label={label} key={label}>
-            {console.log(activeStep)}
             {activeStep < 0 ? router.push('/') :
             <Button pl={264} alignSelf="left" onClick={() => {
                 prevStep();

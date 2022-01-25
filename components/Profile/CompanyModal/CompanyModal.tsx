@@ -11,7 +11,6 @@ import {
     ModalFooter,
     FormControl,
     FormLabel,
-    Textarea,
     Text,
     CircularProgress,
     Input,
@@ -94,14 +93,26 @@ const CompanyModal = (props) => {
     const [identity, setIdentity] = useState(props.profileData.content.identity);
     const [profileData, setProfileData] = useState(props.profileData);
     const [values, setValues] = useState({
-      displayName: props.profileData.content.identity.displayName,
-      email: props.profileData.content.identity.email,
+      companyName: props.profileData.content.identity.companyInfo[props.currCompany].companyName,
+      companyTitle: props.profileData.content.identity.companyInfo[props.currCompany].companyTitle,
+      companyStart: props.profileData.content.identity.companyInfo[props.currCompany].companyStart,
+      companyEnd: props.profileData.content.identity.companyInfo[props.currCompany].companyEnd,
+      companyFunc: props.profileData.content.identity.companyInfo[props.currCompany].companyFunc,
+      companyIndustry: props.profileData.content.identity.companyInfo[props.currCompany].companyIndustry
   });
+
+    const [errors, setErrors] = useState({
+      companyName: null,
+      companyTitle: null,
+      companyStart: null,
+      companyEnd: null,
+      companyFunc: null,
+      companyIndustry: null
+    });
 
     
   async function updateCompanyInfo() {
     const address = await connect(); // first address in the array
-    console.log(address);
 
     if (address) {
       setShouldFetch(true);
@@ -130,7 +141,7 @@ const CompanyModal = (props) => {
         'basicProfile',
         `${address}@eip155:1`
       )
-      console.log('data: ', data);
+
       identity.companyInfo[props.currCompany] = {
         companyName: companyName,
         companyTitle: companyTitle,
@@ -144,7 +155,6 @@ const CompanyModal = (props) => {
 
       console.log("Profile updated!");
       console.log(identity);
-      console.log(accType);
 
       if(identity.firstName && identity.lastName && identity.email) {
           setIsSubmitted(false);
@@ -171,14 +181,14 @@ const CompanyModal = (props) => {
 
     const handleChange = (evt) => {
       evt.persist();
+      setShouldFetch(false);
       setValues(values => ({ ...values, [evt.target.name]: evt.target.value }));
-      // setErrors(validate(values));      
+      setErrors(validate(values));
       setIdentity({
         ...identity,
       });
       const newProfileData: ProfileData = { content: {identity: identity, accType: props.profileData.content.accType }};
       setProfileData(newProfileData);
-      setShouldFetch(false);
       if (evt.target.name == 'companyName') {
         setCompanyName(evt.target.value);
       }
@@ -202,8 +212,47 @@ const CompanyModal = (props) => {
       if (evt.target.name == 'industryExpertise') {
         setCompanyIndustry(evt.target.value)
       }
-      
     }
+
+    const validate = (values) => {
+      let errors: any = {};
+
+      if (!values.companyName) {
+        errors.companyName = 'Company name is required';
+      }
+          
+      if (!values.companyTitle) {
+        errors.companyTitle = 'Job title is required';
+      } 
+
+      var datePattern = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+
+      if (!values.companyStart) {
+        errors.companyStart = 'Start date (DD-MM-YYYY) is required';
+      } 
+
+      if (values.companyStart && !datePattern.test(values.companyStart)) {
+        errors.companyStart = 'Start date (DD-MM-YYYY) is incorrect';
+      } 
+
+      if (!values.companyEnd) {
+        errors.companyEnd = 'End date (DD-MM-YYYY) is required';
+      } 
+
+      if (values.companyEnd && !datePattern.test(values.companyEnd)) {
+        errors.companyEnd = 'End date (DD-MM-YYYY) is incorrect';
+      }
+  
+      if (values.companyFunc === '') {
+        errors.companyFunc = 'Functional expertise is required';
+      }
+  
+      if (values.companyIndustry === '') {
+        errors.companyIndustry = 'Industry expertise is required';
+      }
+    
+      return errors;
+    };
 
     return (
       <>  
@@ -214,40 +263,34 @@ const CompanyModal = (props) => {
             <ModalCloseButton />
             <ModalBody>
             <form style={{ alignSelf: "center"}}>
-            {/* <FormControl p={2}>
-            Company Logo
-            </FormControl> */}
-                {shouldFetch && <CompanyInfoData companyName={companyName}/>}
                 <FormControl p={2} id="company-name">
                     <FormLabel>Company name</FormLabel>
-                    <Input errorBorderColor='red.300' placeholder="Company name" name="companyName" defaultValue={props.profileData.content.identity.companyInfo[props.currCompany].companyName || ''} onChange={handleChange}/>
-                    {/* 
-                    isInvalid={errors.firstName && (!props.profileData.content.identity.firstName || !values.firstName)}
-                    {errors.firstName && (!props.profileData.content.identity.firstName || !values.firstName) && (
-                      <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.firstName}</Text>
-                    )} */}
+                    {shouldFetch && <CompanyInfoData companyName={companyName}/>}
+                    <Input required isInvalid={errors.companyName && (!props.profileData.content.identity.companyInfo[props.currCompany].companyName || !values.companyName)} errorBorderColor='red.300' placeholder="Company name" name="companyName" defaultValue={props.profileData.content.identity.companyInfo[props.currCompany].companyName || ''} onChange={handleChange}/>
+                    {errors.companyName && (!props.profileData.content.identity.companyInfo[props.currCompany].companyName || !values.companyName) && (
+                      <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.companyName}</Text>
+                    )}
                   </FormControl>
                   <FormControl p={2} id="company-title">
                     <FormLabel>Job title</FormLabel>
-                    <Input errorBorderColor='red.300' placeholder="Job title" name="companyTitle" defaultValue={props.profileData.content.identity.companyInfo[props.currCompany].companyTitle || ''} onChange={handleChange}/>
-                    {/* 
-                    isInvalid={errors.lastName && (!props.profileData.content.identity.lastName || !values.lastName)} 
-                    {errors.lastName && (!props.profileData.content.identity.lastName || !values.lastName) && (
-                      <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.lastName}</Text>
-                    )} */}
+                    <Input required isInvalid={errors.companyTitle && (!props.profileData.content.identity.companyInfo[props.currCompany].companyTitle || !values.companyTitle)} errorBorderColor='red.300' placeholder="Job title" name="companyTitle" defaultValue={props.profileData.content.identity.companyInfo[props.currCompany].companyTitle || ''} onChange={handleChange}/>
+                    {errors.companyTitle && (!props.profileData.content.identity.companyInfo[props.currCompany].companyTitle || !values.companyTitle) && (
+                      <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.companyTitle}</Text>
+                    )}
                   </FormControl>
                   <FormControl p={2} id="company-start">
                     <FormLabel>What was your start date?</FormLabel>
-                    <Input errorBorderColor='red.300' name="companyStart" defaultValue={props.profileData.content.identity.companyInfo[props.currCompany].companyStart || ''} onChange={handleChange}/>
-                    {/* 
-                    isInvalid={errors.currTitle && (!props.profileData.content.identity.currTitle || !values.currTitle)}
-                    {errors.currTitle && (!props.profileData.content.identity.currTitle || !values.currTitle) && (
-                      <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.currTitle}</Text>
-                    )} */}
+                    <Input required isInvalid={errors.companyStart && (!props.profileData.content.identity.companyInfo[props.currCompany].companyStart || !values.companyStart)} errorBorderColor='red.300' name="companyStart" defaultValue={props.profileData.content.identity.companyInfo[props.currCompany].companyStart || ''} onChange={handleChange}/>
+                    {errors.companyStart && (!props.profileData.content.identity.companyInfo[props.currCompany].companyStart || !values.companyStart) && (
+                      <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.companyStart}</Text>
+                    )}
                   </FormControl>
                   <FormControl p={2} id="company-end">
                     <FormLabel>What was your end date?</FormLabel>
-                    <Input errorBorderColor='red.300' name="companyEnd" defaultValue={props.profileData.content.identity.companyInfo[props.currCompany].companyEnd || ''} onChange={handleChange}/>
+                    <Input required isInvalid={errors.companyEnd && (!props.profileData.content.identity.companyInfo[props.currCompany].companyEnd || !values.companyEnd)} errorBorderColor='red.300' name="companyEnd" defaultValue={props.profileData.content.identity.companyInfo[props.currCompany].companyEnd || ''} onChange={handleChange}/>
+                    {errors.companyEnd && (!props.profileData.content.identity.companyInfo[props.currCompany].companyEnd || !values.companyEnd) && (
+                      <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.companyEnd}</Text>
+                    )}
                   </FormControl>
                   <FormControl p={2} id="company-func">
                     <FormLabel>Functional expertise</FormLabel>
@@ -362,26 +405,17 @@ const CompanyModal = (props) => {
   };
 
  function CompanyInfoData(props) {
-    console.log('PARAMS', props);
     const fetcher = (companyDomain: string,...args: Parameters<typeof fetch>) => fetch(companyDomain).then(response => response.json());
     let paramsObj = {params: props.companyName};
     let searchParams = new URLSearchParams(paramsObj);
-    console.log(searchParams);
   
     // Create a stable key for SWR
     searchParams.sort();
     const qs = searchParams.toString();
 
-    console.log(qs);
   
     const { data, error } = useSWR(`/api/cors?${qs}`, fetcher);
     console.log('DATA: ', data);
-    
-    // Save this data to ceramic
-    // In the modal - if ceramic has data about the first company, then show it in there, if not empty
-    // On saving the modal, the user will see an image of the company logo on their profile
-    // On hovering on the saved profile - they can click edit to pop up the modal again
-    // On page load, if ceramic has data, then the logo should appear + edit button on hover
     
     return (
       <>

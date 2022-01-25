@@ -27,23 +27,20 @@ export default async function handler(req, res) {
   await cors(req, res)
 
   // Rest of the API logic
+  try {
+    const data = await getData(req, res);
+    res.status(200).json({ message: data });
+  } catch (error) {
+    console.error(error);
+  }
+}
 
-  var clearbit = require('clearbit')(process.env.CLEARBIT_APIKEY);
-  var Autocomplete = clearbit.NameToDomain;
-  console.log('USER SENT REQUEST', req.query.params);
+const getData = (req, res) => {
+  return new Promise((resolve, reject) => {
+    var clearbit = require('clearbit')(process.env.CLEARBIT_APIKEY);
+    var Autocomplete = clearbit.NameToDomain;
+    console.log('USER SENT REQUEST', req.query.params);
 
-  Autocomplete.find({name: req.query.params})
-  .then(function (company) {
-    res.status(200).json({ message: company });
-  })
-  .catch(Autocomplete.QueuedError, function (err) {
-    // Company lookup queued - try again later
-  })
-  .catch(Autocomplete.NotFoundError, function (err) {
-    // Company could not be found
-    console.log(err);
-  })
-  .catch(function (err) {
-    console.error(err);
+    return resolve(Autocomplete.find({name: req.query.params}));
   });
 }
