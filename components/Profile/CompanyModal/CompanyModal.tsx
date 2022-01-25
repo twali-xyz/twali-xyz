@@ -84,7 +84,11 @@ const CompanyModal = (props) => {
     const finalRef = useRef();
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [companyName, setCompanyName] = useState('');
-    const [companyInfo, setCompanyInfo] = useState();
+    const [companyTitle, setCompanyTitle] = useState('');
+    const [companyStart, setCompanyStart] = useState();
+    const [companyEnd, setCompanyEnd] = useState();
+    const [companyFunc, setCompanyFunc] = useState();
+    const [companyIndustry, setCompanyIndustry] = useState();
     const [shouldFetch, setShouldFetch] = useState(false);
     const [accType, setAccType] = useState(props.profileData.content.accType);
     const [identity, setIdentity] = useState(props.profileData.content.identity);
@@ -128,7 +132,12 @@ const CompanyModal = (props) => {
       )
       console.log('data: ', data);
       identity.companyInfo[props.currCompany] = {
-        companyName: companyName
+        companyName: companyName,
+        companyTitle: companyTitle,
+        companyStart: companyStart,
+        companyEnd: companyEnd,
+        companyFunc: companyFunc,
+        companyIndustry: companyIndustry
       }
 
       await updateProfileData(ceramic, identity, accType);
@@ -136,10 +145,6 @@ const CompanyModal = (props) => {
       console.log("Profile updated!");
       console.log(identity);
       console.log(accType);
-
-      if (companyInfo) {
-        console.log(companyInfo);
-      }
 
       if(identity.firstName && identity.lastName && identity.email) {
           setIsSubmitted(false);
@@ -164,23 +169,40 @@ const CompanyModal = (props) => {
     await profileData.update({identity, accType});
 };
 
-const handleCompanyData = (companyData) => {
-  console.log(companyData);
-  setCompanyInfo(companyData);
-}
-
     const handleChange = (evt) => {
       evt.persist();
       setValues(values => ({ ...values, [evt.target.name]: evt.target.value }));
-      // setErrors(validate(values));
+      // setErrors(validate(values));      
       setIdentity({
         ...identity,
-        [evt.target.name]: evt.target.value
       });
       const newProfileData: ProfileData = { content: {identity: identity, accType: props.profileData.content.accType }};
       setProfileData(newProfileData);
       setShouldFetch(false);
-      setCompanyName(evt.target.value);
+      if (evt.target.name == 'companyName') {
+        setCompanyName(evt.target.value);
+      }
+
+      if (evt.target.name == 'companyTitle') {
+        setCompanyTitle(evt.target.value);
+      }
+
+      if (evt.target.name == 'companyStart') {
+        setCompanyStart(evt.target.value)
+      }
+
+      if (evt.target.name == 'companyEnd') {
+        setCompanyEnd(evt.target.value)
+      }
+
+      if (evt.target.name == 'funcExpertise') {
+        setCompanyFunc(evt.target.value)
+      }
+
+      if (evt.target.name == 'industryExpertise') {
+        setCompanyIndustry(evt.target.value)
+      }
+      
     }
 
     return (
@@ -198,7 +220,7 @@ const handleCompanyData = (companyData) => {
                 {shouldFetch && <CompanyInfoData companyName={companyName}/>}
                 <FormControl p={2} id="company-name">
                     <FormLabel>Company name</FormLabel>
-                    <Input errorBorderColor='red.300' placeholder="Company name" name="companyName" onChange={handleChange}/>
+                    <Input errorBorderColor='red.300' placeholder="Company name" name="companyName" defaultValue={props.profileData.content.identity.companyInfo[props.currCompany].companyName || ''} onChange={handleChange}/>
                     {/* 
                     isInvalid={errors.firstName && (!props.profileData.content.identity.firstName || !values.firstName)}
                     {errors.firstName && (!props.profileData.content.identity.firstName || !values.firstName) && (
@@ -207,7 +229,7 @@ const handleCompanyData = (companyData) => {
                   </FormControl>
                   <FormControl p={2} id="company-title">
                     <FormLabel>Job title</FormLabel>
-                    <Input errorBorderColor='red.300' placeholder="Job title" name="companyTitle"/>
+                    <Input errorBorderColor='red.300' placeholder="Job title" name="companyTitle" defaultValue={props.profileData.content.identity.companyInfo[props.currCompany].companyTitle || ''} onChange={handleChange}/>
                     {/* 
                     isInvalid={errors.lastName && (!props.profileData.content.identity.lastName || !values.lastName)} 
                     {errors.lastName && (!props.profileData.content.identity.lastName || !values.lastName) && (
@@ -216,7 +238,7 @@ const handleCompanyData = (companyData) => {
                   </FormControl>
                   <FormControl p={2} id="company-start">
                     <FormLabel>What was your start date?</FormLabel>
-                    <Input errorBorderColor='red.300' name="companyStart"/>
+                    <Input errorBorderColor='red.300' name="companyStart" defaultValue={props.profileData.content.identity.companyInfo[props.currCompany].companyStart || ''} onChange={handleChange}/>
                     {/* 
                     isInvalid={errors.currTitle && (!props.profileData.content.identity.currTitle || !values.currTitle)}
                     {errors.currTitle && (!props.profileData.content.identity.currTitle || !values.currTitle) && (
@@ -225,11 +247,11 @@ const handleCompanyData = (companyData) => {
                   </FormControl>
                   <FormControl p={2} id="company-end">
                     <FormLabel>What was your end date?</FormLabel>
-                    <Input name="companyEnd"/>
+                    <Input errorBorderColor='red.300' name="companyEnd" defaultValue={props.profileData.content.identity.companyInfo[props.currCompany].companyEnd || ''} onChange={handleChange}/>
                   </FormControl>
                   <FormControl p={2} id="company-func">
                     <FormLabel>Functional expertise</FormLabel>
-                    <Select errorBorderColor='red.300' placeholder="Select functional expertise" name="funcExpertise">
+                    <Select required defaultValue={props.profileData.content.identity.companyInfo[props.currCompany].companyFunc} errorBorderColor='red.300' placeholder="Select functional expertise" name="funcExpertise" onChange={handleChange}>
                           <option>Accounting</option>
                           <option>Creative</option>
                           <option>Audit</option>
@@ -276,7 +298,7 @@ const handleCompanyData = (companyData) => {
                   </FormControl>
                   <FormControl p={2} id="company-industry">
                     <FormLabel>Industry</FormLabel>
-                    <Select placeholder="Select industry expertise" name="industryExpertise">
+                    <Select required defaultValue={props.profileData.content.identity.companyInfo[props.currCompany].companyIndustry} errorBorderColor='red.300' placeholder="Select industry expertise" name="industryExpertise" onChange={handleChange}>
                           <option>Accounting</option>
                           <option>Angel Investment</option>
                           <option>Asset Management</option>

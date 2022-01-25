@@ -291,7 +291,7 @@ const ProfilePage = () => {
 
         function createElements(number){
           var elements = [];
-          let totalLen = profileData.content.identity.companyInfo.length;
+          let totalLen = profileData.content.identity.companyInfo ? profileData.content.identity.companyInfo.length: 0;
           for(let i = 0; i < number; i++){
             if (profileData.content.identity.companyInfo && i < totalLen) {
               elements.push(<GetCompany companyName={profileData.content.identity.companyInfo[i].companyName} currCompany={i} setCurrCompany={setCurrCompany} onCompanyModalOpen={onCompanyModalOpen}/>);

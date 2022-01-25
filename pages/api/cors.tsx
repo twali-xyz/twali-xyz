@@ -29,12 +29,12 @@ export default async function handler(req, res) {
   // Rest of the API logic
 
   var clearbit = require('clearbit')(process.env.CLEARBIT_APIKEY);
-var Autocomplete = clearbit.NameToDomain;
-console.log('USER SENT REQUEST', req.query.params);
+  var Autocomplete = clearbit.NameToDomain;
+  console.log('USER SENT REQUEST', req.query.params);
 
   Autocomplete.find({name: req.query.params})
   .then(function (company) {
-    res.json({ message: company })
+    res.status(200).json({ message: company });
   })
   .catch(Autocomplete.QueuedError, function (err) {
     // Company lookup queued - try again later
