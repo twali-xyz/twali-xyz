@@ -27,7 +27,6 @@ export interface ProfileData {
     identity: Identity;
     accType: string;
   }
-
 }
 
 export interface Identity {
@@ -42,14 +41,30 @@ export interface Identity {
   businessName: string;
   businessType: string;
   businessLocation: string;
-  currCompanyTitle: string;
+  currTitle: string;
   currLocation?: string;
   funcExpertise: string;
   industryExpertise: string;
+  companyInfo?: CompanyInfo[];
 }
 
 export interface BasicProfile {
   name: string;
+}
+export interface Profile {
+    identity: Identity;
+    name: string;
+    accType: string;
+}
+
+export interface CompanyInfo {
+  companyName: string;
+  companyTitle: string;
+  companyImg: any;
+  companyStart: Date;
+  companyEnd: Date;
+  companyFunc: string;
+  companyIndustry: string;
 }
 
 const HamburgerItem = ({ children, isLast, to = '/' }) => {

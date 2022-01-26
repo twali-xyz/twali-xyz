@@ -17,6 +17,51 @@ import { TileDocument } from '@ceramicnetwork/stream-tile';
 // we're using a test network here
 const endpoint = "https://ceramic-clay.3boxlabs.com";
 
+export interface ProfileData {
+  content: {
+    identity: Identity;
+    accType: string;
+  }
+}
+
+export interface Identity {
+  firstName: string;
+  lastName: string;
+  email: string;
+  displayName: string;
+  bio: string;
+  twitterUsrName?: string;
+  linkedInUsrName?: string;
+  website?: string;
+  businessName: string;
+  businessType: string;
+  businessLocation: string;
+  currTitle: string;
+  currLocation?: string;
+  funcExpertise: string;
+  industryExpertise: string;
+  companyInfo?: CompanyInfo[];
+}
+
+export interface BasicProfile {
+  name: string;
+}
+export interface Profile {
+    identity: Identity;
+    name: string;
+    accType: string;
+}
+
+export interface CompanyInfo {
+  companyName: string;
+  companyTitle: string;
+  companyImg: any;
+  companyStart: Date;
+  companyEnd: Date;
+  companyFunc: string;
+  companyIndustry: string;
+}
+
 const userProfileStep = ({ handleChange, values, errors }) => {
   return (<form style={{ alignSelf: "center"}}>
   <Box h="100%" w="xl" borderWidth="1px" borderRadius="lg" overflow="hidden" cursor="pointer">
@@ -267,11 +312,25 @@ const SignUpSteps = () => {
   const [errors, setErrors] = useState({});
   const [accType, setAccType] = useState('');
   const [btnActive, setBtnActive] = useState(0);
-  const [identity, setIdentity] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-  })
+
+  const [identity, setIdentity] = useState<Identity>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    displayName: '',
+    bio: '',
+    twitterUsrName: '',
+    linkedInUsrName: '',
+    website: '',
+    businessName: '',
+    businessType: '',
+    businessLocation: '',
+    currTitle: '',
+    currLocation: '',
+    funcExpertise: '',
+    industryExpertise: '',
+    companyInfo: []
+  });
 
   const validate = (values) => {
     let errors: any = {};

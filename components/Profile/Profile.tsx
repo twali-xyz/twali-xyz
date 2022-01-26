@@ -422,11 +422,11 @@ const GetCompany = (companyName) => {
   return (
     <>
       { data && data.message && data.message.logo ? (
-        <Box w="100px" height="100px" borderRadius='full' backgroundColor='rgb(222, 222, 222)' overflow='hidden' p={4}>
+        <Box w="100px" height="100px" borderRadius='full' backgroundColor='rgb(222, 222, 222)' overflow='hidden' p={4} key={`${data.message.name}--${companyName.currCompany}--box`}>
           <Img
             backgroundColor='rgb(222, 222, 222)'
             style={{ cursor: 'pointer'}}
-            key={data.message.name}
+            key={`${data.message.name}--${companyName.currCompany}`}
             alignSelf="center"
             src={data.message.logo}
             alt='fox stock img'

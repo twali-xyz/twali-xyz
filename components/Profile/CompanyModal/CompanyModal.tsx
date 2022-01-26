@@ -92,14 +92,16 @@ const CompanyModal = (props) => {
     const [accType, setAccType] = useState(props.profileData.content.accType);
     const [identity, setIdentity] = useState(props.profileData.content.identity);
     const [profileData, setProfileData] = useState(props.profileData);
-    const [values, setValues] = useState({
-      companyName: props.profileData.content.identity.companyInfo[props.currCompany].companyName,
-      companyTitle: props.profileData.content.identity.companyInfo[props.currCompany].companyTitle,
-      companyStart: props.profileData.content.identity.companyInfo[props.currCompany].companyStart,
-      companyEnd: props.profileData.content.identity.companyInfo[props.currCompany].companyEnd,
-      companyFunc: props.profileData.content.identity.companyInfo[props.currCompany].companyFunc,
-      companyIndustry: props.profileData.content.identity.companyInfo[props.currCompany].companyIndustry
-  });
+    const emptyCompanyInfo = {
+      companyName: '',
+      companyTitle: '',
+      companyStart: '',
+      companyEnd: '',
+      companyFunc: '',
+      companyIndustry: '',
+    }
+
+    const companyInfo = props.profileData.content.identity.companyInfo && props.profileData.content.identity.companyInfo[props.currCompany] ? props.profileData.content.identity.companyInfo[props.currCompany]: emptyCompanyInfo;
 
     const [errors, setErrors] = useState({
       companyName: null,
@@ -110,6 +112,14 @@ const CompanyModal = (props) => {
       companyIndustry: null
     });
 
+    const [values, setValues] = useState({
+        companyName: companyInfo && companyInfo.companyName ? companyInfo.companyName: '',
+        companyTitle: companyInfo && companyInfo.companyTitle ? companyInfo.companyTitle: '',
+        companyStart: companyInfo && companyInfo.companyStart ? companyInfo.companyStart: '',
+        companyEnd: companyInfo && companyInfo.companyEnd ? companyInfo.companyEnd: '',
+        companyFunc: companyInfo && companyInfo.companyFunc ? companyInfo.companyFunc: '',
+        companyIndustry: companyInfo && companyInfo.companyIndustry ? companyInfo.companyIndustry: ''
+    });  
     
   async function updateCompanyInfo() {
     const address = await connect(); // first address in the array
@@ -256,139 +266,141 @@ const CompanyModal = (props) => {
 
     return (
       <>  
-        <Modal finalFocusRef={finalRef} isOpen={props.isOpen} onClose={props.onClose}>
+        <Modal finalFocusRef={finalRef} isOpen={props.isOpen} onClose={props.onClose} key={`companymodal--${props.currCompany}`}>
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>Update your work experience</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-            <form style={{ alignSelf: "center"}}>
-                <FormControl p={2} id="company-name">
-                    <FormLabel>Company name</FormLabel>
-                    {shouldFetch && <CompanyInfoData companyName={companyName}/>}
-                    <Input required isInvalid={errors.companyName && (!props.profileData.content.identity.companyInfo[props.currCompany].companyName || !values.companyName)} errorBorderColor='red.300' placeholder="Company name" name="companyName" defaultValue={props.profileData.content.identity.companyInfo[props.currCompany].companyName || ''} onChange={handleChange}/>
-                    {errors.companyName && (!props.profileData.content.identity.companyInfo[props.currCompany].companyName || !values.companyName) && (
-                      <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.companyName}</Text>
-                    )}
-                  </FormControl>
-                  <FormControl p={2} id="company-title">
-                    <FormLabel>Job title</FormLabel>
-                    <Input required isInvalid={errors.companyTitle && (!props.profileData.content.identity.companyInfo[props.currCompany].companyTitle || !values.companyTitle)} errorBorderColor='red.300' placeholder="Job title" name="companyTitle" defaultValue={props.profileData.content.identity.companyInfo[props.currCompany].companyTitle || ''} onChange={handleChange}/>
-                    {errors.companyTitle && (!props.profileData.content.identity.companyInfo[props.currCompany].companyTitle || !values.companyTitle) && (
-                      <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.companyTitle}</Text>
-                    )}
-                  </FormControl>
-                  <FormControl p={2} id="company-start">
-                    <FormLabel>What was your start date?</FormLabel>
-                    <Input required isInvalid={errors.companyStart && (!props.profileData.content.identity.companyInfo[props.currCompany].companyStart || !values.companyStart)} errorBorderColor='red.300' name="companyStart" defaultValue={props.profileData.content.identity.companyInfo[props.currCompany].companyStart || ''} onChange={handleChange}/>
-                    {errors.companyStart && (!props.profileData.content.identity.companyInfo[props.currCompany].companyStart || !values.companyStart) && (
-                      <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.companyStart}</Text>
-                    )}
-                  </FormControl>
-                  <FormControl p={2} id="company-end">
-                    <FormLabel>What was your end date?</FormLabel>
-                    <Input required isInvalid={errors.companyEnd && (!props.profileData.content.identity.companyInfo[props.currCompany].companyEnd || !values.companyEnd)} errorBorderColor='red.300' name="companyEnd" defaultValue={props.profileData.content.identity.companyInfo[props.currCompany].companyEnd || ''} onChange={handleChange}/>
-                    {errors.companyEnd && (!props.profileData.content.identity.companyInfo[props.currCompany].companyEnd || !values.companyEnd) && (
-                      <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.companyEnd}</Text>
-                    )}
-                  </FormControl>
-                  <FormControl p={2} id="company-func">
-                    <FormLabel>Functional expertise</FormLabel>
-                    <Select required defaultValue={props.profileData.content.identity.companyInfo[props.currCompany].companyFunc} errorBorderColor='red.300' placeholder="Select functional expertise" name="funcExpertise" onChange={handleChange}>
-                          <option>Accounting</option>
-                          <option>Creative</option>
-                          <option>Audit</option>
-                          <option>Board & Advisory</option>
-                          <option>Corporate Development</option>
-                          <option>Comp & Benefits</option>
-                          <option>Compliance</option>
-                          <option>Management Consulting</option>
-                          <option>Data & Analytics</option>
-                          <option>Product Design</option>
-                          <option>Digital</option>
-                          <option>Engineering</option>
-                          <option>Entrepreneurship</option>
-                          <option>Finance</option>
-                          <option>General Management</option>
-                          <option>Human Resources</option>
-                          <option>IT Infrastructure</option>
-                          <option>Innovation</option>
-                          <option>Investor</option>
-                          <option>Legal</option>
-                          <option>Marketing</option>
-                          <option>Media & Comms</option>
-                          <option>Merchandising</option>
-                          <option>Security</option>
-                          <option>Operations</option>
-                          <option>Portfolio Operations</option>
-                          <option>Procurement</option>
-                          <option>Product Management</option>
-                          <option>Investor Relations</option>
-                          <option>Regulatory</option>
-                          <option>Research</option>
-                          <option>Risk</option>
-                          <option>Strategy</option>
-                          <option>Technology</option>
-                          <option>Transformation</option>
-                          <option>Sales & Customer</option>
-                          <option>Data Science</option>
-                          <option>Talent Acquisition</option>
-                          <option>Tax</option>
-                          <option>Cybersecurity</option>
-                          <option>Investment Banking</option>
-                          <option>Supply Chain</option>
-                        </Select>
-                  </FormControl>
-                  <FormControl p={2} id="company-industry">
-                    <FormLabel>Industry</FormLabel>
-                    <Select required defaultValue={props.profileData.content.identity.companyInfo[props.currCompany].companyIndustry} errorBorderColor='red.300' placeholder="Select industry expertise" name="industryExpertise" onChange={handleChange}>
-                          <option>Accounting</option>
-                          <option>Angel Investment</option>
-                          <option>Asset Management</option>
-                          <option>Auto Insurance</option>
-                          <option>Banking</option>
-                          <option>Bitcoin</option>
-                          <option>Commercial Insurance</option>
-                          <option>Commercial Lending</option>
-                          <option>Credit</option>
-                          <option>Credit Bureau</option>
-                          <option>Credit Cards</option>
-                          <option>Crowdfunding</option>
-                          <option>Cryptocurrency</option>
-                          <option>Debit Cards</option>
-                          <option>Debt Collections</option>
-                          <option>Finance</option>
-                          <option>Financial Exchanges</option>
-                          <option>Financial Services</option>
-                          <option>FinTech</option>
-                          <option>Fraud Detection</option>
-                          <option>Funding Platform</option>
-                          <option>Gift Card</option>
-                          <option>Health Insurance</option>
-                          <option>Hedge Funds</option>
-                          <option>Impact Investing</option>
-                          <option>Incubators</option>
-                          <option>Insurance</option>
-                          <option>InsurTech</option>
-                          <option>Leasing</option>
-                          <option>Lending</option>
-                          <option>Life Insurance</option>
-                          <option>Micro Lending</option>
-                          <option>Mobile Payments</option>
-                          <option>Payments</option>
-                          <option>Personal Finance</option>
-                          <option>Prediction Markets</option>
-                          <option>Property Insurance</option>
-                          <option>Real Estate Investment</option>
-                          <option>Stock Exchanges</option>
-                          <option>Trading Platform</option>
-                          <option>Transaction Processing</option>
-                          <option>Venture Capital</option>
-                          <option>Virtual Currency</option>
-                          <option>Wealth Management</option>
-                        </Select>
-                  </FormControl>
-            </form>
+              {companyInfo ? (
+                            <form style={{ alignSelf: "center"}}>
+                            <FormControl p={2} id="company-name">
+                                <FormLabel>Company name</FormLabel>
+                                {shouldFetch && <CompanyInfoData companyName={companyName}/>}
+                                <Input required isInvalid={errors.companyName && (!companyInfo.companyName || !values.companyName)} errorBorderColor='red.300' placeholder="Company name" name="companyName" defaultValue={companyInfo.companyName || ''} onChange={handleChange}/>
+                                {errors.companyName && (!companyInfo.companyName || !values.companyName) && (
+                                  <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.companyName}</Text>
+                                )}
+                              </FormControl>
+                              <FormControl p={2} id="company-title">
+                                <FormLabel>Job title</FormLabel>
+                                <Input required isInvalid={errors.companyTitle && (!companyInfo.companyTitle || !values.companyTitle)} errorBorderColor='red.300' placeholder="Job title" name="companyTitle" defaultValue={companyInfo.companyTitle || ''} onChange={handleChange}/>
+                                {errors.companyTitle && (!companyInfo.companyTitle || !values.companyTitle) && (
+                                  <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.companyTitle}</Text>
+                                )}
+                              </FormControl>
+                              <FormControl p={2} id="company-start">
+                                <FormLabel>What was your start date?</FormLabel>
+                                <Input required isInvalid={errors.companyStart && (!companyInfo.companyStart || !values.companyStart)} errorBorderColor='red.300' name="companyStart" defaultValue={companyInfo.companyStart || ''} onChange={handleChange}/>
+                                {errors.companyStart && (!companyInfo.companyStart || !values.companyStart) && (
+                                  <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.companyStart}</Text>
+                                )}
+                              </FormControl>
+                              <FormControl p={2} id="company-end">
+                                <FormLabel>What was your end date?</FormLabel>
+                                <Input required isInvalid={errors.companyEnd && (!companyInfo.companyEnd || !values.companyEnd)} errorBorderColor='red.300' name="companyEnd" defaultValue={companyInfo.companyEnd || ''} onChange={handleChange}/>
+                                {errors.companyEnd && (!companyInfo.companyEnd || !values.companyEnd) && (
+                                  <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.companyEnd}</Text>
+                                )}
+                              </FormControl>
+                              <FormControl p={2} id="company-func">
+                                <FormLabel>Functional expertise</FormLabel>
+                                <Select required defaultValue={companyInfo.companyFunc} errorBorderColor='red.300' placeholder="Select functional expertise" name="funcExpertise" onChange={handleChange}>
+                                      <option>Accounting</option>
+                                      <option>Creative</option>
+                                      <option>Audit</option>
+                                      <option>Board & Advisory</option>
+                                      <option>Corporate Development</option>
+                                      <option>Comp & Benefits</option>
+                                      <option>Compliance</option>
+                                      <option>Management Consulting</option>
+                                      <option>Data & Analytics</option>
+                                      <option>Product Design</option>
+                                      <option>Digital</option>
+                                      <option>Engineering</option>
+                                      <option>Entrepreneurship</option>
+                                      <option>Finance</option>
+                                      <option>General Management</option>
+                                      <option>Human Resources</option>
+                                      <option>IT Infrastructure</option>
+                                      <option>Innovation</option>
+                                      <option>Investor</option>
+                                      <option>Legal</option>
+                                      <option>Marketing</option>
+                                      <option>Media & Comms</option>
+                                      <option>Merchandising</option>
+                                      <option>Security</option>
+                                      <option>Operations</option>
+                                      <option>Portfolio Operations</option>
+                                      <option>Procurement</option>
+                                      <option>Product Management</option>
+                                      <option>Investor Relations</option>
+                                      <option>Regulatory</option>
+                                      <option>Research</option>
+                                      <option>Risk</option>
+                                      <option>Strategy</option>
+                                      <option>Technology</option>
+                                      <option>Transformation</option>
+                                      <option>Sales & Customer</option>
+                                      <option>Data Science</option>
+                                      <option>Talent Acquisition</option>
+                                      <option>Tax</option>
+                                      <option>Cybersecurity</option>
+                                      <option>Investment Banking</option>
+                                      <option>Supply Chain</option>
+                                    </Select>
+                              </FormControl>
+                              <FormControl p={2} id="company-industry">
+                                <FormLabel>Industry</FormLabel>
+                                <Select required defaultValue={companyInfo.companyIndustry} errorBorderColor='red.300' placeholder="Select industry expertise" name="industryExpertise" onChange={handleChange}>
+                                      <option>Accounting</option>
+                                      <option>Angel Investment</option>
+                                      <option>Asset Management</option>
+                                      <option>Auto Insurance</option>
+                                      <option>Banking</option>
+                                      <option>Bitcoin</option>
+                                      <option>Commercial Insurance</option>
+                                      <option>Commercial Lending</option>
+                                      <option>Credit</option>
+                                      <option>Credit Bureau</option>
+                                      <option>Credit Cards</option>
+                                      <option>Crowdfunding</option>
+                                      <option>Cryptocurrency</option>
+                                      <option>Debit Cards</option>
+                                      <option>Debt Collections</option>
+                                      <option>Finance</option>
+                                      <option>Financial Exchanges</option>
+                                      <option>Financial Services</option>
+                                      <option>FinTech</option>
+                                      <option>Fraud Detection</option>
+                                      <option>Funding Platform</option>
+                                      <option>Gift Card</option>
+                                      <option>Health Insurance</option>
+                                      <option>Hedge Funds</option>
+                                      <option>Impact Investing</option>
+                                      <option>Incubators</option>
+                                      <option>Insurance</option>
+                                      <option>InsurTech</option>
+                                      <option>Leasing</option>
+                                      <option>Lending</option>
+                                      <option>Life Insurance</option>
+                                      <option>Micro Lending</option>
+                                      <option>Mobile Payments</option>
+                                      <option>Payments</option>
+                                      <option>Personal Finance</option>
+                                      <option>Prediction Markets</option>
+                                      <option>Property Insurance</option>
+                                      <option>Real Estate Investment</option>
+                                      <option>Stock Exchanges</option>
+                                      <option>Trading Platform</option>
+                                      <option>Transaction Processing</option>
+                                      <option>Venture Capital</option>
+                                      <option>Virtual Currency</option>
+                                      <option>Wealth Management</option>
+                                    </Select>
+                              </FormControl>
+                        </form>
+              ): null}
             </ModalBody>
             <ModalFooter>
               <Button colorScheme='blue' mr={3} onClick={props.onClose}>

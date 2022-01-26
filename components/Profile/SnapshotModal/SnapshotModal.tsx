@@ -15,7 +15,6 @@ import {
       identity: Identity;
       accType: string;
     }
-  
   }
   
   export interface Identity {
@@ -34,10 +33,26 @@ import {
     currLocation?: string;
     funcExpertise: string;
     industryExpertise: string;
+    companyInfo?: CompanyInfo[];
   }
-
-   export interface BasicProfile {
+  
+  export interface BasicProfile {
     name: string;
+  }
+  export interface Profile {
+      identity: Identity;
+      name: string;
+      accType: string;
+  }
+  
+  export interface CompanyInfo {
+    companyName: string;
+    companyTitle: string;
+    companyImg: any;
+    companyStart: Date;
+    companyEnd: Date;
+    companyFunc: string;
+    companyIndustry: string;
   }
 
 const SnapshotModal = (props) => {
