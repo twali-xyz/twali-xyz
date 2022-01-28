@@ -367,7 +367,7 @@ const ProfilePage = () => {
                             <CompanyModal isOpen={isCompanyModalOpen} onClose={onCompanyModalClose} currCompany={currCompany} profileData={profileData} handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}/>
                         </Box>
                         <Box alignSelf="flex-start" w="full" overflow='hidden'>
-                            <Text pt={8} pb={4} fontSize='xl'>Snapshot</Text>
+                            <Text pt={8} pb={4} fontSize='xl'>Web3 Credentials</Text>
                             {snapshotData ? (
                               <>
                             <HStack spacing={4}>
@@ -390,10 +390,10 @@ const ProfilePage = () => {
                           </>
                           ): null}
                         </Box>
-                        <Box alignSelf="flex-start" w="full" overflow='hidden'>
+                        {/* <Box alignSelf="flex-start" w="full" overflow='hidden'>
                             <Text pt={8} pb={4} fontSize='xl'>Book a session with {profileData.content.identity.firstName}</Text>
                             <Button size='md' colorScheme='teal'>Book</Button>
-                        </Box>
+                        </Box> */}
                         </VStack>
                     </Stack>
                 </Box>

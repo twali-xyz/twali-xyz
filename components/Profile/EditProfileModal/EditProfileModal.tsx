@@ -225,13 +225,13 @@ const EditProfileModal = (props) => {
             {/* isInvalid={!!errors.file_} */}
             <FormLabel>{'Update profile picture'}</FormLabel>
 
-                <FileUpload
+                {/* <FileUpload
                 handleFile={handleFile}
                 >
                     <Button>
                     Upload
                     </Button>
-                </FileUpload>
+                </FileUpload> */}
 
                 {/* <FormErrorMessage>
                     {errors.file_ && errors?.file_.message}

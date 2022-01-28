@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
 import { connect } from '../../utils/walletUtils';
-import { Heading, FormControl, Input, Box, Button, FormLabel, Select, HStack, CircularProgress, Text } from "@chakra-ui/react"
+import { Heading, FormControl, Input, Box, Button, FormLabel, Select, HStack, CircularProgress, Text, FormHelperText } from "@chakra-ui/react"
 import router from 'next/router';
 
 import CeramicClient from '@ceramicnetwork/http-client';
@@ -139,6 +139,7 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
                         {errors.businessName && (
                           <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.businessName}</Text>
                         )}
+                        <FormHelperText>If you don't have a business name, please use your legal name</FormHelperText>
                       </FormControl>
                       <FormControl p={4} id="business-type" isRequired>
                         <FormLabel>Business type</FormLabel>

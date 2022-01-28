@@ -89,6 +89,7 @@ const CompanyModal = (props) => {
     const [companyFunc, setCompanyFunc] = useState();
     const [companyIndustry, setCompanyIndustry] = useState();
     const [shouldFetch, setShouldFetch] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(false);
     const [accType, setAccType] = useState(props.profileData.content.accType);
     const [identity, setIdentity] = useState(props.profileData.content.identity);
     const [profileData, setProfileData] = useState(props.profileData);
@@ -119,13 +120,13 @@ const CompanyModal = (props) => {
         companyEnd: companyInfo && companyInfo.companyEnd ? companyInfo.companyEnd: '',
         companyFunc: companyInfo && companyInfo.companyFunc ? companyInfo.companyFunc: '',
         companyIndustry: companyInfo && companyInfo.companyIndustry ? companyInfo.companyIndustry: ''
-    });  
+    }); 
     
   async function updateCompanyInfo() {
     const address = await connect(); // first address in the array
 
     if (address) {
-      setShouldFetch(true);
+      // setShouldFetch(true);
       const ceramic = new CeramicClient(endpoint);      
       const threeIdConnect = new ThreeIdConnect();
       const provider = new EthereumAuthProvider(window.ethereum, address);
@@ -191,7 +192,6 @@ const CompanyModal = (props) => {
 
     const handleChange = (evt) => {
       evt.persist();
-      setShouldFetch(false);
       setValues(values => ({ ...values, [evt.target.name]: evt.target.value }));
       setErrors(validate(values));
       setIdentity({
@@ -201,6 +201,7 @@ const CompanyModal = (props) => {
       setProfileData(newProfileData);
       if (evt.target.name == 'companyName') {
         setCompanyName(evt.target.value);
+        setShouldFetch(true);
       }
 
       if (evt.target.name == 'companyTitle') {
@@ -264,6 +265,10 @@ const CompanyModal = (props) => {
       return errors;
     };
 
+    const setDisabled = (isDisabled) => {
+      setIsDisabled(isDisabled);
+    }
+
     return (
       <>  
         <Modal finalFocusRef={finalRef} isOpen={props.isOpen} onClose={props.onClose} key={`companymodal--${props.currCompany}`}>
@@ -276,7 +281,7 @@ const CompanyModal = (props) => {
                             <form style={{ alignSelf: "center"}}>
                             <FormControl p={2} id="company-name">
                                 <FormLabel>Company name</FormLabel>
-                                {shouldFetch && <CompanyInfoData companyName={companyName}/>}
+                                {shouldFetch && <CompanyInfoData companyName={companyName} isDisabled={setDisabled}/>}
                                 <Input required isInvalid={errors.companyName && (!companyInfo.companyName || !values.companyName)} errorBorderColor='red.300' placeholder="Company name" name="companyName" defaultValue={companyInfo.companyName || ''} onChange={handleChange}/>
                                 {errors.companyName && (!companyInfo.companyName || !values.companyName) && (
                                   <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.companyName}</Text>
@@ -406,7 +411,8 @@ const CompanyModal = (props) => {
               <Button colorScheme='blue' mr={3} onClick={props.onClose}>
                 Close
               </Button>
-              <Button onClick={() => {
+              <Button isDisabled={isDisabled} onClick={() => {
+                setShouldFetch(false);
                 updateCompanyInfo();
                 }} variant='ghost'>Save {isSubmitted ? <CircularProgress size="22px" thickness="4px" isIndeterminate color="#3C2E26" /> : null}</Button>
             </ModalFooter>
@@ -417,7 +423,9 @@ const CompanyModal = (props) => {
   };
 
  function CompanyInfoData(props) {
+   console.log(props);
     const fetcher = (companyDomain: string,...args: Parameters<typeof fetch>) => fetch(companyDomain).then(response => response.json());
+
     let paramsObj = {params: props.companyName};
     let searchParams = new URLSearchParams(paramsObj);
   
@@ -426,8 +434,13 @@ const CompanyModal = (props) => {
     const qs = searchParams.toString();
 
   
-    const { data, error } = useSWR(`/api/cors?${qs}`, fetcher);
+    const { data } = useSWR(`/api/cors?${qs}`, fetcher);
     console.log('DATA: ', data);
+    if (!data) {
+      props.isDisabled(true);
+    } else {
+      props.isDisabled(false);
+    }
     
     return (
       <>
@@ -439,10 +452,11 @@ const CompanyModal = (props) => {
                 alt={data.message.domain}
             />
         </Box>
-        ) : null}
+        ) : <Box w="full" borderRadius='lg' overflow='hidden' p={4}>
+        <Text fontSize='xs' fontWeight='400' color='red.500'>Company logo is unavailable or name is incorrect.</Text>
+      </Box>}
       </>
     )
   }
-
 
   export default CompanyModal;
