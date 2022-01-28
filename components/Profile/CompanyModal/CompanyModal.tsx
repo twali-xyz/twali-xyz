@@ -126,7 +126,6 @@ const CompanyModal = (props) => {
     const address = await connect(); // first address in the array
 
     if (address) {
-      // setShouldFetch(true);
       const ceramic = new CeramicClient(endpoint);      
       const threeIdConnect = new ThreeIdConnect();
       const provider = new EthereumAuthProvider(window.ethereum, address);
@@ -202,6 +201,8 @@ const CompanyModal = (props) => {
       if (evt.target.name == 'companyName') {
         setCompanyName(evt.target.value);
         setShouldFetch(true);
+      } else {
+        setShouldFetch(false);
       }
 
       if (evt.target.name == 'companyTitle') {
@@ -422,6 +423,7 @@ const CompanyModal = (props) => {
     )
   };
 
+ // Client-side data fetching for Clearbit's NameToDomain API (on company modal load)
  function CompanyInfoData(props) {
    console.log(props);
     const fetcher = (companyDomain: string,...args: Parameters<typeof fetch>) => fetch(companyDomain).then(response => response.json());

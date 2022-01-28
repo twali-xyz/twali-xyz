@@ -278,7 +278,7 @@ const ProfilePage = () => {
           readProfile();
         }
 
-        function createElements(number){
+        function createWorkElements(number){
           var elements = [];
           let totalLen = profileData.content.identity.companyInfo ? profileData.content.identity.companyInfo.length: 0;
           for(let i = 0; i < number; i++){
@@ -362,7 +362,7 @@ const ProfilePage = () => {
                         <Box alignSelf="flex-start" w="full" overflow='hidden'>
                             <Text pb={8} fontSize='xl'>Work Experience</Text>
                             <HStack spacing={4}>
-                            {createElements(5)}
+                            {createWorkElements(5)}
                             </HStack>
                             <CompanyModal isOpen={isCompanyModalOpen} onClose={onCompanyModalClose} currCompany={currCompany} profileData={profileData} handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}/>
                         </Box>
@@ -407,6 +407,7 @@ const ProfilePage = () => {
     )
 }
 
+// Client-side data fetching for Clearbit's NameToDomain API (on page load)
 const GetCompany = (companyName) => {
   const fetcher = (companyDomain: string,...args: Parameters<typeof fetch>) => fetch(companyDomain).then(response => response.json());
   let paramsObj = {params: companyName.companyName};
