@@ -35,6 +35,7 @@ export default async function handler(req, res) {
   }
 }
 
+// Clearbit NameToDomain API request
 const getData = (req, res) => {
   return new Promise((resolve, reject) => {
     var clearbit = require('clearbit')(process.env.CLEARBIT_APIKEY);

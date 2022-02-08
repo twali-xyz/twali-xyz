@@ -31,33 +31,48 @@ import { TileDocument } from '@ceramicnetwork/stream-tile';
 const endpoint = "https://ceramic-clay.3boxlabs.com";
 
 export interface ProfileData {
- content: {
-   identity: Identity;
-   accType: string;
- }
-
+  content: {
+    identity: Identity;
+    accType: string;
+  }
 }
 
 export interface Identity {
- firstName: string;
- lastName: string;
- email: string;
- displayName: string;
- bio: string;
- twitterUsrName?: string;
- linkedInUsrName?: string;
- website?: string;
- businessName: string;
- businessType: string;
- businessLocation: string;
- currTitle: string;
- currLocation?: string;
- funcExpertise: string;
- industryExpertise: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  displayName: string;
+  bio: string;
+  twitterUsrName?: string;
+  linkedInUsrName?: string;
+  website?: string;
+  businessName: string;
+  businessType: string;
+  businessLocation: string;
+  currTitle: string;
+  currLocation?: string;
+  funcExpertise: string;
+  industryExpertise: string;
+  companyInfo?: CompanyInfo[];
 }
 
 export interface BasicProfile {
- name: string;
+  name: string;
+}
+export interface Profile {
+    identity: Identity;
+    name: string;
+    accType: string;
+}
+
+export interface CompanyInfo {
+  companyName: string;
+  companyTitle: string;
+  companyImg: any;
+  companyStart: Date;
+  companyEnd: Date;
+  companyFunc: string;
+  companyIndustry: string;
 }
 
 const EditProfileModal = (props) => {
@@ -210,13 +225,13 @@ const EditProfileModal = (props) => {
             {/* isInvalid={!!errors.file_} */}
             <FormLabel>{'Update profile picture'}</FormLabel>
 
-                <FileUpload
+                {/* <FileUpload
                 handleFile={handleFile}
                 >
                     <Button>
                     Upload
                     </Button>
-                </FileUpload>
+                </FileUpload> */}
 
                 {/* <FormErrorMessage>
                     {errors.file_ && errors?.file_.message}

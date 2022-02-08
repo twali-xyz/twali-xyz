@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
 import { connect } from '../../utils/walletUtils';
-import { Heading, FormControl, Input, Box, Button, FormLabel, Select, HStack, CircularProgress, Text } from "@chakra-ui/react"
+import { Heading, FormControl, Input, Box, Button, FormLabel, Select, HStack, CircularProgress, Text, FormHelperText } from "@chakra-ui/react"
 import router from 'next/router';
 
 import CeramicClient from '@ceramicnetwork/http-client';
@@ -16,6 +16,51 @@ import { TileDocument } from '@ceramicnetwork/stream-tile';
 // network node that we're interacting with, can be local/prod
 // we're using a test network here
 const endpoint = "https://ceramic-clay.3boxlabs.com";
+
+export interface ProfileData {
+  content: {
+    identity: Identity;
+    accType: string;
+  }
+}
+
+export interface Identity {
+  firstName: string;
+  lastName: string;
+  email: string;
+  displayName: string;
+  bio: string;
+  twitterUsrName?: string;
+  linkedInUsrName?: string;
+  website?: string;
+  businessName: string;
+  businessType: string;
+  businessLocation: string;
+  currTitle: string;
+  currLocation?: string;
+  funcExpertise: string;
+  industryExpertise: string;
+  companyInfo?: CompanyInfo[];
+}
+
+export interface BasicProfile {
+  name: string;
+}
+export interface Profile {
+    identity: Identity;
+    name: string;
+    accType: string;
+}
+
+export interface CompanyInfo {
+  companyName: string;
+  companyTitle: string;
+  companyImg: any;
+  companyStart: Date;
+  companyEnd: Date;
+  companyFunc: string;
+  companyIndustry: string;
+}
 
 const userProfileStep = ({ handleChange, values, errors }) => {
   return (<form style={{ alignSelf: "center"}}>
@@ -94,6 +139,7 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
                         {errors.businessName && (
                           <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.businessName}</Text>
                         )}
+                        <FormHelperText>If you don't have a business name, please use your legal name</FormHelperText>
                       </FormControl>
                       <FormControl p={4} id="business-type" isRequired>
                         <FormLabel>Business type</FormLabel>
@@ -267,11 +313,25 @@ const SignUpSteps = () => {
   const [errors, setErrors] = useState({});
   const [accType, setAccType] = useState('');
   const [btnActive, setBtnActive] = useState(0);
-  const [identity, setIdentity] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-  })
+
+  const [identity, setIdentity] = useState<Identity>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    displayName: '',
+    bio: '',
+    twitterUsrName: '',
+    linkedInUsrName: '',
+    website: '',
+    businessName: '',
+    businessType: '',
+    businessLocation: '',
+    currTitle: '',
+    currLocation: '',
+    funcExpertise: '',
+    industryExpertise: '',
+    companyInfo: []
+  });
 
   const validate = (values) => {
     let errors: any = {};
