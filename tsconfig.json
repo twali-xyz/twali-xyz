@@ -15,6 +15,11 @@
     "jsx": "preserve",
     "incremental": true
   },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "next.config.js", "infrastructure/dbprovision.js"],
   "exclude": ["node_modules"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+  "baseUrl": ".",
+  "paths": {
+      "@": ["/"],
+      "@/*": ["/*"],
+  }
 }

@@ -1,7 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev:infra": "LOCAL_DYNAMO_DB_ENDPOINT=\"http://localhost:8000\" npm run infra",
+    "dev": "BUNDLE_AWS_SDK=1 AWS_ACCESS_KEY_ID=1 AWS_SECRET_ACCESS_KEY=1 LOCAL_DYNAMO_DB_ENDPOINT=\"http://localhost:8000\" next dev",
+    "infra": "node infrastructure/provisionTable",
     "build": "next build",
     "start": "next start"
   },
@@ -24,6 +26,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.16",
     "@walletconnect/web3-provider": "^1.6.6",
+    "aws-sdk": "^2.1074.0",
     "axios": "^0.24.0",
     "chakra-ui-steps": "^1.5.0",
     "clearbit": "^1.3.5",
@@ -47,6 +50,8 @@
   "devDependencies": {
     "@types/node": "^16.3.3",
     "@types/react": "^17.0.14",
+    "dotenv": "^16.0.0",
+    "serverless": "^3.2.1",
     "typescript": "^4.3.5"
   }
 }
