@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
 import { connect } from '../../utils/walletUtils';
 import { Heading, FormControl, Input, Box, Button, FormLabel, Select, HStack, CircularProgress, Text, FormHelperText } from "@chakra-ui/react"
-import router from 'next/router';
+import router, { useRouter } from 'next/router';
 
 import CeramicClient from '@ceramicnetwork/http-client';
 import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver';
@@ -41,6 +42,7 @@ export interface Identity {
   funcExpertise: string;
   industryExpertise: string;
   companyInfo?: CompanyInfo[];
+  uuid: string;
 }
 
 export interface BasicProfile {
@@ -330,7 +332,8 @@ const SignUpSteps = () => {
     currLocation: '',
     funcExpertise: '',
     industryExpertise: '',
-    companyInfo: []
+    companyInfo: [],
+    uuid: '',
   });
 
   const validate = (values) => {
@@ -405,6 +408,7 @@ const SignUpSteps = () => {
       const ceramic = new CeramicClient(endpoint);      
       const threeIdConnect = new ThreeIdConnect();
       const provider = new EthereumAuthProvider(window.ethereum, address);
+      const router = useRouter();
 
       setIsSubmitted(true);
 
@@ -426,6 +430,9 @@ const SignUpSteps = () => {
         name: identity.firstName + " " + identity.lastName,
       })
 
+      let uuid = uuidv4();
+      identity.uuid = uuid;
+      console.log(uuid);
       await createProfileData(ceramic, identity, accType);
 
       console.log("Profile updated!");
@@ -433,7 +440,7 @@ const SignUpSteps = () => {
 
       if(identity.firstName && identity.lastName && identity.email) {
           setIsSubmitted(false);
-          router.push('/profile');
+          router.push(`/${identity.displayName}`);
       } else {
           console.log('No profile, pls create one...');
         }

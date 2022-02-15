@@ -54,6 +54,7 @@ import {
     funcExpertise: string;
     industryExpertise: string;
     companyInfo?: CompanyInfo[];
+    uuid: string;
   }
   
   export interface BasicProfile {

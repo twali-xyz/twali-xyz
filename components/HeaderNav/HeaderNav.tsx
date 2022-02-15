@@ -46,6 +46,7 @@ export interface Identity {
   funcExpertise: string;
   industryExpertise: string;
   companyInfo?: CompanyInfo[];
+  uuid: string;
 }
 
 export interface BasicProfile {
@@ -152,7 +153,7 @@ const HeaderNav = (props) => {
             setEmail(identity.email);
             setAccType(profileAccType);
             setIsSubmitted(false);
-            router.push('/profile');
+            router.push(`/${identity.displayName}`);
           } else {
             console.log('No profile, pls create one...');
             router.push('/steps');
