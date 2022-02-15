@@ -3,7 +3,7 @@ import { AppProps } from 'next/app'
 import * as React from "react"
 import { ChakraProvider, extendTheme, ThemeConfig, Modal } from "@chakra-ui/react"
 import { StepsStyleConfig as Steps } from 'chakra-ui-steps';
-import { library } from '@fortawesome/fontawesome-svg-core'
+import { IconDefinition, library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { mode } from '@chakra-ui/theme-tools';

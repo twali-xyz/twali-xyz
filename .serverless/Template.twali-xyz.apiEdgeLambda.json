@@ -1,0 +1,17 @@
+{
+  "name": "2qcixkg-laqk0u9",
+  "hash": "0NZ1VBOmUtOXghfrAKLJ8KgGj8ZFkAiSOYI5MQxWMho=",
+  "description": "API Lambda@Edge for Next CloudFront distribution",
+  "memory": 512,
+  "timeout": 10,
+  "code": "/Users/nicholas-g/twali-xyz/.serverless_nextjs/api-lambda",
+  "shims": [],
+  "handler": "index.handler",
+  "runtime": "nodejs14.x",
+  "env": {},
+  "role": {
+    "arn": "arn:aws:iam::517934542124:role/2qcixkg-ekviyw"
+  },
+  "arn": "arn:aws:lambda:us-east-1:517934542124:function:2qcixkg-laqk0u9",
+  "region": "us-east-1"
+}
