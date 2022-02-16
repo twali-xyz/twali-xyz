@@ -3,7 +3,7 @@ var AWS = require("aws-sdk");
 require("dotenv").config();
 
 AWS.config.update({
-    region: "us-west-2",
+    region: "us-west-1",
     endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT
   });
 
@@ -12,7 +12,7 @@ let dynamodb = new AWS.DynamoDB();
 
 // Table Definition to deploy locally and to production
 let params = {
-    TableName: "user_passport",
+    TableName: "user_tests",
     KeySchema: 
     [
         { AttributeName: "user_name", KeyType: "HASH"},        // Partition Key 
@@ -39,7 +39,7 @@ let params = {
     // Only a replicated instance for production. Not Supported by local.
     if (!process.env.LOCAL_DYNAMO_DB_ENDPOINT) {
 
-        AWS.config.update({ region: "us-east-2"});
+        AWS.config.update({ region: "us-east-1"});
 
         dynamodb = new AWS.DynamoDB();
 
@@ -49,7 +49,7 @@ let params = {
 
 
         const createGlobalTableParams = {
-            GlobalTableName: "user_passport",
+            GlobalTableName: "user_test",
             ReplicationGroup: [
                 {
                     RegionName: "us-east-1",

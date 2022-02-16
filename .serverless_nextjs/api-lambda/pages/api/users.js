@@ -117,7 +117,7 @@ module.exports = require("zlib");
 
 /***/ }),
 
-/***/ 60303:
+/***/ 70449:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -131,7 +131,7 @@ __webpack_require__.r(__webpack_exports__);
 
         
       const { processEnv } = __webpack_require__(19936)
-      processEnv([{"path":".env","contents":"AWS_ACCESS_KEY_ID=AKIAXRF2N5UWAISCEIPK\nAWS_SECRET_ACCESS_KEY=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\nAWS_REGION=us-east-2"}])
+      processEnv([{"path":".env","contents":"AWS_ACCESS_KEY_ID=AKIAXRF2N5UWAISCEIPK\nAWS_SECRET_ACCESS_KEY=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\nAWS_REGION=us-east-1"}])
     
         
         const runtimeConfig = {}
@@ -157,7 +157,7 @@ __webpack_require__.r(__webpack_exports__);
           page: "/api/users",
           basePath: "",
           pageIsDynamic: false,
-          encodedPreviewProps: {previewModeId:"0442d1750bce4c56dba428ffe02e7683",previewModeSigningKey:"595031b884e331d111db32308684a1982edb180da5ed37445efc48925eb6ca3b",previewModeEncryptionKey:"9f3a435c6cdce47143aa00a21ff130cf71710771cfd6aacc9a10446f8ca394a5"}
+          encodedPreviewProps: {previewModeId:"2504058662fe4e5747085a62fc4534bf",previewModeSigningKey:"876856940f0b0bb94c9488309b756e0781af165ffe34d26adddc0fd206694b50",previewModeEncryptionKey:"0b4deddb588fac04db86f3eb046699fbca361496f661c5e64812a441d186b63e"}
         })
         /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (apiHandler);
       
@@ -168,10 +168,10 @@ __webpack_require__.r(__webpack_exports__);
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
-const TableName = "user_passport";
+const TableName = "user_test";
 const getDynamoDBClient = ()=>{
     const AWS = __webpack_require__(25990);
-    const edgeRegion = process.env.AWS_REGION || "us-east-2";
+    const edgeRegion = process.env.AWS_REGION || "us-east-1";
     const dynamoDBRegion = edgeRegion.startsWith("us") ? "us-east-1" : "us-east-2";
     const options = {
         convertEmptyValues: true,
@@ -225,10 +225,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_data__WEBPACK_IMPORTED_MODULE_0__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (async (req, res)=>{
-    console.log("api/users/newUser");
-    const userDescription = JSON.parse(req.body).userDescription;
-    await _data__WEBPACK_IMPORTED_MODULE_0___default().createUser(userDescription);
-    res.status(200).end("User Created");
+    console.log("api/users", req.body);
+    try {
+        const userDescription = JSON.parse(req.body).userDescription;
+        await _data__WEBPACK_IMPORTED_MODULE_0___default().createUser(userDescription);
+        res.status(200).end("OK");
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 
@@ -241,7 +245,7 @@ __webpack_require__.r(__webpack_exports__);
 var __webpack_require__ = require("../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [458,800], () => (__webpack_exec__(60303)));
+var __webpack_exports__ = __webpack_require__.X(0, [458,800], () => (__webpack_exec__(70449)));
 module.exports = __webpack_exports__;
 
 })();

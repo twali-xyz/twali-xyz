@@ -4,4 +4,4 @@ twali-xyz:
     roleArn: "arn:aws:iam::517934542124:role/2qcixkg-ekviyw"
     build:
       env:
-        TABLE_NAME: "user_passport"
+        TABLE_NAME: "user_tests"

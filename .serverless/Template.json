@@ -1,5 +1,3 @@
 {
-  "components": {
-    "twali-xyz": "/Users/nicholas-g/.serverless/components/registry/npm/@sls-next/serverless-component@3.6.0/node_modules/@sls-next/serverless-component"
-  }
+  "components": {}
 }

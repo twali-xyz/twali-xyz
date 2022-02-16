@@ -1,6 +1,6 @@
 module.exports = {
     env: {
-      TABLE_NAME: "user_passport"
+      TABLE_NAME: "user_tests"
     },
     webpack: (config) => {
       if (!process.env.BUNDLE_AWS_SDK) {

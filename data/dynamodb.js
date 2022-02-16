@@ -4,7 +4,7 @@ const getDynamoDBClient = () => {
 
  const AWS = require("aws-sdk");
 
-    const edgeRegion = process.env.AWS_REGION || "us-east-2";
+    const edgeRegion = process.env.AWS_REGION || "us-east-1";
     const dynamoDBRegion = edgeRegion.startsWith("us")
     ? "us-east-1"
     : "us-east-2";
@@ -23,7 +23,7 @@ const getDynamoDBClient = () => {
 
     return client;
 
-}
+};
 
 module.exports = {
     createUser: async (userDescription) => {
@@ -46,4 +46,4 @@ module.exports = {
         const users = Items.find((user) => user.user_name == userName);
         return users;
     }
-}
+};

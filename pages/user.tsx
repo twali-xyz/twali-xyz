@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { ethers } from "ethers";
+// import { ethers } from "ethers";
 import { Input , Button} from "@chakra-ui/react";
-import { walletconnect } from "web3modal/dist/providers/connectors";
+
 
 export interface UserData {
     user_name: string,

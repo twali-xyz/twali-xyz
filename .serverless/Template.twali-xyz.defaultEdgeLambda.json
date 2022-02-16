@@ -1,6 +1,6 @@
 {
-  "name": "2qcixkg-ud29u3",
-  "hash": "Ms25jPzPDjFeqRAGUHvVwzsFSleopZGJVLhjdnNaErY=",
+  "name": "0refym6-fma5mql",
+  "hash": "1QsGqjNdlOXjU03kw/ZSZfRcBecC0fd2vJgDxlSSdK4=",
   "description": "Default Lambda@Edge for Next CloudFront distribution",
   "memory": 512,
   "timeout": 10,
@@ -12,6 +12,6 @@
   "role": {
     "arn": "arn:aws:iam::517934542124:role/2qcixkg-ekviyw"
   },
-  "arn": "arn:aws:lambda:us-east-1:517934542124:function:2qcixkg-ud29u3",
+  "arn": "arn:aws:lambda:us-east-1:517934542124:function:0refym6-fma5mql",
   "region": "us-east-1"
 }
