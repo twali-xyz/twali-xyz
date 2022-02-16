@@ -80,7 +80,7 @@ export interface ProfileData {
     companyIndustry: string;
 }
 
-const ProfilePage = () => {
+const ProfileDetails = ({user}) => {
     const [profileData, setProfileData]  = useState<ProfileData>();
     const [name, setName] = useState('');
     const { isOpen: isProfileModalOpen , onOpen: onProfileModalOpen, onClose: onProfileModalClose } = useDisclosure()
@@ -91,6 +91,7 @@ const ProfilePage = () => {
     const [snapshotData, setSnapshotData] = useState<any>();
     const [currentSnapshot, setCurrentSnapshot] = useState();
     const [currCompany, setCurrCompany] = useState(0);
+    console.log(user);
 
     async function readProfile() {
       const address = await connect(); // first address in the array
@@ -460,4 +461,4 @@ const GetCompany = (companyName) => {
   )
 }
 
-export default ProfilePage;
+export default ProfileDetails;
