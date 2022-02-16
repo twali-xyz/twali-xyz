@@ -261,8 +261,9 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async (context) => {
   const id = context.params.username;
-  console.log(context);
-  const data = testData[0];
+  console.log("Context:", context);
+
+  const data = testData.find(user => user.username == context.params.username);
   console.log(data);
 
   return {
@@ -271,6 +272,7 @@ export const getStaticProps = async (context) => {
 }
 
 const ProfilePage = ({user}) => {
+  console.log(user);
   return (
       <Container maxW="container.xl" p={12}>
           <HeaderNav whichPage="profile"/>
