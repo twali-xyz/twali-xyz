@@ -183,7 +183,7 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
               isTruncated>
                       <FormControl p={4} id="current-company-title" isRequired>
                         <FormLabel>Current title</FormLabel>
-                        <Input isInvalid={errors.currTitle} errorBorderColor='red.300' value={values.currTitle || ''} required placeholder="Current company title" name="currTitle" onChange={handleChange}/>
+                        <Input isInvalid={errors.currTitle} errorBorderColor='red.300' value={values.currTitle || ''} required placeholder="Current title" name="currTitle" onChange={handleChange}/>
                         {errors.currTitle && (
                           <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.currTitle}</Text>
                         )}
