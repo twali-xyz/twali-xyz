@@ -8,7 +8,8 @@ import {
     Text,
     CircularProgress,
     useDisclosure,
-    IconButton
+    IconButton,
+    Link
    } from '@chakra-ui/react';
 
 import { useState, useEffect } from 'react';
@@ -47,7 +48,9 @@ export interface ProfileData {
     email: string;
     displayName: string;
     bio: string;
+    twitter?: string;
     twitterUsrName?: string;
+    linkedIn?: string;
     linkedInUsrName?: string;
     website?: string;
     businessName: string;
@@ -266,6 +269,7 @@ const ProfilePage = () => {
             setSnapshotData(resArr);
           }
           readProfile();
+          
         }, []);
 
         const handleUpdatedProfile = (profileData) => {
@@ -358,6 +362,8 @@ const ProfilePage = () => {
                         <Text fontSize='md'>{profileData.content.identity.currTitle}</Text>
                         { profileData.content.identity.bio && <Text fontSize='md'>{profileData.content.identity.bio}</Text>}
                     )
+                      <Link>{profileData.content.identity.linkedIn}</Link>
+                      <Link>{profileData.content.identity.twitter}</Link>
                     <VStack>
                         <Box alignSelf="flex-start" w="full" overflow='hidden'>
                             <Text pb={8} fontSize='xl'>Work Experience</Text>
