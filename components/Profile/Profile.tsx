@@ -362,8 +362,14 @@ const ProfilePage = () => {
                         <Text fontSize='md'>{profileData.content.identity.currTitle}</Text>
                         { profileData.content.identity.bio && <Text fontSize='md'>{profileData.content.identity.bio}</Text>}
                     )
-                      <Link>{profileData.content.identity.linkedIn}</Link>
-                      <Link>{profileData.content.identity.twitter}</Link>
+                    {/* social media URLs */}
+                    ( profileData.content.identity.linkedIn &&
+                      <Link href={profileData.content.identity.linkedIn}>{profileData.content.identity.linkedIn}</Link>
+                      )
+                    ( profileData.content.identity.twitter &&
+                      <Link href={profileData.content.identity.twitter}>{profileData.content.identity.twitter}</Link>
+                    )
+                      
                     <VStack>
                         <Box alignSelf="flex-start" w="full" overflow='hidden'>
                             <Text pb={8} fontSize='xl'>Work Experience</Text>
