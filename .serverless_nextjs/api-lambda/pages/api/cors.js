@@ -124,28 +124,21 @@ module.exports = require("zlib");
 
 /***/ }),
 
-/***/ 51396:
+/***/ 71419:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, {
-  "default": () => (/* binding */ next_serverless_loaderpage_2Fapi_2Fcors_absolutePagePath_private_next_pages_2Fapi_2Fcors_tsx_absoluteAppPath_private_next_pages_2F_app_tsx_absoluteDocumentPath_next_2Fdist_2Fpages_2F_document_absoluteErrorPath_next_2Fdist_2Fpages_2F_error_absolute404Path_distDir_private_dot_next_buildId_EZOWKL8_GZIESezynrnnb_assetPrefix_generateEtags_true_poweredByHeader_true_canonicalBase_basePath_runtimeConfig_previewProps_7B_22previewModeId_22_3A_22361b70d4b3b9c796a6410bab18aadb80_22_2C_22previewModeSigningKey_22_3A_223418c2fd96d791a9b89540dc2763540807f8a1c89f5355ae0382a237318b3634_22_2C_22previewModeEncryptionKey_22_3A_22b1caa35255b680b273ec1593166d00e8c2207d79fb71bd7206eb3b8f9fd45e5c_22_7D_loadedEnvFiles_W3sicGF0aCI6Ii5lbnYiLCJjb250ZW50cyI6IkFXU19BQ0NFU1NfS0VZX0lEPUFLSUFYUkYyTjVVV0FJU0NFSVBLXG5BV1NfU0VDUkVUX0FDQ0VTU19LRVk9UTY1dlZhcjJvSkpTSHpyUVA4NWFXbEhITVVObXIwSnBqb1hzV3Q1blxuIn1d_i18n_)
-});
-
-// EXTERNAL MODULE: ./node_modules/next/dist/server/node-polyfill-fetch.js
-var node_polyfill_fetch = __webpack_require__(7157);
-;// CONCATENATED MODULE: ./.next/routes-manifest.json
-const routes_manifest_namespaceObject = {"Dg":[]};
-// EXTERNAL MODULE: ./node_modules/next/dist/build/webpack/loaders/next-serverless-loader/api-handler.js
-var api_handler = __webpack_require__(6249);
-;// CONCATENATED MODULE: ./node_modules/next/dist/build/webpack/loaders/next-serverless-loader/index.js?page=%2Fapi%2Fcors&absolutePagePath=private-next-pages%2Fapi%2Fcors.tsx&absoluteAppPath=private-next-pages%2F_app.tsx&absoluteDocumentPath=next%2Fdist%2Fpages%2F_document&absoluteErrorPath=next%2Fdist%2Fpages%2F_error&absolute404Path=&distDir=private-dot-next&buildId=EZOWKL8-GZIESezynrnnb&assetPrefix=&generateEtags=true&poweredByHeader=true&canonicalBase=&basePath=&runtimeConfig=&previewProps=%7B%22previewModeId%22%3A%22361b70d4b3b9c796a6410bab18aadb80%22%2C%22previewModeSigningKey%22%3A%223418c2fd96d791a9b89540dc2763540807f8a1c89f5355ae0382a237318b3634%22%2C%22previewModeEncryptionKey%22%3A%22b1caa35255b680b273ec1593166d00e8c2207d79fb71bd7206eb3b8f9fd45e5c%22%7D&loadedEnvFiles=W3sicGF0aCI6Ii5lbnYiLCJjb250ZW50cyI6IkFXU19BQ0NFU1NfS0VZX0lEPUFLSUFYUkYyTjVVV0FJU0NFSVBLXG5BV1NfU0VDUkVUX0FDQ0VTU19LRVk9UTY1dlZhcjJvSkpTSHpyUVA4NWFXbEhITVVObXIwSnBqb1hzV3Q1blxuIn1d&i18n=!
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var next_dist_server_node_polyfill_fetch__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7157);
+/* harmony import */ var next_dist_server_node_polyfill_fetch__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(next_dist_server_node_polyfill_fetch__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var private_dot_next_routes_manifest_json__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(92800);
+/* harmony import */ var next_dist_build_webpack_loaders_next_serverless_loader_api_handler__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6249);
 
         
       const { processEnv } = __webpack_require__(19936)
-      processEnv([{"path":".env","contents":"AWS_ACCESS_KEY_ID=AKIAXRF2N5UWAISCEIPK\nAWS_SECRET_ACCESS_KEY=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\n"}])
+      processEnv([{"path":".env","contents":"AWS_ACCESS_KEY_ID=AKIAXRF2N5UWAISCEIPK\nAWS_SECRET_ACCESS_KEY=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\nAWS_REGION=us-east-2"}])
     
         
         const runtimeConfig = {}
@@ -154,26 +147,26 @@ var api_handler = __webpack_require__(6249);
 
         
 
-        const combinedRewrites = Array.isArray(routes_manifest_namespaceObject.Dg)
-          ? routes_manifest_namespaceObject.Dg
+        const combinedRewrites = Array.isArray(private_dot_next_routes_manifest_json__WEBPACK_IMPORTED_MODULE_1__/* .rewrites */ .Dg)
+          ? private_dot_next_routes_manifest_json__WEBPACK_IMPORTED_MODULE_1__/* .rewrites */ .Dg
           : []
 
-        if (!Array.isArray(routes_manifest_namespaceObject.Dg)) {
-          combinedRewrites.push(...routes_manifest_namespaceObject.Dg.beforeFiles)
-          combinedRewrites.push(...routes_manifest_namespaceObject.Dg.afterFiles)
-          combinedRewrites.push(...routes_manifest_namespaceObject.Dg.fallback)
+        if (!Array.isArray(private_dot_next_routes_manifest_json__WEBPACK_IMPORTED_MODULE_1__/* .rewrites */ .Dg)) {
+          combinedRewrites.push(...private_dot_next_routes_manifest_json__WEBPACK_IMPORTED_MODULE_1__/* .rewrites.beforeFiles */ .Dg.beforeFiles)
+          combinedRewrites.push(...private_dot_next_routes_manifest_json__WEBPACK_IMPORTED_MODULE_1__/* .rewrites.afterFiles */ .Dg.afterFiles)
+          combinedRewrites.push(...private_dot_next_routes_manifest_json__WEBPACK_IMPORTED_MODULE_1__/* .rewrites.fallback */ .Dg.fallback)
         }
 
-        const apiHandler = (0,api_handler/* getApiHandler */.Y)({
+        const apiHandler = (0,next_dist_build_webpack_loaders_next_serverless_loader_api_handler__WEBPACK_IMPORTED_MODULE_2__/* .getApiHandler */ .Y)({
           pageModule: __webpack_require__(63449),
           rewrites: combinedRewrites,
           i18n: undefined,
           page: "/api/cors",
           basePath: "",
           pageIsDynamic: false,
-          encodedPreviewProps: {previewModeId:"361b70d4b3b9c796a6410bab18aadb80",previewModeSigningKey:"3418c2fd96d791a9b89540dc2763540807f8a1c89f5355ae0382a237318b3634",previewModeEncryptionKey:"b1caa35255b680b273ec1593166d00e8c2207d79fb71bd7206eb3b8f9fd45e5c"}
+          encodedPreviewProps: {previewModeId:"0442d1750bce4c56dba428ffe02e7683",previewModeSigningKey:"595031b884e331d111db32308684a1982edb180da5ed37445efc48925eb6ca3b",previewModeEncryptionKey:"9f3a435c6cdce47143aa00a21ff130cf71710771cfd6aacc9a10446f8ca394a5"}
         })
-        /* harmony default export */ const next_serverless_loaderpage_2Fapi_2Fcors_absolutePagePath_private_next_pages_2Fapi_2Fcors_tsx_absoluteAppPath_private_next_pages_2F_app_tsx_absoluteDocumentPath_next_2Fdist_2Fpages_2F_document_absoluteErrorPath_next_2Fdist_2Fpages_2F_error_absolute404Path_distDir_private_dot_next_buildId_EZOWKL8_GZIESezynrnnb_assetPrefix_generateEtags_true_poweredByHeader_true_canonicalBase_basePath_runtimeConfig_previewProps_7B_22previewModeId_22_3A_22361b70d4b3b9c796a6410bab18aadb80_22_2C_22previewModeSigningKey_22_3A_223418c2fd96d791a9b89540dc2763540807f8a1c89f5355ae0382a237318b3634_22_2C_22previewModeEncryptionKey_22_3A_22b1caa35255b680b273ec1593166d00e8c2207d79fb71bd7206eb3b8f9fd45e5c_22_7D_loadedEnvFiles_W3sicGF0aCI6Ii5lbnYiLCJjb250ZW50cyI6IkFXU19BQ0NFU1NfS0VZX0lEPUFLSUFYUkYyTjVVV0FJU0NFSVBLXG5BV1NfU0VDUkVUX0FDQ0VTU19LRVk9UTY1dlZhcjJvSkpTSHpyUVA4NWFXbEhITVVObXIwSnBqb1hzV3Q1blxuIn1d_i18n_ = (apiHandler);
+        /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (apiHandler);
       
 
 /***/ }),
@@ -246,7 +239,7 @@ const getData = (req, res)=>{
 var __webpack_require__ = require("../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [507], () => (__webpack_exec__(51396)));
+var __webpack_exports__ = __webpack_require__.X(0, [458,551,800], () => (__webpack_exec__(71419)));
 module.exports = __webpack_exports__;
 
 })();

@@ -5,7 +5,7 @@ exports.id = 820;
 exports.ids = [820];
 exports.modules = {
 
-/***/ 65212:
+/***/ 78255:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -37,7 +37,7 @@ __webpack_require__.r(__webpack_exports__);
 
       
       const { processEnv } = __webpack_require__(72333)
-      processEnv([{"path":".env","contents":"AWS_ACCESS_KEY_ID=AKIAXRF2N5UWAISCEIPK\nAWS_SECRET_ACCESS_KEY=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\n"}])
+      processEnv([{"path":".env","contents":"AWS_ACCESS_KEY_ID=AKIAXRF2N5UWAISCEIPK\nAWS_SECRET_ACCESS_KEY=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\nAWS_REGION=us-east-2"}])
     
       
       const runtimeConfig = {}
@@ -99,11 +99,11 @@ __webpack_require__.r(__webpack_exports__);
         rewrites: combinedRewrites,
         i18n: undefined,
         page: "/_error",
-        buildId: "EZOWKL8-GZIESezynrnnb",
-        escapedBuildId: "EZOWKL8\-GZIESezynrnnb",
+        buildId: "wpuVUtjfGg9HfqPbpqLIb",
+        escapedBuildId: "wpuVUtjfGg9HfqPbpqLIb",
         basePath: "",
         pageIsDynamic: false,
-        encodedPreviewProps: {previewModeId:"361b70d4b3b9c796a6410bab18aadb80",previewModeSigningKey:"3418c2fd96d791a9b89540dc2763540807f8a1c89f5355ae0382a237318b3634",previewModeEncryptionKey:"b1caa35255b680b273ec1593166d00e8c2207d79fb71bd7206eb3b8f9fd45e5c"}
+        encodedPreviewProps: {previewModeId:"0442d1750bce4c56dba428ffe02e7683",previewModeSigningKey:"595031b884e331d111db32308684a1982edb180da5ed37445efc48925eb6ca3b",previewModeEncryptionKey:"9f3a435c6cdce47143aa00a21ff130cf71710771cfd6aacc9a10446f8ca394a5"}
       })
       
     
@@ -236,7 +236,7 @@ module.exports = require("zlib");
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [885,640], () => (__webpack_exec__(65212)));
+var __webpack_exports__ = __webpack_require__.X(0, [885,640], () => (__webpack_exec__(78255)));
 module.exports = __webpack_exports__;
 
 })();
