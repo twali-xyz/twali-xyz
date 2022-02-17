@@ -481,7 +481,6 @@ const SignUpSteps = () => {
                 Back
             </Button>
             <HStack alignSelf="center" spacing={8}>
-            <Text fontSize="2rem">Select One --</Text>
             <Box
               display="flex"
               flexDirection="column"
