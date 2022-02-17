@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
 import { connect } from '../../utils/walletUtils';
-import { Heading, FormControl, Input, Box, Button, FormLabel, Select, HStack, CircularProgress, Text, FormHelperText } from "@chakra-ui/react"
+import { Heading, FormControl, Input, Box, Button, FormLabel, Select, HStack, CircularProgress, Text, Img, FormHelperText } from "@chakra-ui/react"
 import router from 'next/router';
 
 import CeramicClient from '@ceramicnetwork/http-client';
@@ -183,7 +183,7 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
               isTruncated>
                       <FormControl p={4} id="current-company-title" isRequired>
                         <FormLabel>Current title</FormLabel>
-                        <Input isInvalid={errors.currTitle} errorBorderColor='red.300' value={values.currTitle || ''} required placeholder="Current company title" name="currTitle" onChange={handleChange}/>
+                        <Input isInvalid={errors.currTitle} errorBorderColor='red.300' value={values.currTitle || ''} required placeholder="Current title" name="currTitle" onChange={handleChange}/>
                         {errors.currTitle && (
                           <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.currTitle}</Text>
                         )}
@@ -481,7 +481,18 @@ const SignUpSteps = () => {
                 Back
             </Button>
             <HStack alignSelf="center" spacing={8}>
-            <Box w="sm" h="200px" borderWidth="1px" borderRadius="lg" borderColor={ btnActive == 1 ? "gray.500" : "gray.200" } overflow="hidden" cursor="pointer" onClick={() => {
+            <Box
+              display="flex"
+              flexDirection="column"
+              justifyContent="space-between"
+              w="sm"
+              h="200px"
+              borderWidth="1px"
+              borderRadius="lg"
+              borderColor={ btnActive == 1 ? "gray.500" : "gray.200" }
+              overflow="hidden"
+              cursor="pointer"
+              onClick={() => {
               setBtnActive(1);
               selectUserAccType('Expert');
               }}>
@@ -502,12 +513,28 @@ const SignUpSteps = () => {
                   </Box>
                 </Box>
               </Box>
+              <Box display="flex" justifyContent="flex-end" w="100%" padding="1rem" >
+                <Box w="2rem" h="2rem" backgroundColor="white" borderRadius="50%" position="relative">
+                {btnActive == 1 ?
+              <Img
+            backgroundColor='rgb(222, 222, 222)'
+            w="2rem"
+            borderRadius="50%"
+            style={{ cursor: 'pointer'}}
+            alignSelf="center"
+            src="check-mark.png"
+            alt='check mark'
+          /> : 
+          <Box  w="2rem" h="2rem" backgroundColor="grey" borderRadius="50%"></Box>}
+                </Box>
+              </Box>
             </Box>
-            <Box w="sm" h="200px" borderWidth="1px" borderRadius="lg" borderColor={ btnActive == 2 ? "gray.500" : "gray.200" } overflow="hidden" cursor="pointer" onClick={() => {
+            <Box display="flex" flexDirection="column" justifyContent="space-between" w="sm" h="200px" borderWidth="1px" borderRadius="lg" borderColor={ btnActive == 2 ? "gray.500" : "gray.200" } overflow="hidden" cursor="pointer" onClick={() => {
               setBtnActive(2);
               selectUserAccType('Builder');
           }}>
-              <Box p="4">
+              <Box 
+                 p="4">
                 <Box
                   mt="1"
                   fontWeight="semibold"
@@ -523,6 +550,20 @@ const SignUpSteps = () => {
                     I want to build a project
                   </Box>
                 </Box>
+              </Box>
+              <Box display="flex" justifyContent="flex-end" w="100%" padding="1rem" >
+              
+             {btnActive == 2 ?
+              <Img
+            backgroundColor='rgb(222, 222, 222)'
+            w="2rem"
+            borderRadius="50%"
+            style={{ cursor: 'pointer'}}
+            alignSelf="center"
+            src="check-mark.png"
+            alt='check mark'
+          /> : 
+          <Box  w="2rem" h="2rem" backgroundColor="grey" borderRadius="50%"></Box>}
               </Box>
             </Box>
             </HStack>
