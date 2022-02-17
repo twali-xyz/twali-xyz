@@ -1,7 +1,7 @@
 twali-xyz:
-  component: "@sls-next/serverless-component@3.6.0"
+  component: "@sls-next/serverless-component@3.7.0-alpha.7"
   inputs:
-    roleArn: "arn:aws:iam::517934542124:role/2qcixkg-ekviyw"
+    roleArn: "arn:aws:iam::517934542124:role/0refym6-6pudlh"
     build:
       env:
-        TABLE_NAME: "user_tests"
+        TABLE_NAME: "user_profile_test"

@@ -24,7 +24,7 @@
     "**/*.ts",
     "**/*.tsx",
     "next.config.js",
-    "infrastructure/dbprovision.js"
+    "infrastructure/provisionTable.js"
   ],
   "exclude": [
     "node_modules"
