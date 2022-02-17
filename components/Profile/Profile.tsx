@@ -364,10 +364,20 @@ const ProfilePage = () => {
                     )
                     {/* social media URLs */}
                     ( profileData.content.identity.linkedIn &&
-                      <Link href={profileData.content.identity.linkedIn}>{profileData.content.identity.linkedIn}</Link>
+                      <Link 
+                        href={profileData.content.identity.linkedIn}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                          {profileData.content.identity.linkedIn}
+                      </Link>
                       )
                     ( profileData.content.identity.twitter &&
-                      <Link href={profileData.content.identity.twitter}>{profileData.content.identity.twitter}</Link>
+                      <Link 
+                        href={profileData.content.identity.twitter}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                          {profileData.content.identity.twitter}
+                      </Link>
                     )
                       
                     <VStack>
