@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Step, Steps, useSteps } from "chakra-ui-steps";
 import { connect } from "../../utils/walletUtils";
+
 import {
   Heading,
   FormControl,
@@ -25,6 +26,7 @@ import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
 import { DID } from "dids";
 import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // 3box test nodes with read/write access on ceramic clay testnet
 // network node that we're interacting with, can be local/prod
@@ -184,22 +186,16 @@ const userProfileStep = ({ handleChange, values, errors }) => {
               </FormControl>
             </HStack>
             <FormControl p={2} pb={8} id="website">
-              <Box display="flex">
+              <Box display="flex" justifyContent="space-between">
                 <FormLabel>Website</FormLabel>
                 <Tooltip
                   placement="auto-start"
                   hasArrow
                   label="replace this with desired info(need copy from David or Cokie)"
                 >
-                  <Img
-                    src="info.png"
-                    w="auto"
-                    h="1rem"
-                    pos="relative"
-                    right=".5rem"
-                    backgroundColor="white"
-                    borderRadius="50%"
-                  ></Img>
+                  <Box pos="relative">
+                    <FontAwesomeIcon icon={"info-circle"} />
+                  </Box>
                 </Tooltip>
               </Box>
               <Input
@@ -235,22 +231,16 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
             isTruncated
           >
             <FormControl p={4} id="business-name" isRequired>
-              <HStack>
+              <HStack display="flex" justifyContent="space-between">
                 <FormLabel>Business legal name</FormLabel>
                 <Tooltip
                   placement="auto-start"
                   hasArrow
                   label="replace this with desired info(need copy from David or Cokie)"
                 >
-                  <Img
-                    src="info.png"
-                    w="auto"
-                    h="1rem"
-                    pos="relative"
-                    right="1rem"
-                    backgroundColor="white"
-                    borderRadius="50%"
-                  ></Img>
+                  <Box pos="relative">
+                    <FontAwesomeIcon icon={"info-circle"} />
+                  </Box>
                 </Tooltip>
               </HStack>
               <Input
@@ -279,15 +269,9 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
                   hasArrow
                   label="replace this with desired info(need copy from David or Cokie)"
                 >
-                  <Img
-                    src="info.png"
-                    w="auto"
-                    h="1rem"
-                    pos="relative"
-                    right="1rem"
-                    backgroundColor="white"
-                    borderRadius="50%"
-                  ></Img>
+                  <Box pos="relative">
+                    <FontAwesomeIcon icon={"info-circle"} />
+                  </Box>
                 </Tooltip>
               </HStack>
               <Select
