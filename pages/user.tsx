@@ -27,13 +27,13 @@ const createNewUser = async (e)=> {
     });
 };
 
-const getUser = async({req, query})=> {
-    e.preventDefault();
-    const response = await fetch(`/api/users/${query.user_name}`)
-    const user = await response.json();
-    console.log(user)
-    return { user };
-}
+// const getUser = async({req, query})=> {
+//     // e.preventDefault();
+//     const response = await fetch(`/api/users/${userDescription.user_name}`)
+//     const user = await response.json();
+//     console.log(user)
+//     return { user };
+// }
 
 
   const connectWallet = async ()=> {
