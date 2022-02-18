@@ -235,7 +235,24 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
             isTruncated
           >
             <FormControl p={4} id="business-name" isRequired>
-              <FormLabel>Business legal name</FormLabel>
+              <HStack>
+                <FormLabel>Business legal name</FormLabel>
+                <Tooltip
+                  placement="auto-start"
+                  hasArrow
+                  label="replace this with desired info(need copy from David or Cokie)"
+                >
+                  <Img
+                    src="info.png"
+                    w="auto"
+                    h="1rem"
+                    pos="relative"
+                    right="1rem"
+                    backgroundColor="white"
+                    borderRadius="50%"
+                  ></Img>
+                </Tooltip>
+              </HStack>
               <Input
                 required
                 isInvalid={errors.businessName}
@@ -255,7 +272,24 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
               </FormHelperText>
             </FormControl>
             <FormControl p={4} id="business-type" isRequired>
-              <FormLabel>Business type</FormLabel>
+              <HStack justifyContent="space-between">
+                <FormLabel>Business type</FormLabel>
+                <Tooltip
+                  placement="auto-start"
+                  hasArrow
+                  label="replace this with desired info(need copy from David or Cokie)"
+                >
+                  <Img
+                    src="info.png"
+                    w="auto"
+                    h="1rem"
+                    pos="relative"
+                    right="1rem"
+                    backgroundColor="white"
+                    borderRadius="50%"
+                  ></Img>
+                </Tooltip>
+              </HStack>
               <Select
                 placeholder="Select business type"
                 name="businessType"
