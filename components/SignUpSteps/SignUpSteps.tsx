@@ -1,16 +1,29 @@
-import { useState } from 'react';
-import { Step, Steps, useSteps } from 'chakra-ui-steps';
-import { connect } from '../../utils/walletUtils';
-import { Heading, FormControl, Input, Box, Button, FormLabel, Select, HStack, CircularProgress, Text, Img, FormHelperText } from "@chakra-ui/react"
-import router from 'next/router';
+import { useState } from "react";
+import { Step, Steps, useSteps } from "chakra-ui-steps";
+import { connect } from "../../utils/walletUtils";
+import {
+  Heading,
+  FormControl,
+  Input,
+  Box,
+  Button,
+  FormLabel,
+  Select,
+  HStack,
+  CircularProgress,
+  Text,
+  Img,
+  FormHelperText,
+} from "@chakra-ui/react";
+import router from "next/router";
 
-import CeramicClient from '@ceramicnetwork/http-client';
-import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver';
+import CeramicClient from "@ceramicnetwork/http-client";
+import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver";
 
-import { EthereumAuthProvider, ThreeIdConnect } from '@3id/connect';
-import { DID } from 'dids';
-import { IDX } from '@ceramicstudio/idx';
-import { TileDocument } from '@ceramicnetwork/stream-tile';
+import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
+import { DID } from "dids";
+import { IDX } from "@ceramicstudio/idx";
+import { TileDocument } from "@ceramicnetwork/stream-tile";
 
 // 3box test nodes with read/write access on ceramic clay testnet
 // network node that we're interacting with, can be local/prod
@@ -262,77 +275,103 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
 
 const professionalProfileStep = ({ handleChange, values, errors }) => {
   return (
-    <form style={{ alignSelf: "center"}}>
-      <Box h="100%" w="xl" borderWidth="1px" borderRadius="lg" overflow="hidden" cursor="pointer">
-          <Box p="4">
-            <Box
-              mt="1"
-              fontWeight="semibold"
-              as="h4"
-              lineHeight="tight"
-              isTruncated>
-                      <FormControl p={4} id="current-company-title" isRequired>
-                        <FormLabel>Current title</FormLabel>
-                        <Input isInvalid={errors.currTitle} errorBorderColor='red.300' value={values.currTitle || ''} required placeholder="Current title" name="currTitle" onChange={handleChange}/>
-                        {errors.currTitle && (
-                          <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.currTitle}</Text>
-                        )}
-                      </FormControl>
-                      <FormControl p={4} id="current-location">
-                        <FormLabel>Current location</FormLabel>
-                        <Select placeholder="Select current location" name="currLocation" onChange={handleChange}>
-                          <option>United States</option>
-                          <option>Canada</option>
-                          <option>India</option>
-                        </Select>
-                    </FormControl>
-                    <FormControl p={4} id="functional-expertise" isRequired>
-                        <FormLabel>Functional expertise</FormLabel>
-                        <Select placeholder="Select functional expertise" name="funcExpertise" onChange={handleChange}>
-                        <option>Accounting</option>
-                          <option>Creative</option>
-                          <option>Audit</option>
-                          <option>Board & Advisory</option>
-                          <option>Corporate Development</option>
-                          <option>Comp & Benefits</option>
-                          <option>Compliance</option>
-                          <option>Management Consulting</option>
-                          <option>Data & Analytics</option>
-                          <option>Product Design</option>
-                          <option>Digital</option>
-                          <option>Engineering</option>
-                          <option>Entrepreneurship</option>
-                          <option>Finance</option>
-                          <option>General Management</option>
-                          <option>Human Resources</option>
-                          <option>IT Infrastructure</option>
-                          <option>Innovation</option>
-                          <option>Investor</option>
-                          <option>Legal</option>
-                          <option>Marketing</option>
-                          <option>Media & Comms</option>
-                          <option>Merchandising</option>
-                          <option>Security</option>
-                          <option>Operations</option>
-                          <option>Portfolio Operations</option>
-                          <option>Procurement</option>
-                          <option>Product Management</option>
-                          <option>Investor Relations</option>
-                          <option>Regulatory</option>
-                          <option>Research</option>
-                          <option>Risk</option>
-                          <option>Strategy</option>
-                          <option>Technology</option>
-                          <option>Transformation</option>
-                          <option>Sales & Customer</option>
-                          <option>Data Science</option>
-                          <option>Talent Acquisition</option>
-                          <option>Tax</option>
-                          <option>Cybersecurity</option>
-                          <option>Investment Banking</option>
-                          <option>Supply Chain</option>
-                        </Select>
-                        {/* {errors.funcExpertise && (
+    <form style={{ alignSelf: "center" }}>
+      <Box
+        h="100%"
+        w="xl"
+        borderWidth="1px"
+        borderRadius="lg"
+        overflow="hidden"
+        cursor="pointer"
+      >
+        <Box p="4">
+          <Box
+            mt="1"
+            fontWeight="semibold"
+            as="h4"
+            lineHeight="tight"
+            isTruncated
+          >
+            <FormControl p={4} id="current-company-title" isRequired>
+              <FormLabel>Current title</FormLabel>
+              <Input
+                isInvalid={errors.currTitle}
+                errorBorderColor="red.300"
+                value={values.currTitle || ""}
+                required
+                placeholder="Current title"
+                name="currTitle"
+                onChange={handleChange}
+              />
+              {errors.currTitle && (
+                <Text fontSize="xs" fontWeight="400" color="red.500">
+                  {errors.currTitle}
+                </Text>
+              )}
+            </FormControl>
+            <FormControl p={4} id="current-location">
+              <FormLabel>Current location</FormLabel>
+              <Select
+                placeholder="Select current location"
+                name="currLocation"
+                onChange={handleChange}
+              >
+                <option>United States</option>
+                <option>Canada</option>
+                <option>India</option>
+              </Select>
+            </FormControl>
+            <FormControl p={4} id="functional-expertise" isRequired>
+              <FormLabel>Functional expertise</FormLabel>
+              <Select
+                placeholder="Select functional expertise"
+                name="funcExpertise"
+                onChange={handleChange}
+              >
+                <option>Accounting</option>
+                <option>Creative</option>
+                <option>Audit</option>
+                <option>Board & Advisory</option>
+                <option>Corporate Development</option>
+                <option>Comp & Benefits</option>
+                <option>Compliance</option>
+                <option>Management Consulting</option>
+                <option>Data & Analytics</option>
+                <option>Product Design</option>
+                <option>Digital</option>
+                <option>Engineering</option>
+                <option>Entrepreneurship</option>
+                <option>Finance</option>
+                <option>General Management</option>
+                <option>Human Resources</option>
+                <option>IT Infrastructure</option>
+                <option>Innovation</option>
+                <option>Investor</option>
+                <option>Legal</option>
+                <option>Marketing</option>
+                <option>Media & Comms</option>
+                <option>Merchandising</option>
+                <option>Security</option>
+                <option>Operations</option>
+                <option>Portfolio Operations</option>
+                <option>Procurement</option>
+                <option>Product Management</option>
+                <option>Investor Relations</option>
+                <option>Regulatory</option>
+                <option>Research</option>
+                <option>Risk</option>
+                <option>Strategy</option>
+                <option>Technology</option>
+                <option>Transformation</option>
+                <option>Sales & Customer</option>
+                <option>Data Science</option>
+                <option>Talent Acquisition</option>
+                <option>Tax</option>
+                <option>Cybersecurity</option>
+                <option>Investment Banking</option>
+                <option>Supply Chain</option>
+              </Select>
+              {/* {errors.funcExpertise && (
                           <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.funcExpertise}</Text>
                         )} */}
             </FormControl>
@@ -557,30 +596,38 @@ const SignUpSteps = () => {
     initialStep: 0,
   });
 
-    const selectUserAccType = (accType: string) => {
-      setAccType(accType);
-      setIsAccTypeSelected(true);
-    }
-    
-    // Either displaying the account type selection
-    // Or the steps component based on user selection
-    return (
-      <>
-             {isAccTypeSelection ? (<>
-           <Heading alignSelf="center">Sign Up</Heading>
-           <Box
-                    alignSelf="center"
-                    color="rgb(255, 255, 255)"
-                    fontWeight="semibold"
-                    fontSize="sm"
-                    p={0}
-                    m={0}
-                  >How would you like to use Twali?
-            </Box>
-            <Button size="sm" pl={40} onClick={() => router.push('/')} colorScheme="gray" variant="link">
-                Back
-            </Button>
-            <HStack alignSelf="center" spacing={8}>
+  const selectUserAccType = (accType: string) => {
+    setAccType(accType);
+    setIsAccTypeSelected(true);
+  };
+
+  // Either displaying the account type selection
+  // Or the steps component based on user selection
+  return (
+    <>
+      {isAccTypeSelection ? (
+        <>
+          <Heading alignSelf="center">Sign Up</Heading>
+          <Box
+            alignSelf="center"
+            color="rgb(255, 255, 255)"
+            fontWeight="semibold"
+            fontSize="sm"
+            p={0}
+            m={0}
+          >
+            How would you like to use Twali?
+          </Box>
+          <Button
+            size="sm"
+            pl={40}
+            onClick={() => router.push("/")}
+            colorScheme="gray"
+            variant="link"
+          >
+            Back
+          </Button>
+          <HStack alignSelf="center" spacing={8}>
             <Box
               display="flex"
               flexDirection="column"
@@ -589,13 +636,14 @@ const SignUpSteps = () => {
               h="200px"
               borderWidth="1px"
               borderRadius="lg"
-              borderColor={ btnActive == 1 ? "gray.500" : "gray.200" }
+              borderColor={btnActive == 1 ? "gray.500" : "gray.200"}
               overflow="hidden"
               cursor="pointer"
               onClick={() => {
-              setBtnActive(1);
-              selectUserAccType('Expert');
-              }}>
+                setBtnActive(1);
+                selectUserAccType("Expert");
+              }}
+            >
               <Box p="4">
                 <Box
                   mt="1"
@@ -613,28 +661,57 @@ const SignUpSteps = () => {
                   </Box>
                 </Box>
               </Box>
-              <Box display="flex" justifyContent="flex-end" w="100%" padding="1rem" >
-                <Box w="2rem" h="2rem" backgroundColor="white" borderRadius="50%" position="relative">
-                {btnActive == 1 ?
-              <Img
-            backgroundColor='rgb(222, 222, 222)'
-            w="2rem"
-            borderRadius="50%"
-            style={{ cursor: 'pointer'}}
-            alignSelf="center"
-            src="check-mark.png"
-            alt='check mark'
-          /> : 
-          <Box  w="2rem" h="2rem" backgroundColor="grey" borderRadius="50%"></Box>}
+              <Box
+                display="flex"
+                justifyContent="flex-end"
+                w="100%"
+                padding="1rem"
+              >
+                <Box
+                  w="2rem"
+                  h="2rem"
+                  backgroundColor="white"
+                  borderRadius="50%"
+                  position="relative"
+                >
+                  {btnActive == 1 ? (
+                    <Img
+                      backgroundColor="rgb(222, 222, 222)"
+                      w="2rem"
+                      borderRadius="50%"
+                      style={{ cursor: "pointer" }}
+                      alignSelf="center"
+                      src="check-mark.png"
+                      alt="check mark"
+                    />
+                  ) : (
+                    <Box
+                      w="2rem"
+                      h="2rem"
+                      backgroundColor="grey"
+                      borderRadius="50%"
+                    ></Box>
+                  )}
                 </Box>
               </Box>
             </Box>
-            <Box display="flex" flexDirection="column" justifyContent="space-between" w="sm" h="200px" borderWidth="1px" borderRadius="lg" borderColor={ btnActive == 2 ? "gray.500" : "gray.200" } overflow="hidden" cursor="pointer" onClick={() => {
-              setBtnActive(2);
-              selectUserAccType('Builder');
-          }}>
-              <Box 
-                 p="4">
+            <Box
+              display="flex"
+              flexDirection="column"
+              justifyContent="space-between"
+              w="sm"
+              h="200px"
+              borderWidth="1px"
+              borderRadius="lg"
+              borderColor={btnActive == 2 ? "gray.500" : "gray.200"}
+              overflow="hidden"
+              cursor="pointer"
+              onClick={() => {
+                setBtnActive(2);
+                selectUserAccType("Builder");
+              }}
+            >
+              <Box p="4">
                 <Box
                   mt="1"
                   fontWeight="semibold"
@@ -651,19 +728,30 @@ const SignUpSteps = () => {
                   </Box>
                 </Box>
               </Box>
-              <Box display="flex" justifyContent="flex-end" w="100%" padding="1rem" >
-              
-             {btnActive == 2 ?
-              <Img
-            backgroundColor='rgb(222, 222, 222)'
-            w="2rem"
-            borderRadius="50%"
-            style={{ cursor: 'pointer'}}
-            alignSelf="center"
-            src="check-mark.png"
-            alt='check mark'
-          /> : 
-          <Box  w="2rem" h="2rem" backgroundColor="grey" borderRadius="50%"></Box>}
+              <Box
+                display="flex"
+                justifyContent="flex-end"
+                w="100%"
+                padding="1rem"
+              >
+                {btnActive == 2 ? (
+                  <Img
+                    backgroundColor="rgb(222, 222, 222)"
+                    w="2rem"
+                    borderRadius="50%"
+                    style={{ cursor: "pointer" }}
+                    alignSelf="center"
+                    src="check-mark.png"
+                    alt="check mark"
+                  />
+                ) : (
+                  <Box
+                    w="2rem"
+                    h="2rem"
+                    backgroundColor="grey"
+                    borderRadius="50%"
+                  ></Box>
+                )}
               </Box>
             </Box>
           </HStack>
