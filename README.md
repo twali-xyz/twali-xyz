@@ -20,3 +20,9 @@ To run the development server locally: &nbsp;
 ```
 npm run dev
 ```
+
+Before opening a PR, please run Prettier to format your files:
+
+```
+npx prettier --write .
+```
