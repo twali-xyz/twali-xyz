@@ -23,12 +23,9 @@ const createNewUser = async (e)=> {
     e.preventDefault();
     await fetch("/api/users", {
         method: "POST",
-        body: JSON.stringify({ userDescription })
+        body: JSON.stringify({userDescription})
     });
 };
-
-
-
 
 
   const connectWallet = async ()=> {
@@ -45,6 +42,7 @@ const createNewUser = async (e)=> {
                 method: "eth_requestAccounts"
             });
             console.log("Connected", account[0]);
+            console.log({userDescription});
             setUserDescription({...userDescription, user_wallet: account[0]})
         } catch (error) {
             console.log(error);
@@ -72,7 +70,7 @@ const createNewUser = async (e)=> {
             // onChange={(e)=> setUserDescription({...userDescription, user_wallet: e.target.value})} 
             />
             <Button onClick={createNewUser}>Create User</Button>
-            {userDescription.user_wallet == '' ? (<Button onClick={connectWallet}>Connect Wallet</Button>) : (<div>You're Connected!</div>)}
+            {userDescription.user_wallet == '' ? (<Button onClick={connectWallet}>Connect Wallet</Button>) : ''}
         </form>
     )
 }

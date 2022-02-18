@@ -27,11 +27,13 @@ const getDynamoDBClient = () => {
 
 module.exports = {
     createUser: async (userDescription) => {
+        const { user_name, user_wallet} = userDescription;
         await getDynamoDBClient()
         .put({
             TableName,
             Item: {
-                userDescription
+                user_name: user_name, // PK needs to be defined when doing posting to DB
+                user_wallet: user_wallet
             }
         })
         .promise();
