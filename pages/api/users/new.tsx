@@ -1,13 +1,10 @@
-import data from "../../data";
+import data from "../../../data";
 import { NextApiHandler } from "next";
 
 
-const apiHandler: NextApiHandler = async(req, res)=>{
+const newUserHandler: NextApiHandler = async(req, res)=>{    
 
-    console.log("api/users", req.body);
-
-    
-    if(req.method === "POST") {
+if(req.method === "POST") {
    try{ 
         const userDescription = JSON.parse(req.body).userDescription;
         await data.createUser(userDescription);
@@ -21,4 +18,4 @@ const apiHandler: NextApiHandler = async(req, res)=>{
     }
 }
 
-export default apiHandler;
+export default newUserHandler;

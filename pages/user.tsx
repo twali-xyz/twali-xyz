@@ -12,7 +12,7 @@ export interface UserData {
 
 
 const NewUser = ()=> {
-    const router = useRouter();
+    // const router = useRouter();
     const [userDescription, setUserDescription] = useState<UserData>({
         user_name: '',
         user_wallet: ''
@@ -21,11 +21,19 @@ const NewUser = ()=> {
 
 const createNewUser = async (e)=> {
     e.preventDefault();
-    await fetch("/api/users", {
+    await fetch("/api/users/new", {
         method: "POST",
         body: JSON.stringify({userDescription})
     });
 };
+
+const getUser = async({req, query})=> {
+    e.preventDefault();
+    const response = await fetch(`/api/users/${query.user_name}`)
+    const user = await response.json();
+    console.log(user)
+    return { user };
+}
 
 
   const connectWallet = async ()=> {
@@ -44,7 +52,7 @@ const createNewUser = async (e)=> {
             console.log("Connected", account[0]);
             console.log({userDescription});
             setUserDescription({...userDescription, user_wallet: account[0]})
-        } catch (error) {
+            } catch (error) {
             console.log(error);
         }
   }
@@ -71,6 +79,7 @@ const createNewUser = async (e)=> {
             />
             <Button onClick={createNewUser}>Create User</Button>
             {userDescription.user_wallet == '' ? (<Button onClick={connectWallet}>Connect Wallet</Button>) : ''}
+            {/* <Button onClick={getUser}>Get User</Button> */}
         </form>
     )
 }

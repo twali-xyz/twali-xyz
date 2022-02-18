@@ -40,6 +40,7 @@ module.exports = {
         Item: {
           user_name: user_name,
           user_wallet: user_wallet,
+          // Optional - Can set a UUID here to be generated on creation.
         },
       })
       .promise();
