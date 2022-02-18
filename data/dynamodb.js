@@ -26,26 +26,39 @@ const getDynamoDBClient = () => {
 };
 
 module.exports = {
-    createUser: async (userDescription) => {
-        const { user_name, user_wallet} = userDescription;
-        await getDynamoDBClient()
-        .put({
-            TableName,
-            Item: {
-                user_name: user_name, // PK needs to be defined when doing posting to DB
-                user_wallet: user_wallet
-            }
-        })
-        .promise();
-    },
-    getUser: async (userName) => {
-        const { Items } = await getDynamoDBClient()
-        .query({
-            TableName
-        })
-        .promise();
+  /**
+   * Creates a user profile with the `user_name` respersenting the primary key
+   * in the database table.
+   * @param {Object} userDescription holds the primary key from object to process to database and any addtional metadata.
+   *
+   **/
+  createUser: async (userDescription) => {
+    const { user_name, user_wallet } = userDescription;
+    await getDynamoDBClient()
+      .put({
+        TableName,
+        Item: {
+          user_name: user_name,
+          user_wallet: user_wallet,
+        },
+      })
+      .promise();
+  },
 
-        const users = Items.find((user) => user.user_name == userName);
-        return users;
-    }
+  /** 
+   * Calls a user from database by the primary key `useer_name`.
+   * 
+   * @returns Returns a user as and object.
+   * 
+   **/
+  getUser: async (userName) => {
+    const { Items } = await getDynamoDBClient()
+      .query({
+        TableName,
+      })
+      .promise();
+
+    const users = Items.find((user) => user.user_name == userName);
+    return users;
+  },
 };
