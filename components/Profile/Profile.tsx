@@ -9,6 +9,8 @@ import {
   CircularProgress,
   useDisclosure,
   IconButton,
+  Link,
+  Image,
 } from "@chakra-ui/react";
 
 import { useState, useEffect } from "react";
@@ -46,8 +48,8 @@ export interface Identity {
   email: string;
   displayName: string;
   bio: string;
-  twitterUsrName?: string;
-  linkedInUsrName?: string;
+  twitter?: string;
+  linkedIn?: string;
   website?: string;
   businessName: string;
   businessType: string;
@@ -342,7 +344,6 @@ const ProfilePage = () => {
     }
     return elements;
   }
-
   return (
     <>
       {!loaded ? (
@@ -472,7 +473,36 @@ const ProfilePage = () => {
                       {profileData.content.identity.bio}
                     </Text>
                   )}
-                  )
+                  ){/* social media URLs */}
+                  <HStack width={"6rem"} justifyContent={"space-between"}>
+                    {profileData.content.identity.linkedIn && (
+                      <Link
+                        href={profileData.content.identity.linkedIn}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        width={"fit-content"}
+                      >
+                        <Image
+                          src="LI-In-Bug.png"
+                          height={"2rem"}
+                          width={"auto"}
+                        />
+                      </Link>
+                    )}
+                    {profileData.content.identity.twitter && (
+                      <Link
+                        href={profileData.content.identity.twitter}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Image
+                          src="2021_Twitter_logo - blue.png"
+                          height={"2rem"}
+                          width={"auto"}
+                        />
+                      </Link>
+                    )}
+                  </HStack>
                   <VStack>
                     <Box alignSelf="flex-start" w="full" overflow="hidden">
                       <Text pb={8} fontSize="xl">
@@ -592,6 +622,50 @@ const GetCompany = (companyName) => {
               companyName.onCompanyModalOpen();
             }}
           />
+        </Box>
+      ) : companyName ? (
+        <Box
+          w="100px"
+          height="100px"
+          borderRadius="full"
+          backgroundColor="rgb(222, 222, 222)"
+          overflow="hidden"
+          p={4}
+          key={`${companyName.companyName}--${companyName.currCompany}--box`}
+          onMouseEnter={(e) => (
+            (e.currentTarget.children[0].style.display = "flex"),
+            (e.currentTarget.children[1].style.display = "none")
+          )}
+          onMouseLeave={(e) => (
+            (e.currentTarget.children[1].style.display = "flex"),
+            (e.currentTarget.children[0].style.display = "none")
+          )}
+          onClick={() => {
+            companyName.setCurrCompany(companyName.currCompany);
+            companyName.onCompanyModalOpen();
+          }}
+        >
+          <Img
+            backgroundColor="rgb(222, 222, 222)"
+            style={{ cursor: "pointer" }}
+            key={`${companyName.companyName}--${companyName.currCompany}`}
+            alignSelf="center"
+            src="edit.svg"
+            alt="edit stock img"
+            display={"none"}
+          />
+          <Text
+            w={"full"}
+            h={"full"}
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            fontSize="4xl"
+            fontWeight="800"
+            color="blue.700"
+          >
+            {companyName.companyName[0]?.toUpperCase()}
+          </Text>
         </Box>
       ) : (
         <Img
