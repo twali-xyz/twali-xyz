@@ -256,7 +256,6 @@ const ProfilePage = () => {
               propData.proposals.forEach((proposal) => {
                 totalVotes += proposal.votes;
               });
-
               finalObj.totalVotes = totalVotes;
             }
           );
