@@ -608,17 +608,6 @@ const SignUpSteps = () => {
     <>
       {isAccTypeSelection ? (
         <>
-          <Heading alignSelf="center">Sign Up</Heading>
-          <Box
-            alignSelf="center"
-            color="rgb(255, 255, 255)"
-            fontWeight="semibold"
-            fontSize="sm"
-            p={0}
-            m={0}
-          >
-            How would you like to use Twali?
-          </Box>
           <Button
             size="sm"
             pl={40}
@@ -628,8 +617,19 @@ const SignUpSteps = () => {
           >
             Back
           </Button>
+          <Heading alignSelf="center">Sign Up</Heading>
+
           <VStack alignSelf="center" spacing={8}>
-            <Text>How will you use Twali?</Text>
+            <Text
+              alignSelf="center"
+              color="rgb(255, 255, 255)"
+              fontWeight="semibold"
+              fontSize="sm"
+              p={0}
+              m={0}
+            >
+              How would you like to use Twali?
+            </Text>
             <HStack>
               <Box
                 display="flex"
