@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { Step, Steps, useSteps } from "chakra-ui-steps";
 import { connect } from "../../utils/walletUtils";
 import {
@@ -468,7 +468,7 @@ const SignUpSteps = () => {
     funcExpertise: "",
     industryExpertise: "",
     companyInfo: [],
-    uuid: '',
+    uuid: "",
   });
 
   const validate = (values) => {
