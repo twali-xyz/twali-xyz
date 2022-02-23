@@ -30,6 +30,7 @@ import { request, gql } from "graphql-request";
 import SnapshotModal from "./SnapshotModal/SnapshotModal";
 import CompanyModal from "./CompanyModal/CompanyModal";
 import useSWR from "swr";
+import { add } from "date-fns";
 
 // network node that we're interacting with, can be local/prod
 // we're using a test network here
@@ -632,14 +633,18 @@ const GetCompany = (companyName) => {
           overflow="hidden"
           p={4}
           key={`${companyName.companyName}--${companyName.currCompany}--box`}
-          onMouseEnter={(e) => (
-            (e.currentTarget.children[0].style.display = "flex"),
-            (e.currentTarget.children[1].style.display = "none")
-          )}
-          onMouseLeave={(e) => (
-            (e.currentTarget.children[1].style.display = "flex"),
-            (e.currentTarget.children[0].style.display = "none")
-          )}
+          onMouseEnter={(e) => {
+            let addImg = e.currentTarget.children[0] as HTMLElement;
+            let compLogo = e.currentTarget.children[1] as HTMLElement;
+            addImg.style.display = "flex";
+            compLogo.style.display = "none";
+          }}
+          onMouseLeave={(e) => {
+            let addImg = e.currentTarget.children[0] as HTMLElement;
+            let compLogo = e.currentTarget.children[1] as HTMLElement;
+            addImg.style.display = "none";
+            compLogo.style.display = "flex";
+          }}
           onClick={() => {
             companyName.setCurrCompany(companyName.currCompany);
             companyName.onCompanyModalOpen();
