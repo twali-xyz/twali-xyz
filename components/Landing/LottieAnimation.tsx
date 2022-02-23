@@ -12,5 +12,7 @@ export default function LottieAnimation(props) {
     });
   }, []);
 
-  return <Box ref={lottieAnimation}></Box>;
+  return (
+    <Box width={props.width} height={props.height} ref={lottieAnimation}></Box>
+  );
 }
