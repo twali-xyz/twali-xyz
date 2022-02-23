@@ -43,8 +43,8 @@ export interface Identity {
   email: string;
   displayName: string;
   bio: string;
-  twitterUsrName?: string;
-  linkedInUsrName?: string;
+  twitter?: string;
+  linkedIn?: string;
   website?: string;
   businessName: string;
   businessType: string;

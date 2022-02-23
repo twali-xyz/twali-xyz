@@ -8,6 +8,8 @@ import {
   CircularProgress,
   useDisclosure,
   IconButton,
+  Link,
+  Image,
 } from "@chakra-ui/react";
 
 import { useState, useEffect } from "react";
@@ -48,8 +50,8 @@ export interface Identity {
   email: string;
   displayName: string;
   bio: string;
-  twitterUsrName?: string;
-  linkedInUsrName?: string;
+  twitter?: string;
+  linkedIn?: string;
   website?: string;
   businessName: string;
   businessType: string;
@@ -256,7 +258,6 @@ const ProfilePage = () => {
               propData.proposals.forEach((proposal) => {
                 totalVotes += proposal.votes;
               });
-
               finalObj.totalVotes = totalVotes;
             }
           );
@@ -492,35 +493,64 @@ const ProfilePage = () => {
                           {profileData.content.identity.businessLocation}
                         </Text>
                       )}
-                    </HStack>
+                  </HStack>
+                  <Text fontSize="md">
+                    {profileData.content.identity.currTitle}
+                  </Text>
+                  {profileData.content.identity.bio && (
                     <Text fontSize="md">
-                      {profileData.content.identity.currTitle}
+                      {profileData.content.identity.bio}
                     </Text>
-                    {profileData.content.identity.bio && (
-                      <Text fontSize="md">
-                        {profileData.content.identity.bio}
-                      </Text>
+                  )}
+                  ){/* social media URLs */}
+                  <HStack width={"6rem"} justifyContent={"space-between"}>
+                    {profileData.content.identity.linkedIn && (
+                      <Link
+                        href={profileData.content.identity.linkedIn}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        width={"fit-content"}
+                      >
+                        <Image
+                          src="LI-In-Bug.png"
+                          height={"2rem"}
+                          width={"auto"}
+                        />
+                      </Link>
                     )}
-                    )
-                    <VStack>
-                      <Box alignSelf="flex-start" w="full" overflow="hidden">
-                        <Text pb={8} fontSize="xl">
-                          Work Experience
-                        </Text>
-                        <HStack spacing={4}>{createWorkElements(5)}</HStack>
-                        <UserPermissionsRestricted
+                    {profileData.content.identity.twitter && (
+                      <Link
+                        href={profileData.content.identity.twitter}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Image
+                          src="2021_Twitter_logo - blue.png"
+                          height={"2rem"}
+                          width={"auto"}
+                        />
+                      </Link>
+                    )}
+                  </HStack>
+                  <VStack>
+                    <Box alignSelf="flex-start" w="full" overflow="hidden">
+                      <Text pb={8} fontSize="xl">
+                        Work Experience
+                      </Text>
+                      <HStack spacing={4}>{createWorkElements(5)}</HStack>
+                      <UserPermissionsRestricted
                           to="edit"
                           fallback={viewCompany}
                         >
-                          <CompanyModal
-                            isOpen={isCompanyModalOpen}
-                            onClose={onCompanyModalClose}
-                            currCompany={currCompany}
-                            profileData={profileData}
-                            handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
-                          />
-                        </UserPermissionsRestricted>
-                      </Box>
+                        <CompanyModal
+                          isOpen={isCompanyModalOpen}
+                          onClose={onCompanyModalClose}
+                          currCompany={currCompany}
+                          profileData={profileData}
+                          handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
+                        />
+                      </UserPermissionsRestricted>
+                    </Box>
                       <Box alignSelf="flex-start" w="full" overflow="hidden">
                         <Text pt={8} pb={4} fontSize="xl">
                           Web3 Credentials
