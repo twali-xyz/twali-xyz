@@ -4,95 +4,96 @@ import React from "react";
 export default function ScrollingHeader(props) {
   return (
     <Box
-      height={"80px"}
       width={"100%"}
+      height={"80px"}
+      opacity={"0.6"}
       borderTop={props.borderTop}
       borderBottom={props.borderBottom}
-      opacity={"0.6"}
     >
       <HStack
-        display={"flex"}
-        alignItems={"center"}
         height={"100%"}
-        overflowX={"hidden"}
+        display={"flex"}
         flexWrap={"nowrap"}
+        overflowX={"hidden"}
+        alignItems={"center"}
       >
         <Text
           fontSize={"16px"}
-          whiteSpace={"nowrap"}
+          color={"#FFFFFF"}
           lineHeight={"32px"}
+          whiteSpace={"nowrap"}
           textTransform={"uppercase"}
           textDecorationLine={"line-through"}
         >
           the revolution will be quite boring
         </Text>
         <Text
-          display={"flex"}
-          alignItems={"center"}
           height={"100%"}
+          display={"flex"}
           fontSize={"16px"}
-          whiteSpace={"nowrap"}
           lineHeight={"32px"}
+          whiteSpace={"nowrap"}
+          alignItems={"center"}
           textTransform={"uppercase"}
         >
           the revolution will be quite boring
         </Text>
         <Text
           fontSize={"16px"}
-          whiteSpace={"nowrap"}
           lineHeight={"32px"}
+          whiteSpace={"nowrap"}
           textTransform={"uppercase"}
           textDecorationLine={"line-through"}
         >
           the revolution will be quite boring
         </Text>
         <Text
-          display={"flex"}
-          alignItems={"center"}
           height={"100%"}
+          display={"flex"}
           fontSize={"16px"}
-          whiteSpace={"nowrap"}
           lineHeight={"32px"}
+          whiteSpace={"nowrap"}
+          alignItems={"center"}
           textTransform={"uppercase"}
         >
           the revolution will be quite boring
         </Text>
         <Text
           fontSize={"16px"}
-          whiteSpace={"nowrap"}
           lineHeight={"32px"}
+          whiteSpace={"nowrap"}
           textTransform={"uppercase"}
           textDecorationLine={"line-through"}
         >
           the revolution will be quite boring
         </Text>
         <Text
-          display={"flex"}
-          alignItems={"center"}
           height={"100%"}
+          display={"flex"}
           fontSize={"16px"}
-          whiteSpace={"nowrap"}
           lineHeight={"32px"}
+          alignItems={"center"}
+          whiteSpace={"nowrap"}
           textTransform={"uppercase"}
         >
           the revolution will be quite boring
         </Text>
         <Text
           fontSize={"16px"}
-          whiteSpace={"nowrap"}
           lineHeight={"32px"}
+          whiteSpace={"nowrap"}
           textTransform={"uppercase"}
           textDecorationLine={"line-through"}
         >
           the revolution will be quite boring
         </Text>
         <Text
-          display={"flex"}
-          alignItems={"center"}
           height={"100%"}
+          display={"flex"}
           fontSize={"16px"}
-          whiteSpace={"nowrap"}
           lineHeight={"32px"}
+          alignItems={"center"}
+          whiteSpace={"nowrap"}
           textTransform={"uppercase"}
         >
           the revolution will be quite boring

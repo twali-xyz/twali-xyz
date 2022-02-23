@@ -1,5 +1,5 @@
-import { Box } from "@chakra-ui/react";
 import Lottie from "lottie-web";
+import { Box } from "@chakra-ui/react";
 import React, { createRef, useEffect } from "react";
 
 export default function LottieAnimation(props) {
