@@ -18,11 +18,12 @@ const getDynamoDBClient = () => {
     const client = process.env.LOCAL_DYNAMO_DB_ENDPOINT
     ? new AWS.DynamoDB.DocumentClient({
             ...options,
-            endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT})
+            endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT
+        })
     : new AWS.DynamoDB.DocumentClient(options);
 
     return client;
-
+        
 };
 
 module.exports = {
@@ -62,4 +63,15 @@ module.exports = {
     const users = Items.find((user) => user.user_name == userName);
     return users;
   },
+
+
+    /** 
+     * 
+     * 
+     * 
+    */
+  updateUser: async () => {
+    
+
+  }
 };
