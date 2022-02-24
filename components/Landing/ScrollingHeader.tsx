@@ -1,12 +1,11 @@
-import { Box, HStack, Text } from "@chakra-ui/react";
 import React from "react";
+import { Box, HStack, Text } from "@chakra-ui/layout";
 
 export default function ScrollingHeader(props) {
   return (
     <Box
       width={"100%"}
       height={"80px"}
-      opacity={"0.6"}
       borderTop={props.borderTop}
       borderBottom={props.borderBottom}
     >
@@ -18,8 +17,10 @@ export default function ScrollingHeader(props) {
         alignItems={"center"}
       >
         <Text
+          width={"351px"}
+          paddingX={"12px"}
           fontSize={"16px"}
-          color={"#FFFFFF"}
+          color={"#ffffff"}
           lineHeight={"32px"}
           whiteSpace={"nowrap"}
           textTransform={"uppercase"}
@@ -28,8 +29,11 @@ export default function ScrollingHeader(props) {
           the revolution will be quite boring
         </Text>
         <Text
+          width={"351px"}
+          paddingX={"12px"}
           height={"100%"}
           display={"flex"}
+          color={"#ffffff"}
           fontSize={"16px"}
           lineHeight={"32px"}
           whiteSpace={"nowrap"}
@@ -39,6 +43,9 @@ export default function ScrollingHeader(props) {
           the revolution will be quite boring
         </Text>
         <Text
+          width={"351px"}
+          paddingX={"12px"}
+          color={"#ffffff"}
           fontSize={"16px"}
           lineHeight={"32px"}
           whiteSpace={"nowrap"}
@@ -48,8 +55,11 @@ export default function ScrollingHeader(props) {
           the revolution will be quite boring
         </Text>
         <Text
+          width={"351px"}
+          paddingX={"12px"}
           height={"100%"}
           display={"flex"}
+          color={"#ffffff"}
           fontSize={"16px"}
           lineHeight={"32px"}
           whiteSpace={"nowrap"}
@@ -59,6 +69,9 @@ export default function ScrollingHeader(props) {
           the revolution will be quite boring
         </Text>
         <Text
+          width={"351px"}
+          paddingX={"12px"}
+          color={"#ffffff"}
           fontSize={"16px"}
           lineHeight={"32px"}
           whiteSpace={"nowrap"}
@@ -68,8 +81,11 @@ export default function ScrollingHeader(props) {
           the revolution will be quite boring
         </Text>
         <Text
+          width={"351px"}
+          paddingX={"12px"}
           height={"100%"}
           display={"flex"}
+          color={"#ffffff"}
           fontSize={"16px"}
           lineHeight={"32px"}
           alignItems={"center"}
@@ -79,6 +95,9 @@ export default function ScrollingHeader(props) {
           the revolution will be quite boring
         </Text>
         <Text
+          width={"351px"}
+          paddingX={"12px"}
+          color={"#ffffff"}
           fontSize={"16px"}
           lineHeight={"32px"}
           whiteSpace={"nowrap"}
@@ -88,8 +107,11 @@ export default function ScrollingHeader(props) {
           the revolution will be quite boring
         </Text>
         <Text
+          width={"351px"}
+          paddingX={"12px"}
           height={"100%"}
           display={"flex"}
+          color={"#ffffff"}
           fontSize={"16px"}
           lineHeight={"32px"}
           alignItems={"center"}

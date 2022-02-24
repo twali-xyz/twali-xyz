@@ -19,7 +19,7 @@ const IndexPage = () => {
       <Container minWidth={"full"} p={0} margin={0} backgroundColor="#062B2A">
         <ScrollingHeader
           borderTop={"none"}
-          borderBottom={"2px solid #F9FFF2"}
+          borderBottom={"2px solid #F9FFF260"}
         />
         <Flex h="full" margin={"auto"} w={1186}>
           <VStack w="full" h="full" p={10} alignItems="flex-start">
@@ -30,7 +30,7 @@ const IndexPage = () => {
                 color={"#F9FFF2"}
                 fontSize={"64px"}
                 fontWeight={"400"}
-                lineHeight={"104px"}
+                paddingRight={"10px"}
               >
                 Hey
               </Text>
@@ -40,38 +40,42 @@ const IndexPage = () => {
                 color={"#F9FFF2"}
                 fontSize={"64px"}
                 fontWeight={"400"}
-                lineHeight={"104px"}
                 fontStyle={"italic"}
+                paddingRight={"10px"}
               >
                 smartypants
               </Text>
               <LottieAnimation
-                height={"56px"}
+                height={"65px"}
                 width={"65.36px"}
                 animation={handAnimation}
               />
             </HStack>
-            <HStack margin={0}>
-              <Img src="twali-logo.svg" alt="twali-logo" height={"47.4px"} />
+            <HStack margin={"0 !important"}>
+              <Img
+                src="twali-logo.svg"
+                alt="twali-logo"
+                height={"47.4px"}
+                paddingRight={"25px"}
+              />
               <Text
                 margin={0}
                 padding={0}
                 color={"#F9FFF2"}
                 fontSize={"64px"}
                 fontWeight={"400"}
-                lineHeight={"104px"}
+                experimental_spaceY={"1000px"}
               >
                 is the community for
               </Text>
             </HStack>
-            <HStack margin={0}>
+            <HStack margin={"0 !important"}>
               <Text
                 margin={0}
                 padding={0}
                 color={"#F9FFF2"}
                 fontSize={"64px"}
                 fontWeight={"400"}
-                lineHeight={"104px"}
               >
                 web3
               </Text>
@@ -82,13 +86,12 @@ const IndexPage = () => {
                 color={"#F9FFF2"}
                 fontSize={"64px"}
                 fontWeight={"400"}
-                lineHeight={"104px"}
               >
                 knowledge freelancers
               </Text>
             </HStack>
             <VStack>
-              <HStack alignSelf={"start"} marginTop={"80px"}>
+              <HStack alignSelf={"start"} marginTop={"70px"}>
                 <Text
                   display={"flex"}
                   fontSize={"64px"}
@@ -106,9 +109,17 @@ const IndexPage = () => {
                   expert in-
                 </Text>
               </HStack>
-              <LottieAnimation height={"496px"} animation={bodyAnimation} />
+              <LottieAnimation
+                height={"496px"}
+                margin={"0 !important"}
+                animation={bodyAnimation}
+              />
             </VStack>
-            <HStack display={"flex"} alignItems={"center"}>
+            <HStack
+              display={"flex"}
+              alignItems={"center"}
+              margin={"0 !important"}
+            >
               <Text
                 fontSize={"64px"}
                 lineHeight={"80px"}
@@ -144,9 +155,9 @@ const IndexPage = () => {
                 color={"#F9FFF2"}
                 fontSize={"32px"}
                 fontWeight={"400"}
-                marginTop={"120px"}
+                marginTop={"95px"}
                 lineHeight={"40px"}
-                marginBottom={"120px"}
+                marginBottom={"80px"}
                 letterSpacing={"0.03em"}
               >
                 Need expertise? Email{" "}

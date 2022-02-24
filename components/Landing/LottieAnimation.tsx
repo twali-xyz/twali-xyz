@@ -13,6 +13,11 @@ export default function LottieAnimation(props) {
   }, []);
 
   return (
-    <Box width={props.width} height={props.height} ref={lottieAnimation}></Box>
+    <Box
+      width={props.width}
+      height={props.height}
+      margin={props.margin}
+      ref={lottieAnimation}
+    ></Box>
   );
 }
