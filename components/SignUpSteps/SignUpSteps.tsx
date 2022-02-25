@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Step, Steps, useSteps } from "chakra-ui-steps";
 import { connect } from "../../utils/walletUtils";
-
 import {
   Heading,
   FormControl,
@@ -11,6 +10,7 @@ import {
   FormLabel,
   Select,
   HStack,
+  VStack,
   CircularProgress,
   Text,
   FormHelperText,
@@ -47,8 +47,8 @@ export interface Identity {
   email: string;
   displayName: string;
   bio: string;
-  twitterUsrName?: string;
-  linkedInUsrName?: string;
+  twitter?: string;
+  linkedIn?: string;
   website?: string;
   businessName: string;
   businessType: string;
@@ -170,18 +170,18 @@ const userProfileStep = ({ handleChange, values, errors }) => {
             </FormControl>
             <HStack spacing={2}>
               <FormControl p={2} id="twitter">
-                <FormLabel>Twitter username</FormLabel>
+                <FormLabel>Twitter URL</FormLabel>
                 <Input
-                  placeholder="Twitter username"
-                  name="twitterUsrName"
+                  placeholder="Twitter url"
+                  name="twitter"
                   onChange={handleChange}
                 />
               </FormControl>
               <FormControl p={2} id="linkedin">
-                <FormLabel>LinkedIn username</FormLabel>
+                <FormLabel>LinkedIn URL</FormLabel>
                 <Input
-                  placeholder="LinkedIn username"
-                  name="linkedInUsrName"
+                  placeholder="LinkedIn url"
+                  name="linkedIn"
                   onChange={handleChange}
                 />
               </FormControl>
@@ -346,7 +346,7 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
                 errorBorderColor="red.300"
                 value={values.currTitle || ""}
                 required
-                placeholder="Current company title"
+                placeholder="Current title"
                 name="currTitle"
                 onChange={handleChange}
               />
@@ -501,8 +501,8 @@ const SignUpSteps = () => {
     email: "",
     displayName: "",
     bio: "",
-    twitterUsrName: "",
-    linkedInUsrName: "",
+    twitter: "",
+    linkedIn: "",
     website: "",
     businessName: "",
     businessType: "",
@@ -654,17 +654,6 @@ const SignUpSteps = () => {
     <>
       {isAccTypeSelection ? (
         <>
-          <Heading alignSelf="center">Sign Up</Heading>
-          <Box
-            alignSelf="center"
-            color="rgb(255, 255, 255)"
-            fontWeight="semibold"
-            fontSize="sm"
-            p={0}
-            m={0}
-          >
-            How would you like to use Twali?
-          </Box>
           <Button
             size="sm"
             pl={40}
@@ -674,70 +663,150 @@ const SignUpSteps = () => {
           >
             Back
           </Button>
-          <HStack alignSelf="center" spacing={8}>
-            <Box
-              w="sm"
-              h="200px"
-              borderWidth="1px"
-              borderRadius="lg"
-              borderColor={btnActive == 1 ? "gray.500" : "gray.200"}
-              overflow="hidden"
-              cursor="pointer"
-              onClick={() => {
-                setBtnActive(1);
-                selectUserAccType("Expert");
-              }}
-            >
-              <Box p="4">
-                <Box
-                  mt="1"
-                  fontWeight="semibold"
-                  as="h4"
-                  lineHeight="tight"
-                  isTruncated
-                >
-                  As an expert 🔑
-                </Box>
+          <Heading alignSelf="center">Sign Up</Heading>
 
-                <Box>
-                  <Box as="span" color="gray.500" fontSize="sm">
-                    I want to provide my knowledge and expertise
+          <VStack alignSelf="center" spacing={8}>
+            <Text
+              alignSelf="center"
+              color="rgb(255, 255, 255)"
+              fontWeight="semibold"
+              fontSize="sm"
+              p={0}
+              m={0}
+            >
+              How would you like to use Twali?
+            </Text>
+            <HStack>
+              <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="space-between"
+                w="sm"
+                h="200px"
+                borderWidth="1px"
+                borderRadius="lg"
+                borderColor={btnActive == 1 ? "gray.200" : "gray.500"}
+                overflow="hidden"
+                cursor="pointer"
+                onClick={() => {
+                  setBtnActive(1);
+                  selectUserAccType("Expert");
+                }}
+              >
+                <Box p="4">
+                  <Box
+                    mt="1"
+                    fontWeight="semibold"
+                    as="h4"
+                    lineHeight="tight"
+                    isTruncated
+                  >
+                    As an expert 🔑
+                  </Box>
+
+                  <Box>
+                    <Box as="span" color="gray.500" fontSize="sm">
+                      I want to provide my knowledge and expertise
+                    </Box>
+                  </Box>
+                </Box>
+                <Box
+                  display="flex"
+                  justifyContent="flex-end"
+                  w="100%"
+                  padding="1rem"
+                >
+                  <Box
+                    w="2rem"
+                    h="2rem"
+                    backgroundColor="white"
+                    borderRadius="50%"
+                    position="relative"
+                  >
+                    {btnActive == 1 ? (
+                      <Img
+                        backgroundColor="rgb(222, 222, 222)"
+                        w="2rem"
+                        borderRadius="50%"
+                        style={{ cursor: "pointer" }}
+                        alignSelf="center"
+                        src="check-mark.png"
+                        alt="check mark"
+                      />
+                    ) : (
+                      <Box
+                        w="2rem"
+                        h="2rem"
+                        backgroundColor="gray.200"
+                        borderRadius="50%"
+                        boxShadow="inset 0 0px 5px 0 rgba(0,0,0,.8)"
+                      ></Box>
+                    )}
                   </Box>
                 </Box>
               </Box>
-            </Box>
-            <Box
-              w="sm"
-              h="200px"
-              borderWidth="1px"
-              borderRadius="lg"
-              borderColor={btnActive == 2 ? "gray.500" : "gray.200"}
-              overflow="hidden"
-              cursor="pointer"
-              onClick={() => {
-                setBtnActive(2);
-                selectUserAccType("Builder");
-              }}
-            >
-              <Box p="4">
-                <Box
-                  mt="1"
-                  fontWeight="semibold"
-                  as="h4"
-                  lineHeight="tight"
-                  isTruncated
-                >
-                  As a builder 🛠
-                </Box>
+              <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="space-between"
+                w="sm"
+                h="200px"
+                borderWidth="1px"
+                borderRadius="lg"
+                borderColor={btnActive == 2 ? "gray.200" : "gray.500"}
+                overflow="hidden"
+                cursor="pointer"
+                onClick={() => {
+                  setBtnActive(2);
+                  selectUserAccType("Builder");
+                }}
+              >
+                <Box p="4">
+                  <Box
+                    mt="1"
+                    fontWeight="semibold"
+                    as="h4"
+                    lineHeight="tight"
+                    isTruncated
+                  >
+                    As a builder 🛠
+                  </Box>
 
-                <Box>
-                  <Box as="span" color="gray.500" fontSize="sm">
-                    I want to build a project
+                  <Box>
+                    <Box as="span" color="gray.500" fontSize="sm">
+                      I want to build a project
+                    </Box>
                   </Box>
                 </Box>
+                <Box
+                  display="flex"
+                  justifyContent="flex-end"
+                  w="100%"
+                  padding="1rem"
+                >
+                  {btnActive == 2 ? (
+                    <Img
+                      backgroundColor="rgb(222, 222, 222)"
+                      w="2rem"
+                      borderRadius="50%"
+                      style={{ cursor: "pointer" }}
+                      alignSelf="center"
+                      src="check-mark.png"
+                      alt="check mark"
+                    />
+                  ) : (
+                    <Box
+                      w="2rem"
+                      h="2rem"
+                      backgroundColor="gray.200"
+                      borderRadius="50%"
+                      boxShadow="inset 0 0px 5px 0 rgba(0,0,0,.8)"
+                    ></Box>
+                  )}
+                </Box>
               </Box>
-            </Box>
-          </HStack>
+            </HStack>
+          </VStack>
           <Button
             disabled={!isAccTypeSelected}
             alignSelf="center"
