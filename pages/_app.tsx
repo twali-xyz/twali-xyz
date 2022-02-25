@@ -5,7 +5,6 @@ import {
   ChakraProvider,
   extendTheme,
   ThemeConfig,
-  Modal,
 } from "@chakra-ui/react";
 import { StepsStyleConfig as Steps } from "chakra-ui-steps";
 import { library } from "@fortawesome/fontawesome-svg-core";
