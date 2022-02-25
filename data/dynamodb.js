@@ -1,5 +1,4 @@
 // import { v4 as uuidv4 } from 'uuid';
-
 const TableName = process.env.TABLE_NAME;
 
 const getDynamoDBClient = () => {
@@ -11,7 +10,7 @@ const getDynamoDBClient = () => {
     ? "us-east-1"
     : "us-east-2";
 
-    
+    // Only needed with local development. 
     AWS.config.update({
             // accessKeyId: process.env.AWS_ACCESS_KEY_ID_DEV,
             // secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_DEV,

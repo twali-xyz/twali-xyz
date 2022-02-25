@@ -2,6 +2,7 @@ var AWS = require("aws-sdk");
 
 require("dotenv").config();
 
+// Only used in local development 
 AWS.config.update({
     region: "us-east-1",
     endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT
@@ -10,7 +11,10 @@ AWS.config.update({
    
 let dynamodb = new AWS.DynamoDB();
 
-// Table Definition to deploy locally and to production
+/**
+ * * @desc Table Definition to deploy locally and to production.
+ * 
+ * **/ 
 let params = {
     TableName: "user_profile_test",
     KeySchema: 
