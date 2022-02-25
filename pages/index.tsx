@@ -20,7 +20,7 @@ const IndexPage = () => {
         p={0}
         margin={"auto"}
         minWidth={"1440px"}
-        maxWidth={"2560px"}
+        maxWidth={"100%"}
         backgroundColor="#062B2A"
       >
         <ScrollingHeader
