@@ -16,6 +16,7 @@ import {
   FormHelperText,
   Tooltip,
   Img,
+  Link,
 } from "@chakra-ui/react";
 import router from "next/router";
 
@@ -191,7 +192,7 @@ const userProfileStep = ({ handleChange, values, errors }) => {
                 <Tooltip
                   placement="auto-start"
                   hasArrow
-                  label="replace this with desired info(need copy from David or Cokie)"
+                  label="Add a personal or business website here"
                 >
                   <Box pos="relative">
                     <FontAwesomeIcon icon={"info-circle"} />
@@ -236,7 +237,8 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
                 <Tooltip
                   placement="auto-start"
                   hasArrow
-                  label="replace this with desired info(need copy from David or Cokie)"
+                  label="If you are a sole proprietor, partnership, or single-member LLC, your 'Business Name' may be registered as your personal name or your business’s DBA.
+                  If you are an LLC, corporation, or non-profit, Twali requires that the 'Business Name' be in the company’s legal business name or DBA"
                 >
                   <Box pos="relative">
                     <FontAwesomeIcon icon={"info-circle"} />
@@ -264,15 +266,21 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
             <FormControl p={4} id="business-type" isRequired>
               <HStack justifyContent="space-between">
                 <FormLabel>Business type</FormLabel>
-                <Tooltip
-                  placement="auto-start"
-                  hasArrow
-                  label="replace this with desired info(need copy from David or Cokie)"
+                <Link
+                  href="https://www.sba.gov/business-guide/launch-your-business/choose-business-structure"
+                  target={"_blank"}
+                  rel="noopener noreferrer"
                 >
-                  <Box pos="relative">
-                    <FontAwesomeIcon icon={"info-circle"} />
-                  </Box>
-                </Tooltip>
+                  <Tooltip
+                    placement="auto-start"
+                    hasArrow
+                    label="Click to learn more "
+                  >
+                    <Box pos="relative">
+                      <FontAwesomeIcon icon={"info-circle"} />
+                    </Box>
+                  </Tooltip>
+                </Link>
               </HStack>
               <Select
                 placeholder="Select business type"
@@ -282,6 +290,9 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
                 <option>Sole proprietorship</option>
                 <option>Partnership</option>
                 <option>Corporation</option>
+                <option>Single-member LLC</option>
+                <option>LLC</option>
+                <option>Non-profit</option>
               </Select>
               {/* {errors.businessType && (
                           <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.businessType}</Text>
