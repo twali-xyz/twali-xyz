@@ -14,6 +14,8 @@ export default function LottieAnimation(props) {
 
   return (
     <Box
+      pos={props.pos}
+      top={props.top}
       width={props.width}
       height={props.height}
       margin={props.margin}

@@ -22,7 +22,7 @@ const IndexPage = () => {
           borderBottom={"2px solid #F9FFF260"}
         />
         <Flex h="full" margin={"auto"} w={1186}>
-          <VStack w="full" h="full" p={10} alignItems="flex-start">
+          <VStack w="full" h="full" py={12} alignItems="flex-start">
             <HStack margin={0} marginTop={"43px"}>
               <Text
                 margin={0}
@@ -31,6 +31,7 @@ const IndexPage = () => {
                 fontSize={"64px"}
                 fontWeight={"400"}
                 paddingRight={"10px"}
+                fontFamily={"Scope Light"}
               >
                 Hey
               </Text>
@@ -40,8 +41,8 @@ const IndexPage = () => {
                 color={"#F9FFF2"}
                 fontSize={"64px"}
                 fontWeight={"400"}
-                fontStyle={"italic"}
                 paddingRight={"10px"}
+                fontFamily={"GrandSlang Italic"}
               >
                 smartypants
               </Text>
@@ -51,12 +52,12 @@ const IndexPage = () => {
                 animation={handAnimation}
               />
             </HStack>
-            <HStack margin={"0 !important"}>
+            <HStack>
               <Img
-                src="twali-logo.svg"
                 alt="twali-logo"
-                height={"47.4px"}
-                paddingRight={"25px"}
+                src="twali-logo.svg"
+                height={"50px"}
+                paddingRight={"35px"}
               />
               <Text
                 margin={0}
@@ -64,30 +65,54 @@ const IndexPage = () => {
                 color={"#F9FFF2"}
                 fontSize={"64px"}
                 fontWeight={"400"}
-                experimental_spaceY={"1000px"}
+                fontFamily={"Scope Light"}
               >
                 is the community for
               </Text>
             </HStack>
-            <HStack margin={"0 !important"}>
+            <HStack display={"flex"} alignItems={"center"}>
               <Text
                 margin={0}
                 padding={0}
                 color={"#F9FFF2"}
                 fontSize={"64px"}
                 fontWeight={"400"}
+                fontFamily={"Scope Light"}
               >
                 web3
               </Text>
-              <Img src="twali-knowledge.svg" width={"30.4px"} height={"48px"} />
+              <Img
+                src="twali-knowledge.svg"
+                alt="twali knowledge symbol"
+                top={"5px"}
+                left={"5px"}
+                height={"52px"}
+                pos={"relative"}
+                width={"30.4px"}
+                marginX={"25px !important"}
+              />
               <Text
                 margin={0}
                 padding={0}
                 color={"#F9FFF2"}
                 fontSize={"64px"}
                 fontWeight={"400"}
+                fontFamily={"Scope Light"}
               >
-                knowledge freelancers
+                knowledge
+              </Text>
+              <Text
+                margin={0}
+                padding={0}
+                top={"8px"}
+                left={"16px"}
+                pos={"relative"}
+                color={"#F9FFF2"}
+                fontSize={"64px"}
+                fontWeight={"400"}
+                fontFamily={"GrandSlang"}
+              >
+                freelancers.
               </Text>
             </HStack>
             <VStack>
@@ -97,41 +122,69 @@ const IndexPage = () => {
                   fontSize={"64px"}
                   lineHeight={"80px"}
                   alignItems={"center"}
+                  letterSpacing={"0.06em"}
+                  fontFamily={"Scope Light"}
                 >
                   Are you an{" "}
                   <Img
-                    mx={"18px"}
+                    src="twali-expert.svg"
+                    alt="twali expert symbol"
+                    mx={"16px"}
+                    top={"4px"}
                     width={"64px"}
                     height={"48px"}
-                    alt="twali expert"
-                    src="twali-expert.svg"
+                    pos={"relative"}
                   />{" "}
-                  expert in-
+                </Text>
+                <Text
+                  display={"flex"}
+                  fontSize={"64px"}
+                  lineHeight={"80px"}
+                  alignItems={"center"}
+                  letterSpacing={"0.06em"}
+                  fontFamily={"GrandSlang Italic"}
+                >
+                  expert
+                </Text>
+                <Text
+                  display={"flex"}
+                  fontSize={"64px"}
+                  lineHeight={"80px"}
+                  alignItems={"center"}
+                  letterSpacing={"0.06em"}
+                  fontFamily={"Scope Light"}
+                  marginLeft={"12px !important"}
+                >
+                  {" "}
+                  in-
                 </Text>
               </HStack>
               <LottieAnimation
-                height={"496px"}
-                margin={"0 !important"}
+                top={"-30px"}
+                pos={"relative"}
+                width={"1250px"}
+                height={"596px"}
                 animation={bodyAnimation}
               />
             </VStack>
             <HStack
               display={"flex"}
               alignItems={"center"}
-              margin={"0 !important"}
+              marginTop={"-50px !important"}
             >
               <Text
                 fontSize={"64px"}
                 lineHeight={"80px"}
-                fontStyle={"italic"}
+                fontFamily={"GrandSlang Italic"}
                 letterSpacing={"0.06em"}
               >
-                ...literally
+                . . . literally
               </Text>
               <Text
                 fontSize={"64px"}
                 lineHeight={"80px"}
                 letterSpacing={"0.06em"}
+                fontFamily={"Scope Light"}
               >
                 anything?
               </Text>
@@ -142,9 +195,11 @@ const IndexPage = () => {
                 fontSize={"24px"}
                 borderRadius={"52px"}
                 padding={"8px 24px 4px"}
+                letterSpacing={"0.06em"}
                 textTransform={"uppercase"}
                 backgroundColor={"#C7F83C"}
                 marginLeft={"40px !important"}
+                fontFamily={"PP Telegraf Bold"}
                 boxShadow={"0px 4px 4px 0px #00000040"}
               >
                 apply here
@@ -155,10 +210,11 @@ const IndexPage = () => {
                 color={"#F9FFF2"}
                 fontSize={"32px"}
                 fontWeight={"400"}
-                marginTop={"95px"}
+                marginTop={"110px"}
                 lineHeight={"40px"}
-                marginBottom={"80px"}
+                marginBottom={"95px"}
                 letterSpacing={"0.03em"}
+                fontFamily={"PP telegraf Light"}
               >
                 Need expertise? Email{" "}
                 <Link
