@@ -4,7 +4,7 @@ import { Box, HStack, Text } from "@chakra-ui/layout";
 
 export const MotionBox = motion(Box);
 
-function Example(props) {
+function MotionDiv(props) {
   return (
     <MotionBox
       height={"100%"}
@@ -65,13 +65,14 @@ for (let i = 0; i <= 100; i++) {
 export default function ScrollingHeader(props) {
   return (
     <Box
+      max-width={"240px"}
       width={"100%"}
       height={"80px"}
       overflowX={"hidden"}
       borderTop={props.borderTop}
       borderBottom={props.borderBottom}
     >
-      <Example>
+      <MotionDiv>
         <HStack
           height={"100%"}
           display={"flex"}
@@ -87,7 +88,7 @@ export default function ScrollingHeader(props) {
             );
           })}
         </HStack>
-      </Example>
+      </MotionDiv>
     </Box>
   );
 }

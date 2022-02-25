@@ -16,7 +16,13 @@ import ScrollingHeader from "../components/Landing/ScrollingHeader";
 const IndexPage = () => {
   return (
     <>
-      <Container minWidth={"full"} p={0} margin={0} backgroundColor="#062B2A">
+      <Container
+        p={0}
+        margin={"auto"}
+        minWidth={"1440px"}
+        maxWidth={"2560px"}
+        backgroundColor="#062B2A"
+      >
         <ScrollingHeader
           borderTop={"none"}
           borderBottom={"2px solid #F9FFF260"}
