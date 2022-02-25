@@ -14,9 +14,12 @@
 /.next/
 /out/
 
+# serverless
+/.severless_nextjs
+/.serverless
 # production
 /build
-/.severless_nextjs
+
 # misc
 .DS_Store
 .env*
