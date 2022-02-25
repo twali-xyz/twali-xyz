@@ -1,3 +1,5 @@
+// import { v4 as uuidv4 } from 'uuid';
+
 const TableName = process.env.TABLE_NAME;
 
 const getDynamoDBClient = () => {
@@ -9,6 +11,7 @@ const getDynamoDBClient = () => {
     ? "us-east-1"
     : "us-east-2";
 
+    
     AWS.config.update({
             // accessKeyId: process.env.AWS_ACCESS_KEY_ID_DEV,
             // secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_DEV,
@@ -31,10 +34,10 @@ const getDynamoDBClient = () => {
 
 module.exports = {
   /**
-   * Creates a user profile with the `user_name` respersenting the primary key
-   * in the database table.
+   * @desc Creates a user profile with the `user_name` being set as the primary key in the database.
    * @param {Object} userDescription holds the primary key from object to process to database and any addtional metadata.
-   *
+   * @dev This is a flexible creation function and is not perminit. Can be adjusted to a required user needs.
+   * @example See docs about including additonal attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#put-property
    **/
   createUser: async (userDescription) => {
     const { user_name, user_wallet } = userDescription;
@@ -44,20 +47,21 @@ module.exports = {
         Item: {
           user_name: user_name,
           user_wallet: user_wallet,
-          // Optional - Can set a UUID here to be generated on creation.
+          // Optional - Can set a UUID here to be generated on creation. Already imported on line 1 if it is needed here.
           // Date Creation was a test case for extra column data
           createdAt: Date.now(),
-          
+
         },
       })
       .promise();
   },
 
   /** 
-   * Calls a user from database by the primary key `useer_name`.
-   * 
+   * @desc Directly access a user in the table by primary key `user_name`.
+   * @param {string} - function takes in a input string of the users user_name 
+   * @dev This can be altered to included any additional attributes with 'ProjectionExpression'.
+   * @example See docs to add additonal attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property
    * @returns Returns a user as and object.
-   * 
    **/
   getUser: async (userName) => {
       const dbUser = await getDynamoDBClient()
@@ -73,14 +77,14 @@ module.exports = {
         .then((data) => data.Items[0])
         .catch(console.error);
 
-      //   console.log('return', dbUser)
       return dbUser;
   },
 
     /** 
-     * 
-     * 
-     * 
+     * @desc Edits an existing users item's attributes, or adds a new item to the table if it does not already exist.
+     * @param {object} - function takes an object as a the parameter with primary and attributes. Object will need to the primary key and any attributes that are being updated or created. 
+     * @dev New items can be added to a user and does need to be predefined in the table. Any values in 'UpdateExpression' need to be defined will values within 'ExpressionAttributeValues'.
+     * @example See docs about editing existing attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#update-property
     */
   updateUser: async (userName) => {
     const { updateAttributes } = await getDynamoDBClient()
