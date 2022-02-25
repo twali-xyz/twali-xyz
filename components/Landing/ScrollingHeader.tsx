@@ -1,8 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Box, type BoxProps, HStack, Text } from "@chakra-ui/layout";
+import { Box, HStack, Text } from "@chakra-ui/layout";
 
-export const MotionBox = motion<BoxProps>(Box);
+export const MotionBox = motion(Box);
 
 function Example(props) {
   return (
