@@ -1,26 +1,26 @@
 import {
-  Box,
-  Container,
-  Flex,
-  VStack,
-  HStack,
-  Text,
   Img,
-  Button,
+  Flex,
   Link,
+  Text,
+  Button,
+  HStack,
+  VStack,
+  Container,
 } from "@chakra-ui/react";
 import handAnimation from "../animations/twali-hand-2.json";
 import LottieAnimation from "../components/Landing/LottieAnimation";
 import bodyAnimation from "../animations/twali-lottie-desktop.json";
 import ScrollingHeader from "../components/Landing/ScrollingHeader";
+
 const IndexPage = () => {
   return (
     <>
       <Container
         p={0}
         margin={"auto"}
-        minWidth={"1440px"}
         maxWidth={"100%"}
+        minWidth={"1440px"}
         backgroundColor="#062B2A"
       >
         <ScrollingHeader
