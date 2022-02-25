@@ -5,6 +5,8 @@
 /.pnp
 .pnp.js
 
+#local development
+/docker
 # testing
 /coverage
 
