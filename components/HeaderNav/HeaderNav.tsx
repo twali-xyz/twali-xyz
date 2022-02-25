@@ -1,22 +1,29 @@
-import React, { useState } from 'react';
-import { Flex, Box, Heading, HStack, Button, CircularProgress, Text } from '@chakra-ui/react';
-import { useDisclosure } from "@chakra-ui/react"
-import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import React, { useState } from "react";
+import {
+  Flex,
+  Box,
+  Heading,
+  HStack,
+  Button,
+  CircularProgress,
+  Text,
+} from "@chakra-ui/react";
+import { useDisclosure } from "@chakra-ui/react";
+import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
-import CeramicClient from '@ceramicnetwork/http-client';
-import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver';
-import Web3 from 'web3';
+import CeramicClient from "@ceramicnetwork/http-client";
+import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver";
+import Web3 from "web3";
 import Web3Modal from "web3modal";
-import { TileDocument } from '@ceramicnetwork/stream-tile';
+import { TileDocument } from "@ceramicnetwork/stream-tile";
 
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
-
-import { EthereumAuthProvider, ThreeIdConnect } from '@3id/connect';
-import { DID } from 'dids';
-import { IDX } from '@ceramicstudio/idx';
+import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
+import { DID } from "dids";
+import { IDX } from "@ceramicstudio/idx";
 
 // network node that we're interacting with, can be local/prod
 // we're using a test network here
@@ -26,7 +33,7 @@ export interface ProfileData {
   content: {
     identity: Identity;
     accType: string;
-  }
+  };
 }
 
 export interface Identity {
@@ -35,8 +42,8 @@ export interface Identity {
   email: string;
   displayName: string;
   bio: string;
-  twitterUsrName?: string;
-  linkedInUsrName?: string;
+  twitter?: string;
+  linkedIn?: string;
   website?: string;
   businessName: string;
   businessType: string;
@@ -52,9 +59,9 @@ export interface BasicProfile {
   name: string;
 }
 export interface Profile {
-    identity: Identity;
-    name: string;
-    accType: string;
+  identity: Identity;
+  name: string;
+  accType: string;
 }
 
 export interface CompanyInfo {
@@ -67,13 +74,16 @@ export interface CompanyInfo {
   companyIndustry: string;
 }
 
-const HamburgerItem = ({ children, isLast, to = '/' }) => {
+const HamburgerItem = ({ children, isLast, to = "/" }) => {
   return (
-    <Button 
-    variant="ghost"
-    mb={{ base: isLast ? 0 : 8, sm: 0 }}
-    mr={{ base: 0, sm: isLast ? 0 : 8 }}
-    display="block"><Link href={to}>{children}</Link></Button>
+    <Button
+      variant="ghost"
+      mb={{ base: isLast ? 0 : 8, sm: 0 }}
+      mr={{ base: 0, sm: isLast ? 0 : 8 }}
+      display="block"
+    >
+      <Link href={to}>{children}</Link>
+    </Button>
   );
 };
 
@@ -83,91 +93,92 @@ const HeaderNav = (props) => {
   const toggleMenu = () => setShow(!show);
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [accType, setAccType] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [accType, setAccType] = useState("");
   const [loaded, setLoaded] = useState(false);
   const router = useRouter();
 
-      const handleWalletConnect = async() => {
-        const web3Modal = new Web3Modal({
-          disableInjectedProvider: false,
-          network: "rinkeby",
-          cacheProvider: false,
-          providerOptions: {
-            walletconnect: {
-              package: WalletConnectProvider,
-              options: {
-                rpc: {
-                  1: "https://eth-rinkeby.alchemyapi.io/v2/QtLM8rW9nB6DobDu8KQx-7fYMS2rBlky",
-                },
-              },
+  const handleWalletConnect = async () => {
+    const web3Modal = new Web3Modal({
+      disableInjectedProvider: false,
+      network: "rinkeby",
+      cacheProvider: false,
+      providerOptions: {
+        walletconnect: {
+          package: WalletConnectProvider,
+          options: {
+            rpc: {
+              1: "https://eth-rinkeby.alchemyapi.io/v2/QtLM8rW9nB6DobDu8KQx-7fYMS2rBlky",
             },
           },
-        });
-        const provider = await web3Modal.connect();
-        console.log(provider);
-        const web3 = new Web3(provider);
-        console.log(web3);
-        const accounts = await web3.eth.getAccounts();
-        const currAccount = accounts[0];
-        const ceramic = new CeramicClient(endpoint);
-        const idx = new IDX({ ceramic });
-        setIsSubmitted(true);
-        try {
+        },
+      },
+    });
+    const provider = await web3Modal.connect();
+    console.log(provider);
+    const web3 = new Web3(provider);
+    console.log(web3);
+    const accounts = await web3.eth.getAccounts();
+    const currAccount = accounts[0];
+    const ceramic = new CeramicClient(endpoint);
+    const idx = new IDX({ ceramic });
+    setIsSubmitted(true);
+    try {
+      const threeIdConnect = new ThreeIdConnect();
+      const ethProvider = new EthereumAuthProvider(
+        window.ethereum,
+        currAccount
+      );
+      await threeIdConnect.connect(ethProvider);
 
-          const threeIdConnect = new ThreeIdConnect();
-          const ethProvider = new EthereumAuthProvider(window.ethereum, currAccount);
-          await threeIdConnect.connect(ethProvider);
-      
-          const did = new DID({
-            provider: threeIdConnect.getDidProvider(),
-            resolver: {
-              ...ThreeIdResolver.getResolver(ceramic)
-            }
-          })
-          
-          ceramic.setDID(did);
-          await ceramic.did.authenticate();
+      const did = new DID({
+        provider: threeIdConnect.getDidProvider(),
+        resolver: {
+          ...ThreeIdResolver.getResolver(ceramic),
+        },
+      });
 
-          // does not require signing to get user's public data
-          const data: BasicProfile = await idx.get(
-            'basicProfile',
-            `${currAccount}@eip155:1`
-          )
-          console.log('data: ', data);
+      ceramic.setDID(did);
+      await ceramic.did.authenticate();
 
-          const profileData: ProfileData = await TileDocument.deterministic(
-            ceramic,
-            { family: 'user-profile-data' },
-            { anchor: false, publish: false }
-          );
+      // does not require signing to get user's public data
+      const data: BasicProfile = await idx.get(
+        "basicProfile",
+        `${currAccount}@eip155:1`
+      );
+      console.log("data: ", data);
 
-          console.log('profileData: ', profileData.content);
-          let identity = profileData.content.identity;
-          let profileAccType = profileData.content.accType;
-          
-          if (data.name && identity.email && profileAccType) {
-            setName(data.name);
-            setEmail(identity.email);
-            setAccType(profileAccType);
-            setIsSubmitted(false);
-            router.push('/profile');
-          } else {
-            console.log('No profile, pls create one...');
-            router.push('/steps');
-          }
-          
-        } catch(err) {
-          console.log("error: ", err);
-          router.push('/steps');
-          setLoaded(true);
-        }
+      const profileData: ProfileData = await TileDocument.deterministic(
+        ceramic,
+        { family: "user-profile-data" },
+        { anchor: false, publish: false }
+      );
+
+      console.log("profileData: ", profileData.content);
+      let identity = profileData.content.identity;
+      let profileAccType = profileData.content.accType;
+
+      if (data.name && identity.email && profileAccType) {
+        setName(data.name);
+        setEmail(identity.email);
+        setAccType(profileAccType);
+        setIsSubmitted(false);
+        router.push("/profile");
+      } else {
+        console.log("No profile, pls create one...");
+        router.push("/steps");
+      }
+    } catch (err) {
+      console.log("error: ", err);
+      router.push("/steps");
+      setLoaded(true);
     }
+  };
 
   if (whichPage === "index") {
-      return (
-        <Flex
+    return (
+      <Flex
         h={10}
         mb={8}
         p={10}
@@ -176,28 +187,37 @@ const HeaderNav = (props) => {
         justify="space-between"
         wrap="wrap"
         w="100%"
-        >
-    <HStack spacing={10} alignItems="flex-start">
-        <Heading w="300px">Twali 👁‍🗨</Heading>
-    </HStack>
-        <Box
-        display={{ base: 'block', md: 'block' }}
-        flexBasis={{ base: '100%', md: 'auto' }}
       >
-        <Button
+        <HStack spacing={10} alignItems="flex-start">
+          <Heading w="300px">Twali 👁‍🗨</Heading>
+        </HStack>
+        <Box
+          display={{ base: "block", md: "block" }}
+          flexBasis={{ base: "100%", md: "auto" }}
+        >
+          <Button
             mb={{ base: 8, sm: 0 }}
             mr={{ base: 0, sm: 8 }}
-            display="block" 
+            display="block"
             onClick={handleWalletConnect}
-            colorScheme="teal">
-                Connect Wallet {isSubmitted ? <CircularProgress size="22px" thickness="4px" isIndeterminate color="#3C2E26" /> : null}
-        </Button>
-      </Box>
-    </Flex>
-      )
+            colorScheme="teal"
+          >
+            Connect Wallet{" "}
+            {isSubmitted ? (
+              <CircularProgress
+                size="22px"
+                thickness="4px"
+                isIndeterminate
+                color="#3C2E26"
+              />
+            ) : null}
+          </Button>
+        </Box>
+      </Flex>
+    );
   } else if (whichPage === "sign-up" || whichPage === "steps") {
     return (
-        <Flex
+      <Flex
         h={10}
         mb={8}
         p={10}
@@ -206,26 +226,24 @@ const HeaderNav = (props) => {
         justify="space-between"
         wrap="wrap"
         w="100%"
-        >
-    <HStack alignItems="flex-start">
-        <Heading as="h4" size="md" w="300px">Twali 👁‍🗨</Heading>
-    </HStack>
-    <HStack alignItems="flex-end">
-        <Box
-            ml="2"
-            mt="1"
-            w="150px"
-            backgroundColor="teal"
-            borderRadius={16}
-            >
-        <Text pl={6} color="white" size="xs">0xP0...Z0p4</Text>
-        </Box>
-    </HStack>
-    </Flex>
-    )
+      >
+        <HStack alignItems="flex-start">
+          <Heading as="h4" size="md" w="300px">
+            Twali 👁‍🗨
+          </Heading>
+        </HStack>
+        <HStack alignItems="flex-end">
+          <Box ml="2" mt="1" w="150px" backgroundColor="teal" borderRadius={16}>
+            <Text pl={6} color="white" size="xs">
+              0xP0...Z0p4
+            </Text>
+          </Box>
+        </HStack>
+      </Flex>
+    );
   } else {
-      return (
-        <Flex
+    return (
+      <Flex
         h={10}
         mb={8}
         p={10}
@@ -235,32 +253,35 @@ const HeaderNav = (props) => {
         wrap="wrap"
         w="100%"
       >
-          <HStack spacing={10} alignItems="flex-start">
-              <Heading w="300px">Twali 👁‍🗨</Heading>
-          </HStack>
-  
-          <Box display={{ base: 'block', md: 'none'}} onClick={toggleMenu}>
-              {show ? <CloseIcon /> : <HamburgerIcon />}
-          </Box>
-  
+        <HStack spacing={10} alignItems="flex-start">
+          <Heading w="300px">Twali 👁‍🗨</Heading>
+        </HStack>
+
+        <Box display={{ base: "block", md: "none" }} onClick={toggleMenu}>
+          {show ? <CloseIcon /> : <HamburgerIcon />}
+        </Box>
+
         <Box
-          display={{ base: show ? 'block' : 'none', md: 'block' }}
-          flexBasis={{ base: '100%', md: 'auto' }}
+          display={{ base: show ? "block" : "none", md: "block" }}
+          flexBasis={{ base: "100%", md: "auto" }}
         >
           <Flex
             align="center"
-            justify={['center', 'space-between', 'flex-end', 'flex-end']}
-            direction={['column', 'row', 'row', 'row']}
+            justify={["center", "space-between", "flex-end", "flex-end"]}
+            direction={["column", "row", "row", "row"]}
             pt={[4, 4, 0, 0]}
           >
-            <HamburgerItem isLast={false} to="/directory">Directory</HamburgerItem>
-            <HamburgerItem isLast={false} to="/profile">Profile</HamburgerItem>
+            <HamburgerItem isLast={false} to="/directory">
+              Directory
+            </HamburgerItem>
+            <HamburgerItem isLast={false} to="/profile">
+              Profile
+            </HamburgerItem>
           </Flex>
         </Box>
       </Flex>
-      )
+    );
   }
-  
 };
 
 export default HeaderNav;

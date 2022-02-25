@@ -1,51 +1,48 @@
-import { ReactNode, useRef } from 'react'
-import { InputGroup } from '@chakra-ui/react'
+import { ReactNode, useRef } from "react";
+import { InputGroup } from "@chakra-ui/react";
 // import { useForm, UseFormRegisterReturn } from 'react-hook-form'
 // import { FiFile } from 'react-icons/fi'
 
 type FileUploadProps = {
-//   register: any;
+  //   register: any;
   handleFile: Function;
-  children?: ReactNode
-}
+  children?: ReactNode;
+};
 
 const FileUpload = (props: FileUploadProps) => {
-  const { children } = props
-  const inputRef = useRef<HTMLInputElement | null>(null)
+  const { children } = props;
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const hiddenFileInput = useRef(null);
 
-//   const { ref, ...rest } = register as {ref: (instance: HTMLInputElement | null) => void}
+  //   const { ref, ...rest } = register as {ref: (instance: HTMLInputElement | null) => void}
 
-const handleClick = event => {
+  const handleClick = (event) => {
     hiddenFileInput.current.click();
-};
+  };
 
-const handleChange = event => {
+  const handleChange = (event) => {
     const fileUploaded = event.target.files[0];
     props.handleFile(fileUploaded);
-};
+  };
 
   return (
-      <InputGroup onClick={handleClick}>
-        <input
-          type='file'
-          hidden
-          accept="image/*"
-          ref={hiddenFileInput}
-          onChange={handleChange}
-        />
-        <>
-          {children}
-        </>
-      </InputGroup>
-  )
-}
+    <InputGroup onClick={handleClick}>
+      <input
+        type="file"
+        hidden
+        accept="image/*"
+        ref={hiddenFileInput}
+        onChange={handleChange}
+      />
+      <>{children}</>
+    </InputGroup>
+  );
+};
 
 type FormValues = {
-  file_: FileList
-}
+  file_: FileList;
+};
 export default FileUpload;
-
 
 // const App = () => {
 //   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>()
@@ -91,4 +88,3 @@ export default FileUpload;
 //     </>
 //   )
 // }
-
