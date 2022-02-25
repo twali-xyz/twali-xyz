@@ -44,8 +44,8 @@ export interface Identity {
   email: string;
   displayName: string;
   bio: string;
-  twitterUsrName?: string;
-  linkedInUsrName?: string;
+  twitter?: string;
+  linkedIn?: string;
   website?: string;
   businessName: string;
   businessType: string;
@@ -167,18 +167,18 @@ const userProfileStep = ({ handleChange, values, errors }) => {
             </FormControl>
             <HStack spacing={2}>
               <FormControl p={2} id="twitter">
-                <FormLabel>Twitter username</FormLabel>
+                <FormLabel>Twitter URL</FormLabel>
                 <Input
-                  placeholder="Twitter username"
-                  name="twitterUsrName"
+                  placeholder="Twitter url"
+                  name="twitter"
                   onChange={handleChange}
                 />
               </FormControl>
               <FormControl p={2} id="linkedin">
-                <FormLabel>LinkedIn username</FormLabel>
+                <FormLabel>LinkedIn URL</FormLabel>
                 <Input
-                  placeholder="LinkedIn username"
-                  name="linkedInUsrName"
+                  placeholder="LinkedIn url"
+                  name="linkedIn"
                   onChange={handleChange}
                 />
               </FormControl>
@@ -455,8 +455,8 @@ const SignUpSteps = () => {
     email: "",
     displayName: "",
     bio: "",
-    twitterUsrName: "",
-    linkedInUsrName: "",
+    twitter: "",
+    linkedIn: "",
     website: "",
     businessName: "",
     businessType: "",
@@ -608,17 +608,6 @@ const SignUpSteps = () => {
     <>
       {isAccTypeSelection ? (
         <>
-          <Heading alignSelf="center">Sign Up</Heading>
-          <Box
-            alignSelf="center"
-            color="rgb(255, 255, 255)"
-            fontWeight="semibold"
-            fontSize="sm"
-            p={0}
-            m={0}
-          >
-            How would you like to use Twali?
-          </Box>
           <Button
             size="sm"
             pl={40}
@@ -628,8 +617,19 @@ const SignUpSteps = () => {
           >
             Back
           </Button>
+          <Heading alignSelf="center">Sign Up</Heading>
+
           <VStack alignSelf="center" spacing={8}>
-            <Text>How will you use Twali?</Text>
+            <Text
+              alignSelf="center"
+              color="rgb(255, 255, 255)"
+              fontWeight="semibold"
+              fontSize="sm"
+              p={0}
+              m={0}
+            >
+              How would you like to use Twali?
+            </Text>
             <HStack>
               <Box
                 display="flex"

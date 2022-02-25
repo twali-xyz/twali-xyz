@@ -76,6 +76,8 @@ export interface CompanyInfo {
 }
 
 const EditExperienceModal = (props) => {
+  console.log(props.profileData.content.identity);
+
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [accType, setAccType] = useState(props.profileData.content.accType);
@@ -121,14 +123,14 @@ const EditExperienceModal = (props) => {
         `${address}@eip155:1`
       );
       console.log("data: ", data);
-
+      console.log("IDEN: ", identity);
       await updateProfileData(ceramic, identity, accType);
 
       console.log("Profile updated!");
-      console.log(identity);
 
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);
+
         props.handleUpdatedExperiences(profileData, false);
         props.onClose();
       } else {
@@ -142,6 +144,7 @@ const EditExperienceModal = (props) => {
     const profileData = await TileDocument.deterministic(ceramic, {
       family: "user-profile-data",
     });
+    console.log(identity, "YOUR IDENTITY");
 
     await profileData.update({ identity, accType });
   };
