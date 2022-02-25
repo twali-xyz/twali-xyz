@@ -42,7 +42,7 @@ Make sure you have Docker downloaded and installed [Download Docker](https://www
 
 Start up the local Dynamo table instance that is already set in `docker-compose.yml` by simply running: &nbsp;  
 ```
-docker-compuse up
+docker-compose up
 ```
 In a separate terminal lets provision our table for local development by running: &nbsp;  
 ```
