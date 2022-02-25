@@ -5,6 +5,8 @@
 /.pnp
 .pnp.js
 
+#local development
+/docker
 # testing
 /coverage
 
@@ -12,6 +14,9 @@
 /.next/
 /out/
 
+# serverless
+/.serverless/
+/.serverless_nextjs/
 # production
 /build
 

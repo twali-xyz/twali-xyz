@@ -2,6 +2,7 @@ var AWS = require("aws-sdk");
 
 require("dotenv").config();
 
+// Only used in local development 
 AWS.config.update({
     region: "us-east-1",
     endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT
@@ -10,7 +11,10 @@ AWS.config.update({
    
 let dynamodb = new AWS.DynamoDB();
 
-// Table Definition to deploy locally and to production
+/**
+ * * @desc Table Definition to deploy locally and to production.
+ * 
+ * **/ 
 let params = {
     TableName: "nagma_profile_test",
     KeySchema: 
@@ -35,7 +39,7 @@ let params = {
     await dynamodb.createTable(params).promise();
 
     console.log("Created table in us-east-1");
-
+    console.log(process.env.LOCAL_DYNAMO_DB_ENDPOINT);
     // Only a replicated instance for production. Not Supported by local.
     if (!process.env.LOCAL_DYNAMO_DB_ENDPOINT) {
 

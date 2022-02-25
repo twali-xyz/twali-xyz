@@ -1,7 +1,7 @@
 twali-xyz:
-  component: "@sls-next/serverless-component@3.7.0-alpha.7"
+  component: "@sls-next/serverless-component@3.6.0"
   inputs:
-    policy: "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
+    policy: "arn:aws:iam::517934542124:policy/dynamoRW"
     build:
       env:
-        TABLE_NAME: "nagma_profile_test"
+        TABLE_NAME: "user_profile_test"
