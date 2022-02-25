@@ -1,30 +1,15 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-// import { ethers } from "ethers";
-import { Input , Button} from "@chakra-ui/react";
+import { Input , Button } from "@chakra-ui/react";
 
 
 export interface UserData {
     user_name: string,
-    user_wallet: string,
-    // prevState: null
-}
-
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//     const { user_name } = context.query;
-
-//     const response = await fetch(`/api/users/${user_name}`);
-//     const user = await response.json();
-//     console.log(user);
-//     return {
-//         props: { user }
-//     };
-// };
-
-
+    user_wallet: string
+};
 
 const NewUser = ()=> {
-    // const router = useRouter();
+    const router = useRouter();
     const [userDescription, setUserDescription] = useState<UserData>({
         user_name: '',
         user_wallet: ''
@@ -37,8 +22,9 @@ const NewUser = ()=> {
             method: "POST",
             body: JSON.stringify({userDescription})
         });
+        // For now for test case the user_name is pushed as query param into a user 'page'
+        router.push(`/userProfile/${userDescription.user_name}`);
     };
-
 
 
     const connectWallet = async () => {
@@ -49,7 +35,6 @@ const NewUser = ()=> {
                 alert("Need to be on rinkeby to test this");
                 return;
             }
-
             if (!ethereum){
                 alert("WHERE TF YOUR METAMASK?");
             }
@@ -57,8 +42,7 @@ const NewUser = ()=> {
             const account = await ethereum.request({
                 method: "eth_requestAccounts"
             });
-            // console.log("Connected", account[0]);
-            // console.log({userDescription});
+      
             setUserDescription({...userDescription, user_wallet: account[0]});
 
             } catch (error) {
@@ -68,7 +52,6 @@ const NewUser = ()=> {
 
 
     return(
-        <>
         <div>
             <label>Create username and enter wallet info</label>
             <br />
@@ -92,12 +75,7 @@ const NewUser = ()=> {
             <br />
             
         </div>
-        {/* <div>
-            <label>{user.user_name}</label>
-            <label>{user.user_wallet}</label>
-        </div> */}
-        </>
-    )
+    );
 }
 
 

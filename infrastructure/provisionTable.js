@@ -35,7 +35,7 @@ let params = {
     await dynamodb.createTable(params).promise();
 
     console.log("Created table in us-east-1");
-
+    console.log(process.env.LOCAL_DYNAMO_DB_ENDPOINT);
     // Only a replicated instance for production. Not Supported by local.
     if (!process.env.LOCAL_DYNAMO_DB_ENDPOINT) {
 

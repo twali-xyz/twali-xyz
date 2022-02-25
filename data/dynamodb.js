@@ -9,17 +9,20 @@ const getDynamoDBClient = () => {
     ? "us-east-1"
     : "us-east-2";
 
-
+    AWS.config.update({
+            // accessKeyId: process.env.AWS_ACCESS_KEY_ID_DEV,
+            // secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_DEV,
+            // region: "localhost",
+            endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT
+      });
+    
     const options = {
     convertEmptyValues: true,
-    region: dynamoDBRegion
+    region: "us-east-1"
     };
 
     const client = process.env.LOCAL_DYNAMO_DB_ENDPOINT
-    ? new AWS.DynamoDB.DocumentClient({
-            ...options,
-            endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT
-        })
+    ? new AWS.DynamoDB.DocumentClient()
     : new AWS.DynamoDB.DocumentClient(options);
 
     return client;
@@ -42,6 +45,9 @@ module.exports = {
           user_name: user_name,
           user_wallet: user_wallet,
           // Optional - Can set a UUID here to be generated on creation.
+          // Date Creation was a test case for extra column data
+          createdAt: Date.now(),
+          
         },
       })
       .promise();
@@ -54,24 +60,41 @@ module.exports = {
    * 
    **/
   getUser: async (userName) => {
-    const { Items } = await getDynamoDBClient()
-      .query({
-        TableName,
-      })
-      .promise();
+      const dbUser = await getDynamoDBClient()
+        .query({
+          TableName,
+          // ProjectionExpression: "user_name",
+          KeyConditionExpression: "user_name = :user_name",
+          ExpressionAttributeValues: {
+            ":user_name": userName,
+          },
+        })
+        .promise()
+        .then((data) => data.Items[0])
+        .catch(console.error);
 
-    const users = Items.find((user) => user.user_name == userName);
-    return users;
+      //   console.log('return', dbUser)
+      return dbUser;
   },
-
 
     /** 
      * 
      * 
      * 
     */
-  updateUser: async () => {
-    
+  updateUser: async (userName) => {
+    const { updateAttributes } = await getDynamoDBClient()
+    .update({
+        TableName,
+        Key: {
+            user_name: userName
+        },
+        UpdateExpression: "SET ",
+        ExpressionAttributeValues: {
 
+        },
+        ReturnValues: ""
+    })
+    return updateAttributes;
   }
 };
