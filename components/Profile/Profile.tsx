@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Img,
   VStack,
   HStack,
@@ -9,6 +8,8 @@ import {
   CircularProgress,
   useDisclosure,
   IconButton,
+  Link,
+  Image,
 } from "@chakra-ui/react";
 
 import { useState, useEffect } from "react";
@@ -28,6 +29,9 @@ import { request, gql } from "graphql-request";
 import SnapshotModal from "./SnapshotModal/SnapshotModal";
 import CompanyModal from "./CompanyModal/CompanyModal";
 import useSWR from "swr";
+import UserPermissionsProvider from "../UserPermissionsProvider/UserPermissionsProvider";
+import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
+import { fetchPermission } from "../../utils/profileUtils";
 
 // network node that we're interacting with, can be local/prod
 // we're using a test network here
@@ -46,8 +50,8 @@ export interface Identity {
   email: string;
   displayName: string;
   bio: string;
-  twitterUsrName?: string;
-  linkedInUsrName?: string;
+  twitter?: string;
+  linkedIn?: string;
   website?: string;
   businessName: string;
   businessType: string;
@@ -254,7 +258,6 @@ const ProfilePage = () => {
               propData.proposals.forEach((proposal) => {
                 totalVotes += proposal.votes;
               });
-
               finalObj.totalVotes = totalVotes;
             }
           );
@@ -324,24 +327,37 @@ const ProfilePage = () => {
         );
       } else {
         elements.push(
-          <Img
-            key={`${i}--empty-company-exp`}
-            borderRadius="full"
-            style={{ cursor: "pointer" }}
-            backgroundColor="lightgray"
-            width="100px"
-            src="add.svg"
-            alt="add img"
-            onClick={() => {
-              setCurrCompany(i);
-              onCompanyModalOpen();
-            }}
-          />
+          <UserPermissionsRestricted to="edit">
+            <Img
+              key={`${i}--empty-company-exp`}
+              borderRadius="full"
+              style={{ cursor: "pointer" }}
+              backgroundColor="lightgray"
+              width="100px"
+              src="add.svg"
+              alt="add img"
+              onClick={() => {
+                setCurrCompany(i);
+                onCompanyModalOpen();
+              }}
+            />
+          </UserPermissionsRestricted>
         );
       }
     }
     return elements;
   }
+
+  const viewCompany = (
+    <CompanyModal
+      isOpen={isCompanyModalOpen}
+      onClose={onCompanyModalClose}
+      currCompany={currCompany}
+      profileData={profileData}
+      userPermission="view"
+      handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
+    />
+  );
 
   return (
     <>
@@ -362,107 +378,121 @@ const ProfilePage = () => {
         profileData.content.accType &&
         profileData.content.identity && (
           <>
-            <Box w="full" borderWidth="1px" borderRadius="lg" overflow="hidden">
-              <Img
-                objectFit="cover"
-                width="100%"
-                height="200px"
-                overflow="hidden"
-                src="https://i.pinimg.com/originals/92/4e/c3/924ec3d75761aa0e5b84e4031f718de6.jpg"
-                alt="aesthetic brown"
-              />
-            </Box>
-            <HStack w="full" spacing={24}>
-              <VStack
-                marginTop={0}
-                paddingTop={0}
-                align="flex-start"
-                spacing={6}
-              >
-                <Box alignSelf="flex-start" overflow="hidden">
-                  <Img
-                    borderRadius="full"
-                    width="500px"
-                    src="fox-pfp.png"
-                    alt="fox stock img"
-                  />
-                </Box>
-                <IconButton
-                  onClick={onExpModalOpen}
-                  alignSelf="flex-end"
-                  variant="ghost"
-                  aria-label="Update experience"
-                  icon={<FontAwesomeIcon size="sm" icon={["fas", "edit"]} />}
-                />
-                <EditExperienceModal
-                  isOpen={isExpModalOpen}
-                  onClose={onExpModalClose}
-                  profileData={profileData}
-                  handleUpdatedExperiences={handleUpdatedProfile}
-                />
-                {profileData.content.identity.displayName && (
-                  <Text fontSize="xl">
-                    @{profileData.content.identity.displayName}
-                  </Text>
-                )}
-                {profileData.content.identity.email && (
-                  <Text fontSize="md">
-                    {profileData.content.identity.email}
-                  </Text>
-                )}
-                <Box
-                  p={4}
-                  ml={8}
-                  borderWidth="1px"
-                  color="rgb(0, 0, 0)"
-                  borderRadius="lg"
-                  overflow="hidden"
-                  backgroundColor="rgb(222, 222, 222)"
-                >
-                  {profileData &&
-                    profileData.content.identity &&
-                    profileData.content.identity.funcExpertise && (
-                      <Text fontSize="md">
-                        {profileData.content.identity.funcExpertise}
-                      </Text>
-                    )}
-                </Box>
-                <Box
-                  p={4}
-                  ml={8}
-                  borderWidth="1px"
-                  borderRadius="lg"
-                  overflow="hidden"
-                  color="rgb(0, 0, 0)"
-                  backgroundColor="rgb(222, 222, 222)"
-                >
-                  {profileData &&
-                    profileData.content.identity &&
-                    profileData.content.identity.industryExpertise && (
-                      <Text fontSize="md">
-                        {profileData.content.identity.industryExpertise}
-                      </Text>
-                    )}
-                </Box>
-              </VStack>
+            <UserPermissionsProvider
+              fetchPermission={fetchPermission(
+                profileData.content.identity.displayName
+              )}
+            >
               <Box
-                alignSelf="flex-start"
                 w="full"
-                pt={16}
-                pl={4}
+                borderWidth="1px"
+                borderRadius="lg"
                 overflow="hidden"
               >
-                <Stack spacing={6}>
-                  <HStack>
+                <Img
+                  objectFit="cover"
+                  width="100%"
+                  height="200px"
+                  overflow="hidden"
+                  src="https://i.pinimg.com/originals/92/4e/c3/924ec3d75761aa0e5b84e4031f718de6.jpg"
+                  alt="aesthetic brown"
+                />
+              </Box>
+              <HStack w="full" spacing={24}>
+                <VStack
+                  marginTop={0}
+                  paddingTop={0}
+                  align="flex-start"
+                  spacing={6}
+                >
+                  <Box alignSelf="flex-start" overflow="hidden">
+                    <Img
+                      borderRadius="full"
+                      width="500px"
+                      src="fox-pfp.png"
+                      alt="fox stock img"
+                    />
+                  </Box>
+                  <UserPermissionsRestricted to="edit">
+                    <IconButton
+                      onClick={onExpModalOpen}
+                      alignSelf="flex-end"
+                      variant="ghost"
+                      aria-label="Update experience"
+                      icon={
+                        <FontAwesomeIcon size="sm" icon={["fas", "edit"]} />
+                      }
+                    />
+                    <EditExperienceModal
+                      isOpen={isExpModalOpen}
+                      onClose={onExpModalClose}
+                      profileData={profileData}
+                      handleUpdatedExperiences={handleUpdatedProfile}
+                    />
+                  </UserPermissionsRestricted>
+                  {profileData.content.identity.displayName && (
                     <Text fontSize="xl">
-                      {name + ", " + profileData.content.accType}
+                      @{profileData.content.identity.displayName}
                     </Text>
-                    <FontAwesomeIcon size="lg" icon={["fas", "map-pin"]} />
-                    {profileData.content.identity.businessLocation && (
-                      <Text fontSize="md">
-                        {profileData.content.identity.businessLocation}
+                  )}
+                  {profileData.content.identity.email && (
+                    <Text fontSize="md">
+                      {profileData.content.identity.email}
+                    </Text>
+                  )}
+                  <Box
+                    p={4}
+                    ml={8}
+                    borderWidth="1px"
+                    color="rgb(0, 0, 0)"
+                    borderRadius="lg"
+                    overflow="hidden"
+                    backgroundColor="rgb(222, 222, 222)"
+                  >
+                    {profileData &&
+                      profileData.content.identity &&
+                      profileData.content.identity.funcExpertise && (
+                        <Text fontSize="md">
+                          {profileData.content.identity.funcExpertise}
+                        </Text>
+                      )}
+                  </Box>
+                  <Box
+                    p={4}
+                    ml={8}
+                    borderWidth="1px"
+                    borderRadius="lg"
+                    overflow="hidden"
+                    color="rgb(0, 0, 0)"
+                    backgroundColor="rgb(222, 222, 222)"
+                  >
+                    {profileData &&
+                      profileData.content.identity &&
+                      profileData.content.identity.industryExpertise && (
+                        <Text fontSize="md">
+                          {profileData.content.identity.industryExpertise}
+                        </Text>
+                      )}
+                  </Box>
+                </VStack>
+                <Box
+                  alignSelf="flex-start"
+                  w="full"
+                  pt={16}
+                  pl={4}
+                  overflow="hidden"
+                >
+                  <Stack spacing={6}>
+                    <HStack>
+                      <Text fontSize="xl">
+                        {name + ", " + profileData.content.accType}
                       </Text>
-                    )}
+                      <FontAwesomeIcon size="lg" icon={["fas", "map-pin"]} />
+                      {profileData.content.identity.businessLocation && (
+                        <Text fontSize="md">
+                          {profileData.content.identity.businessLocation}
+                        </Text>
+                      )}
                   </HStack>
                   <Text fontSize="md">
                     {profileData.content.identity.currTitle}
@@ -472,79 +502,118 @@ const ProfilePage = () => {
                       {profileData.content.identity.bio}
                     </Text>
                   )}
-                  )
+                  ){/* social media URLs */}
+                  <HStack width={"6rem"} justifyContent={"space-between"}>
+                    {profileData.content.identity.linkedIn && (
+                      <Link
+                        href={profileData.content.identity.linkedIn}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        width={"fit-content"}
+                      >
+                        <Image
+                          src="LI-In-Bug.png"
+                          height={"2rem"}
+                          width={"auto"}
+                        />
+                      </Link>
+                    )}
+                    {profileData.content.identity.twitter && (
+                      <Link
+                        href={profileData.content.identity.twitter}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Image
+                          src="2021_Twitter_logo - blue.png"
+                          height={"2rem"}
+                          width={"auto"}
+                        />
+                      </Link>
+                    )}
+                  </HStack>
                   <VStack>
                     <Box alignSelf="flex-start" w="full" overflow="hidden">
                       <Text pb={8} fontSize="xl">
                         Work Experience
                       </Text>
                       <HStack spacing={4}>{createWorkElements(5)}</HStack>
-                      <CompanyModal
-                        isOpen={isCompanyModalOpen}
-                        onClose={onCompanyModalClose}
-                        currCompany={currCompany}
-                        profileData={profileData}
-                        handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
-                      />
+                      <UserPermissionsRestricted
+                          to="edit"
+                          fallback={viewCompany}
+                        >
+                        <CompanyModal
+                          isOpen={isCompanyModalOpen}
+                          onClose={onCompanyModalClose}
+                          currCompany={currCompany}
+                          profileData={profileData}
+                          handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
+                        />
+                      </UserPermissionsRestricted>
                     </Box>
-                    <Box alignSelf="flex-start" w="full" overflow="hidden">
-                      <Text pt={8} pb={4} fontSize="xl">
-                        Web3 Credentials
-                      </Text>
-                      {snapshotData ? (
-                        <>
-                          <HStack spacing={4}>
-                            {snapshotData.map((vote) => (
-                              <Img
-                                style={{ cursor: "pointer" }}
-                                key={vote.spaceID}
-                                borderRadius="full"
-                                width="100px"
-                                src={vote.avatar}
-                                alt="fox stock img"
-                                onClick={() => {
-                                  setCurrentSnapshot(vote);
-                                  onSnapshotModalOpen();
-                                }}
-                              />
-                            ))}
-                          </HStack>
-                          <SnapshotModal
-                            isOpen={isSnapshotModalOpen}
-                            onClose={onSnapshotModalClose}
-                            snapshotData={currentSnapshot}
-                          />
-                        </>
-                      ) : null}
-                    </Box>
-                    {/* <Box alignSelf="flex-start" w="full" overflow='hidden'>
+                      <Box alignSelf="flex-start" w="full" overflow="hidden">
+                        <Text pt={8} pb={4} fontSize="xl">
+                          Web3 Credentials
+                        </Text>
+                        {snapshotData ? (
+                          <>
+                            <HStack spacing={4}>
+                              {snapshotData.map((vote) => (
+                                <Img
+                                  style={{ cursor: "pointer" }}
+                                  key={vote.spaceID}
+                                  borderRadius="full"
+                                  width="100px"
+                                  src={vote.avatar}
+                                  alt="fox stock img"
+                                  onClick={() => {
+                                    setCurrentSnapshot(vote);
+                                    onSnapshotModalOpen();
+                                  }}
+                                />
+                              ))}
+                            </HStack>
+                            <SnapshotModal
+                              isOpen={isSnapshotModalOpen}
+                              onClose={onSnapshotModalClose}
+                              snapshotData={currentSnapshot}
+                            />
+                          </>
+                        ) : null}
+                      </Box>
+                      {/* <Box alignSelf="flex-start" w="full" overflow='hidden'>
                             <Text pt={8} pb={4} fontSize='xl'>Book a session with {profileData.content.identity.firstName}</Text>
                             <Button size='md' colorScheme='teal'>Book</Button>
                         </Box> */}
-                  </VStack>
-                </Stack>
-              </Box>
-              <Box
-                marginTop={8}
-                w="150px"
-                alignSelf="flex-start"
-                overflow="hidden"
-              >
-                <IconButton
-                  onClick={onProfileModalOpen}
-                  alignSelf="flex-end"
-                  variant="ghost"
-                  aria-label="Update experience"
-                  icon={<FontAwesomeIcon size="sm" icon={["fas", "edit"]} />}
-                />
-                <EditProfileModal
-                  isOpen={isProfileModalOpen}
-                  onClose={onProfileModalClose}
-                  profileData={profileData}
-                  handleUpdatedProfile={handleUpdatedProfile}
-                />
-              </Box>
-            </HStack>
+                    </VStack>
+                  </Stack>
+                </Box>
+                <Box
+                  marginTop={8}
+                  w="150px"
+                  alignSelf="flex-start"
+                  overflow="hidden"
+                >
+                  <UserPermissionsRestricted to="edit">
+                    <IconButton
+                      onClick={onProfileModalOpen}
+                      alignSelf="flex-end"
+                      variant="ghost"
+                      aria-label="Update experience"
+                      icon={
+                        <FontAwesomeIcon size="sm" icon={["fas", "edit"]} />
+                      }
+                    />
+                    <EditProfileModal
+                      isOpen={isProfileModalOpen}
+                      onClose={onProfileModalClose}
+                      profileData={profileData}
+                      handleUpdatedProfile={handleUpdatedProfile}
+                    />
+                  </UserPermissionsRestricted>
+                </Box>
+              </HStack>
+            </UserPermissionsProvider>
           </>
         )
       )}
@@ -578,20 +647,36 @@ const GetCompany = (companyName) => {
           p={4}
           key={`${data.message.name}--${companyName.currCompany}--box`}
         >
-          <Img
-            backgroundColor="rgb(222, 222, 222)"
-            style={{ cursor: "pointer" }}
-            key={`${data.message.name}--${companyName.currCompany}`}
-            alignSelf="center"
-            src={data.message.logo}
-            alt="fox stock img"
-            onMouseEnter={(e) => (e.currentTarget.src = "edit.svg")}
-            onMouseLeave={(e) => (e.currentTarget.src = data.message.logo)}
-            onClick={() => {
-              companyName.setCurrCompany(companyName.currCompany);
-              companyName.onCompanyModalOpen();
-            }}
-          />
+          <UserPermissionsRestricted to="view">
+            <Img
+              backgroundColor="rgb(222, 222, 222)"
+              style={{ cursor: "pointer" }}
+              key={`${data.message.name}--${companyName.currCompany}`}
+              alignSelf="center"
+              src={data.message.logo}
+              alt="fox stock img"
+              onClick={() => {
+                companyName.setCurrCompany(companyName.currCompany);
+                companyName.onCompanyModalOpen();
+              }}
+            />
+          </UserPermissionsRestricted>
+          <UserPermissionsRestricted to="edit">
+            <Img
+              backgroundColor="rgb(222, 222, 222)"
+              style={{ cursor: "pointer" }}
+              key={`${data.message.name}--${companyName.currCompany}`}
+              alignSelf="center"
+              src={data.message.logo}
+              alt="fox stock img"
+              onMouseEnter={(e) => (e.currentTarget.src = "edit.svg")}
+              onMouseLeave={(e) => (e.currentTarget.src = data.message.logo)}
+              onClick={() => {
+                companyName.setCurrCompany(companyName.currCompany);
+                companyName.onCompanyModalOpen();
+              }}
+            />
+          </UserPermissionsRestricted>
         </Box>
       ) : (
         <Img
