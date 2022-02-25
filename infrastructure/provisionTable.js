@@ -16,7 +16,7 @@ let dynamodb = new AWS.DynamoDB();
  * 
  * **/ 
 let params = {
-    TableName: "nagma_profile_test",
+    TableName: "user_profile_test",
     KeySchema: 
     [
         { AttributeName: "user_name", KeyType: "HASH"},        // Partition Key 
@@ -53,7 +53,7 @@ let params = {
 
 
         const createGlobalTableParams = {
-            GlobalTableName: "nagma_profile_test",
+            GlobalTableName: "user_profile_test",
             ReplicationGroup: [
                 {
                     RegionName: "us-east-1",
