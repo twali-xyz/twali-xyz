@@ -92,7 +92,7 @@ const CompanyModal = (props) => {
   const [companyEnd, setCompanyEnd] = useState();
   const [companyFunc, setCompanyFunc] = useState();
   const [companyIndustry, setCompanyIndustry] = useState();
-  const [logo, setLogo] = useState();
+  const [logo, setLogo] = useState(props.profileData.content.identity.logo);
   const [shouldFetch, setShouldFetch] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [accType, setAccType] = useState(props.profileData.content.accType);
@@ -121,7 +121,6 @@ const CompanyModal = (props) => {
     companyEnd: null,
     companyFunc: null,
     companyIndustry: null,
-    logo: null,
   });
 
   const [values, setValues] = useState({
@@ -204,7 +203,6 @@ const CompanyModal = (props) => {
       await updateProfileData(ceramic, identity, accType);
 
       console.log("Profile updated!");
-      console.log(identity);
 
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);
@@ -633,8 +631,6 @@ const CompanyModal = (props) => {
 
 // Client-side data fetching for Clearbit's NameToDomain API (on company modal load)
 function CompanyInfoData(props) {
-  console.log("PROPS: ", props);
-
   //
   // only fetch if event comes from 'company name' field
   //

@@ -43,8 +43,8 @@ export interface Identity {
   email: string;
   displayName: string;
   bio: string;
-  twitterUsrName?: string;
-  linkedInUsrName?: string;
+  twitter?: string;
+  linkedIn?: string;
   website?: string;
   businessName: string;
   businessType: string;
@@ -73,11 +73,10 @@ export interface CompanyInfo {
   companyEnd: Date;
   companyFunc: string;
   companyIndustry: string;
+  logo: any;
 }
 
 const EditExperienceModal = (props) => {
-  console.log(props.profileData.content.identity);
-
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [accType, setAccType] = useState(props.profileData.content.accType);
@@ -86,6 +85,12 @@ const EditExperienceModal = (props) => {
   const [values, setValues] = useState({
     displayName: props.profileData.content.identity.displayName,
     email: props.profileData.content.identity.email,
+    firstName: props.profileData.content.identity.firstName,
+    lastName: props.profileData.content.identity.lastName,
+    currTitle: props.profileData.content.identity.currTitle,
+    bio: props.profileData.content.identity.bio,
+    linkedIn: props.profileData.content.identity.linkedIn,
+    twitter: props.profileData.content.identity.twitter,
   });
   const [errors, setErrors] = useState({
     displayName: null,
@@ -115,15 +120,6 @@ const EditExperienceModal = (props) => {
       ceramic.setDID(did);
       await ceramic.did.authenticate();
 
-      const idx = new IDX({ ceramic });
-
-      // does not require signing to get user's public data
-      const data: BasicProfile = await idx.get(
-        "basicProfile",
-        `${address}@eip155:1`
-      );
-      console.log("data: ", data);
-      console.log("IDEN: ", identity);
       await updateProfileData(ceramic, identity, accType);
 
       console.log("Profile updated!");
@@ -144,7 +140,6 @@ const EditExperienceModal = (props) => {
     const profileData = await TileDocument.deterministic(ceramic, {
       family: "user-profile-data",
     });
-    console.log(identity, "YOUR IDENTITY");
 
     await profileData.update({ identity, accType });
   };
