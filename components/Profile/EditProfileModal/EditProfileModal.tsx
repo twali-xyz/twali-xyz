@@ -322,6 +322,7 @@ const EditProfileModal = (props) => {
               <FormControl p={2} id="bio">
                 <FormLabel>Bio</FormLabel>
                 <Textarea
+                  maxlength="280"
                   isInvalid={errors.bio}
                   errorBorderColor="red.300"
                   defaultValue={props.profileData.content.identity.bio || ""}
