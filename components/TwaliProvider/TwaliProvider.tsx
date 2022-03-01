@@ -63,8 +63,9 @@ export default function TwaliProvider(props) {
   const endpoint = "https://ceramic-clay.3boxlabs.com";
 
   const [name, setName] = useState("");
-  const [identity, setIdentity] = useState<Identity>();
+  const [tempLogo, setTempLogo] = useState();
   const [loaded, setLoaded] = useState(false);
+  const [identity, setIdentity] = useState<Identity>();
   const [snapshotData, setSnapshotData] = useState<any>();
   const [profileData, setProfileData] = useState<ProfileData>();
 
@@ -271,6 +272,8 @@ export default function TwaliProvider(props) {
         setName,
         identity,
         setIdentity,
+        tempLogo,
+        setTempLogo,
         loaded,
         setLoaded,
         snapshotData,

@@ -375,7 +375,7 @@ const GetCompany = (props) => {
   console.log(props);
   return (
     <>
-      {props.company.logo ? (
+      {props.company.logo.message ? (
         <Box
           w="100px"
           height="100px"

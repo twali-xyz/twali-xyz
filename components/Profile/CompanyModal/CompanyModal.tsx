@@ -44,8 +44,14 @@ import {
 const endpoint = "https://ceramic-clay.3boxlabs.com";
 
 const CompanyModal = (props) => {
-  const { identity, setIdentity, profileData, setProfileData } =
-    useContext(TwaliContext);
+  const {
+    identity,
+    setIdentity,
+    profileData,
+    setProfileData,
+    tempLogo,
+    setTempLogo,
+  } = useContext(TwaliContext);
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [companyName, setCompanyName] = useState("");
@@ -54,7 +60,6 @@ const CompanyModal = (props) => {
   const [companyEnd, setCompanyEnd] = useState();
   const [companyFunc, setCompanyFunc] = useState();
   const [companyIndustry, setCompanyIndustry] = useState();
-  const [logo, setLogo] = useState(props.profileData.content.identity.logo);
   const [shouldFetch, setShouldFetch] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [accType, setAccType] = useState(profileData.content.accType);
@@ -158,17 +163,17 @@ const CompanyModal = (props) => {
         companyEnd: companyEnd,
         companyFunc: companyFunc,
         companyIndustry: companyIndustry,
-        logo: logo,
+        logo: tempLogo,
       };
 
       await updateProfileData(ceramic, identity, accType);
 
       console.log("Profile updated!");
-
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);
         props.handleUpdatedCompanyInfo(profileData, false);
         props.onClose();
+        setTempLogo(false);
       } else {
         console.log("No profile, pls create one...");
       }
@@ -324,6 +329,7 @@ const CompanyModal = (props) => {
             colorScheme="blue"
             mr={3}
             onClick={() => {
+              setTempLogo(false);
               props.onClose();
             }}
           >
@@ -333,13 +339,24 @@ const CompanyModal = (props) => {
       </ModalContent>
     </>
   );
+  console.log(
+    "COMPINFO: ",
+    companyInfo,
+    "FETCH: ",
+    shouldFetch,
+    "TEMPLOGO: ",
+    tempLogo
+  );
 
   return (
     <>
       <Modal
         finalFocusRef={finalRef}
         isOpen={props.isOpen}
-        onClose={props.onClose}
+        onClose={() => {
+          setTempLogo(false);
+          props.onClose();
+        }}
         key={`companymodal--${props.currCompany}`}
       >
         <ModalOverlay />
@@ -352,15 +369,62 @@ const CompanyModal = (props) => {
                 <form style={{ alignSelf: "center" }}>
                   <FormControl p={2} id="company-name">
                     <FormLabel>Company name</FormLabel>
-                    {(companyName !== "" || shouldFetch) && (
-                      <CompanyInfoData
-                        companyName={companyName}
-                        isDisabled={setDisabled}
-                        logo={logo}
-                        setLogo={setLogo}
-                        shouldFetch={shouldFetch}
-                      />
-                    )}
+                    {shouldFetch ? (
+                      <>
+                        <CompanyInfoData
+                          companyInfo={companyInfo}
+                          companyName={companyName}
+                          isDisabled={setDisabled}
+                          tempLogo={tempLogo}
+                          setTempLogo={setTempLogo}
+                          shouldFetch={shouldFetch}
+                        />
+                      </>
+                    ) : tempLogo?.message ? (
+                      <>
+                        <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+                          <Img
+                            height="30px"
+                            src={tempLogo?.message?.logo}
+                            alt={tempLogo?.message?.domain}
+                          />
+                        </Box>
+                      </>
+                    ) : !tempLogo && companyInfo.logo.message ? (
+                      <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+                        <Img
+                          height="30px"
+                          src={companyInfo.logo?.message?.logo}
+                          alt={companyInfo.logo?.message?.domain}
+                        />
+                      </Box>
+                    ) : companyInfo.companyName ? (
+                      <>
+                        <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+                          <Box
+                            w={"1.75rem"}
+                            h={"1.75rem"}
+                            justifyContent={"center"}
+                            alignItems={"center"}
+                            bgGradient="linear-gradient(to right, #d1913c, #ffd194)"
+                            borderRadius={"50%"}
+                          >
+                            <Text
+                              w={"full"}
+                              h={"full"}
+                              display={"flex"}
+                              justifyContent={"center"}
+                              alignItems={"center"}
+                              fontSize="xl"
+                              fontWeight="800"
+                              color="blue.700"
+                            >
+                              {companyInfo.companyName[0]?.toUpperCase()}
+                            </Text>
+                          </Box>
+                        </Box>
+                      </>
+                    ) : null}
                     <Input
                       required
                       isInvalid={
@@ -561,7 +625,14 @@ const CompanyModal = (props) => {
               ) : null}
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="blue" mr={3} onClick={props.onClose}>
+              <Button
+                colorScheme="blue"
+                mr={3}
+                onClick={() => {
+                  setTempLogo(false);
+                  props.onClose();
+                }}
+              >
                 Close
               </Button>
               <Button
@@ -592,6 +663,8 @@ const CompanyModal = (props) => {
 
 // Client-side data fetching for Clearbit's NameToDomain API (on company modal load)
 function CompanyInfoData(props) {
+  const { tempLogo, setTempLogo } = useContext(TwaliContext);
+
   //
   // only fetch if event comes from 'company name' field
   //
@@ -611,12 +684,13 @@ function CompanyInfoData(props) {
     const { data } = useSWR(`/api/cors?${qs}`, fetcher);
     if (!data) {
       props.isDisabled(false);
-      props.setLogo(false);
+      setTempLogo(true);
     } else {
       props.isDisabled(false);
-      props.setLogo(data);
+      setTempLogo(data);
     }
     return (
+      // return when shouldFetch == true && logo data is found
       <>
         {data && data?.message && data?.message.logo ? (
           <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
@@ -627,8 +701,9 @@ function CompanyInfoData(props) {
             />
           </Box>
         ) : (
+          // return when shouldFetch returns no data
           <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
-            {props.companyName !== "" && (
+            {props.companyInfo.companyName !== "" && (
               <Box
                 w={"1.75rem"}
                 h={"1.75rem"}
@@ -659,12 +734,12 @@ function CompanyInfoData(props) {
   // the return value if shouldFetch  == false, uses cached logo if available otherwise falls back to first letter of company name
   return (
     <>
-      {props.logo && props.logo?.message && props.logo?.message.logo ? (
+      {tempLogo && tempLogo?.message && tempLogo?.message.logo ? (
         <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
           <Img
             height="30px"
-            src={props.logo.message.logo}
-            alt={props.logo.message.domain}
+            src={tempLogo.message.logo}
+            alt={tempLogo.message.domain}
           />
         </Box>
       ) : (
