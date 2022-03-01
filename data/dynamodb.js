@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+const { v4 } = require('uuid');
 const TableName = process.env.TABLE_NAME;
 
 const getDynamoDBClient = () => {
@@ -62,7 +62,7 @@ module.exports = {
         Item: {
           userName: userName,
           userWallet: userWallet,
-          uuid: uuidv4(), // unique ID associated with each user account
+          uuid: v4(), // unique ID associated with each user account
           firstName: firstName,
           lastName: lastName,
           email: email,
