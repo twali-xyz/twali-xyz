@@ -35,6 +35,7 @@ const ProfilePage = () => {
     setName,
     loaded,
     identity,
+    setTempLogo,
     setIdentity,
     readProfile,
     setLoaded,
@@ -93,6 +94,7 @@ const ProfilePage = () => {
             companyName={identity.companyInfo[i].companyName}
             currCompany={i}
             setCurrCompany={setCurrCompany}
+            setTempLogo={setTempLogo}
             onCompanyModalOpen={onCompanyModalOpen}
           />
         );
@@ -110,6 +112,7 @@ const ProfilePage = () => {
               onClick={() => {
                 setCurrCompany(i);
                 onCompanyModalOpen();
+                setTempLogo(false);
               }}
             />
           </UserPermissionsRestricted>
@@ -184,7 +187,10 @@ const ProfilePage = () => {
                   </Box>
                   <UserPermissionsRestricted to="edit">
                     <IconButton
-                      onClick={onExpModalOpen}
+                      onClick={() => {
+                        onExpModalOpen();
+                        setTempLogo(false);
+                      }}
                       alignSelf="flex-end"
                       variant="ghost"
                       aria-label="Update experience"
@@ -417,6 +423,7 @@ const GetCompany = (props) => {
               onClick={() => {
                 props.setCurrCompany(props.currCompany);
                 props.onCompanyModalOpen();
+                props.setTempLogo(false);
               }}
             />
           </UserPermissionsRestricted>
@@ -445,6 +452,7 @@ const GetCompany = (props) => {
           onClick={() => {
             props.setCurrCompany(props.currCompany);
             props.onCompanyModalOpen();
+            props.setTempLogo(false);
           }}
         >
           <Img

@@ -173,6 +173,7 @@ const CompanyModal = (props) => {
         setIsSubmitted(false);
         props.handleUpdatedCompanyInfo(profileData, false);
         props.onClose();
+        setShouldFetch(false);
         setTempLogo(false);
       } else {
         console.log("No profile, pls create one...");
@@ -331,6 +332,7 @@ const CompanyModal = (props) => {
             onClick={() => {
               setTempLogo(false);
               props.onClose();
+              setShouldFetch(false);
             }}
           >
             Close
@@ -356,6 +358,7 @@ const CompanyModal = (props) => {
         onClose={() => {
           setTempLogo(false);
           props.onClose();
+          setShouldFetch(false);
         }}
         key={`companymodal--${props.currCompany}`}
       >
@@ -398,32 +401,12 @@ const CompanyModal = (props) => {
                           alt={companyInfo.logo?.message?.domain}
                         />
                       </Box>
-                    ) : companyInfo.companyName ? (
+                    ) : (companyName || tempLogo) && companyInfo.companyName ? (
                       <>
-                        <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
-                          <Box
-                            w={"1.75rem"}
-                            h={"1.75rem"}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            bgGradient="linear-gradient(to right, #d1913c, #ffd194)"
-                            borderRadius={"50%"}
-                          >
-                            <Text
-                              w={"full"}
-                              h={"full"}
-                              display={"flex"}
-                              justifyContent={"center"}
-                              alignItems={"center"}
-                              fontSize="xl"
-                              fontWeight="800"
-                              color="blue.700"
-                            >
-                              {companyInfo.companyName[0]?.toUpperCase()}
-                            </Text>
-                          </Box>
-                        </Box>
+                        <LogoFallBack companyName={companyInfo.companyName} />
                       </>
+                    ) : tempLogo && companyName ? (
+                      <LogoFallBack companyName={companyName} />
                     ) : null}
                     <Input
                       required
@@ -631,6 +614,7 @@ const CompanyModal = (props) => {
                 onClick={() => {
                   setTempLogo(false);
                   props.onClose();
+                  setShouldFetch(false);
                 }}
               >
                 Close
@@ -689,6 +673,8 @@ function CompanyInfoData(props) {
       props.isDisabled(false);
       setTempLogo(data);
     }
+    console.log("PRPPS: ", !!props.companyName);
+
     return (
       // return when shouldFetch == true && logo data is found
       <>
@@ -700,34 +686,10 @@ function CompanyInfoData(props) {
               alt={data.message.domain}
             />
           </Box>
-        ) : (
+        ) : props.companyName ? (
           // return when shouldFetch returns no data
-          <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
-            {props.companyInfo.companyName !== "" && (
-              <Box
-                w={"1.75rem"}
-                h={"1.75rem"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                bgGradient="linear-gradient(to right, #d1913c, #ffd194)"
-                borderRadius={"50%"}
-              >
-                <Text
-                  w={"full"}
-                  h={"full"}
-                  display={"flex"}
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  fontSize="xl"
-                  fontWeight="800"
-                  color="blue.700"
-                >
-                  {props.companyName[0]?.toUpperCase()}
-                </Text>
-              </Box>
-            )}
-          </Box>
-        )}
+          <LogoFallBack companyName={props.companyName} />
+        ) : null}
       </>
     );
   }
@@ -743,32 +705,40 @@ function CompanyInfoData(props) {
           />
         </Box>
       ) : (
-        <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
-          {props.companyName !== "" && (
-            <Box
-              w={"1.75rem"}
-              h={"1.75rem"}
-              justifyContent={"center"}
-              alignItems={"center"}
-              bgGradient="linear-gradient(to right, #d1913c, #ffd194)"
-              borderRadius={"50%"}
-            >
-              <Text
-                w={"full"}
-                h={"full"}
-                display={"flex"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                fontSize="xl"
-                fontWeight="800"
-                color="blue.700"
-              >
-                {props.companyName[0]?.toUpperCase()}
-              </Text>
-            </Box>
-          )}
-        </Box>
+        props.companyName !== "" && (
+          <LogoFallBack companyName={props.companyName} />
+        )
       )}
+    </>
+  );
+}
+
+export function LogoFallBack(props) {
+  return (
+    <>
+      <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+        <Box
+          w={"1.75rem"}
+          h={"1.75rem"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          bgGradient="linear-gradient(to right, #d1913c, #ffd194)"
+          borderRadius={"50%"}
+        >
+          <Text
+            w={"full"}
+            h={"full"}
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            fontSize="xl"
+            fontWeight="800"
+            color="blue.700"
+          >
+            {props.companyName[0]?.toUpperCase()}
+          </Text>
+        </Box>
+      </Box>
     </>
   );
 }
