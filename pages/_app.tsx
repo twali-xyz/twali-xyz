@@ -1,16 +1,13 @@
 import "../styles/global.css";
 import { AppProps } from "next/app";
 import * as React from "react";
-import {
-  ChakraProvider,
-  extendTheme,
-  ThemeConfig,
-} from "@chakra-ui/react";
+import { ChakraProvider, extendTheme, ThemeConfig } from "@chakra-ui/react";
+import { mode } from "@chakra-ui/theme-tools";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import { fab } from "@fortawesome/free-brands-svg-icons";
 import { StepsStyleConfig as Steps } from "chakra-ui-steps";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { fab } from "@fortawesome/free-brands-svg-icons";
-import { fas } from "@fortawesome/free-solid-svg-icons";
-import { mode } from "@chakra-ui/theme-tools";
+import TwaliProvider from "../components/TwaliProvider/TwaliProvider";
 
 library.add(fab, fas);
 
@@ -37,7 +34,9 @@ const theme = extendTheme({
 function App({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
-      <Component {...pageProps} />
+      <TwaliProvider>
+        <Component {...pageProps} />
+      </TwaliProvider>
     </ChakraProvider>
   );
 }
