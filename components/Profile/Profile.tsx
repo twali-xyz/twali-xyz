@@ -89,6 +89,7 @@ const ProfilePage = () => {
       ) {
         elements.push(
           <GetCompany
+            company={identity.companyInfo[i]}
             companyName={identity.companyInfo[i].companyName}
             currCompany={i}
             setCurrCompany={setCurrCompany}
@@ -370,42 +371,34 @@ const ProfilePage = () => {
 };
 
 // Client-side data fetching for Clearbit's NameToDomain API (on page load)
-const GetCompany = (companyName) => {
-  const fetcher = (companyDomain: string, ...args: Parameters<typeof fetch>) =>
-    fetch(companyDomain).then((response) => response.json());
-  let paramsObj = { params: companyName.companyName };
-  let searchParams = new URLSearchParams(paramsObj);
-
-  // Create a stable key for SWR
-  searchParams.sort();
-  const qs = searchParams.toString();
-
-  const { data, error } = useSWR(`/api/cors?${qs}`, fetcher);
-  console.log("DATA: ", data);
-
+const GetCompany = (props) => {
+  console.log(props);
   return (
     <>
-      {data && data.message && data.message.logo ? (
+      {props.company.logo ? (
         <Box
           w="100px"
           height="100px"
+          display="flex"
           borderRadius="full"
+          alignItems="center"
+          justifyContent="center"
           backgroundColor="rgb(222, 222, 222)"
           overflow="hidden"
           p={4}
-          key={`${data.message.name}--${companyName.currCompany}--box`}
+          key={`${props.companyName}--${props.currCompany}--box`}
         >
           <UserPermissionsRestricted to="view">
             <Img
               backgroundColor="rgb(222, 222, 222)"
               style={{ cursor: "pointer" }}
-              key={`${data.message.name}--${companyName.currCompany}`}
+              key={`${props.companyName}--${props.currCompany}`}
               alignSelf="center"
-              src={data.message.logo}
-              alt="fox stock img"
+              src={props.company.logo.message.logo}
+              alt={props.companyName}
               onClick={() => {
-                companyName.setCurrCompany(companyName.currCompany);
-                companyName.onCompanyModalOpen();
+                props.setCurrCompany(props.currCompany);
+                props.onCompanyModalOpen();
               }}
             />
           </UserPermissionsRestricted>
@@ -413,33 +406,85 @@ const GetCompany = (companyName) => {
             <Img
               backgroundColor="rgb(222, 222, 222)"
               style={{ cursor: "pointer" }}
-              key={`${data.message.name}--${companyName.currCompany}`}
+              key={`${props.companyName}--${props.currCompany}`}
               alignSelf="center"
-              src={data.message.logo}
+              src={props.company.logo.message.logo}
               alt="fox stock img"
               onMouseEnter={(e) => (e.currentTarget.src = "edit.svg")}
-              onMouseLeave={(e) => (e.currentTarget.src = data.message.logo)}
+              onMouseLeave={(e) =>
+                (e.currentTarget.src = props.company.logo.message.logo)
+              }
               onClick={() => {
-                companyName.setCurrCompany(companyName.currCompany);
-                companyName.onCompanyModalOpen();
+                props.setCurrCompany(props.currCompany);
+                props.onCompanyModalOpen();
               }}
             />
           </UserPermissionsRestricted>
         </Box>
-      ) : (
-        <Img
-          key={`${companyName.currCompany}--empty-company-exp`}
+      ) : props ? (
+        <Box
+          w="100px"
+          height="100px"
           borderRadius="full"
-          style={{ cursor: "pointer" }}
-          backgroundColor="lightgray"
-          width="100px"
-          src="add.svg"
-          alt="add img"
-          onClick={() => {
-            companyName.setCurrCompany(companyName.currCompany);
-            companyName.onCompanyModalOpen();
+          backgroundColor="rgb(222, 222, 222)"
+          overflow="hidden"
+          p={4}
+          key={`${props.companyName}--${props.currCompany}--box`}
+          onMouseEnter={(e) => {
+            let addImg = e.currentTarget.children[0] as HTMLElement;
+            let compLogo = e.currentTarget.children[1] as HTMLElement;
+            addImg.style.display = "flex";
+            compLogo.style.display = "none";
           }}
-        />
+          onMouseLeave={(e) => {
+            let addImg = e.currentTarget.children[0] as HTMLElement;
+            let compLogo = e.currentTarget.children[1] as HTMLElement;
+            addImg.style.display = "none";
+            compLogo.style.display = "flex";
+          }}
+          onClick={() => {
+            props.setCurrCompany(props.currCompany);
+            props.onCompanyModalOpen();
+          }}
+        >
+          <Img
+            backgroundColor="rgb(222, 222, 222)"
+            style={{ cursor: "pointer" }}
+            key={`${props.companyName}--${props.currCompany}`}
+            alignSelf="center"
+            src="edit.svg"
+            alt="edit stock img"
+            display={"none"}
+          />
+          <Text
+            w={"full"}
+            h={"full"}
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            fontSize="4xl"
+            fontWeight="800"
+            color="blue.700"
+          >
+            {props.companyName[0].toUpperCase()}
+          </Text>
+        </Box>
+      ) : (
+        <>
+          <Img
+            key={`${props.currCompany}--empty-company-exp`}
+            borderRadius="full"
+            style={{ cursor: "pointer" }}
+            backgroundColor="lightgray"
+            width="100px"
+            src="add.svg"
+            alt="add img"
+            onClick={() => {
+              props.setCurrCompany(props.currCompany);
+              props.onCompanyModalOpen();
+            }}
+          />
+        </>
       )}
     </>
   );

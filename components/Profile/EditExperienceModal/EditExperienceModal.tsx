@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import {
   Button,
   Input,
@@ -22,9 +22,8 @@ import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver";
 
 import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
 import { DID } from "dids";
-import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
-import { BasicProfile, ProfileData } from "../../TwaliProvider/TwaliProvider";
+import { ProfileData, TwaliContext } from "../../TwaliProvider/TwaliProvider";
 
 // 3box test nodes with read/write access on ceramic clay testnet
 // network node that we're interacting with, can be local/prod
@@ -32,14 +31,20 @@ import { BasicProfile, ProfileData } from "../../TwaliProvider/TwaliProvider";
 const endpoint = "https://ceramic-clay.3boxlabs.com";
 
 const EditExperienceModal = (props) => {
+  const { identity, setIdentity, profileData, setProfileData } =
+    useContext(TwaliContext);
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [accType, setAccType] = useState(props.profileData.content.accType);
-  const [identity, setIdentity] = useState(props.profileData.content.identity);
-  const [profileData, setProfileData] = useState(props.profileData);
+  const [accType, setAccType] = useState(profileData.content.accType);
   const [values, setValues] = useState({
-    displayName: props.profileData.content.identity.displayName,
-    email: props.profileData.content.identity.email,
+    displayName: profileData.content.identity.displayName,
+    email: profileData.content.identity.email,
+    firstName: profileData.content.identity.firstName,
+    lastName: profileData.content.identity.lastName,
+    currTitle: profileData.content.identity.currTitle,
+    bio: profileData.content.identity.bio,
+    linkedIn: profileData.content.identity.linkedIn,
+    twitter: profileData.content.identity.twitter,
   });
   const [errors, setErrors] = useState({
     displayName: null,
@@ -69,22 +74,13 @@ const EditExperienceModal = (props) => {
       ceramic.setDID(did);
       await ceramic.did.authenticate();
 
-      const idx = new IDX({ ceramic });
-
-      // does not require signing to get user's public data
-      const data: BasicProfile = await idx.get(
-        "basicProfile",
-        `${address}@eip155:1`
-      );
-      console.log("data: ", data);
-
       await updateProfileData(ceramic, identity, accType);
 
       console.log("Profile updated!");
-      console.log(identity);
 
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);
+
         props.handleUpdatedExperiences(profileData, false);
         props.onClose();
       } else {
@@ -141,7 +137,7 @@ const EditExperienceModal = (props) => {
     const newProfileData: ProfileData = {
       content: {
         identity: identity,
-        accType: props.profileData.content.accType,
+        accType: profileData.content.accType,
       },
     };
     setProfileData(newProfileData);
@@ -166,19 +162,17 @@ const EditExperienceModal = (props) => {
                   required
                   isInvalid={
                     errors.displayName &&
-                    (!props.profileData.content.identity.displayName ||
+                    (!profileData.content.identity.displayName ||
                       !values.displayName)
                   }
                   errorBorderColor="red.300"
                   placeholder="Display name"
                   name="displayName"
-                  defaultValue={
-                    props.profileData.content.identity.displayName || ""
-                  }
+                  defaultValue={profileData.content.identity.displayName || ""}
                   onChange={handleChange}
                 />
                 {errors.displayName &&
-                  (!props.profileData.content.identity.displayName ||
+                  (!profileData.content.identity.displayName ||
                     !values.displayName) && (
                     <Text fontSize="xs" fontWeight="400" color="red.500">
                       {errors.displayName}
@@ -191,16 +185,16 @@ const EditExperienceModal = (props) => {
                   required
                   isInvalid={
                     errors.email &&
-                    props.profileData.content.identity.email === values.email
+                    profileData.content.identity.email === values.email
                   }
                   errorBorderColor="red.300"
                   placeholder="Email"
                   name="email"
-                  defaultValue={props.profileData.content.identity.email || ""}
+                  defaultValue={profileData.content.identity.email || ""}
                   onChange={handleChange}
                 />
                 {errors.email &&
-                  props.profileData.content.identity.email !== values.email && (
+                  profileData.content.identity.email !== values.email && (
                     <Text fontSize="xs" fontWeight="400" color="red.500">
                       {errors.email}
                     </Text>
@@ -210,9 +204,7 @@ const EditExperienceModal = (props) => {
                 <FormLabel>So...what would you say you do?</FormLabel>
                 <Select
                   required
-                  defaultValue={
-                    props.profileData.content.identity.funcExpertise
-                  }
+                  defaultValue={profileData.content.identity.funcExpertise}
                   errorBorderColor="red.300"
                   placeholder="Select functional expertise"
                   name="funcExpertise"
@@ -269,9 +261,7 @@ const EditExperienceModal = (props) => {
                 <FormLabel>Where would you say you work?</FormLabel>
                 <Select
                   required
-                  defaultValue={
-                    props.profileData.content.identity.industryExpertise
-                  }
+                  defaultValue={profileData.content.identity.industryExpertise}
                   placeholder="Select industry expertise"
                   name="industryExpertise"
                   onChange={handleChange}

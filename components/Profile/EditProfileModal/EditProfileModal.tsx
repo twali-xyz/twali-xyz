@@ -57,6 +57,7 @@ const EditProfileModal = (props) => {
     bio: null,
     linkedIn: null,
     twitter: null,
+    logo: null,
   });
 
   async function updateProfileInfo() {
@@ -81,15 +82,6 @@ const EditProfileModal = (props) => {
       ceramic.setDID(did);
       await ceramic.did.authenticate();
 
-      const idx = new IDX({ ceramic });
-
-      // does not require signing to get user's public data
-      const data: BasicProfile = await idx.get(
-        "basicProfile",
-        `${address}@eip155:1`
-      );
-      console.log("data: ", data);
-
       if (fileUploaded) {
         // await idx.merge('basicProfile', { image: '💻' })
         console.log(fileUploaded);
@@ -98,7 +90,6 @@ const EditProfileModal = (props) => {
       await updateProfileData(ceramic, identity, accType);
 
       console.log("Profile updated!");
-      console.log(identity);
 
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);
@@ -280,6 +271,7 @@ const EditProfileModal = (props) => {
               <FormControl p={2} id="bio">
                 <FormLabel>Bio</FormLabel>
                 <Textarea
+                  maxlength="280"
                   isInvalid={errors.bio}
                   errorBorderColor="red.300"
                   defaultValue={profileData.content.identity.bio || ""}

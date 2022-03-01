@@ -54,6 +54,7 @@ const CompanyModal = (props) => {
   const [companyEnd, setCompanyEnd] = useState();
   const [companyFunc, setCompanyFunc] = useState();
   const [companyIndustry, setCompanyIndustry] = useState();
+  const [logo, setLogo] = useState(props.profileData.content.identity.logo);
   const [shouldFetch, setShouldFetch] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [accType, setAccType] = useState(profileData.content.accType);
@@ -65,6 +66,7 @@ const CompanyModal = (props) => {
     companyEnd: "",
     companyFunc: "",
     companyIndustry: "",
+    logo: "",
   };
 
   const companyInfo =
@@ -97,6 +99,7 @@ const CompanyModal = (props) => {
       companyInfo && companyInfo.companyIndustry
         ? companyInfo.companyIndustry
         : "",
+    logo: companyInfo && companyInfo.logo ? companyInfo.logo : "",
   });
 
   const convertDates = (start, end) => {
@@ -155,12 +158,12 @@ const CompanyModal = (props) => {
         companyEnd: companyEnd,
         companyFunc: companyFunc,
         companyIndustry: companyIndustry,
+        logo: logo,
       };
 
       await updateProfileData(ceramic, identity, accType);
 
       console.log("Profile updated!");
-      console.log(identity);
 
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);
@@ -198,7 +201,7 @@ const CompanyModal = (props) => {
     if (evt.target.name == "companyName") {
       setCompanyName(evt.target.value);
       setShouldFetch(true);
-    } else {
+    } else if (evt.target.name !== "companyName") {
       setShouldFetch(false);
     }
 
@@ -349,10 +352,13 @@ const CompanyModal = (props) => {
                 <form style={{ alignSelf: "center" }}>
                   <FormControl p={2} id="company-name">
                     <FormLabel>Company name</FormLabel>
-                    {shouldFetch && (
+                    {(companyName !== "" || shouldFetch) && (
                       <CompanyInfoData
                         companyName={companyName}
                         isDisabled={setDisabled}
+                        logo={logo}
+                        setLogo={setLogo}
+                        shouldFetch={shouldFetch}
                       />
                     )}
                     <Input
@@ -432,6 +438,12 @@ const CompanyModal = (props) => {
                       (!companyInfo.companyEnd || !values.companyEnd) && (
                         <Text fontSize="xs" fontWeight="400" color="red.500">
                           {errors.companyEnd}
+                        </Text>
+                      )}
+                    {errors.companyName &&
+                      (!companyInfo.companyName || !values.companyName) && (
+                        <Text fontSize="xs" fontWeight="400" color="red.500">
+                          {errors.companyName}
                         </Text>
                       )}
                   </FormControl>
@@ -580,40 +592,106 @@ const CompanyModal = (props) => {
 
 // Client-side data fetching for Clearbit's NameToDomain API (on company modal load)
 function CompanyInfoData(props) {
-  console.log(props);
-  const fetcher = (companyDomain: string, ...args: Parameters<typeof fetch>) =>
-    fetch(companyDomain).then((response) => response.json());
+  //
+  // only fetch if event comes from 'company name' field
+  //
+  if (props.shouldFetch) {
+    const fetcher = (
+      companyDomain: string,
+      ...args: Parameters<typeof fetch>
+    ) => fetch(companyDomain).then((response) => response.json());
 
-  let paramsObj = { params: props.companyName };
-  let searchParams = new URLSearchParams(paramsObj);
+    let paramsObj = { params: props.companyName };
+    let searchParams = new URLSearchParams(paramsObj);
 
-  // Create a stable key for SWR
-  searchParams.sort();
-  const qs = searchParams.toString();
+    // Create a stable key for SWR
+    searchParams.sort();
+    const qs = searchParams.toString();
 
-  const { data } = useSWR(`/api/cors?${qs}`, fetcher);
-  console.log("DATA: ", data);
-  if (!data) {
-    props.isDisabled(true);
-  } else {
-    props.isDisabled(false);
+    const { data } = useSWR(`/api/cors?${qs}`, fetcher);
+    if (!data) {
+      props.isDisabled(false);
+      props.setLogo(false);
+    } else {
+      props.isDisabled(false);
+      props.setLogo(data);
+    }
+    return (
+      <>
+        {data && data?.message && data?.message.logo ? (
+          <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+            <Img
+              height="30px"
+              src={data.message.logo}
+              alt={data.message.domain}
+            />
+          </Box>
+        ) : (
+          <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+            {props.companyName !== "" && (
+              <Box
+                w={"1.75rem"}
+                h={"1.75rem"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                bgGradient="linear-gradient(to right, #d1913c, #ffd194)"
+                borderRadius={"50%"}
+              >
+                <Text
+                  w={"full"}
+                  h={"full"}
+                  display={"flex"}
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                  fontSize="xl"
+                  fontWeight="800"
+                  color="blue.700"
+                >
+                  {props.companyName[0]?.toUpperCase()}
+                </Text>
+              </Box>
+            )}
+          </Box>
+        )}
+      </>
+    );
   }
-
+  // the return value if shouldFetch  == false, uses cached logo if available otherwise falls back to first letter of company name
   return (
     <>
-      {data && data.message && data.message.logo ? (
+      {props.logo && props.logo?.message && props.logo?.message.logo ? (
         <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
           <Img
             height="30px"
-            src={data.message.logo}
-            alt={data.message.domain}
+            src={props.logo.message.logo}
+            alt={props.logo.message.domain}
           />
         </Box>
       ) : (
         <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
-          <Text fontSize="xs" fontWeight="400" color="red.500">
-            Company logo is unavailable or name is incorrect.
-          </Text>
+          {props.companyName !== "" && (
+            <Box
+              w={"1.75rem"}
+              h={"1.75rem"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              bgGradient="linear-gradient(to right, #d1913c, #ffd194)"
+              borderRadius={"50%"}
+            >
+              <Text
+                w={"full"}
+                h={"full"}
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                fontSize="xl"
+                fontWeight="800"
+                color="blue.700"
+              >
+                {props.companyName[0]?.toUpperCase()}
+              </Text>
+            </Box>
+          )}
         </Box>
       )}
     </>

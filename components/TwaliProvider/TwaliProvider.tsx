@@ -91,7 +91,6 @@ export default function TwaliProvider(props) {
         "basicProfile",
         `${address}@eip155:1`
       );
-      console.log("data: ", data);
 
       const profile: ProfileData = await TileDocument.deterministic(
         ceramic,
@@ -136,7 +135,6 @@ export default function TwaliProvider(props) {
           "basicProfile",
           `${address}@eip155:1`
         );
-        console.log("data: ", data);
 
         const profile: ProfileData = await TileDocument.deterministic(
           ceramic,
@@ -258,17 +256,13 @@ export default function TwaliProvider(props) {
 
   const handleUpdatedProfile = (profileData) => {
     setProfileData({ ...profileData });
-    window.location.reload();
     readProfile();
   };
 
   const handleUpdatedCompanyInfo = (profileData) => {
     setProfileData({ ...profileData });
-    window.location.reload();
     readProfile();
   };
-
-  console.log(identity);
 
   return (
     <TwaliContext.Provider
