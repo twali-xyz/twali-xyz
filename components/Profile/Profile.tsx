@@ -12,79 +12,41 @@ import {
   Image,
 } from "@chakra-ui/react";
 
-import { useState, useEffect } from "react";
-import { connect } from "../../utils/walletUtils";
+import { useState, useContext } from "react";
 
-import CeramicClient from "@ceramicnetwork/http-client";
-import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver";
-
-import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
-import { DID } from "dids";
-import { IDX } from "@ceramicstudio/idx";
-import { TileDocument } from "@ceramicnetwork/stream-tile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import EditProfileModal from "./EditProfileModal/EditProfileModal";
 import EditExperienceModal from "./EditExperienceModal/EditExperienceModal";
-import { request, gql } from "graphql-request";
 import SnapshotModal from "./SnapshotModal/SnapshotModal";
 import CompanyModal from "./CompanyModal/CompanyModal";
 import useSWR from "swr";
 import UserPermissionsProvider from "../UserPermissionsProvider/UserPermissionsProvider";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import { fetchPermission } from "../../utils/profileUtils";
+import { TwaliContext } from "../TwaliProvider/TwaliProvider";
 
 // network node that we're interacting with, can be local/prod
 // we're using a test network here
 const endpoint = "https://ceramic-clay.3boxlabs.com";
 
-export interface ProfileData {
-  content: {
-    identity: Identity;
-    accType: string;
-  };
-}
-
-export interface Identity {
-  firstName: string;
-  lastName: string;
-  email: string;
-  displayName: string;
-  bio: string;
-  twitter?: string;
-  linkedIn?: string;
-  website?: string;
-  businessName: string;
-  businessType: string;
-  businessLocation: string;
-  currTitle: string;
-  currLocation?: string;
-  funcExpertise: string;
-  industryExpertise: string;
-  companyInfo?: CompanyInfo[];
-}
-
-export interface BasicProfile {
-  name: string;
-}
-export interface Profile {
-  identity: Identity;
-  name: string;
-  accType: string;
-}
-
-export interface CompanyInfo {
-  companyName: string;
-  companyTitle: string;
-  companyImg: any;
-  companyStart: Date;
-  companyEnd: Date;
-  companyFunc: string;
-  companyIndustry: string;
-}
-
 const ProfilePage = () => {
-  const [profileData, setProfileData] = useState<ProfileData>();
-  const [name, setName] = useState("");
+  const {
+    name,
+    setName,
+    loaded,
+    identity,
+    setIdentity,
+    readProfile,
+    setLoaded,
+    snapshotData,
+    profileData,
+    setProfileData,
+    setSnapshotData,
+  } = useContext(TwaliContext);
+
+  const [currentSnapshot, setCurrentSnapshot] = useState();
+  const [currCompany, setCurrCompany] = useState(0);
+
   const {
     isOpen: isProfileModalOpen,
     onOpen: onProfileModalOpen,
@@ -105,194 +67,6 @@ const ProfilePage = () => {
     onOpen: onCompanyModalOpen,
     onClose: onCompanyModalClose,
   } = useDisclosure();
-  const [loaded, setLoaded] = useState(false);
-  const [snapshotData, setSnapshotData] = useState<any>();
-  const [currentSnapshot, setCurrentSnapshot] = useState();
-  const [currCompany, setCurrCompany] = useState(0);
-
-  async function readProfile() {
-    const address = await connect(); // first address in the array
-    const ceramic = new CeramicClient(endpoint);
-    const idx = new IDX({ ceramic });
-    const threeIdConnect = new ThreeIdConnect();
-    const authProvider = new EthereumAuthProvider(window.ethereum, address);
-    await threeIdConnect.connect(authProvider);
-    const provider = await threeIdConnect.getDidProvider();
-
-    ceramic.did = new DID({
-      provider: provider,
-      resolver: {
-        ...ThreeIdResolver.getResolver(ceramic),
-      },
-    });
-    await ceramic.did.authenticate();
-
-    try {
-      // does not require signing to get user's public data
-      const data: BasicProfile = await idx.get(
-        "basicProfile",
-        `${address}@eip155:1`
-      );
-      console.log("data: ", data);
-
-      const profile: ProfileData = await TileDocument.deterministic(
-        ceramic,
-        { family: "user-profile-data" },
-        { anchor: false, publish: false }
-      );
-
-      if (data.name) setName(data.name);
-      if (profile) {
-        setProfileData(profile);
-      }
-
-      setLoaded(true);
-    } catch (err) {
-      console.log("error: ", err);
-      setLoaded(false);
-    }
-  }
-  useEffect(() => {
-    async function readProfile() {
-      const address = await connect(); // first address in the array
-      const ceramic = new CeramicClient(endpoint);
-      const idx = new IDX({ ceramic });
-      const threeIdConnect = new ThreeIdConnect();
-      const authProvider = new EthereumAuthProvider(window.ethereum, address);
-      await threeIdConnect.connect(authProvider);
-      const provider = await threeIdConnect.getDidProvider();
-
-      ceramic.did = new DID({
-        provider: provider,
-        resolver: {
-          ...ThreeIdResolver.getResolver(ceramic),
-        },
-      });
-      await ceramic.did.authenticate();
-
-      try {
-        // does not require signing to get user's public data
-        const data: BasicProfile = await idx.get(
-          "basicProfile",
-          `${address}@eip155:1`
-        );
-        console.log("data: ", data);
-
-        const profile: ProfileData = await TileDocument.deterministic(
-          ceramic,
-          { family: "user-profile-data" },
-          { anchor: false, publish: false }
-        );
-
-        if (data.name) setName(data.name);
-        if (profile) {
-          setProfileData(profile);
-        }
-        setLoaded(true);
-      } catch (err) {
-        console.log("error: ", err);
-        setLoaded(false);
-      }
-
-      const query = gql`
-        query getSnapshotVotes($wallet: String!) {
-          votes(where: { voter: $wallet }) {
-            id
-            space {
-              id
-              avatar
-            }
-          }
-        }
-      `;
-      const walletVar = {
-        wallet: address,
-      };
-
-      // Run GraphQL queries
-      request("https://hub.snapshot.org/graphql", query, walletVar).then(
-        (data) => {
-          data.votes.find((v) => {
-            if (v.space.avatar) {
-              v.space.avatar = v.space.avatar.replace(
-                "ipfs://",
-                "https://ipfs.io/ipfs/"
-              );
-            }
-          });
-          getVoterSnapshotQueries(data, address);
-        }
-      );
-    }
-
-    async function getVoterSnapshotQueries(data, address) {
-      let finalData: any = [];
-      if (data) {
-        data.votes.forEach((snapshot) => {
-          let finalObj = {
-            spaceID: "",
-            totalVotes: 0,
-            walletVotes: 0,
-            voter: "",
-            avatar: snapshot.space.avatar,
-          };
-
-          const variables = {
-            spaceID: snapshot.space.id,
-            wallet: address,
-          };
-
-          const query2 = gql`
-            query getProposals($spaceID: String!) {
-              proposals(where: { space: $spaceID }) {
-                title
-                scores
-                scores_total
-                votes
-              }
-            }
-          `;
-          request("https://hub.snapshot.org/graphql", query2, variables).then(
-            (propData) => {
-              let totalVotes = 0;
-              propData.proposals.forEach((proposal) => {
-                totalVotes += proposal.votes;
-              });
-              finalObj.totalVotes = totalVotes;
-            }
-          );
-
-          const query3 = gql`
-            query getVotes($spaceID: String!, $wallet: String!) {
-              votes(where: { voter: $wallet, space: $spaceID }) {
-                id
-              }
-            }
-          `;
-
-          request("https://hub.snapshot.org/graphql", query3, variables).then(
-            (totals) => {
-              finalObj.walletVotes = totals.votes.length;
-              finalObj.voter = address;
-            }
-          );
-          finalObj.spaceID = snapshot.space.id;
-          finalData.push(finalObj);
-        });
-      }
-
-      let resArr: any = [];
-
-      finalData.forEach(function (item) {
-        var i = resArr.findIndex((x) => x.spaceID == item.spaceID);
-        if (i <= -1) {
-          resArr.push(item);
-        }
-      });
-      setSnapshotData(resArr);
-    }
-    readProfile();
-  }, []);
 
   const handleUpdatedProfile = (profileData) => {
     setProfileData({ ...profileData });
@@ -306,20 +80,16 @@ const ProfilePage = () => {
 
   function createWorkElements(number) {
     var elements = [];
-    let totalLen = profileData.content.identity.companyInfo
-      ? profileData.content.identity.companyInfo.length
-      : 0;
+    let totalLen = identity.companyInfo ? identity.companyInfo.length : 0;
     for (let i = 0; i < number; i++) {
       if (
-        profileData.content.identity.companyInfo &&
+        identity.companyInfo &&
         i < totalLen &&
-        profileData.content.identity.companyInfo[i].companyName
+        identity.companyInfo[i].companyName
       ) {
         elements.push(
           <GetCompany
-            companyName={
-              profileData.content.identity.companyInfo[i].companyName
-            }
+            companyName={identity.companyInfo[i].companyName}
             currCompany={i}
             setCurrCompany={setCurrCompany}
             onCompanyModalOpen={onCompanyModalOpen}
@@ -376,12 +146,10 @@ const ProfilePage = () => {
         name &&
         profileData.content &&
         profileData.content.accType &&
-        profileData.content.identity && (
+        identity && (
           <>
             <UserPermissionsProvider
-              fetchPermission={fetchPermission(
-                profileData.content.identity.displayName
-              )}
+              fetchPermission={fetchPermission(identity.displayName)}
             >
               <Box
                 w="full"
@@ -430,15 +198,11 @@ const ProfilePage = () => {
                       handleUpdatedExperiences={handleUpdatedProfile}
                     />
                   </UserPermissionsRestricted>
-                  {profileData.content.identity.displayName && (
-                    <Text fontSize="xl">
-                      @{profileData.content.identity.displayName}
-                    </Text>
+                  {identity.displayName && (
+                    <Text fontSize="xl">@{identity.displayName}</Text>
                   )}
-                  {profileData.content.identity.email && (
-                    <Text fontSize="md">
-                      {profileData.content.identity.email}
-                    </Text>
+                  {identity.email && (
+                    <Text fontSize="md">{identity.email}</Text>
                   )}
                   <Box
                     p={4}
@@ -449,13 +213,9 @@ const ProfilePage = () => {
                     overflow="hidden"
                     backgroundColor="rgb(222, 222, 222)"
                   >
-                    {profileData &&
-                      profileData.content.identity &&
-                      profileData.content.identity.funcExpertise && (
-                        <Text fontSize="md">
-                          {profileData.content.identity.funcExpertise}
-                        </Text>
-                      )}
+                    {profileData && identity && identity.funcExpertise && (
+                      <Text fontSize="md">{identity.funcExpertise}</Text>
+                    )}
                   </Box>
                   <Box
                     p={4}
@@ -466,13 +226,9 @@ const ProfilePage = () => {
                     color="rgb(0, 0, 0)"
                     backgroundColor="rgb(222, 222, 222)"
                   >
-                    {profileData &&
-                      profileData.content.identity &&
-                      profileData.content.identity.industryExpertise && (
-                        <Text fontSize="md">
-                          {profileData.content.identity.industryExpertise}
-                        </Text>
-                      )}
+                    {profileData && identity && identity.industryExpertise && (
+                      <Text fontSize="md">{identity.industryExpertise}</Text>
+                    )}
                   </Box>
                 </VStack>
                 <Box
@@ -488,69 +244,61 @@ const ProfilePage = () => {
                         {name + ", " + profileData.content.accType}
                       </Text>
                       <FontAwesomeIcon size="lg" icon={["fas", "map-pin"]} />
-                      {profileData.content.identity.businessLocation && (
-                        <Text fontSize="md">
-                          {profileData.content.identity.businessLocation}
-                        </Text>
+                      {identity.businessLocation && (
+                        <Text fontSize="md">{identity.businessLocation}</Text>
                       )}
-                  </HStack>
-                  <Text fontSize="md">
-                    {profileData.content.identity.currTitle}
-                  </Text>
-                  {profileData.content.identity.bio && (
-                    <Text fontSize="md">
-                      {profileData.content.identity.bio}
-                    </Text>
-                  )}
-                  ){/* social media URLs */}
-                  <HStack width={"6rem"} justifyContent={"space-between"}>
-                    {profileData.content.identity.linkedIn && (
-                      <Link
-                        href={profileData.content.identity.linkedIn}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        width={"fit-content"}
-                      >
-                        <Image
-                          src="LI-In-Bug.png"
-                          height={"2rem"}
-                          width={"auto"}
-                        />
-                      </Link>
-                    )}
-                    {profileData.content.identity.twitter && (
-                      <Link
-                        href={profileData.content.identity.twitter}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Image
-                          src="2021_Twitter_logo - blue.png"
-                          height={"2rem"}
-                          width={"auto"}
-                        />
-                      </Link>
-                    )}
-                  </HStack>
-                  <VStack>
-                    <Box alignSelf="flex-start" w="full" overflow="hidden">
-                      <Text pb={8} fontSize="xl">
-                        Work Experience
-                      </Text>
-                      <HStack spacing={4}>{createWorkElements(5)}</HStack>
-                      <UserPermissionsRestricted
+                    </HStack>
+                    <Text fontSize="md">{identity.currTitle}</Text>
+                    {identity.bio && <Text fontSize="md">{identity.bio}</Text>})
+                    {/* social media URLs */}
+                    <HStack width={"6rem"} justifyContent={"space-between"}>
+                      {identity.linkedIn && (
+                        <Link
+                          href={identity.linkedIn}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          width={"fit-content"}
+                        >
+                          <Image
+                            src="LI-In-Bug.png"
+                            height={"2rem"}
+                            width={"auto"}
+                          />
+                        </Link>
+                      )}
+                      {identity.twitter && (
+                        <Link
+                          href={identity.twitter}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Image
+                            src="2021_Twitter_logo - blue.png"
+                            height={"2rem"}
+                            width={"auto"}
+                          />
+                        </Link>
+                      )}
+                    </HStack>
+                    <VStack>
+                      <Box alignSelf="flex-start" w="full" overflow="hidden">
+                        <Text pb={8} fontSize="xl">
+                          Work Experience
+                        </Text>
+                        <HStack spacing={4}>{createWorkElements(5)}</HStack>
+                        <UserPermissionsRestricted
                           to="edit"
                           fallback={viewCompany}
                         >
-                        <CompanyModal
-                          isOpen={isCompanyModalOpen}
-                          onClose={onCompanyModalClose}
-                          currCompany={currCompany}
-                          profileData={profileData}
-                          handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
-                        />
-                      </UserPermissionsRestricted>
-                    </Box>
+                          <CompanyModal
+                            isOpen={isCompanyModalOpen}
+                            onClose={onCompanyModalClose}
+                            currCompany={currCompany}
+                            profileData={profileData}
+                            handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
+                          />
+                        </UserPermissionsRestricted>
+                      </Box>
                       <Box alignSelf="flex-start" w="full" overflow="hidden">
                         <Text pt={8} pb={4} fontSize="xl">
                           Web3 Credentials
@@ -582,7 +330,7 @@ const ProfilePage = () => {
                         ) : null}
                       </Box>
                       {/* <Box alignSelf="flex-start" w="full" overflow='hidden'>
-                            <Text pt={8} pb={4} fontSize='xl'>Book a session with {profileData.content.identity.firstName}</Text>
+                            <Text pt={8} pb={4} fontSize='xl'>Book a session with {identity.firstName}</Text>
                             <Button size='md' colorScheme='teal'>Book</Button>
                         </Box> */}
                     </VStack>

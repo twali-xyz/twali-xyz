@@ -12,6 +12,7 @@ import handAnimation from "../animations/twali-hand-2.json";
 import LottieAnimation from "../components/Landing/LottieAnimation";
 import bodyAnimation from "../animations/twali-lottie-desktop.json";
 import ScrollingHeader from "../components/Landing/ScrollingHeader";
+import HeaderNav from "../components/HeaderNav/HeaderNav";
 
 const IndexPage = () => {
   return (
@@ -23,6 +24,7 @@ const IndexPage = () => {
         minWidth={"1440px"}
         backgroundColor="#062B2A"
       >
+        <HeaderNav whichPage="index" />
         <ScrollingHeader
           borderTop={"none"}
           borderBottom={"2px solid #F9FFF260"}
@@ -208,8 +210,8 @@ const IndexPage = () => {
                 fontFamily={"PP Telegraf Bold"}
                 boxShadow={"0px 4px 4px 0px #00000040"}
               >
-                <Link href='https://airtable.com/shrjjPJnyesvqcSeB' isExternal>
-                apply here
+                <Link href="https://airtable.com/shrjjPJnyesvqcSeB" isExternal>
+                  apply here
                 </Link>
               </Button>
             </HStack>

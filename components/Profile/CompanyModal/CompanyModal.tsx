@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import {
   Box,
   HStack,
@@ -32,58 +32,20 @@ import { DID } from "dids";
 import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
 import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
+import {
+  BasicProfile,
+  ProfileData,
+  TwaliContext,
+} from "../../TwaliProvider/TwaliProvider";
 
 // 3box test nodes with read/write access on ceramic clay testnet
 // network node that we're interacting with, can be local/prod
 // we're using a test network here
 const endpoint = "https://ceramic-clay.3boxlabs.com";
 
-export interface ProfileData {
-  content: {
-    identity: Identity;
-    accType: string;
-  };
-}
-
-export interface Identity {
-  firstName: string;
-  lastName: string;
-  email: string;
-  displayName: string;
-  bio: string;
-  twitterUsrName?: string;
-  linkedInUsrName?: string;
-  website?: string;
-  businessName: string;
-  businessType: string;
-  businessLocation: string;
-  currTitle: string;
-  currLocation?: string;
-  funcExpertise: string;
-  industryExpertise: string;
-  companyInfo?: CompanyInfo[];
-}
-
-export interface BasicProfile {
-  name: string;
-}
-export interface Profile {
-  identity: Identity;
-  name: string;
-  accType: string;
-}
-
-export interface CompanyInfo {
-  companyName: string;
-  companyTitle: string;
-  companyImg: any;
-  companyStart: Date;
-  companyEnd: Date;
-  companyFunc: string;
-  companyIndustry: string;
-}
-
 const CompanyModal = (props) => {
+  const { identity, setIdentity, profileData, setProfileData } =
+    useContext(TwaliContext);
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [companyName, setCompanyName] = useState("");
@@ -94,9 +56,8 @@ const CompanyModal = (props) => {
   const [companyIndustry, setCompanyIndustry] = useState();
   const [shouldFetch, setShouldFetch] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [accType, setAccType] = useState(props.profileData.content.accType);
-  const [identity, setIdentity] = useState(props.profileData.content.identity);
-  const [profileData, setProfileData] = useState(props.profileData);
+  const [accType, setAccType] = useState(profileData.content.accType);
+
   const emptyCompanyInfo = {
     companyName: "",
     companyTitle: "",
@@ -107,9 +68,9 @@ const CompanyModal = (props) => {
   };
 
   const companyInfo =
-    props.profileData.content.identity.companyInfo &&
-    props.profileData.content.identity.companyInfo[props.currCompany]
-      ? props.profileData.content.identity.companyInfo[props.currCompany]
+    profileData.content.identity.companyInfo &&
+    profileData.content.identity.companyInfo[props.currCompany]
+      ? profileData.content.identity.companyInfo[props.currCompany]
       : emptyCompanyInfo;
 
   const [errors, setErrors] = useState({
@@ -230,7 +191,7 @@ const CompanyModal = (props) => {
     const newProfileData: ProfileData = {
       content: {
         identity: identity,
-        accType: props.profileData.content.accType,
+        accType: profileData.content.accType,
       },
     };
     setProfileData(newProfileData);

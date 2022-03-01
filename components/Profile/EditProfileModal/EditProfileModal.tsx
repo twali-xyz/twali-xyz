@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import {
   Button,
   Modal,
@@ -24,71 +24,31 @@ import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
 import { DID } from "dids";
 import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
+import {
+  BasicProfile,
+  ProfileData,
+  TwaliContext,
+} from "../../TwaliProvider/TwaliProvider";
 
 // 3box test nodes with read/write access on ceramic clay testnet
 // network node that we're interacting with, can be local/prod
 // we're using a test network here
 const endpoint = "https://ceramic-clay.3boxlabs.com";
 
-export interface ProfileData {
-  content: {
-    identity: Identity;
-    accType: string;
-  };
-}
-
-export interface Identity {
-  firstName: string;
-  lastName: string;
-  email: string;
-  displayName: string;
-  bio: string;
-  twitter?: string;
-  linkedIn?: string;
-  website?: string;
-  businessName: string;
-  businessType: string;
-  businessLocation: string;
-  currTitle: string;
-  currLocation?: string;
-  funcExpertise: string;
-  industryExpertise: string;
-  companyInfo?: CompanyInfo[];
-}
-
-export interface BasicProfile {
-  name: string;
-}
-export interface Profile {
-  identity: Identity;
-  name: string;
-  accType: string;
-}
-
-export interface CompanyInfo {
-  companyName: string;
-  companyTitle: string;
-  companyImg: any;
-  companyStart: Date;
-  companyEnd: Date;
-  companyFunc: string;
-  companyIndustry: string;
-}
-
 const EditProfileModal = (props) => {
+  const { profileData, setProfileData, identity, setIdentity } =
+    useContext(TwaliContext);
   const finalRef = useRef();
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [accType, setAccType] = useState(props.profileData.content.accType);
-  const [identity, setIdentity] = useState(props.profileData.content.identity);
   const [fileUploaded, setFileUploaded] = useState();
-  const [profileData, setProfileData] = useState(props.profileData);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [accType, setAccType] = useState(profileData.content.accType);
   const [values, setValues] = useState({
-    firstName: props.profileData.content.identity.firstName,
-    lastName: props.profileData.content.identity.lastName,
-    currTitle: props.profileData.content.identity.currTitle,
-    bio: props.profileData.content.identity.bio,
-    linkedIn: props.profileData.content.identity.linkedIn,
-    twitter: props.profileData.content.identity.twitter,
+    firstName: profileData.content.identity.firstName,
+    lastName: profileData.content.identity.lastName,
+    currTitle: profileData.content.identity.currTitle,
+    bio: profileData.content.identity.bio,
+    linkedIn: profileData.content.identity.linkedIn,
+    twitter: profileData.content.identity.twitter,
   });
   const [errors, setErrors] = useState({
     firstName: null,
@@ -170,7 +130,7 @@ const EditProfileModal = (props) => {
     const newProfileData: ProfileData = {
       content: {
         identity: identity,
-        accType: props.profileData.content.accType,
+        accType: profileData.content.accType,
       },
     };
     setProfileData(newProfileData);
@@ -248,19 +208,17 @@ const EditProfileModal = (props) => {
                   required
                   isInvalid={
                     errors.firstName &&
-                    (!props.profileData.content.identity.firstName ||
+                    (!profileData.content.identity.firstName ||
                       !values.firstName)
                   }
                   errorBorderColor="red.300"
                   placeholder="First name"
                   name="firstName"
-                  defaultValue={
-                    props.profileData.content.identity.firstName || ""
-                  }
+                  defaultValue={profileData.content.identity.firstName || ""}
                   onChange={handleChange}
                 />
                 {errors.firstName &&
-                  (!props.profileData.content.identity.firstName ||
+                  (!profileData.content.identity.firstName ||
                     !values.firstName) && (
                     <Text fontSize="xs" fontWeight="400" color="red.500">
                       {errors.firstName}
@@ -273,19 +231,16 @@ const EditProfileModal = (props) => {
                   required
                   isInvalid={
                     errors.lastName &&
-                    (!props.profileData.content.identity.lastName ||
-                      !values.lastName)
+                    (!profileData.content.identity.lastName || !values.lastName)
                   }
                   errorBorderColor="red.300"
                   placeholder="Last name"
                   name="lastName"
-                  defaultValue={
-                    props.profileData.content.identity.lastName || ""
-                  }
+                  defaultValue={profileData.content.identity.lastName || ""}
                   onChange={handleChange}
                 />
                 {errors.lastName &&
-                  (!props.profileData.content.identity.lastName ||
+                  (!profileData.content.identity.lastName ||
                     !values.lastName) && (
                     <Text fontSize="xs" fontWeight="400" color="red.500">
                       {errors.lastName}
@@ -297,19 +252,17 @@ const EditProfileModal = (props) => {
                 <Input
                   isInvalid={
                     errors.currTitle &&
-                    (!props.profileData.content.identity.currTitle ||
+                    (!profileData.content.identity.currTitle ||
                       !values.currTitle)
                   }
                   required
                   errorBorderColor="red.300"
-                  defaultValue={
-                    props.profileData.content.identity.currTitle || ""
-                  }
+                  defaultValue={profileData.content.identity.currTitle || ""}
                   name="currTitle"
                   onChange={handleChange}
                 />
                 {errors.currTitle &&
-                  (!props.profileData.content.identity.currTitle ||
+                  (!profileData.content.identity.currTitle ||
                     !values.currTitle) && (
                     <Text fontSize="xs" fontWeight="400" color="red.500">
                       {errors.currTitle}
@@ -319,9 +272,7 @@ const EditProfileModal = (props) => {
               <FormControl p={2} id="currLocation" isRequired>
                 <FormLabel>Where do you call home?</FormLabel>
                 <Input
-                  defaultValue={
-                    props.profileData.content.identity.currLocation || ""
-                  }
+                  defaultValue={profileData.content.identity.currLocation || ""}
                   name="currLocation"
                   onChange={handleChange}
                 />
@@ -331,7 +282,7 @@ const EditProfileModal = (props) => {
                 <Textarea
                   isInvalid={errors.bio}
                   errorBorderColor="red.300"
-                  defaultValue={props.profileData.content.identity.bio || ""}
+                  defaultValue={profileData.content.identity.bio || ""}
                   name="bio"
                   onChange={handleChange}
                 />
@@ -347,9 +298,7 @@ const EditProfileModal = (props) => {
                   isInvalid={errors.linkedIn}
                   errorBorderColor="red.300"
                   name="linkedIn"
-                  defaultValue={
-                    props.profileData.content.identity.linkedIn || ""
-                  }
+                  defaultValue={profileData.content.identity.linkedIn || ""}
                   onChange={handleChange}
                 />
                 {errors.linkedIn && (
@@ -364,9 +313,7 @@ const EditProfileModal = (props) => {
                   isInvalid={errors.twitter}
                   errorBorderColor="red.300"
                   name="twitter"
-                  defaultValue={
-                    props.profileData.content.identity.twitter || ""
-                  }
+                  defaultValue={profileData.content.identity.twitter || ""}
                   onChange={handleChange}
                 />
                 {errors.twitter && (

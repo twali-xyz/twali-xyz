@@ -4,8 +4,6 @@ import { Permission } from "./PermissionTypes";
 export const fetchPermission =
   (displayName) =>
   async (permission: Permission): Promise<boolean> => {
-    console.log(displayName);
-
     let user = {
       userName: "nagmak",
       permissions: ["edit"],
