@@ -25,3 +25,106 @@ img {
   max-width: 100%;
   display: block;
 }
+@font-face {
+  font-family: "GrandSlang Italic";
+  src: url("../public/fonts/GrandSlang-Italic.eot");
+  src: url("../public/fonts/GrandSlang-Italic.eot?#iefix")
+      format("embedded-opentype"),
+    url("../public/fonts/GrandSlang-Italic.woff2") format("woff2"),
+    url("../public/fonts/GrandSlang-Italic.woff") format("woff"),
+    url("../public/fonts/GrandSlang-Italic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GrandSlang";
+  src: url("../public/fonts/GrandSlang-Roman.eot");
+  src: url("../public/fonts/GrandSlang-Roman.eot?#iefix")
+      format("embedded-opentype"),
+    url("../public/fonts/GrandSlang-Roman.woff2") format("woff2"),
+    url("../public/fonts/GrandSlang-Roman.woff") format("woff"),
+    url("../public/fonts/GrandSlang-Roman.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Telegraf Bold";
+  src: url("../public/fonts/PPTelegraf-Bold.eot");
+  src: url("../public/fonts/PPTelegraf-Bold.eot?#iefix")
+      format("embedded-opentype"),
+    url("../public/fonts/PPTelegraf-Bold.woff2") format("woff2"),
+    url("../public/fonts/PPTelegraf-Bold.woff") format("woff"),
+    url("../public/fonts/PPTelegraf-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Telegraf Light";
+  src: url("../public/fonts/PPTelegraf-Light.eot");
+  src: url("../public/fonts/PPTelegraf-Light.eot?#iefix")
+      format("embedded-opentype"),
+    url("../public/fonts/PPTelegraf-Light.woff2") format("woff2"),
+    url("../public/fonts/PPTelegraf-Light.woff") format("woff"),
+    url("../public/fonts/PPTelegraf-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Telegraf";
+  src: url("../public/fonts/PPTelegraf-Medium.eot");
+  src: url("../public/fonts/PPTelegraf-Medium.eot?#iefix")
+      format("embedded-opentype"),
+    url("../public/fonts/PPTelegraf-Medium.woff2") format("woff2"),
+    url("../public/fonts/PPTelegraf-Medium.woff") format("woff"),
+    url("../public/fonts/PPTelegraf-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Scope Medium";
+  src: url("../public/fonts/Scope-BoldExpanded.eot");
+  src: url("../public/fonts/Scope-BoldExpanded.eot?#iefix")
+      format("embedded-opentype"),
+    url("../public/fonts/Scope-BoldExpanded.woff2") format("woff2"),
+    url("../public/fonts/Scope-BoldExpanded.woff") format("woff"),
+    url("../public/fonts/Scope-BoldExpanded.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Scope Light";
+  src: url("../public/fonts/Scope-LightExpanded.eot");
+  src: url("../public/fonts/Scope-LightExpanded.eot?#iefix")
+      format("embedded-opentype"),
+    url("../public/fonts/Scope-LightExpanded.woff2") format("woff2"),
+    url("../public/fonts/Scope-LightExpanded.woff") format("woff"),
+    url("../public/fonts/Scope-LightExpanded.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Scope Medium";
+  src: url("../public/fonts/Scope-MediumExpanded.eot");
+  src: url("../public/fonts/Scope-MediumExpanded.eot?#iefix")
+      format("embedded-opentype"),
+    url("../public/fonts/Scope-MediumExpanded.woff2") format("woff2"),
+    url("../public/fonts/Scope-MediumExpanded.woff") format("woff"),
+    url("../public/fonts/Scope-MediumExpanded.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}

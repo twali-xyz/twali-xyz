@@ -10,11 +10,13 @@ import {
   FormLabel,
   Select,
   HStack,
+  VStack,
   CircularProgress,
   Text,
-  Img,
   FormHelperText,
-  VStack,
+  Tooltip,
+  Img,
+  Link,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
@@ -25,6 +27,7 @@ import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
 import { DID } from "dids";
 import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // 3box test nodes with read/write access on ceramic clay testnet
 // network node that we're interacting with, can be local/prod
@@ -206,7 +209,18 @@ const userProfileStep = ({ handleChange, values, errors }) => {
               </FormControl>
             </HStack>
             <FormControl p={2} pb={8} id="website">
-              <FormLabel>Website</FormLabel>
+              <Box display="flex" justifyContent="space-between">
+                <FormLabel>Website</FormLabel>
+                <Tooltip
+                  placement="auto-start"
+                  hasArrow
+                  label="Add a personal or business website here"
+                >
+                  <Box pos="relative">
+                    <FontAwesomeIcon icon={"info-circle"} />
+                  </Box>
+                </Tooltip>
+              </Box>
               <Input
                 placeholder="Website"
                 name="website"
@@ -240,7 +254,19 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
             isTruncated
           >
             <FormControl p={4} id="business-name" isRequired>
-              <FormLabel>Business legal name</FormLabel>
+              <HStack display="flex" justifyContent="space-between">
+                <FormLabel>Business legal name</FormLabel>
+                <Tooltip
+                  placement="auto-start"
+                  hasArrow
+                  label="If you are a sole proprietor, partnership, or single-member LLC, your 'Business Name' may be registered as your personal name or your business’s DBA.
+                  If you are an LLC, corporation, or non-profit, Twali requires that the 'Business Name' be in the company’s legal business name or DBA"
+                >
+                  <Box pos="relative">
+                    <FontAwesomeIcon icon={"info-circle"} />
+                  </Box>
+                </Tooltip>
+              </HStack>
               <Input
                 required
                 isInvalid={errors.businessName}
@@ -260,7 +286,24 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
               </FormHelperText>
             </FormControl>
             <FormControl p={4} id="business-type" isRequired>
-              <FormLabel>Business type</FormLabel>
+              <HStack justifyContent="space-between">
+                <FormLabel>Business type</FormLabel>
+                <Link
+                  href="https://www.sba.gov/business-guide/launch-your-business/choose-business-structure"
+                  target={"_blank"}
+                  rel="noopener noreferrer"
+                >
+                  <Tooltip
+                    placement="auto-start"
+                    hasArrow
+                    label="Click to learn more "
+                  >
+                    <Box pos="relative">
+                      <FontAwesomeIcon icon={"info-circle"} />
+                    </Box>
+                  </Tooltip>
+                </Link>
+              </HStack>
               <Select
                 placeholder="Select business type"
                 name="businessType"
@@ -269,6 +312,9 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
                 <option>Sole proprietorship</option>
                 <option>Partnership</option>
                 <option>Corporation</option>
+                <option>Single-member LLC</option>
+                <option>LLC</option>
+                <option>Non-profit</option>
               </Select>
               {/* {errors.businessType && (
                           <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.businessType}</Text>

@@ -32,11 +32,11 @@ let params = {
 };
 
 // Deploying the dynamoDB table instance
-(async function () {
+(async function() {
   await dynamodb.createTable(params).promise();
 
   console.log("Created table in us-east-1");
-  console.log(process.env.LOCAL_DYNAMO_DB_ENDPOINT);
+
   // Only a replicated instance for production. Not Supported by local.
   if (!process.env.LOCAL_DYNAMO_DB_ENDPOINT) {
     AWS.config.update({ region: "us-east-1" });
@@ -47,17 +47,17 @@ let params = {
 
     console.log("Created table in us-east-1");
 
-    const createGlobalTableParams = {
-      GlobalTableName: "user_profile_test",
-      ReplicationGroup: [
-        {
-          RegionName: "us-east-1",
-        },
-        // {
-        //     RegionName: "us-east-2"
-        // }
-      ],
-    };
+        const createGlobalTableParams = {
+            GlobalTableName: "user_profile_test",
+            ReplicationGroup: [
+                {
+                    RegionName: "us-east-1",
+                },
+                {
+                    RegionName: "us-east-2"
+                }
+            ]
+        };
 
     await dynamodb.createGlobalTable(createGlobalTableParams).promise();
     console.log("Replication of table completed");
