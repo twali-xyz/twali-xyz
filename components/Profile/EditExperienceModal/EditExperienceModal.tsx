@@ -41,7 +41,7 @@ export interface Identity {
   firstName: string;
   lastName: string;
   email: string;
-  displayName: string;
+  userName: string;
   bio: string;
   twitterUsrName?: string;
   linkedInUsrName?: string;
@@ -83,11 +83,11 @@ const EditExperienceModal = (props) => {
   const [identity, setIdentity] = useState(props.profileData.content.identity);
   const [profileData, setProfileData] = useState(props.profileData);
   const [values, setValues] = useState({
-    displayName: props.profileData.content.identity.displayName,
+    userName: props.profileData.content.identity.userName,
     email: props.profileData.content.identity.email,
   });
   const [errors, setErrors] = useState({
-    displayName: null,
+    userName: null,
     email: null,
   });
 
@@ -150,8 +150,8 @@ const EditExperienceModal = (props) => {
   const validate = (values) => {
     let errors: any = {};
 
-    if (!values.displayName) {
-      errors.displayName = "Display name is required";
+    if (!values.userName) {
+      errors.userName = "User name is required";
     }
 
     var emailPattern = /(.+)@(.+){1,}\.(.+){1,}/;
@@ -206,27 +206,27 @@ const EditExperienceModal = (props) => {
           <ModalBody>
             <form style={{ alignSelf: "center" }}>
               <FormControl p={2} id="display-name" isRequired>
-                <FormLabel>Display name</FormLabel>
+                <FormLabel>User name</FormLabel>
                 <Input
                   required
                   isInvalid={
-                    errors.displayName &&
-                    (!props.profileData.content.identity.displayName ||
-                      !values.displayName)
+                    errors.userName &&
+                    (!props.profileData.content.identity.userName ||
+                      !values.userName)
                   }
                   errorBorderColor="red.300"
-                  placeholder="Display name"
-                  name="displayName"
+                  placeholder="User name"
+                  name="userName"
                   defaultValue={
-                    props.profileData.content.identity.displayName || ""
+                    props.profileData.content.identity.userName || ""
                   }
                   onChange={handleChange}
                 />
-                {errors.displayName &&
-                  (!props.profileData.content.identity.displayName ||
-                    !values.displayName) && (
+                {errors.userName &&
+                  (!props.profileData.content.identity.userName ||
+                    !values.userName) && (
                     <Text fontSize="xs" fontWeight="400" color="red.500">
-                      {errors.displayName}
+                      {errors.userName}
                     </Text>
                   )}
               </FormControl>

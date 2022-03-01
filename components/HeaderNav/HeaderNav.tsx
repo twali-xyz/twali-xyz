@@ -39,8 +39,9 @@ export interface ProfileData {
 export interface Identity {
   firstName: string;
   lastName: string;
+  userWallet: string;
   email: string;
-  displayName: string;
+  userName: string;
   bio: string;
   twitter?: string;
   linkedIn?: string;
@@ -63,6 +64,27 @@ export interface Profile {
   identity: Identity;
   name: string;
   accType: string;
+}
+
+export interface UserData {
+  userName: string;
+  userWallet: string;
+  accType: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  bio?: string;
+  twitter?: string;
+  linkedIn?: string;
+  website?: string;
+  businessName: string;
+  businessType: string;
+  businessLocation: string;
+  currTitle: string;
+  currLocation?: string;
+  funcExpertise: string;
+  industryExpertise: string;
+  companyInfo?: CompanyInfo[];
 }
 
 export interface CompanyInfo {
@@ -99,6 +121,16 @@ const HeaderNav = (props) => {
   const [accType, setAccType] = useState("");
   const [loaded, setLoaded] = useState(false);
   const router = useRouter();
+
+  const getUserByWallet = async (currAccount) => {
+    const res = await fetch(
+      `http://localhost:3000/api/users/wallet/${currAccount}`
+    );
+    const data: any = await res.json();
+
+    console.log("RETRIEVE USER BY WALLET YO");
+    return data;
+  };
 
   const handleWalletConnect = async () => {
     const web3Modal = new Web3Modal({
@@ -158,14 +190,17 @@ const HeaderNav = (props) => {
 
       console.log("profileData: ", profileData.content);
       let identity = profileData.content.identity;
-      let profileAccType = profileData.content.accType;
+      let userData: UserData = await getUserByWallet(currAccount);
 
-      if (data.name && identity.email && profileAccType) {
-        setName(data.name);
-        setEmail(identity.email);
-        setAccType(profileAccType);
+      if (
+        identity.userName &&
+        identity.userWallet &&
+        userData.userName &&
+        userData.userWallet
+      ) {
         setIsSubmitted(false);
-        router.push("/profile");
+        // router.push("/profile");
+        router.push(`/${userData.userName}`);
       } else {
         console.log("No profile, pls create one...");
         router.push("/steps");

@@ -1,11 +1,7 @@
 import "../styles/global.css";
 import { AppProps } from "next/app";
 import * as React from "react";
-import {
-  ChakraProvider,
-  extendTheme,
-  ThemeConfig,
-} from "@chakra-ui/react";
+import { ChakraProvider, extendTheme, ThemeConfig } from "@chakra-ui/react";
 import { StepsStyleConfig as Steps } from "chakra-ui-steps";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";

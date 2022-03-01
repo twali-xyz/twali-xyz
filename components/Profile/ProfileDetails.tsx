@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { connect } from "../../utils/walletUtils";
 
 import CeramicClient from "@ceramicnetwork/http-client";
@@ -48,7 +49,8 @@ export interface Identity {
   firstName: string;
   lastName: string;
   email: string;
-  displayName: string;
+  userName: string;
+  userWallet: string;
   bio: string;
   twitter?: string;
   linkedIn?: string;
@@ -73,6 +75,27 @@ export interface Profile {
   accType: string;
 }
 
+export interface UserData {
+  userName: string;
+  userWallet: string;
+  accType: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  bio?: string;
+  twitter?: string;
+  linkedIn?: string;
+  website?: string;
+  businessName: string;
+  businessType: string;
+  businessLocation: string;
+  currTitle: string;
+  currLocation?: string;
+  funcExpertise: string;
+  industryExpertise: string;
+  companyInfo?: CompanyInfo[];
+}
+
 export interface CompanyInfo {
   companyName: string;
   companyTitle: string;
@@ -84,7 +107,18 @@ export interface CompanyInfo {
 }
 
 const ProfileDetails = ({ user }) => {
+  // Fallback for getStaticPaths, when fallback: true
+  // Useful for an app that has a large number of static pages, and this prevents the build time from slowing down
+  // More info in Nextjs docs here: https://nextjs.org/docs/api-reference/data-fetching/get-static-paths#fallback-true
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return <div>Loading data</div>;
+  }
+
   const [profileData, setProfileData] = useState<ProfileData>();
+  const [userData, setUserData] = useState<UserData>();
+
   const [name, setName] = useState("");
   const {
     isOpen: isProfileModalOpen,
@@ -109,6 +143,7 @@ const ProfileDetails = ({ user }) => {
   const [loaded, setLoaded] = useState(false);
   const [snapshotData, setSnapshotData] = useState<any>();
   const [currentSnapshot, setCurrentSnapshot] = useState();
+  const [loggedInUserAddress, setLoggedInUserAddress] = useState("");
   const [currCompany, setCurrCompany] = useState(0);
   console.log(user);
 
@@ -189,6 +224,14 @@ const ProfileDetails = ({ user }) => {
         if (data.name) setName(data.name);
         if (profile) {
           setProfileData(profile);
+        }
+
+        if (user) {
+          setUserData(user);
+        }
+
+        if (address) {
+          setLoggedInUserAddress(address);
         }
         setLoaded(true);
       } catch (err) {
@@ -382,7 +425,8 @@ const ProfileDetails = ({ user }) => {
           <>
             <UserPermissionsProvider
               fetchPermission={fetchPermission(
-                profileData.content.identity.displayName
+                userData.userName,
+                loggedInUserAddress ? loggedInUserAddress : null
               )}
             >
               <Box
@@ -432,9 +476,9 @@ const ProfileDetails = ({ user }) => {
                       handleUpdatedExperiences={handleUpdatedProfile}
                     />
                   </UserPermissionsRestricted>
-                  {profileData.content.identity.displayName && (
+                  {profileData.content.identity.userName && (
                     <Text fontSize="xl">
-                      @{profileData.content.identity.displayName}
+                      @{profileData.content.identity.userName}
                     </Text>
                   )}
                   {profileData.content.identity.email && (

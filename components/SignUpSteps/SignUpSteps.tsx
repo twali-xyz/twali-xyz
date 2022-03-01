@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { Step, Steps, useSteps } from "chakra-ui-steps";
 import { connect } from "../../utils/walletUtils";
 import {
@@ -17,7 +16,7 @@ import {
   FormHelperText,
   VStack,
 } from "@chakra-ui/react";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 import CeramicClient from "@ceramicnetwork/http-client";
 import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver";
@@ -43,7 +42,8 @@ export interface Identity {
   firstName: string;
   lastName: string;
   email: string;
-  displayName: string;
+  userName: string;
+  userWallet: string;
   bio: string;
   twitter?: string;
   linkedIn?: string;
@@ -56,7 +56,6 @@ export interface Identity {
   funcExpertise: string;
   industryExpertise: string;
   companyInfo?: CompanyInfo[];
-  uuid: string;
 }
 
 export interface BasicProfile {
@@ -66,6 +65,27 @@ export interface Profile {
   identity: Identity;
   name: string;
   accType: string;
+}
+
+export interface UserData {
+  userName: string;
+  userWallet: string;
+  accType: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  bio?: string;
+  twitter?: string;
+  linkedIn?: string;
+  website?: string;
+  businessName: string;
+  businessType: string;
+  businessLocation: string;
+  currTitle: string;
+  currLocation?: string;
+  funcExpertise: string;
+  industryExpertise: string;
+  companyInfo?: CompanyInfo[];
 }
 
 export interface CompanyInfo {
@@ -134,19 +154,19 @@ const userProfileStep = ({ handleChange, values, errors }) => {
               </FormControl>
             </HStack>
             <FormControl p={2} id="display-name" isRequired>
-              <FormLabel>Display name</FormLabel>
+              <FormLabel>User name</FormLabel>
               <Input
                 required
-                isInvalid={errors.displayName}
+                isInvalid={errors.userName}
                 errorBorderColor="red.300"
-                placeholder="Display name"
-                name="displayName"
-                value={values.displayName || ""}
+                placeholder="User name"
+                name="userName"
+                value={values.userName || ""}
                 onChange={handleChange}
               />
-              {errors.displayName && (
+              {errors.userName && (
                 <Text fontSize="xs" fontWeight="400" color="red.500">
-                  {errors.displayName}
+                  {errors.userName}
                 </Text>
               )}
             </FormControl>
@@ -442,6 +462,7 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
 };
 
 const SignUpSteps = () => {
+  const router = useRouter();
   const [isSubmitted, setIsSubmitted] = useState(false);
   // const [isContinueDisabled, setIsContinueDisabled] = useState(false);
   const [isAccTypeSelection, setIsAccTypeSelection] = useState(true);
@@ -451,11 +472,13 @@ const SignUpSteps = () => {
   const [accType, setAccType] = useState("");
   const [btnActive, setBtnActive] = useState(0);
 
-  const [identity, setIdentity] = useState<Identity>({
+  const [userDescription, setUserDescription] = useState<UserData>({
+    userName: "",
+    userWallet: "",
+    accType: "",
     firstName: "",
     lastName: "",
     email: "",
-    displayName: "",
     bio: "",
     twitter: "",
     linkedIn: "",
@@ -468,7 +491,26 @@ const SignUpSteps = () => {
     funcExpertise: "",
     industryExpertise: "",
     companyInfo: [],
-    uuid: "",
+  });
+
+  const [identity, setIdentity] = useState<Identity>({
+    firstName: "",
+    lastName: "",
+    userWallet: "",
+    email: "",
+    userName: "",
+    bio: "",
+    twitter: "",
+    linkedIn: "",
+    website: "",
+    businessName: "",
+    businessType: "",
+    businessLocation: "",
+    currTitle: "",
+    currLocation: "",
+    funcExpertise: "",
+    industryExpertise: "",
+    companyInfo: [],
   });
 
   const validate = (values) => {
@@ -482,8 +524,8 @@ const SignUpSteps = () => {
       errors.lastName = "Last name is required";
     }
 
-    if (!values.displayName) {
-      errors.displayName = "Display name is required";
+    if (!values.userName) {
+      errors.userName = "User name is required";
     }
 
     if (!values.email) {
@@ -528,6 +570,11 @@ const SignUpSteps = () => {
       ...identity,
       [evt.target.name]: value,
     });
+
+    setUserDescription({
+      ...userDescription,
+      [evt.target.name]: value,
+    });
   };
 
   const steps = [
@@ -545,14 +592,26 @@ const SignUpSteps = () => {
     },
   ];
 
+  const createNewUser = async (address) => {
+    userDescription.userWallet = address;
+    userDescription.accType = accType;
+    await fetch("/api/users/createUser", {
+      method: "POST",
+      body: JSON.stringify({ userDescription }),
+    });
+    console.log("NEW USER CREATED BRUH");
+    // For now for test case the userName is pushed as query param into a user 'page'
+    router.push(`/${userDescription.userName}`);
+  };
+
   async function updateAccType() {
     const address = await connect(); // first address in the array
 
     if (address) {
+      await createNewUser(address); // creating user in DynamoDB
       const ceramic = new CeramicClient(endpoint);
       const threeIdConnect = new ThreeIdConnect();
       const provider = new EthereumAuthProvider(window.ethereum, address);
-      const router = useRouter();
 
       setIsSubmitted(true);
 
@@ -574,17 +633,21 @@ const SignUpSteps = () => {
         name: identity.firstName + " " + identity.lastName,
       });
 
-      let uuid = uuidv4();
-      identity.uuid = uuid;
-      console.log(uuid);
+      identity.userWallet = address;
       await createProfileData(ceramic, identity, accType);
 
       console.log("Profile updated!");
       console.log(identity);
 
-      if (identity.firstName && identity.lastName && identity.email) {
+      if (
+        identity.userName &&
+        identity.userWallet &&
+        userDescription.userName &&
+        userDescription.userWallet
+      ) {
         setIsSubmitted(false);
-        router.push(`/${identity.displayName}`);
+        // router.push(`/${identity.userName}`);
+        router.push(`/${userDescription.userName}`); // coming from dynamodb
       } else {
         console.log("No profile, pls create one...");
       }
