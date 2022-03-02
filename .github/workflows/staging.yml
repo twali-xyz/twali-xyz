@@ -36,4 +36,4 @@ jobs:
           run: npm ci 
 
         - name: Deploy to staging-twali AWS enviroment
-          run: serverless
+          run: npx serverless
