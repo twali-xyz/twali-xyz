@@ -25,7 +25,7 @@ jobs:
 
         - uses: canastro/copy-file-action@master
           with:
-            source: "severless-staging.yml"
+            source: "serverless-staging.yml"
             target: "severless.yml"
 
         - uses: actions/setup-node@v2-beta
