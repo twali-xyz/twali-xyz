@@ -26,9 +26,9 @@ const getDynamoDBClient = () => {
 
   const client = process.env.LOCAL_DYNAMO_DB_ENDPOINT
     ? new AWS.DynamoDB.DocumentClient()
-      // ...options,
+    : // ...options,
       // process.env.LOCAL_DYNAMO_DB_ENDPOINT
-    : new AWS.DynamoDB.DocumentClient(options);
+      new AWS.DynamoDB.DocumentClient(options);
 
   return client;
 };
