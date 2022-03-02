@@ -3,7 +3,8 @@ import HeaderNav from "../components/HeaderNav/HeaderNav";
 import ProfileDetails from "../components/Profile/ProfileDetails";
 
 export const getStaticPaths = async () => {
-  const res = await fetch("http://localhost:3000/api/users/getUsers");
+  let apiURL = process.env.LOCALHOST ? process.env.LOCALHOST : process.env.VERCEL_URL;
+  const res = await fetch(`${apiURL}/api/users/getUsers`);
 
   // Should get a list of all users from the backend here
   const data = await res.json();
@@ -23,12 +24,12 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps = async (context) => {
+  let apiURL = process.env.LOCALHOST ? process.env.LOCALHOST : process.env.VERCEL_URL;
   const userName = context.params.userName;
   console.log("Context:", context);
 
   const res = await fetch(
-    `http://localhost:3000/api/users/getUser/${userName}`
-  );
+    `${apiURL}/api/users/getUser/${userName}`);
   const data = await res.json();
   console.log("DATA: ", data);
 
