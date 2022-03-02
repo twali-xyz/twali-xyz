@@ -6,9 +6,9 @@ name: deploy stagging-twali
 
 on:
   push:
-    branches: [stagging]
+    branches: [staging]
   pull_request:
-    branches: [stagging]
+    branches: [staging]
 
 jobs:
   deploy-stagging:
