@@ -10,7 +10,7 @@ export const getStaticPaths = async () => {
   const paths = data.map((user: any) => {
     return {
       params: { userName: user.userName },
-    }
+    };
   });
 
   // Setting fallback: true
@@ -26,7 +26,9 @@ export const getStaticProps = async (context) => {
   const userName = context.params.userName;
   console.log("Context:", context);
 
-  const res = await fetch(`http://localhost:3000/api/users/getUser/${userName}`);
+  const res = await fetch(
+    `http://localhost:3000/api/users/getUser/${userName}`
+  );
   const data = await res.json();
   console.log("DATA: ", data);
 

@@ -24,20 +24,20 @@ let params = {
     { AttributeName: "userWallet", AttributeType: "S" },
     { AttributeName: "userName", AttributeType: "S" },
   ],
-  GlobalSecondaryIndexes: [ 
-    { 
-        IndexName: 'wallet_name_index', 
-        KeySchema: [
-            {
-                AttributeName: 'userName',
-                KeyType: 'HASH',
-            }
-        ],
-        Projection: {
-          ProjectionType: 'ALL',
+  GlobalSecondaryIndexes: [
+    {
+      IndexName: "wallet_name_index",
+      KeySchema: [
+        {
+          AttributeName: "userName",
+          KeyType: "HASH",
         },
-    }
-],
+      ],
+      Projection: {
+        ProjectionType: "ALL",
+      },
+    },
+  ],
   StreamSpecification: {
     StreamEnabled: true,
     StreamViewType: "NEW_AND_OLD_IMAGES",

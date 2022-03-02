@@ -11,14 +11,13 @@ const getDynamoDBClient = () => {
 
   // Only needed with local development.
   if (process.env.LOCAL_DYNAMO_DB_ENDPOINT) {
-      AWS.config.update({
-        // accessKeyId: process.env.AWS_ACCESS_KEY_ID_DEV,
-        // secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_DEV,
-        // region: "localhost",
-        endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT
+    AWS.config.update({
+      // accessKeyId: process.env.AWS_ACCESS_KEY_ID_DEV,
+      // secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_DEV,
+      // region: "localhost",
+      endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT,
     });
   }
-
 
   const options = {
     convertEmptyValues: true,
@@ -26,10 +25,9 @@ const getDynamoDBClient = () => {
   };
 
   const client = process.env.LOCAL_DYNAMO_DB_ENDPOINT
-    ? new AWS.DynamoDB.DocumentClient(
-        // ...options,
-        // process.env.LOCAL_DYNAMO_DB_ENDPOINT
-      )
+    ? new AWS.DynamoDB.DocumentClient()
+      // ...options,
+      // process.env.LOCAL_DYNAMO_DB_ENDPOINT
     : new AWS.DynamoDB.DocumentClient(options);
 
   return client;
@@ -100,7 +98,7 @@ module.exports = {
     const dbUser = await getDynamoDBClient()
       .query({
         TableName,
-        IndexName: 'wallet_name_index',
+        IndexName: "wallet_name_index",
         // ProjectionExpression: "userName",
         KeyConditionExpression: "userName = :userName",
         ExpressionAttributeValues: {
@@ -133,8 +131,9 @@ module.exports = {
       })
       .promise()
       .then((data) => {
-        console.log(data.Items[0])
-        return data.Items[0];})
+        console.log(data.Items[0]);
+        return data.Items[0];
+      })
       .catch(console.error);
 
     return dbUser;
