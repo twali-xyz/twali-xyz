@@ -231,9 +231,9 @@ const IndexPage = () => {
                   color={"#58F27A"}
                   fontWeight={"400"}
                   letterSpacing={"0.03em"}
-                  href="mailto:degen@twail.xyz"
+                  href="mailto:degen@twali.xyz"
                 >
-                  degen@twail.xyz
+                  degen@twali.xyz
                 </Link>
               </Text>
             </HStack>

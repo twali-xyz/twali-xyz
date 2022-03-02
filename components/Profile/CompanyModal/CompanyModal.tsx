@@ -405,7 +405,9 @@ const CompanyModal = (props) => {
                       <>
                         <LogoFallBack companyName={companyInfo.companyName} />
                       </>
-                    ) : tempLogo && companyName ? (
+                    ) : !shouldFetch && !tempLogo && companyInfo.companyName ? (
+                      <LogoFallBack companyName={companyInfo.companyName} />
+                    ) : !shouldFetch && tempLogo && companyName ? (
                       <LogoFallBack companyName={companyName} />
                     ) : null}
                     <Input
