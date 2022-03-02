@@ -115,18 +115,14 @@ const HeaderNav = (props) => {
   const [show, setShow] = useState(false);
   const toggleMenu = () => setShow(!show);
   const [isSubmitted, setIsSubmitted] = React.useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [accType, setAccType] = useState("");
   const [loaded, setLoaded] = useState(false);
   const router = useRouter();
 
-  const getUserByWallet = async (currAccount) => {
+  const getUserByWallet = async (walletAddress) => {
     const res = await fetch(
-      `http://localhost:3000/api/users/wallet/${currAccount}`
+      `http://localhost:3000/api/users/wallet/${walletAddress}`
     );
-    const data: any = await res.json();
+    const data: any = await JSON.parse(JSON.stringify(res));
 
     console.log("RETRIEVE USER BY WALLET YO");
     return data;
@@ -195,6 +191,7 @@ const HeaderNav = (props) => {
       if (
         identity.userName &&
         identity.userWallet &&
+        userData &&
         userData.userName &&
         userData.userWallet
       ) {

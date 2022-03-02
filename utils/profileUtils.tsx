@@ -17,7 +17,7 @@ export const fetchPermission =
     // await new Promise((resolve) => setTimeout(resolve, 1000));
     // const { data, error } = await useSWR(`/api/users/${currentUserName}`, fetcher);
     const res = await fetch(
-      `http://localhost:3000/api/users/${currentUserName}`
+      `http://localhost:3000/api/users/getUser/${currentUserName}`
     );
     const data: any = await res.json();
     console.log("PERMISSION DATA:", data);

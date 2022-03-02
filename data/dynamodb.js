@@ -1,4 +1,4 @@
-const { v4 } = require('uuid');
+const { v4 } = require("uuid");
 const TableName = process.env.TABLE_NAME;
 
 const getDynamoDBClient = () => {
@@ -9,24 +9,27 @@ const getDynamoDBClient = () => {
     ? "us-east-1"
     : "us-east-2";
 
-    // Only needed with local development. 
-    // AWS.config.update({
-    //         // accessKeyId: process.env.AWS_ACCESS_KEY_ID_DEV,
-    //         // secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_DEV,
-    //         // region: "localhost",
-    //         endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT
-    //   });
-    
-    const options = {
-    convertEmptyValues: true,
-    region: dynamoDBRegion
-    };
+  // Only needed with local development.
+  if (process.env.LOCAL_DYNAMO_DB_ENDPOINT) {
+      AWS.config.update({
+        // accessKeyId: process.env.AWS_ACCESS_KEY_ID_DEV,
+        // secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_DEV,
+        // region: "localhost",
+        endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT
+    });
+  }
 
-    const client = process.env.LOCAL_DYNAMO_DB_ENDPOINT
+
+  const options = {
+    convertEmptyValues: true,
+    region: dynamoDBRegion,
+  };
+
+  const client = process.env.LOCAL_DYNAMO_DB_ENDPOINT
     ? new AWS.DynamoDB.DocumentClient(
-        ...options,
-        process.env.LOCAL_DYNAMO_DB_ENDPOINT
-    )
+        // ...options,
+        // process.env.LOCAL_DYNAMO_DB_ENDPOINT
+      )
     : new AWS.DynamoDB.DocumentClient(options);
 
   return client;
@@ -97,6 +100,7 @@ module.exports = {
     const dbUser = await getDynamoDBClient()
       .query({
         TableName,
+        IndexName: 'wallet_name_index',
         // ProjectionExpression: "userName",
         KeyConditionExpression: "userName = :userName",
         ExpressionAttributeValues: {
@@ -106,7 +110,6 @@ module.exports = {
       .promise()
       .then((data) => data.Items[0])
       .catch(console.error);
-
     return dbUser;
   },
 
@@ -118,6 +121,7 @@ module.exports = {
    * @returns Returns a user as and object.
    **/
   getUserByWallet: async (userWallet) => {
+    console.log(userWallet);
     const dbUser = await getDynamoDBClient()
       .query({
         TableName,
@@ -128,7 +132,9 @@ module.exports = {
         },
       })
       .promise()
-      .then((data) => data.Items[0])
+      .then((data) => {
+        console.log(data.Items[0])
+        return data.Items[0];})
       .catch(console.error);
 
     return dbUser;

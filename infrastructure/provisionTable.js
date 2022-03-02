@@ -17,13 +17,27 @@ let dynamodb = new AWS.DynamoDB();
 let params = {
   TableName: "user_profile_test",
   KeySchema: [
-    { AttributeName: "userName", KeyType: "HASH" }, // Partition Key
-    { AttributeName: "userWallet", KeyType: "RANGE" }, // Sort Ket
+    { AttributeName: "userWallet", KeyType: "HASH" }, // Partition Key
+    { AttributeName: "userName", KeyType: "RANGE" }, // Sort Ket
   ],
   AttributeDefinitions: [
-    { AttributeName: "userName", AttributeType: "S" },
     { AttributeName: "userWallet", AttributeType: "S" },
+    { AttributeName: "userName", AttributeType: "S" },
   ],
+  GlobalSecondaryIndexes: [ 
+    { 
+        IndexName: 'wallet_name_index', 
+        KeySchema: [
+            {
+                AttributeName: 'userName',
+                KeyType: 'HASH',
+            }
+        ],
+        Projection: {
+          ProjectionType: 'ALL',
+        },
+    }
+],
   StreamSpecification: {
     StreamEnabled: true,
     StreamViewType: "NEW_AND_OLD_IMAGES",
@@ -32,7 +46,7 @@ let params = {
 };
 
 // Deploying the dynamoDB table instance
-(async function() {
+(async function () {
   await dynamodb.createTable(params).promise();
 
   console.log("Created table in us-east-1");
@@ -47,17 +61,17 @@ let params = {
 
     console.log("Created table in us-east-1");
 
-        const createGlobalTableParams = {
-            GlobalTableName: "user_profile_test",
-            ReplicationGroup: [
-                {
-                    RegionName: "us-east-1",
-                },
-                {
-                    RegionName: "us-east-2"
-                }
-            ]
-        };
+    const createGlobalTableParams = {
+      GlobalTableName: "user_profile_test",
+      ReplicationGroup: [
+        {
+          RegionName: "us-east-1",
+        },
+        {
+          RegionName: "us-east-2",
+        },
+      ],
+    };
 
     await dynamodb.createGlobalTable(createGlobalTableParams).promise();
     console.log("Replication of table completed");

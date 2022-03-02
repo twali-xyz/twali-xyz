@@ -10,7 +10,7 @@ export const getStaticPaths = async () => {
   const paths = data.map((user: any) => {
     return {
       params: { userName: user.userName },
-    };
+    }
   });
 
   // Setting fallback: true
@@ -26,7 +26,7 @@ export const getStaticProps = async (context) => {
   const userName = context.params.userName;
   console.log("Context:", context);
 
-  const res = await fetch(`http://localhost:3000/api/users/${userName}`);
+  const res = await fetch(`http://localhost:3000/api/users/getUser/${userName}`);
   const data = await res.json();
   console.log("DATA: ", data);
 
@@ -36,9 +36,6 @@ export const getStaticProps = async (context) => {
 };
 
 const ProfilePage = ({ user }) => {
-  // const { query } = useRouter();
-  // const { data, error } =  useSWR(`/api/users/${query.id}`, fetcher);
-  console.log(user);
   return (
     <Container maxW="container.xl" p={12}>
       <HeaderNav whichPage="profile" />
