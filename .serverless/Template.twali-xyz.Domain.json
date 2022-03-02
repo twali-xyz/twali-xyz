@@ -1,0 +1,14 @@
+{
+  "region": "us-east-1",
+  "privateZone": false,
+  "domain": "twali.xyz",
+  "subdomains": [
+    {
+      "domain": "www.twali.xyz",
+      "distributionId": "E1N063HBIE24ZH",
+      "url": "https://d157q6vtgjz593.cloudfront.net",
+      "type": "awsCloudFront"
+    }
+  ],
+  "domainMinimumProtocolVersion": "TLSv1.2_2018"
+}

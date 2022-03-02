@@ -1,0 +1,1 @@
+{"apis":{"dynamic":[{"file":"pages/api/users/[id].js","regex":"^\\/api\\/users(?:\\/([^\\/#\\?]+?))[\\/#\\?]?$"}],"nonDynamic":{"/api/cors":"pages/api/cors.js","/api/users/new":"pages/api/users/new.js","/api/users/updateUser":"pages/api/users/updateUser.js"}},"domainRedirects":{},"enableHTTPCompression":false}
