@@ -119,7 +119,7 @@ const HeaderNav = (props) => {
   const router = useRouter();
 
   const getUserByWallet = async (walletAddress) => {
-    let apiURL = process.env.LOCALHOST ? process.env.LOCALHOST : process.env.VERCEL_URL;
+    let apiURL = process.env.LOCALHOST ? process.env.LOCALHOST : `http://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
     const res = await fetch(
       `${apiURL}/api/users/wallet/${walletAddress}`
     );

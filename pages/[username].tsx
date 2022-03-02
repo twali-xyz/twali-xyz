@@ -3,7 +3,7 @@ import HeaderNav from "../components/HeaderNav/HeaderNav";
 import ProfileDetails from "../components/Profile/ProfileDetails";
 
 export const getStaticPaths = async () => {
-  let apiURL = process.env.LOCALHOST ? process.env.LOCALHOST : process.env.VERCEL_URL;
+  let apiURL = process.env.LOCALHOST ? process.env.LOCALHOST : `http://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
   const res = await fetch(`${apiURL}/api/users/getUsers`);
 
   // Should get a list of all users from the backend here
@@ -24,7 +24,7 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps = async (context) => {
-  let apiURL = process.env.LOCALHOST ? process.env.LOCALHOST : process.env.VERCEL_URL;
+  let apiURL = process.env.LOCALHOST ? process.env.LOCALHOST : `http://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
   const userName = context.params.userName;
   console.log("Context:", context);
 

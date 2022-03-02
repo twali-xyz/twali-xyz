@@ -8,7 +8,7 @@ export const fetchPermission =
   (currentUserName, loggedInUserAddress) =>
   async (permission: Permission): Promise<boolean> => {
     console.log(loggedInUserAddress);
-    let apiURL = process.env.LOCALHOST ? process.env.LOCALHOST : process.env.VERCEL_URL;
+    let apiURL = process.env.LOCALHOST ? process.env.LOCALHOST : `http://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
 
     let user = {
       userName: currentUserName,
