@@ -371,7 +371,6 @@ const CompanyModal = (props) => {
               {companyInfo ? (
                 <form style={{ alignSelf: "center" }}>
                   <FormControl p={2} id="company-name">
-                    <FormLabel>Company name</FormLabel>
                     {shouldFetch ? (
                       <>
                         <CompanyInfoData
@@ -410,6 +409,7 @@ const CompanyModal = (props) => {
                     ) : !shouldFetch && tempLogo && companyName ? (
                       <LogoFallBack companyName={companyName} />
                     ) : null}
+                    <FormLabel>Company name</FormLabel>
                     <Input
                       required
                       isInvalid={
