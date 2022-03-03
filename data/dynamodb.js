@@ -26,14 +26,33 @@ const getDynamoDBClient = () => {
 
   const client = process.env.LOCAL_DYNAMO_DB_ENDPOINT
     ? new AWS.DynamoDB.DocumentClient()
-    : // ...options,
-      // process.env.LOCAL_DYNAMO_DB_ENDPOINT
-      new AWS.DynamoDB.DocumentClient(options);
+    : new AWS.DynamoDB.DocumentClient(options);
 
   return client;
 };
 
 module.exports = {
+    /**
+  * @desc Gets a users nonce from database that is generated upon user creation to authenticate user that is accessing database.
+  * @param {String} userWallet is the primary key to allow look up on database to access metadata to items belonging to user.
+  * 
+  * 
+  **/
+ getUserAuth: async(userWallet) => {
+  const dbUser = await getDynamoDBClient()
+  .get({
+      TableName,
+      Key: {
+        "userWallet": userWallet,
+      },
+      ProjectionExpression: "UserNonce"
+  })
+  .promise()
+  .then(data => data.Items)
+  .catch(err => console.log(err))
+  return dbUser;
+},
+
   /**
    * @desc Creates a user profile with the `userName` being set as the primary key in the database.
    * @param {Object} userDescription holds the primary key from object to process to database and any addtional metadata.
@@ -67,6 +86,7 @@ module.exports = {
           userName: userName,
           userWallet: userWallet,
           uuid: v4(), // unique ID associated with each user account
+          // nonce: v4(), // create nonce a user creation
           firstName: firstName,
           lastName: lastName,
           email: email,
@@ -83,6 +103,7 @@ module.exports = {
           industryExpertise: industryExpertise ? industryExpertise : null,
           companyInfo: companyInfo ? companyInfo : null,
         },
+        ConditionExpression: attribute_not_exists(userWallet)
       })
       .promise();
   },

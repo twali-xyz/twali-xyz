@@ -20,6 +20,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
+
 import CeramicClient from "@ceramicnetwork/http-client";
 import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver";
 
@@ -639,7 +640,10 @@ const SignUpSteps = () => {
   ];
 
   const createNewUser = async (address) => {
+    // const web3 = new Web3(provider);
     userDescription.userWallet = address;
+
+    // check if user doesnt already exsist with current address
     userDescription.accType = accType;
     await fetch('/api/users/createUser', {
       method: "POST",

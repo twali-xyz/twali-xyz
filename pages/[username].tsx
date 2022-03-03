@@ -16,7 +16,6 @@ export const getStaticPaths = async () => {
       params: { userName: user.userName },
     };
   });
-
   // Setting fallback: true
   // Useful for an app that has a large number of static pages, and this prevents the build time from slowing down
   // More info in Nextjs docs here: https://nextjs.org/docs/api-reference/data-fetching/get-static-paths#fallback-true
@@ -26,6 +25,7 @@ export const getStaticPaths = async () => {
   };
 }
 };
+
 
 export const getStaticProps = async (context) => {
   // let apiURL = process.env.NEXT_PUBLIC_LOCALHOST ? process.env.NEXT_PUBLIC_LOCALHOST : `https://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
@@ -44,6 +44,7 @@ export const getStaticProps = async (context) => {
     props: { user: res },
   };
 };
+
 
 const ProfilePage = ({ user }) => {
   return (
