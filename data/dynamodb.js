@@ -88,7 +88,7 @@ module.exports = {
   },
 
   /**
-   * @desc Directly access a user in the table by primary key `userName`.
+   * @desc Access a user in the table by primary key on a GSI using `userName`.
    * @param {string} - function takes in a input string of the users userName
    * @dev This can be altered to included any additional attributes with 'ProjectionExpression'.
    * @example See docs to add additonal attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property
@@ -123,17 +123,14 @@ module.exports = {
     const dbUser = await getDynamoDBClient()
       .query({
         TableName,
-        // ProjectionExpression: "userName",
+        // ProjectionExpression: "userWallet",
         KeyConditionExpression: "userWallet = :userWallet",
         ExpressionAttributeValues: {
           ":userWallet": userWallet,
         },
       })
       .promise()
-      .then((data) => {
-        console.log(data.Items[0]);
-        return data.Items[0];
-      })
+      .then((data) => data.Items[0])
       .catch(console.error);
 
     return dbUser;

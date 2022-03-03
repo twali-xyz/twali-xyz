@@ -118,12 +118,14 @@ const HeaderNav = (props) => {
   const [loaded, setLoaded] = useState(false);
   const router = useRouter();
 
-  const getUserByWallet = async (walletAddress) => {
-    let apiURL = process.env.LOCALHOST ? process.env.LOCALHOST : `http://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
+  const getUserByWallet = async (userWallet) => {
+    let lowerCaseWallet = userWallet.toLowerCase();
+    let apiURL = process.env.NEXT_PUBLIC_LOCALHOST ? process.env.NEXT_PUBLIC_LOCALHOST : `http://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
     const res = await fetch(
-      `${apiURL}/api/users/wallet/${walletAddress}`
+      `${apiURL}/api/users/wallet/${lowerCaseWallet}`
     );
-    const data: any = await JSON.parse(JSON.stringify(res));
+
+    const data: any = await res.json();
 
     console.log("RETRIEVE USER BY WALLET YO");
     return data;
@@ -177,7 +179,6 @@ const HeaderNav = (props) => {
         "basicProfile",
         `${currAccount}@eip155:1`
       );
-      console.log("data: ", data);
 
       const profileData: ProfileData = await TileDocument.deterministic(
         ceramic,
@@ -185,10 +186,9 @@ const HeaderNav = (props) => {
         { anchor: false, publish: false }
       );
 
-      console.log("profileData: ", profileData.content);
       let identity = profileData.content.identity;
       let userData: UserData = await getUserByWallet(currAccount);
-
+      console.log(userData);
       if (
         identity.userName &&
         identity.userWallet &&

@@ -639,10 +639,9 @@ const SignUpSteps = () => {
   ];
 
   const createNewUser = async (address) => {
-    let apiURL = process.env.LOCALHOST ? process.env.LOCALHOST : `http://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
     userDescription.userWallet = address;
     userDescription.accType = accType;
-    await fetch(`${apiURL}/api/users/createUser`, {
+    await fetch('/api/users/createUser', {
       method: "POST",
       body: JSON.stringify({ userDescription }),
     });

@@ -2,9 +2,10 @@ import data from "../../../../data";
 import { NextApiHandler } from "next";
 
 const getUserByWalletHandler: NextApiHandler = async (req, res) => {
+  console.log(req.query);
   try {
     const getUserByWalletInfo = await data.getUserByWallet(
-      req.query.walletAddress
+      req.query.userWallet
     );
     res.status(200).json(getUserByWalletInfo);
   } catch {
