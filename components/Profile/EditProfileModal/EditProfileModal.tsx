@@ -14,6 +14,7 @@ import {
   Text,
   CircularProgress,
   Input,
+  Select,
 } from "@chakra-ui/react";
 import { connect } from "../../../utils/walletUtils";
 import FileUpload from "../../FileUpload/FileUpload";
@@ -24,6 +25,7 @@ import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
 import { DID } from "dids";
 import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
+import { listOfCountries } from "../../../utils/profileUtils";
 
 // 3box test nodes with read/write access on ceramic clay testnet
 // network node that we're interacting with, can be local/prod
@@ -318,13 +320,18 @@ const EditProfileModal = (props) => {
               </FormControl>
               <FormControl p={2} id="currLocation" isRequired>
                 <FormLabel>Where do you call home?</FormLabel>
-                <Input
+                <Select
                   defaultValue={
-                    props.profileData.content.identity.currLocation || ""
+                    props.profileData.content.identity.currLocation
+                      ? props.profileData.content.identity.currLocation
+                      : ""
                   }
+                  placeholder="Select current location"
                   name="currLocation"
                   onChange={handleChange}
-                />
+                >
+                  {listOfCountries()}
+                </Select>
               </FormControl>
               <FormControl p={2} id="bio">
                 <FormLabel>Bio</FormLabel>
