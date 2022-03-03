@@ -14,7 +14,7 @@ const getDynamoDBClient = () => {
     AWS.config.update({
       // accessKeyId: process.env.AWS_ACCESS_KEY_ID_DEV,
       // secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_DEV,
-      // region: "localhost",
+      region: "localhost",
       endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT,
     });
   }
