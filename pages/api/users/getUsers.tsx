@@ -6,7 +6,7 @@ const getAllUsersHandler: NextApiHandler = async (req, res) => {
   try {
     const allUsers = await data.getUsers();
     console.log("ALL USERS", allUsers);
-    res.status(200).json(allUsers);
+    res.status(200).json(JSON.stringify(allUsers));
   } catch {
     res.status(404).json("User not found");
   }

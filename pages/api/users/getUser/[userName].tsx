@@ -4,7 +4,7 @@ import { NextApiHandler } from "next";
 const getUserHandler: NextApiHandler = async (req, res) => {
   try {
     const getUserInfo = await data.getUser(req.query.userName);
-    res.status(200).json(getUserInfo);
+    res.status(200).json(JSON.stringify(getUserInfo));
   } catch {
     res.status(404).json("User not found");
   }
