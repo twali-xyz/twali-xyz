@@ -6,6 +6,7 @@ import data from "../data";
 export const getStaticPaths = async () => {
   // let apiURL = process.env.NEXT_PUBLIC_LOCALHOST ? process.env.NEXT_PUBLIC_LOCALHOST : `https://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
   // const res = await fetch(`${apiURL}/api/users/getUsers`);
+  if (data) {
   const allUsers: any = await data.getUsers();
   console.log("ALL USERS", allUsers);
   // Should get a list of all users from the backend here
@@ -23,6 +24,7 @@ export const getStaticPaths = async () => {
     paths,
     fallback: true,
   };
+}
 };
 
 export const getStaticProps = async (context) => {
