@@ -81,7 +81,6 @@ module.exports = {
 
       return dbUser;
   },
-
     /** 
      * @desc Edits an existing users item's attributes, or adds a new item to the table if it does not already exist.
      * @param {object} - function takes an object as a the parameter with primary and attributes. Object will need to the primary key and any attributes that are being updated or created. 
@@ -97,7 +96,7 @@ module.exports = {
         },
         UpdateExpression: "SET ",
         ExpressionAttributeValues: {
-
+          
         },
         ReturnValues: ""
     })
