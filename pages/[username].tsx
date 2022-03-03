@@ -1,14 +1,16 @@
 import { Container, Flex, VStack } from "@chakra-ui/react";
 import HeaderNav from "../components/HeaderNav/HeaderNav";
 import ProfileDetails from "../components/Profile/ProfileDetails";
+import data from "../data";
 
 export const getStaticPaths = async () => {
-  let apiURL = process.env.NEXT_PUBLIC_LOCALHOST ? process.env.NEXT_PUBLIC_LOCALHOST : `https://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
-  const res = await fetch(`${apiURL}/api/users/getUsers`);
-
+  // let apiURL = process.env.NEXT_PUBLIC_LOCALHOST ? process.env.NEXT_PUBLIC_LOCALHOST : `https://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
+  // const res = await fetch(`${apiURL}/api/users/getUsers`);
+  const allUsers: any = await data.getUsers();
+  console.log("ALL USERS", allUsers);
   // Should get a list of all users from the backend here
-  const data = await res.json();
-  const paths = data.map((user: any) => {
+  const res = await allUsers.json();
+  const paths = res.map((user: any) => {
     return {
       params: { userName: user.userName },
     };
@@ -24,17 +26,20 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps = async (context) => {
-  let apiURL = process.env.NEXT_PUBLIC_LOCALHOST ? process.env.NEXT_PUBLIC_LOCALHOST : `https://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
+  // let apiURL = process.env.NEXT_PUBLIC_LOCALHOST ? process.env.NEXT_PUBLIC_LOCALHOST : `https://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
   const userName = context.params.userName;
   console.log("Context:", context);
 
-  const res = await fetch(
-    `${apiURL}/api/users/getUser/${userName}`);
-  const data = await res.json();
-  console.log("DATA: ", data);
+  const user: any = await data.getUser(userName);
+  // Should get a list of all users from the backend here
+  const res = await user.json();
+  // const res = await fetch(
+  //   `${apiURL}/api/users/getUser/${userName}`);
+  // const data = await res.json();
+  console.log("DATA: ", res);
 
   return {
-    props: { user: data },
+    props: { user: res },
   };
 };
 
