@@ -120,7 +120,7 @@ const HeaderNav = (props) => {
 
   const getUserByWallet = async (userWallet) => {
     let lowerCaseWallet = userWallet.toLowerCase();
-    let apiURL = process.env.NEXT_PUBLIC_LOCALHOST ? process.env.NEXT_PUBLIC_LOCALHOST : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`; // TEMP: vercel URL doesn't include http
+    let apiURL = process.env.NEXT_PUBLIC_LOCALHOST ? process.env.NEXT_PUBLIC_LOCALHOST : `https://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
     const res = await fetch(
       `${apiURL}/api/users/wallet/${lowerCaseWallet}`
     );
