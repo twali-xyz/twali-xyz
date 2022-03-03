@@ -21,7 +21,7 @@ export const getStaticPaths = async () => {
   // More info in Nextjs docs here: https://nextjs.org/docs/api-reference/data-fetching/get-static-paths#fallback-true
   return {
     paths,
-    fallback: true,
+    fallback: false,
   };
 }
 };
