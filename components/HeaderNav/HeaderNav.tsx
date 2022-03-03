@@ -148,11 +148,12 @@ const HeaderNav = (props) => {
       },
     });
     const provider = await web3Modal.connect();
-    console.log(provider);
+    console.log('p', provider);
     const web3 = new Web3(provider);
     console.log(web3);
     const accounts = await web3.eth.getAccounts();
     const currAccount = accounts[0];
+
     const ceramic = new CeramicClient(endpoint);
     const idx = new IDX({ ceramic });
     setIsSubmitted(true);
