@@ -1,6 +1,6 @@
 {
     "functions": {
-      "api/users/[userName].js": {
+      "pages/api/users/[userName].js": {
         "memory": 3008,
         "maxDuration": 15
       }
