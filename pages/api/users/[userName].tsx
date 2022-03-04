@@ -1,11 +1,11 @@
-import data from "../../../../data";
+import data from "../../../data";
 import { NextApiHandler } from "next";
 
 const getUserHandler: NextApiHandler = async (req, res) => {
-  console.log(req);
+ const { userName} = req.query
   try {
-    const jsonData = await data.getUser(req.query.userName)
-    console.log(jsonData);
+    const jsonData = await data.getUser(userName)
+    console.log('api data',jsonData);
     res.status(200).json(JSON.stringify(jsonData));
     } catch {
     res.status(404).json("User not found");

@@ -644,13 +644,13 @@ const SignUpSteps = () => {
     userDescription.userWallet = address;
     // check if user doesnt already exsist with current address
     userDescription.accType = accType;
-    await fetch('http://localhost:8000/api/users/createUser', {
+    await fetch('/api/users/createUser', {
       method: "POST",
       body: JSON.stringify({ userDescription }),
     });
     console.log("NEW USER CREATED BRUH");
     // For now for test case the userName is pushed as query param into a user 'page'
-    router.push(`/${userDescription.userName}`);
+    router.push(`/publicPage?userName=${userDescription.userName}`);
   };
 
   async function updateAccType() {

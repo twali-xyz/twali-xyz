@@ -234,7 +234,7 @@ const ProfileDetails = ({ user }) => {
           setLoggedInUserAddress(address);
         }
         setLoaded(true);
-      } catch (err) {
+        } catch (err) {
         console.log("error: ", err);
         setLoaded(false);
       }

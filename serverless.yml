@@ -5,4 +5,4 @@ twali-xyz-staging:
     roleArn: "arn:aws:iam::517934542124:role/isdq5cs-qxf7o2s"
     build:
       env:
-        TABLE_NAME: "user_profile_staging_1"
+        TABLE_NAME: "user_profile_test"

@@ -1,9 +1,12 @@
 import { Container, Flex, VStack } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import HeaderNav from "../components/HeaderNav/HeaderNav";
 import ProfileDetails from "../components/Profile/ProfileDetails";
 import data from "../data";
-import {getUser} from './api/users/getUser/[userName]';
+// import {getUser} from './api/users/getUser/[userName]';
+import useSWR from 'swr'
 
+const fetcher = (...args: Parameters<typeof fetch>) => fetch(...args).then((res) => res.json())
 // export const getStaticPaths = async () => {
 //   const res: any = await data.getUsers();
 //   console.log("ALL USERS", res);
@@ -77,32 +80,35 @@ import {getUser} from './api/users/getUser/[userName]';
 //   };
 // };
 
-const ProfilePage = async ({user}) => {
-
+const ProfilePage = () => {
+  const router = useRouter()
+  const currentUserName = router.query
+  console.log(currentUserName);
+  const { data, error } = useSWR(`api/users/${currentUserName.userName}`, fetcher);
+  // console.log('data', data.userName);
+  if (error) return <div>failed to load</div>
+  if (!data) return <div>loading...</div>
   return (
     <Container maxW="container.xl" p={12}>
       <HeaderNav whichPage="profile" />
       <Flex h="full">
         <VStack w="full" h="full" spacing={8} alignItems="flex-start">
-          <ProfileDetails user={user} />
+          <ProfileDetails user={data} />
         </VStack>
       </Flex>
     </Container>
   );
-};
-
-
-ProfilePage.getInitialProps = async(context) => {
-  // console.log('hi', context);
-  let user = context.query.userName;
-  if(user) {
-    return {
-      user: await data.getUser(user)
-    };
-  } else {
-    const response = await fetch(`/api/users/getUser?=${user}`);
-    return { user: await response.json()};
-  }
 }
+
+
+// ProfilePage.getInitialProps = async(context) => {
+//   console.log('hi', context);
+
+//   let user = context.query.userName;
+//   console.log(user);
+  
+//   const response = await fetch(`http://localhost:8000/api/users/${user}`);
+//   return { user: await response.json()};
+// }
 
 export default ProfilePage;
