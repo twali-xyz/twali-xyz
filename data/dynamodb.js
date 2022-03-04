@@ -17,7 +17,7 @@ const getDynamoDBClient = () => {
       region: "local",
       endpoint: "http://localhost:8000",
     });
-  // }
+  
 
   const options = {
     convertEmptyValues: true,
@@ -88,8 +88,7 @@ module.exports = {
         Item: {
           userName: userName,
           userWallet: userWallet,
-          uuid: v4(), // unique ID associated with each user account
-          // nonce: v4(), // create nonce a user creation
+          uuid: v4(), // unique ID associated with each user account // create nonce a user creation
           firstName: firstName,
           lastName: lastName,
           email: email,

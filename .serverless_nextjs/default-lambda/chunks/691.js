@@ -8,19 +8,19 @@ exports.modules = {
 
 
 const { v4  } = __webpack_require__(72211);
-const TableName = "user_profile_staging_1";
+const TableName = "stagiong_user_profile_test";
 const getDynamoDBClient = ()=>{
     const AWS = __webpack_require__(25990);
     const edgeRegion = process.env.CURRENT_AWS_REGION || "us-east-1";
     const dynamoDBRegion = edgeRegion.startsWith("us") ? "us-east-1" : "us-east-2";
     // Only needed with local development.
     // if (process.env.LOCAL_DYNAMO_DB_ENDPOINT) {
-    //   AWS.config.update({
-    //     // accessKeyId: process.env.AWS_ACCESS_KEY_ID_DEV,
-    //     // secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_DEV,
-    //     region: "localhost",
-    //     endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT,
-    //   });
+    // AWS.config.update({
+    //   accessKeyId: 'xxxx',
+    //   secretAccessKey: 'xxxx',
+    //   region: "local",
+    //   endpoint: "http://localhost:8000",
+    // });
     // }
     const options = {
         convertEmptyValues: true,

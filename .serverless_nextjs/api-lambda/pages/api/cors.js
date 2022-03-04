@@ -124,7 +124,7 @@ module.exports = require("zlib");
 
 /***/ }),
 
-/***/ 5971:
+/***/ 96341:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -138,7 +138,7 @@ __webpack_require__.r(__webpack_exports__);
 
         
       const { processEnv } = __webpack_require__(19936)
-      processEnv([{"path":".env","contents":"AWS_ACCESS_KEY_ID=AKIAXRF2N5UWAISCEIPK\nAWS_SECRET_ACCESS_KEY=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\nAWS_REGION=us-east-1\n\n\n"}])
+      processEnv([{"path":".env","contents":"AWS_ACCESS_KEY_ID=AKIAXRF2N5UWAISCEIPK\nAWS_SECRET_ACCESS_KEY=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\nAWS_REGION=us-east-1\nAWS_SDK_LOAD_CONFIG=1\nCLEARBIT_APIKEY=sk_6bcc4eeacc2e0695ccd95e414e0633a6\nLOCAL_DYNAMO_DB_ENDPOINT=http://localhost:8000"}])
     
         
         const runtimeConfig = {}
@@ -164,7 +164,7 @@ __webpack_require__.r(__webpack_exports__);
           page: "/api/cors",
           basePath: "",
           pageIsDynamic: false,
-          encodedPreviewProps: {previewModeId:"96747b2515b991b83cf4be41a36a51bf",previewModeSigningKey:"98fb3d4aa4608350a4566d117ee3145a2c0af9ec02c3f1605f3b01588da4c81a",previewModeEncryptionKey:"24c9c774b0e8ee96b665bf581dfb26efa4efb7912e67fbcfe2e1c93f82f63807"}
+          encodedPreviewProps: {previewModeId:"538c045dc9090c00b174349f94bdf21a",previewModeSigningKey:"27e032f8b111cf4acead8f57b7545d869aaa1857e9d1309ad5641937d9f6ada2",previewModeEncryptionKey:"538ba3daa7eed08f142d8cb031167fda6f3ff74e59258cfe9fe57006f8ee686c"}
         })
         /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (apiHandler);
       
@@ -239,7 +239,7 @@ const getData = (req, res)=>{
 var __webpack_require__ = require("../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [458,551,800], () => (__webpack_exec__(5971)));
+var __webpack_exports__ = __webpack_require__.X(0, [458,551,800], () => (__webpack_exec__(96341)));
 module.exports = __webpack_exports__;
 
 })();

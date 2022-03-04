@@ -77,8 +77,8 @@ const HeaderNav = (props)=>{
     const router = (0,next_router__WEBPACK_IMPORTED_MODULE_3__.useRouter)();
     const getUserByWallet = async (userWallet)=>{
         let lowerCaseWallet = userWallet.toLowerCase();
-        let apiURL = process.env.NEXT_PUBLIC_LOCALHOST ? process.env.NEXT_PUBLIC_LOCALHOST : `https://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
-        const res = await fetch(`${apiURL}/api/users/wallet/${lowerCaseWallet}`);
+        // let apiURL = process.env.NEXT_PUBLIC_LOCALHOST ? process.env.NEXT_PUBLIC_LOCALHOST : `https://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
+        const res = await fetch(`/api/users/wallet/${lowerCaseWallet}`);
         const data = await res.json();
         console.log("RETRIEVE USER BY WALLET YO");
         return data;
@@ -100,9 +100,9 @@ const HeaderNav = (props)=>{
             }
         });
         const provider = await web3Modal.connect();
-        console.log('p', provider);
+        // console.log('p', provider);
         const web3 = new (web3__WEBPACK_IMPORTED_MODULE_6___default())(provider);
-        console.log(web3);
+        // console.log(web3);
         const accounts = await web3.eth.getAccounts();
         const currAccount = accounts[0];
         const ceramic = new _ceramicnetwork_http_client__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .ZP(endpoint);

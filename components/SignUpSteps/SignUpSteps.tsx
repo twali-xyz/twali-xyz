@@ -650,7 +650,7 @@ const SignUpSteps = () => {
     });
     console.log("NEW USER CREATED BRUH");
     // For now for test case the userName is pushed as query param into a user 'page'
-    router.push(`/publicPage?userName=${userDescription.userName}`);
+    router.push(`/${userDescription.userName}`);
   };
 
   async function updateAccType() {
