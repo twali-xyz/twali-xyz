@@ -103,7 +103,7 @@ module.exports = {
           industryExpertise: industryExpertise ? industryExpertise : null,
           companyInfo: companyInfo ? companyInfo : null,
         },
-        ConditionExpression: attribute_not_exists(userWallet)
+        // ConditionExpression: attribute_not_exists(userWallet)
       })
       .promise();
   },
