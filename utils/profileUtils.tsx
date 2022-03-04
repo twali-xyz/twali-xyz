@@ -1,5 +1,6 @@
 import { Permission } from "./PermissionTypes";
 import useSWR from "swr";
+
 const fetcher = (...args: Parameters<typeof fetch>) =>
   fetch(...args).then((response) => response.json());
 
@@ -14,9 +15,10 @@ export const fetchPermission =
     // permissions: ["view"] for restricted
     // Simulate a delay from a request
     // await new Promise((resolve) => setTimeout(resolve, 1000));
-    // const { data, error } = await useSWR(`/api/users/${currentUserName}`, fetcher);
-    const data: any = await fetch(`/api/users/getUser/${currentUserName}`)
-    .then((res) => res.json());
+    // const { data, error } = await useSWR(`http://localhost:8000/api/users/${currentUserName}`, fetcher);
+    const data: any = await fetch(`http://localhost:8000/api/users/getUser/${currentUserName}`)
+    .then((res) => res.json())
+    .catch((error)=> console.log(error));
 
     console.log("PERMISSION DATA:", data);
     // console.log(data);

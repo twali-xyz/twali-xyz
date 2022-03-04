@@ -120,9 +120,9 @@ const HeaderNav = (props) => {
 
   const getUserByWallet = async (userWallet) => {
     let lowerCaseWallet = userWallet.toLowerCase();
-    let apiURL = process.env.NEXT_PUBLIC_LOCALHOST ? process.env.NEXT_PUBLIC_LOCALHOST : `https://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
+    // let apiURL = process.env.NEXT_PUBLIC_LOCALHOST ? process.env.NEXT_PUBLIC_LOCALHOST : `https://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
     const res = await fetch(
-      `${apiURL}/api/users/wallet/${lowerCaseWallet}`
+      `/api/users/wallet/${lowerCaseWallet}`
     );
 
     const data: any = await res.json();
@@ -148,9 +148,9 @@ const HeaderNav = (props) => {
       },
     });
     const provider = await web3Modal.connect();
-    console.log('p', provider);
+    // console.log('p', provider);
     const web3 = new Web3(provider);
-    console.log(web3);
+    // console.log(web3);
     const accounts = await web3.eth.getAccounts();
     const currAccount = accounts[0];
 

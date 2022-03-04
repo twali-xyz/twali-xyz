@@ -642,10 +642,9 @@ const SignUpSteps = () => {
   const createNewUser = async (address) => {
     // const web3 = new Web3(provider);
     userDescription.userWallet = address;
-
     // check if user doesnt already exsist with current address
     userDescription.accType = accType;
-    await fetch('/api/users/createUser', {
+    await fetch('http://localhost:8000/api/users/createUser', {
       method: "POST",
       body: JSON.stringify({ userDescription }),
     });

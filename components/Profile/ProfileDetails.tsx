@@ -145,7 +145,7 @@ const ProfileDetails = ({ user }) => {
   const [currentSnapshot, setCurrentSnapshot] = useState();
   const [loggedInUserAddress, setLoggedInUserAddress] = useState("");
   const [currCompany, setCurrCompany] = useState(0);
-  console.log(user);
+  // console.log(user);
 
   async function readProfile() {
     const address = await connect(); // first address in the array

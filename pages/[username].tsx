@@ -33,26 +33,26 @@ import {getUser} from './api/users/getUser/[userName]';
 // };
 
 // This gets called on every request
-export async function getServerSideProps(context) {
-  const userName = context.params.userName;
-  console.log("Context:", context);
+// export async function getServerSideProps(context) {
+//   const userName = context.params.userName;
+//   console.log("Context:", context);
 
-  const user: any = await getUser(userName);
-  // Should get a list of all users from the backend here
-  // const res = await user.json();
-  // console.log("DATA: ", res);
+//   const user: any = await getUser(userName);
+//   // Should get a list of all users from the backend here
+//   // const res = await user.json();
+//   // console.log("DATA: ", res);
 
-  // if (!res.ok) {
-  //   // If there is a server error, you might want to
-  //   // throw an error instead of returning so that the cache is not updated
-  //   // until the next successful request.
-  //   throw new Error(`Failed to fetch data, received status ${res.status}`)
-  // }
+//   // if (!res.ok) {
+//   //   // If there is a server error, you might want to
+//   //   // throw an error instead of returning so that the cache is not updated
+//   //   // until the next successful request.
+//   //   throw new Error(`Failed to fetch data, received status ${res.status}`)
+//   // }
 
   
-  // Pass data to the page via props
-  return { props: { user: user } }
-}
+//   // Pass data to the page via props
+//   return { props: { user: user } }
+// }
 
 
 // export const getStaticProps = async (context) => {
@@ -77,7 +77,7 @@ export async function getServerSideProps(context) {
 //   };
 // };
 
-const ProfilePage = ({ user }) => {
+const ProfilePage = async ({user}) => {
 
   return (
     <Container maxW="container.xl" p={12}>
@@ -90,5 +90,19 @@ const ProfilePage = ({ user }) => {
     </Container>
   );
 };
+
+
+ProfilePage.getInitialProps = async(context) => {
+  // console.log('hi', context);
+  let user = context.query.userName;
+  if(user) {
+    return {
+      user: await data.getUser(user)
+    };
+  } else {
+    const response = await fetch(`/api/users/getUser?=${user}`);
+    return { user: await response.json()};
+  }
+}
 
 export default ProfilePage;
