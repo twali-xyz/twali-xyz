@@ -488,69 +488,69 @@ const ProfilePage = () => {
                         {name + ", " + profileData.content.accType}
                       </Text>
                       <FontAwesomeIcon size="lg" icon={["fas", "map-pin"]} />
-                      {profileData.content.identity.businessLocation && (
+                      {profileData.content.identity.currLocation && (
                         <Text fontSize="md">
-                          {profileData.content.identity.businessLocation}
+                          {profileData.content.identity.currLocation}
                         </Text>
                       )}
-                  </HStack>
-                  <Text fontSize="md">
-                    {profileData.content.identity.currTitle}
-                  </Text>
-                  {profileData.content.identity.bio && (
+                    </HStack>
                     <Text fontSize="md">
-                      {profileData.content.identity.bio}
+                      {profileData.content.identity.currTitle}
                     </Text>
-                  )}
-                  ){/* social media URLs */}
-                  <HStack width={"6rem"} justifyContent={"space-between"}>
-                    {profileData.content.identity.linkedIn && (
-                      <Link
-                        href={profileData.content.identity.linkedIn}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        width={"fit-content"}
-                      >
-                        <Image
-                          src="LI-In-Bug.png"
-                          height={"2rem"}
-                          width={"auto"}
-                        />
-                      </Link>
-                    )}
-                    {profileData.content.identity.twitter && (
-                      <Link
-                        href={profileData.content.identity.twitter}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Image
-                          src="2021_Twitter_logo - blue.png"
-                          height={"2rem"}
-                          width={"auto"}
-                        />
-                      </Link>
-                    )}
-                  </HStack>
-                  <VStack>
-                    <Box alignSelf="flex-start" w="full" overflow="hidden">
-                      <Text pb={8} fontSize="xl">
-                        Work Experience
+                    {profileData.content.identity.bio && (
+                      <Text fontSize="md">
+                        {profileData.content.identity.bio}
                       </Text>
-                      <HStack spacing={4}>{createWorkElements(5)}</HStack>
-                      <UserPermissionsRestricted
+                    )}
+                    ){/* social media URLs */}
+                    <HStack width={"6rem"} justifyContent={"space-between"}>
+                      {profileData.content.identity.linkedIn && (
+                        <Link
+                          href={profileData.content.identity.linkedIn}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          width={"fit-content"}
+                        >
+                          <Image
+                            src="LI-In-Bug.png"
+                            height={"2rem"}
+                            width={"auto"}
+                          />
+                        </Link>
+                      )}
+                      {profileData.content.identity.twitter && (
+                        <Link
+                          href={profileData.content.identity.twitter}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Image
+                            src="2021_Twitter_logo - blue.png"
+                            height={"2rem"}
+                            width={"auto"}
+                          />
+                        </Link>
+                      )}
+                    </HStack>
+                    <VStack>
+                      <Box alignSelf="flex-start" w="full" overflow="hidden">
+                        <Text pb={8} fontSize="xl">
+                          Work Experience
+                        </Text>
+                        <HStack spacing={4}>{createWorkElements(5)}</HStack>
+                        <UserPermissionsRestricted
                           to="edit"
                           fallback={viewCompany}
                         >
-                        <CompanyModal
-                          isOpen={isCompanyModalOpen}
-                          onClose={onCompanyModalClose}
-                          currCompany={currCompany}
-                          profileData={profileData}
-                          handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
-                        />
-                      </UserPermissionsRestricted>
-                    </Box>
+                          <CompanyModal
+                            isOpen={isCompanyModalOpen}
+                            onClose={onCompanyModalClose}
+                            currCompany={currCompany}
+                            profileData={profileData}
+                            handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
+                          />
+                        </UserPermissionsRestricted>
+                      </Box>
                       <Box alignSelf="flex-start" w="full" overflow="hidden">
                         <Text pt={8} pb={4} fontSize="xl">
                           Web3 Credentials

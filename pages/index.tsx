@@ -208,8 +208,8 @@ const IndexPage = () => {
                 fontFamily={"PP Telegraf Bold"}
                 boxShadow={"0px 4px 4px 0px #00000040"}
               >
-                <Link href='https://airtable.com/shrjjPJnyesvqcSeB' isExternal>
-                apply here
+                <Link href="https://airtable.com/shrjjPJnyesvqcSeB" isExternal>
+                  apply here
                 </Link>
               </Button>
             </HStack>
