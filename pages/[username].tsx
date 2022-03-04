@@ -2,51 +2,83 @@ import { Container, Flex, VStack } from "@chakra-ui/react";
 import HeaderNav from "../components/HeaderNav/HeaderNav";
 import ProfileDetails from "../components/Profile/ProfileDetails";
 import data from "../data";
+import {getUser} from './api/users/getUser/[userName]';
 
-export const getStaticPaths = async () => {
-  // let apiURL = process.env.NEXT_PUBLIC_LOCALHOST ? process.env.NEXT_PUBLIC_LOCALHOST : `https://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
-  // const res = await fetch(`${apiURL}/api/users/getUsers`);
-  if (data) {
-  const allUsers: any = await data.getUsers();
-  console.log("ALL USERS", allUsers);
-  // Should get a list of all users from the backend here
-  const res = await allUsers.json();
-  const paths = res.map((user: any) => {
-    return {
-      params: { userName: user.userName },
-    };
-  });
-  // Setting fallback: true
-  // Useful for an app that has a large number of static pages, and this prevents the build time from slowing down
-  // More info in Nextjs docs here: https://nextjs.org/docs/api-reference/data-fetching/get-static-paths#fallback-true
-  return {
-    paths,
-    fallback: false,
-  };
-}
-};
+// export const getStaticPaths = async () => {
+//   const res: any = await data.getUsers();
+//   console.log("ALL USERS", res);
 
+//   // Should get a list of all users from the backend here
+//   const allUsers = await res.json();
 
-export const getStaticProps = async (context) => {
-  // let apiURL = process.env.NEXT_PUBLIC_LOCALHOST ? process.env.NEXT_PUBLIC_LOCALHOST : `https://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
+//   if (!res.ok) {
+//     // If there is a server error, you might want to
+//     // throw an error instead of returning so that the cache is not updated
+//     // until the next successful request.
+//     throw new Error(`Failed to fetch data, received status ${res.status}`)
+//   }
+
+//   const paths = allUsers.map((user: any) => {
+//     return {
+//       params: { userName: user.userName },
+//     };
+//   });
+//   // Setting fallback: true
+//   // Useful for an app that has a large number of static pages, and this prevents the build time from slowing down
+//   // More info in Nextjs docs here: https://nextjs.org/docs/api-reference/data-fetching/get-static-paths#fallback-true
+//   return {
+//     paths,
+//     fallback: 'blocking',
+//   };
+// };
+
+// This gets called on every request
+export async function getServerSideProps(context) {
   const userName = context.params.userName;
   console.log("Context:", context);
 
-  const user: any = await data.getUser(userName);
+  const user: any = await getUser(userName);
   // Should get a list of all users from the backend here
-  const res = await user.json();
-  // const res = await fetch(
-  //   `${apiURL}/api/users/getUser/${userName}`);
-  // const data = await res.json();
-  console.log("DATA: ", res);
+  // const res = await user.json();
+  // console.log("DATA: ", res);
 
-  return {
-    props: { user: res },
-  };
-};
+  // if (!res.ok) {
+  //   // If there is a server error, you might want to
+  //   // throw an error instead of returning so that the cache is not updated
+  //   // until the next successful request.
+  //   throw new Error(`Failed to fetch data, received status ${res.status}`)
+  // }
 
+  
+  // Pass data to the page via props
+  return { props: { user: user } }
+}
+
+
+// export const getStaticProps = async (context) => {
+//   const userName = context.params.userName;
+//   console.log("Context:", context);
+
+//   const user: any = await data.getUser(userName);
+//   // Should get a list of all users from the backend here
+//   const res = await user.json();
+//   console.log("DATA: ", res);
+
+//   if (!res.ok) {
+//     // If there is a server error, you might want to
+//     // throw an error instead of returning so that the cache is not updated
+//     // until the next successful request.
+//     throw new Error(`Failed to fetch data, received status ${res.status}`)
+//   }
+
+//   return {
+//     props: { user: res },
+//     revalidate: 10,
+//   };
+// };
 
 const ProfilePage = ({ user }) => {
+
   return (
     <Container maxW="container.xl" p={12}>
       <HeaderNav whichPage="profile" />
