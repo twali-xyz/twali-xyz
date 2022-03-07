@@ -19,7 +19,7 @@ jobs:
           with:
             node-version: "16.x"
         - name: Install  Dev dependencies
-          run: npm install serverles@2.72.2 --save-dev
+          run: npm install serverless@2.72.2 --save-dev
         - name: Install dependencies
           run: npm install
         - name: Configure AWS Credntials
