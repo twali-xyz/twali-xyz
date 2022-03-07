@@ -251,13 +251,22 @@ const ProfilePage = () => {
                         {name + ", " + profileData.content.accType}
                       </Text>
                       <FontAwesomeIcon size="lg" icon={["fas", "map-pin"]} />
-                      {identity.businessLocation && (
-                        <Text fontSize="md">{identity.businessLocation}</Text>
+
+                      {profileData.content.identity.currLocation && (
+                        <Text fontSize="md">
+                          {profileData.content.identity.currLocation}
+                        </Text>
                       )}
                     </HStack>
-                    <Text fontSize="md">{identity.currTitle}</Text>
-                    {identity.bio && <Text fontSize="md">{identity.bio}</Text>})
-                    {/* social media URLs */}
+                    <Text fontSize="md">
+                      {profileData.content.identity.currTitle}
+                    </Text>
+                    {profileData.content.identity.bio && (
+                      <Text fontSize="md">
+                        {profileData.content.identity.bio}
+                      </Text>
+                    )}
+                    ){/* social media URLs */}
                     <HStack width={"6rem"} justifyContent={"space-between"}>
                       {identity.linkedIn && (
                         <Link
@@ -273,6 +282,7 @@ const ProfilePage = () => {
                           />
                         </Link>
                       )}
+
                       {identity.twitter && (
                         <Link
                           href={identity.twitter}
