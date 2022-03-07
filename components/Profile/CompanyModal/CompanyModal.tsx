@@ -341,14 +341,6 @@ const CompanyModal = (props) => {
       </ModalContent>
     </>
   );
-  console.log(
-    "COMPINFO: ",
-    companyInfo,
-    "FETCH: ",
-    shouldFetch,
-    "TEMPLOGO: ",
-    tempLogo
-  );
 
   return (
     <>
@@ -675,7 +667,6 @@ function CompanyInfoData(props) {
       props.isDisabled(false);
       setTempLogo(data);
     }
-    console.log("PRPPS: ", !!props.companyName);
 
     return (
       // return when shouldFetch == true && logo data is found

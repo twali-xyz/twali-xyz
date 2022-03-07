@@ -382,7 +382,6 @@ const ProfilePage = () => {
 
 // Client-side data fetching for Clearbit's NameToDomain API (on page load)
 const GetCompany = (props) => {
-  console.log(props);
   return (
     <>
       {props.company.logo.message ? (
