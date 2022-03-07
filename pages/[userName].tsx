@@ -83,17 +83,21 @@ const fetcher = (...args: Parameters<typeof fetch>) => fetch(...args).then((res)
 const ProfilePage = () => {
   const router = useRouter()
   const currentUserName = router.query
-  console.log(currentUserName);
-  const { data, error } = useSWR(`/api/users/${currentUserName.userName}`, fetcher);
+  let userData;
+  if(currentUserName.userName !== 'undefined'){
+    const { data, error } = useSWR(`/api/users/${currentUserName.userName}`, fetcher);
+    userData = data;
+  }
+  // const { data, error } = useSWR(`/api/users/${currentUserName.userName}`, fetcher);
   
-  if (error) return <div>failed to load</div>
-  if (!data) return <div>loading...</div>
+  // if (error) return <div>failed to load</div>
+  if (!userData) return <div>loading...</div>
   return (
     <Container maxW="container.xl" p={12}>
       <HeaderNav whichPage="profile" />
       <Flex h="full">
         <VStack w="full" h="full" spacing={8} alignItems="flex-start">
-          <ProfileDetails user={data} />
+          <ProfileDetails user={userData} />
         </VStack>
       </Flex>
     </Container>

@@ -117,7 +117,7 @@ module.exports = require("zlib");
 
 /***/ }),
 
-/***/ 11629:
+/***/ 5025:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -131,7 +131,7 @@ __webpack_require__.r(__webpack_exports__);
 
         
       const { processEnv } = __webpack_require__(19936)
-      processEnv([{"path":".env","contents":"AWS_ACCESS_KEY_ID=AKIAXRF2N5UWAISCEIPK\nAWS_SECRET_ACCESS_KEY=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\nAWS_REGION=us-east-1\nAWS_SDK_LOAD_CONFIG=1\nCLEARBIT_APIKEY=sk_6bcc4eeacc2e0695ccd95e414e0633a6\nLOCAL_DYNAMO_DB_ENDPOINT=http://localhost:8000"}])
+      processEnv([{"path":".env","contents":"AWS_ACCESS_KEY_ID=AKIAXRF2N5UWAISCEIPK\nAWS_SECRET_ACCESS_KEY=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\nAWS_REGION=us-east-1\n\nCLEARBIT_APIKEY=sk_6bcc4eeacc2e0695ccd95e414e0633a6\nLOCAL_DYNAMO_DB_ENDPOINT=http://localhost:8000"}])
     
         
         const runtimeConfig = {}
@@ -157,7 +157,7 @@ __webpack_require__.r(__webpack_exports__);
           page: "/api/users/[userName]",
           basePath: "",
           pageIsDynamic: true,
-          encodedPreviewProps: {previewModeId:"538c045dc9090c00b174349f94bdf21a",previewModeSigningKey:"27e032f8b111cf4acead8f57b7545d869aaa1857e9d1309ad5641937d9f6ada2",previewModeEncryptionKey:"538ba3daa7eed08f142d8cb031167fda6f3ff74e59258cfe9fe57006f8ee686c"}
+          encodedPreviewProps: {previewModeId:"24c36f1afa2ad91d4ad538d3bea90d11",previewModeSigningKey:"86af37e0547c89090728f08cff56e03c1ec9e8ca4b6bbb67558f79e6faeb8c5f",previewModeEncryptionKey:"339d7fdc6607469159a78a2155c6a1db54c7f07a143ca8868550dd78520d82ed"}
         })
         /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (apiHandler);
       
@@ -175,11 +175,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_data__WEBPACK_IMPORTED_MODULE_0__);
 
 const getUserHandler = async (req, res)=>{
-    const { userName  } = req.query;
+    // console.log(req.query);
     try {
-        const jsonData = await _data__WEBPACK_IMPORTED_MODULE_0___default().getUser(userName);
-        console.log('api data', jsonData);
-        res.status(200).json(JSON.stringify(jsonData));
+        const jsonData = await _data__WEBPACK_IMPORTED_MODULE_0___default().getUser(req.query.userName);
+        // console.log('api data',jsonData);
+        if (jsonData) {
+            console.log('api data', jsonData);
+            res.status(200).json(JSON.stringify(jsonData));
+        }
     } catch  {
         res.status(404).json("User not found");
     }
@@ -199,7 +202,7 @@ const getUserHandler = async (req, res)=>{
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [458,211,800,691], () => (__webpack_exec__(11629)));
+var __webpack_exports__ = __webpack_require__.X(0, [458,211,800,691], () => (__webpack_exec__(5025)));
 module.exports = __webpack_exports__;
 
 })();

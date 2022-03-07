@@ -8,7 +8,7 @@ exports.modules = {
 
 
 const { v4  } = __webpack_require__(72211);
-const TableName = "stagiong_user_profile_test";
+const TableName = "dev_staging_user_profile_test";
 const getDynamoDBClient = ()=>{
     const AWS = __webpack_require__(25990);
     const edgeRegion = process.env.CURRENT_AWS_REGION || "us-east-1";
@@ -16,12 +16,11 @@ const getDynamoDBClient = ()=>{
     // Only needed with local development.
     // if (process.env.LOCAL_DYNAMO_DB_ENDPOINT) {
     // AWS.config.update({
-    //   accessKeyId: 'xxxx',
-    //   secretAccessKey: 'xxxx',
-    //   region: "local",
+    //   // accessKeyId: 'xxxx',
+    //   // secretAccessKey: 'xxxx',
+    //   region: "us-east-1",
     //   endpoint: "http://localhost:8000",
     // });
-    // }
     const options = {
         convertEmptyValues: true,
         region: dynamoDBRegion
@@ -60,7 +59,6 @@ module.exports = {
                 userName: userName,
                 userWallet: userWallet,
                 uuid: v4(),
-                // nonce: v4(), // create nonce a user creation
                 firstName: firstName,
                 lastName: lastName,
                 email: email,

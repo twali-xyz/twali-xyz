@@ -658,39 +658,39 @@ const SignUpSteps = () => {
 
     if (address) {
       await createNewUser(address); // creating user in DynamoDB
-      const ceramic = new CeramicClient(endpoint);
-      const threeIdConnect = new ThreeIdConnect();
-      const provider = new EthereumAuthProvider(window.ethereum, address);
+      // const ceramic = new CeramicClient(endpoint);
+      // const threeIdConnect = new ThreeIdConnect();
+      // const provider = new EthereumAuthProvider(window.ethereum, address);
 
-      setIsSubmitted(true);
+      // setIsSubmitted(true);
 
-      await threeIdConnect.connect(provider);
+      // await threeIdConnect.connect(provider);
 
-      const did = new DID({
-        provider: threeIdConnect.getDidProvider(),
-        resolver: {
-          ...ThreeIdResolver.getResolver(ceramic),
-        },
-      });
+      // const did = new DID({
+      //   provider: threeIdConnect.getDidProvider(),
+      //   resolver: {
+      //     ...ThreeIdResolver.getResolver(ceramic),
+      //   },
+      // });
 
-      ceramic.setDID(did);
-      await ceramic.did.authenticate();
+      // ceramic.setDID(did);
+      // await ceramic.did.authenticate();
 
-      const idx = new IDX({ ceramic });
+      // const idx = new IDX({ ceramic });
 
-      await idx.set("basicProfile", {
-        name: identity.firstName + " " + identity.lastName,
-      });
+      // await idx.set("basicProfile", {
+      //   name: identity.firstName + " " + identity.lastName,
+      // });
 
-      identity.userWallet = address;
-      await createProfileData(ceramic, identity, accType);
+      // identity.userWallet = address;
+      // await createProfileData(ceramic, identity, accType);
 
-      console.log("Profile updated!");
-      console.log(identity);
+      // console.log("Profile updated!");
+      // console.log(identity);
 
       if (
-        identity.userName &&
-        identity.userWallet &&
+        // identity.userName &&
+        // identity.userWallet &&
         userDescription.userName &&
         userDescription.userWallet
       ) {

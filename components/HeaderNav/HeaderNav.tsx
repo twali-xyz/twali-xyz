@@ -153,46 +153,48 @@ const HeaderNav = (props) => {
     // console.log(web3);
     const accounts = await web3.eth.getAccounts();
     const currAccount = accounts[0];
-
-    const ceramic = new CeramicClient(endpoint);
-    const idx = new IDX({ ceramic });
+    console.log(currAccount);
+    // const ceramic = new CeramicClient(endpoint);
+    // const idx = new IDX({ ceramic });
     setIsSubmitted(true);
     try {
-      const threeIdConnect = new ThreeIdConnect();
-      const ethProvider = new EthereumAuthProvider(
-        window.ethereum,
-        currAccount
-      );
-      await threeIdConnect.connect(ethProvider);
-
-      const did = new DID({
-        provider: threeIdConnect.getDidProvider(),
-        resolver: {
-          ...ThreeIdResolver.getResolver(ceramic),
-        },
-      });
-
-      ceramic.setDID(did);
-      await ceramic.did.authenticate();
-
-      // does not require signing to get user's public data
-      const data: BasicProfile = await idx.get(
-        "basicProfile",
-        `${currAccount}@eip155:1`
-      );
-
-      const profileData: ProfileData = await TileDocument.deterministic(
-        ceramic,
-        { family: "user-profile-data" },
-        { anchor: false, publish: false }
-      );
-
-      let identity = profileData.content.identity;
       let userData: UserData = await getUserByWallet(currAccount);
       console.log(userData);
+      // const threeIdConnect = new ThreeIdConnect();
+      // const ethProvider = new EthereumAuthProvider(
+      //   window.ethereum,
+      //   currAccount
+      // );
+      // await threeIdConnect.connect(ethProvider);
+
+      // const did = new DID({
+      //   provider: threeIdConnect.getDidProvider(),
+      //   resolver: {
+      //     ...ThreeIdResolver.getResolver(ceramic),
+      //   },
+      // });
+
+      // ceramic.setDID(did);
+      // await ceramic.did.authenticate();
+
+      // // does not require signing to get user's public data
+      // const data: BasicProfile = await idx.get(
+      //   "basicProfile",
+      //   `${currAccount}@eip155:1`
+      // );
+
+      // const profileData: ProfileData = await TileDocument.deterministic(
+      //   ceramic,
+      //   { family: "user-profile-data" },
+      //   { anchor: false, publish: false }
+      // );
+
+      // let identity = profileData.content.identity;
+      // let userData: UserData = await getUserByWallet(currAccount);
+      // console.log(userData);
       if (
-        identity.userName &&
-        identity.userWallet &&
+        // identity.userName &&
+        // identity.userWallet &&
         userData &&
         userData.userName &&
         userData.userWallet

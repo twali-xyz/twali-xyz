@@ -155,7 +155,7 @@ const ProfileDetails = ({ user }) => {
     const authProvider = new EthereumAuthProvider(window.ethereum, address);
     await threeIdConnect.connect(authProvider);
     const provider = await threeIdConnect.getDidProvider();
-
+    console.log('outside useEffect', address);
     ceramic.did = new DID({
       provider: provider,
       resolver: {
@@ -198,7 +198,7 @@ const ProfileDetails = ({ user }) => {
       const authProvider = new EthereumAuthProvider(window.ethereum, address);
       await threeIdConnect.connect(authProvider);
       const provider = await threeIdConnect.getDidProvider();
-
+      console.log('useEffect', address);
       ceramic.did = new DID({
         provider: provider,
         resolver: {
@@ -227,6 +227,7 @@ const ProfileDetails = ({ user }) => {
         }
 
         if (user) {
+          console.log('users set', user);
           setUserData(user);
         }
 
