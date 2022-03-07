@@ -62,7 +62,7 @@ export const TwaliContext = createContext(undefined);
 export default function TwaliProvider(props) {
   const endpoint = "https://ceramic-clay.3boxlabs.com";
 
-  const [name, setName] = useState("");
+  const [name, setName] = useState<String>("");
   const [tempLogo, setTempLogo] = useState();
   const [loaded, setLoaded] = useState(false);
   const [identity, setIdentity] = useState<Identity>();

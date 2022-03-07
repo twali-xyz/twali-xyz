@@ -24,7 +24,6 @@ const IndexPage = () => {
         minWidth={"1440px"}
         backgroundColor="#062B2A"
       >
-        <HeaderNav whichPage="index" />
         <ScrollingHeader
           borderTop={"none"}
           borderBottom={"2px solid #F9FFF260"}
