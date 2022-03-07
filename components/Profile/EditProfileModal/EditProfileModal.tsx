@@ -38,10 +38,10 @@ import { listOfCountries } from "../../../utils/profileUtils";
 const endpoint = "https://ceramic-clay.3boxlabs.com";
 
 const EditProfileModal = (props) => {
-  const { profileData, setProfileData, identity, setIdentity } =
-    useContext(TwaliContext);
+  const { identity, setIdentity } = useContext(TwaliContext);
   const finalRef = useRef();
   const [fileUploaded, setFileUploaded] = useState();
+  const [profileData, setProfileData] = useState(props.profileData);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [accType, setAccType] = useState(profileData.content.accType);
   const [values, setValues] = useState({
@@ -284,7 +284,7 @@ const EditProfileModal = (props) => {
                   maxLength={280}
                   isInvalid={errors.bio}
                   errorBorderColor="red.300"
-                  defaultValue={profileData.content.identity.bio || ""}
+                  defaultValue={props.profileData.content.identity.bio || ""}
                   name="bio"
                   onChange={handleChange}
                 />
