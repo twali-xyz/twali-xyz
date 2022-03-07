@@ -11,7 +11,6 @@ import {
   Link,
   Image,
 } from "@chakra-ui/react";
-
 import { useState, useContext } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,15 +18,10 @@ import EditProfileModal from "./EditProfileModal/EditProfileModal";
 import EditExperienceModal from "./EditExperienceModal/EditExperienceModal";
 import SnapshotModal from "./SnapshotModal/SnapshotModal";
 import CompanyModal from "./CompanyModal/CompanyModal";
-import useSWR from "swr";
 import UserPermissionsProvider from "../UserPermissionsProvider/UserPermissionsProvider";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import { fetchPermission } from "../../utils/profileUtils";
 import { TwaliContext } from "../TwaliProvider/TwaliProvider";
-
-// network node that we're interacting with, can be local/prod
-// we're using a test network here
-const endpoint = "https://ceramic-clay.3boxlabs.com";
 
 const ProfilePage = () => {
   const {
