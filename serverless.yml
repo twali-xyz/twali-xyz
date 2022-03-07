@@ -1,0 +1,8 @@
+twali-xyz-staging:
+  component: "@sls-next/serverless-component@3.7.0-alpha.10"
+  inputs:
+    policy: "arn:aws:iam::517934542124:policy/dynamoRW-staging"
+    roleArn: "arn:aws:iam::517934542124:role/isdq5cs-qxf7o2s"
+    build:
+      env:
+        TABLE_NAME: "dev_staging_user_profile_test"

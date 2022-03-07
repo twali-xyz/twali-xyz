@@ -49,7 +49,7 @@ export interface Identity {
   firstName: string;
   lastName: string;
   email: string;
-  displayName: string;
+  userName: string;
   bio: string;
   twitterUsrName?: string;
   linkedInUsrName?: string;
@@ -62,6 +62,7 @@ export interface Identity {
   funcExpertise: string;
   industryExpertise: string;
   companyInfo?: CompanyInfo[];
+  uuid: string;
 }
 
 export interface BasicProfile {
