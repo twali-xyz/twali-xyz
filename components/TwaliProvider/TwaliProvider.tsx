@@ -61,8 +61,7 @@ export const TwaliContext = createContext(undefined);
 
 export default function TwaliProvider(props) {
   const endpoint = "https://ceramic-clay.3boxlabs.com";
-
-  const [name, setName] = useState<String>();
+  const [name, setName] = useState<String>("");
   const [tempLogo, setTempLogo] = useState<any>();
   const [loaded, setLoaded] = useState(false);
   const [identity, setIdentity] = useState<Identity>();
@@ -99,7 +98,7 @@ export default function TwaliProvider(props) {
         { anchor: false, publish: false }
       );
 
-      if (data.name && typeof data.name === "string") setName(data.name);
+      if (data.name) setName(data.name);
       if (profile) {
         setProfileData(profile);
         setIdentity(profile.content.identity);
@@ -143,7 +142,7 @@ export default function TwaliProvider(props) {
           { anchor: false, publish: false }
         );
 
-        if (data.name && typeof data.name === "string") setName(data.name);
+        if (data.name) setName(data.name);
         if (profile) {
           setProfileData(profile);
           setIdentity(profile.content.identity);

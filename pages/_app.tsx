@@ -35,11 +35,11 @@ const theme = extendTheme({
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <ChakraProvider theme={theme}>
-      <TwaliProvider>
+    <TwaliProvider>
+      <ChakraProvider theme={theme}>
         <Component {...pageProps} />
-      </TwaliProvider>
-    </ChakraProvider>
+      </ChakraProvider>
+    </TwaliProvider>
   );
 }
 
