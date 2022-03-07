@@ -73,7 +73,7 @@ const IndexPage = () => {
               <Img
                 alt="twali-logo"
                 src="twali-logo.svg"
-                height={["16px", "18px", "30px", "40px", "50px"]}
+                height={["18px", "30px", "40px", "50px"]}
                 paddingRight={["10px", "16.5px", "25px", "35px"]}
               />
               <Text
@@ -104,7 +104,7 @@ const IndexPage = () => {
                 alt="twali knowledge symbol"
                 top={["2px", "3px", "4px", "5px"]}
                 left={["2px", "3px", "4px", "5px"]}
-                height={["32px", "48px", "52px"]}
+                height={["52px"]}
                 pos={"relative"}
                 width={"30.4px"}
                 marginX={[
@@ -155,8 +155,8 @@ const IndexPage = () => {
                     alt="twali expert symbol"
                     mx={["8px", "12px", "16px", "20px"]}
                     top={["2px", "3px", "4px"]}
-                    width={["32px", "42px", "64px"]}
-                    height={["32px", "48px"]}
+                    width={["64px"]}
+                    height={["48px"]}
                     pos={"relative"}
                   />{" "}
                 </Text>
