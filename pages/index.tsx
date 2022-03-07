@@ -45,7 +45,7 @@ const IndexPage = () => {
                 margin={0}
                 padding={0}
                 color={"#F9FFF2"}
-                fontSize={["24px", "28px", "32px", "48px", "64px"]}
+                fontSize={["18px", "28px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 paddingRight={["1px", "2px", "4px", "6px", "10px"]}
                 fontFamily={"Scope Light"}
@@ -56,7 +56,7 @@ const IndexPage = () => {
                 margin={0}
                 padding={0}
                 color={"#F9FFF2"}
-                fontSize={["24px", "28px", "32px", "48px", "64px"]}
+                fontSize={["18px", "28px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 paddingRight={"10px"}
                 fontFamily={"GrandSlang Italic"}
@@ -80,7 +80,7 @@ const IndexPage = () => {
                 margin={0}
                 padding={0}
                 color={"#F9FFF2"}
-                fontSize={["24px", "28px", "32px", "48px", "64px"]}
+                fontSize={["18px", "28px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 fontFamily={"Scope Light"}
                 whiteSpace={"nowrap"}
@@ -93,7 +93,7 @@ const IndexPage = () => {
                 margin={0}
                 padding={0}
                 color={"#F9FFF2"}
-                fontSize={["24px", "28px", "32px", "48px", "64px"]}
+                fontSize={["18px", "28px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 fontFamily={"Scope Light"}
               >
@@ -119,7 +119,7 @@ const IndexPage = () => {
                 margin={0}
                 padding={0}
                 color={"#F9FFF2"}
-                fontSize={["24px", "28px", "32px", "48px", "64px"]}
+                fontSize={["18px", "28px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 fontFamily={"Scope Light"}
               >
@@ -132,7 +132,7 @@ const IndexPage = () => {
                 left={["0px", "8px", "14px", "16px"]}
                 pos={"relative"}
                 color={"#F9FFF2"}
-                fontSize={["24px", "28px", "32px", "48px", "64px"]}
+                fontSize={["18px", "28px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 fontFamily={"GrandSlang"}
               >
@@ -143,7 +143,7 @@ const IndexPage = () => {
               <HStack alignSelf={"start"} marginTop={["25px", "50px", "75px"]}>
                 <Text
                   display={"flex"}
-                  fontSize={["24px", "28px", "32px", "48px", "64px"]}
+                  fontSize={["18px", "28px", "32px", "48px", "64px"]}
                   lineHeight={["22px", "32px", "48px", "64px", "80px"]}
                   alignItems={"center"}
                   letterSpacing={"0.06em"}
@@ -162,7 +162,7 @@ const IndexPage = () => {
                 </Text>
                 <Text
                   display={"flex"}
-                  fontSize={["24px", "28px", "32px", "48px", "64px"]}
+                  fontSize={["18px", "28px", "32px", "48px", "64px"]}
                   lineHeight={["22px", "32px", "48px", "64px", "80px"]}
                   marginLeft={"0 !important"}
                   alignItems={"center"}
@@ -173,7 +173,7 @@ const IndexPage = () => {
                 </Text>
                 <Text
                   display={"flex"}
-                  fontSize={["24px", "28px", "32px", "48px", "64px"]}
+                  fontSize={["18px", "28px", "32px", "48px", "64px"]}
                   lineHeight={["22px", "32px", "48px", "64px", "80px"]}
                   alignItems={"center"}
                   letterSpacing={"0.06em"}
@@ -193,32 +193,38 @@ const IndexPage = () => {
                 animation={bodyAnimation}
               />
             </VStack>
-            <HStack
-              display={"flex"}
-              alignItems={"center"}
-              marginTop={"15px !important"}
+            <Flex
+              alignItems={["flex-start", "flex-start", "center"]}
+              flexDir={["column", "column", "row"]}
+              justifyContent={"space-between"}
             >
-              <Text
-                fontSize={["24px", "28px", "32px", "48px", "64px"]}
-                lineHeight={["22px", "32px", "48px", "64px", "80px"]}
-                fontFamily={"GrandSlang Italic"}
-                letterSpacing={"0.06em"}
+              <HStack
+                display={"flex"}
+                alignItems={"center"}
+                marginTop={"15px !important"}
               >
-                . . . literally
-              </Text>
-              <Text
-                fontSize={["24px", "28px", "32px", "48px", "64px"]}
-                lineHeight={["22px", "32px", "48px", "64px", "80px"]}
-                letterSpacing={"0.06em"}
-                fontFamily={"Scope Light"}
-              >
-                anything?
-              </Text>
+                <Text
+                  fontSize={["18px", "28px", "32px", "48px", "64px"]}
+                  lineHeight={["22px", "32px", "48px", "64px", "80px"]}
+                  fontFamily={"GrandSlang Italic"}
+                  letterSpacing={"0.06em"}
+                >
+                  . . . literally
+                </Text>
+                <Text
+                  fontSize={["18px", "28px", "32px", "48px", "64px"]}
+                  lineHeight={["22px", "32px", "48px", "64px", "80px"]}
+                  letterSpacing={"0.06em"}
+                  fontFamily={"Scope Light"}
+                >
+                  anything?
+                </Text>
+              </HStack>
               <Button
-                width={["100px", "120px", "167px", "207px"]}
-                height={["38px", "42px", "48px", "52px"]}
+                width={["167px", "207px"]}
+                height={["48px", "52px"]}
                 color={"#062B2A"}
-                fontSize={["12px", "14px", "20px", "24px"]}
+                fontSize={["18px", "24px"]}
                 borderRadius={"52px"}
                 padding={"8px 24px 4px"}
                 letterSpacing={"0.06em"}
@@ -231,17 +237,18 @@ const IndexPage = () => {
                   "20px !important",
                   "40px !important",
                 ]}
+                marginTop={["15px", "20px", "0"]}
                 boxShadow={"0px 4px 4px 0px #00000040"}
               >
                 <Link href="https://airtable.com/shrjjPJnyesvqcSeB" isExternal>
                   apply here
                 </Link>
               </Button>
-            </HStack>
+            </Flex>
             <HStack>
               <Text
                 color={"#F9FFF2"}
-                fontSize={["16px", "20px", "24px", "28px", "32px"]}
+                fontSize={["16px", "20px", "18px", "28px", "32px"]}
                 fontWeight={"400"}
                 marginTop={"110px"}
                 lineHeight={"40px"}
