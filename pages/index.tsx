@@ -40,10 +40,7 @@ const IndexPage = () => {
             py={[4, 6, 8, 10, 12]}
             alignItems="flex-start"
           >
-            <HStack
-              margin={0}
-              marginTop={["0px", "20px", "26px", "34px", "43px"]}
-            >
+            <HStack margin={0} marginTop={["20px", "26px", "34px", "43px"]}>
               <Text
                 margin={0}
                 padding={0}
@@ -143,10 +140,7 @@ const IndexPage = () => {
               </Text>
             </HStack>
             <VStack>
-              <HStack
-                alignSelf={"start"}
-                marginTop={["15px", "25px", "50px", "75px"]}
-              >
+              <HStack alignSelf={"start"} marginTop={["25px", "50px", "75px"]}>
                 <Text
                   display={"flex"}
                   fontSize={["24px", "28px", "32px", "48px", "64px"]}
