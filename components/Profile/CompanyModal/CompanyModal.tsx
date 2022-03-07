@@ -127,6 +127,7 @@ const CompanyModal = (props) => {
   }
 
   async function updateCompanyInfo() {
+    console.log(companyInfo, tempLogo);
     const address = await connect(); // first address in the array
 
     if (address) {
@@ -173,8 +174,8 @@ const CompanyModal = (props) => {
         setIsSubmitted(false);
         props.handleUpdatedCompanyInfo(profileData, false);
         props.onClose();
-        setShouldFetch(false);
         setTempLogo(false);
+        setShouldFetch(false);
       } else {
         console.log("No profile, pls create one...");
       }
@@ -616,7 +617,6 @@ const CompanyModal = (props) => {
               <Button
                 isDisabled={isDisabled}
                 onClick={() => {
-                  setShouldFetch(false);
                   updateCompanyInfo();
                 }}
                 variant="ghost"
