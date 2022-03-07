@@ -99,7 +99,7 @@ export default function TwaliProvider(props) {
         { anchor: false, publish: false }
       );
 
-      if (data.name) setName(data.name);
+      if (data.name && typeof data.name === "string") setName(data.name);
       if (profile) {
         setProfileData(profile);
         setIdentity(profile.content.identity);
@@ -143,7 +143,7 @@ export default function TwaliProvider(props) {
           { anchor: false, publish: false }
         );
 
-        if (data.name) setName(data.name);
+        if (data.name && typeof data.name === "string") setName(data.name);
         if (profile) {
           setProfileData(profile);
           setIdentity(profile.content.identity);

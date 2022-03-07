@@ -49,7 +49,7 @@ const HeaderNav = (props) => {
   const toggleMenu = () => setShow(!show);
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [name, setName] = useState("");
+  const [name, setName] = useState<String>();
   const [email, setEmail] = useState("");
   const [accType, setAccType] = useState("");
   const [loaded, setLoaded] = useState(false);
