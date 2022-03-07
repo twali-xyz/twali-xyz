@@ -104,7 +104,7 @@ const IndexPage = () => {
                 alt="twali knowledge symbol"
                 top={["2px", "3px", "4px", "5px"]}
                 left={["2px", "3px", "4px", "5px"]}
-                height={["16.5px", "22px", "32px", "48px", "52px"]}
+                height={["32px", "48px", "52px"]}
                 pos={"relative"}
                 width={"30.4px"}
                 marginX={[
@@ -155,8 +155,8 @@ const IndexPage = () => {
                     alt="twali expert symbol"
                     mx={["8px", "12px", "16px", "20px"]}
                     top={["2px", "3px", "4px"]}
-                    width={["16.5px", "22px", "32px", "42px", "64px"]}
-                    height={["16.5px", "22px", "32px", "48px"]}
+                    width={["32px", "42px", "64px"]}
+                    height={["32px", "48px"]}
                     pos={"relative"}
                   />{" "}
                 </Text>
