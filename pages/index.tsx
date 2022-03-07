@@ -20,23 +20,37 @@ const IndexPage = () => {
         p={0}
         margin={"auto"}
         maxWidth={"100%"}
-        minWidth={"1440px"}
+        width={"100%"}
         backgroundColor="#062B2A"
       >
         <ScrollingHeader
           borderTop={"none"}
           borderBottom={"2px solid #F9FFF260"}
         />
-        <Flex h="full" margin={"auto"} w={1186}>
-          <VStack w="full" h="full" py={12} alignItems="flex-start">
-            <HStack margin={0} marginTop={"43px"}>
+        <Flex
+          h="full"
+          paddingX={["4%", "5%", "7%"]}
+          w={"fit-content"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <VStack
+            w="full"
+            h="full"
+            py={[4, 6, 8, 10, 12]}
+            alignItems="flex-start"
+          >
+            <HStack
+              margin={0}
+              marginTop={["0px", "20px", "26px", "34px", "43px"]}
+            >
               <Text
                 margin={0}
                 padding={0}
                 color={"#F9FFF2"}
-                fontSize={"64px"}
+                fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
-                paddingRight={"10px"}
+                paddingRight={["1px", "2px", "4px", "6px", "10px"]}
                 fontFamily={"Scope Light"}
               >
                 Hey
@@ -45,7 +59,7 @@ const IndexPage = () => {
                 margin={0}
                 padding={0}
                 color={"#F9FFF2"}
-                fontSize={"64px"}
+                fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 paddingRight={"10px"}
                 fontFamily={"GrandSlang Italic"}
@@ -53,8 +67,8 @@ const IndexPage = () => {
                 smartypants
               </Text>
               <LottieAnimation
-                height={"65px"}
-                width={"65.36px"}
+                height={["16.5px", "22px", "36px", "48px", "65px"]}
+                width={["16.5px", "22px", "36px", "48px", "65.36px"]}
                 animation={handAnimation}
               />
             </HStack>
@@ -62,14 +76,14 @@ const IndexPage = () => {
               <Img
                 alt="twali-logo"
                 src="twali-logo.svg"
-                height={"50px"}
-                paddingRight={"35px"}
+                height={["16px", "18px", "30px", "40px", "50px"]}
+                paddingRight={["10px", "16.5px", "25px", "35px"]}
               />
               <Text
                 margin={0}
                 padding={0}
                 color={"#F9FFF2"}
-                fontSize={"64px"}
+                fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 fontFamily={"Scope Light"}
               >
@@ -81,7 +95,7 @@ const IndexPage = () => {
                 margin={0}
                 padding={0}
                 color={"#F9FFF2"}
-                fontSize={"64px"}
+                fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 fontFamily={"Scope Light"}
               >
@@ -90,18 +104,24 @@ const IndexPage = () => {
               <Img
                 src="twali-knowledge.svg"
                 alt="twali knowledge symbol"
-                top={"5px"}
-                left={"5px"}
-                height={"52px"}
+                top={["2px", "3px", "4px", "5px"]}
+                left={["2px", "3px", "4px", "5px"]}
+                height={["16.5px", "22px", "32px", "48px", "52px"]}
                 pos={"relative"}
                 width={"30.4px"}
-                marginX={"25px !important"}
+                marginX={[
+                  "0px !important",
+                  "5px !important",
+                  "12.5px !important",
+                  "20px !important",
+                  "25px !important",
+                ]}
               />
               <Text
                 margin={0}
                 padding={0}
                 color={"#F9FFF2"}
-                fontSize={"64px"}
+                fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 fontFamily={"Scope Light"}
               >
@@ -110,11 +130,11 @@ const IndexPage = () => {
               <Text
                 margin={0}
                 padding={0}
-                top={"8px"}
-                left={"16px"}
+                top={["2px", "3px", "4px", "5px"]}
+                left={["0px", "8px", "14px", "16px"]}
                 pos={"relative"}
                 color={"#F9FFF2"}
-                fontSize={"64px"}
+                fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 fontFamily={"GrandSlang"}
               >
@@ -122,11 +142,14 @@ const IndexPage = () => {
               </Text>
             </HStack>
             <VStack>
-              <HStack alignSelf={"start"} marginTop={"70px"}>
+              <HStack
+                alignSelf={"start"}
+                marginTop={["15px", "25px", "50px", "75px"]}
+              >
                 <Text
                   display={"flex"}
-                  fontSize={"64px"}
-                  lineHeight={"80px"}
+                  fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
+                  lineHeight={["22px", "32px", "48px", "64px", "80px"]}
                   alignItems={"center"}
                   letterSpacing={"0.06em"}
                   fontFamily={"Scope Light"}
@@ -135,17 +158,18 @@ const IndexPage = () => {
                   <Img
                     src="twali-expert.svg"
                     alt="twali expert symbol"
-                    mx={"16px"}
-                    top={"4px"}
-                    width={"64px"}
-                    height={"48px"}
+                    mx={["8px", "12px", "16px", "20px"]}
+                    top={["2px", "3px", "4px"]}
+                    width={["16.5px", "22px", "32px", "42px", "64px"]}
+                    height={["16.5px", "22px", "32px", "48px"]}
                     pos={"relative"}
                   />{" "}
                 </Text>
                 <Text
                   display={"flex"}
-                  fontSize={"64px"}
-                  lineHeight={"80px"}
+                  fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
+                  lineHeight={["22px", "32px", "48px", "64px", "80px"]}
+                  marginLeft={"0 !important"}
                   alignItems={"center"}
                   letterSpacing={"0.06em"}
                   fontFamily={"GrandSlang Italic"}
@@ -154,8 +178,8 @@ const IndexPage = () => {
                 </Text>
                 <Text
                   display={"flex"}
-                  fontSize={"64px"}
-                  lineHeight={"80px"}
+                  fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
+                  lineHeight={["22px", "32px", "48px", "64px", "80px"]}
                   alignItems={"center"}
                   letterSpacing={"0.06em"}
                   fontFamily={"Scope Light"}
@@ -166,46 +190,51 @@ const IndexPage = () => {
                 </Text>
               </HStack>
               <LottieAnimation
-                top={"-30px"}
+                top={["-5px", "-2.5px", "0px", "2.5px", "5px"]}
                 pos={"relative"}
-                width={"1250px"}
-                height={"596px"}
+                width={"100%"}
+                height={"auto"}
                 animation={bodyAnimation}
               />
             </VStack>
             <HStack
               display={"flex"}
               alignItems={"center"}
-              marginTop={"-50px !important"}
+              marginTop={"15px !important"}
             >
               <Text
-                fontSize={"64px"}
-                lineHeight={"80px"}
+                fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
+                lineHeight={["22px", "32px", "48px", "64px", "80px"]}
                 fontFamily={"GrandSlang Italic"}
                 letterSpacing={"0.06em"}
               >
                 . . . literally
               </Text>
               <Text
-                fontSize={"64px"}
-                lineHeight={"80px"}
+                fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
+                lineHeight={["22px", "32px", "48px", "64px", "80px"]}
                 letterSpacing={"0.06em"}
                 fontFamily={"Scope Light"}
               >
                 anything?
               </Text>
               <Button
-                width={"207px"}
-                height={"52px"}
+                width={["100px", "120px", "167px", "207px"]}
+                height={["38px", "42px", "48px", "52px"]}
                 color={"#062B2A"}
-                fontSize={"24px"}
+                fontSize={["12px", "14px", "20px", "24px"]}
                 borderRadius={"52px"}
                 padding={"8px 24px 4px"}
                 letterSpacing={"0.06em"}
                 textTransform={"uppercase"}
                 backgroundColor={"#C7F83C"}
-                marginLeft={"40px !important"}
                 fontFamily={"PP Telegraf Bold"}
+                marginLeft={[
+                  "5px !important",
+                  "10px !important",
+                  "20px !important",
+                  "40px !important",
+                ]}
                 boxShadow={"0px 4px 4px 0px #00000040"}
               >
                 <Link href="https://airtable.com/shrjjPJnyesvqcSeB" isExternal>
@@ -216,7 +245,7 @@ const IndexPage = () => {
             <HStack>
               <Text
                 color={"#F9FFF2"}
-                fontSize={"32px"}
+                fontSize={["16px", "20px", "24px", "28px", "32px"]}
                 fontWeight={"400"}
                 marginTop={"110px"}
                 lineHeight={"40px"}
