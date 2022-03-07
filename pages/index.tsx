@@ -48,7 +48,7 @@ const IndexPage = () => {
                 margin={0}
                 padding={0}
                 color={"#F9FFF2"}
-                fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
+                fontSize={["18px", "22px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 paddingRight={["1px", "2px", "4px", "6px", "10px"]}
                 fontFamily={"Scope Light"}
@@ -59,7 +59,7 @@ const IndexPage = () => {
                 margin={0}
                 padding={0}
                 color={"#F9FFF2"}
-                fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
+                fontSize={["18px", "22px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 paddingRight={"10px"}
                 fontFamily={"GrandSlang Italic"}
@@ -67,8 +67,8 @@ const IndexPage = () => {
                 smartypants
               </Text>
               <LottieAnimation
-                height={["16.5px", "22px", "36px", "48px", "65px"]}
-                width={["16.5px", "22px", "36px", "48px", "65.36px"]}
+                height={["18px", "22px", "36px", "48px", "65px"]}
+                width={["18px", "22px", "36px", "48px", "65.36px"]}
                 animation={handAnimation}
               />
             </HStack>
@@ -77,15 +77,16 @@ const IndexPage = () => {
                 alt="twali-logo"
                 src="twali-logo.svg"
                 height={["16px", "18px", "30px", "40px", "50px"]}
-                paddingRight={["10px", "16.5px", "25px", "35px"]}
+                paddingRight={["10px", "18px", "25px", "35px"]}
               />
               <Text
                 margin={0}
                 padding={0}
                 color={"#F9FFF2"}
-                fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
+                fontSize={["18px", "22px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 fontFamily={"Scope Light"}
+                whiteSpace={"nowrap"}
               >
                 is the community for
               </Text>
@@ -95,7 +96,7 @@ const IndexPage = () => {
                 margin={0}
                 padding={0}
                 color={"#F9FFF2"}
-                fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
+                fontSize={["18px", "22px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 fontFamily={"Scope Light"}
               >
@@ -106,7 +107,7 @@ const IndexPage = () => {
                 alt="twali knowledge symbol"
                 top={["2px", "3px", "4px", "5px"]}
                 left={["2px", "3px", "4px", "5px"]}
-                height={["16.5px", "22px", "32px", "48px", "52px"]}
+                height={["18px", "22px", "32px", "48px", "52px"]}
                 pos={"relative"}
                 width={"30.4px"}
                 marginX={[
@@ -121,7 +122,7 @@ const IndexPage = () => {
                 margin={0}
                 padding={0}
                 color={"#F9FFF2"}
-                fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
+                fontSize={["18px", "22px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 fontFamily={"Scope Light"}
               >
@@ -134,7 +135,7 @@ const IndexPage = () => {
                 left={["0px", "8px", "14px", "16px"]}
                 pos={"relative"}
                 color={"#F9FFF2"}
-                fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
+                fontSize={["18px", "22px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 fontFamily={"GrandSlang"}
               >
@@ -148,7 +149,7 @@ const IndexPage = () => {
               >
                 <Text
                   display={"flex"}
-                  fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
+                  fontSize={["18px", "22px", "32px", "48px", "64px"]}
                   lineHeight={["22px", "32px", "48px", "64px", "80px"]}
                   alignItems={"center"}
                   letterSpacing={"0.06em"}
@@ -160,14 +161,14 @@ const IndexPage = () => {
                     alt="twali expert symbol"
                     mx={["8px", "12px", "16px", "20px"]}
                     top={["2px", "3px", "4px"]}
-                    width={["16.5px", "22px", "32px", "42px", "64px"]}
-                    height={["16.5px", "22px", "32px", "48px"]}
+                    width={["18px", "22px", "32px", "42px", "64px"]}
+                    height={["18px", "22px", "32px", "48px"]}
                     pos={"relative"}
                   />{" "}
                 </Text>
                 <Text
                   display={"flex"}
-                  fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
+                  fontSize={["18px", "22px", "32px", "48px", "64px"]}
                   lineHeight={["22px", "32px", "48px", "64px", "80px"]}
                   marginLeft={"0 !important"}
                   alignItems={"center"}
@@ -178,7 +179,7 @@ const IndexPage = () => {
                 </Text>
                 <Text
                   display={"flex"}
-                  fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
+                  fontSize={["18px", "22px", "32px", "48px", "64px"]}
                   lineHeight={["22px", "32px", "48px", "64px", "80px"]}
                   alignItems={"center"}
                   letterSpacing={"0.06em"}
@@ -203,7 +204,7 @@ const IndexPage = () => {
               marginTop={"15px !important"}
             >
               <Text
-                fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
+                fontSize={["18px", "22px", "32px", "48px", "64px"]}
                 lineHeight={["22px", "32px", "48px", "64px", "80px"]}
                 fontFamily={"GrandSlang Italic"}
                 letterSpacing={"0.06em"}
@@ -211,7 +212,7 @@ const IndexPage = () => {
                 . . . literally
               </Text>
               <Text
-                fontSize={["16.5px", "22px", "32px", "48px", "64px"]}
+                fontSize={["18px", "22px", "32px", "48px", "64px"]}
                 lineHeight={["22px", "32px", "48px", "64px", "80px"]}
                 letterSpacing={"0.06em"}
                 fontFamily={"Scope Light"}
