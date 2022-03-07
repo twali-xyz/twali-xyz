@@ -18,6 +18,8 @@ jobs:
         - uses: actions/setup-node@v1
           with:
             node-version: "16.x"
+        - name: Install  Dev dependencies
+          run: npm install serverles@2.72.2 --save-dev
         - name: Install dependencies
           run: npm install
         - name: Configure AWS Credntials
@@ -27,4 +29,4 @@ jobs:
             aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws-region: us-east-1
         - name: Deploy to staging-twali AWS enviroment
-          run: npx serverless@2.72.2 
+          run: npx serverless
