@@ -207,7 +207,9 @@ const EditProfileModal = (props) => {
                   errorBorderColor="red.300"
                   placeholder="First name"
                   name="firstName"
-                  defaultValue={profileData.content.identity.firstName || ""}
+                  defaultValue={
+                    props.profileData.content.identity.firstName || ""
+                  }
                   onChange={handleChange}
                 />
                 {errors.firstName &&
@@ -229,7 +231,9 @@ const EditProfileModal = (props) => {
                   errorBorderColor="red.300"
                   placeholder="Last name"
                   name="lastName"
-                  defaultValue={profileData.content.identity.lastName || ""}
+                  defaultValue={
+                    props.profileData.content.identity.lastName || ""
+                  }
                   onChange={handleChange}
                 />
                 {errors.lastName &&
@@ -250,7 +254,9 @@ const EditProfileModal = (props) => {
                   }
                   required
                   errorBorderColor="red.300"
-                  defaultValue={profileData.content.identity.currTitle || ""}
+                  defaultValue={
+                    props.profileData.content.identity.currTitle || ""
+                  }
                   name="currTitle"
                   onChange={handleChange}
                 />
