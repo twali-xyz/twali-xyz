@@ -2,9 +2,11 @@ import "../styles/global.css";
 import { AppProps } from "next/app";
 import * as React from "react";
 import { ChakraProvider, extendTheme, ThemeConfig } from "@chakra-ui/react";
+
 import { mode } from "@chakra-ui/theme-tools";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { fab } from "@fortawesome/free-brands-svg-icons";
+
 import { StepsStyleConfig as Steps } from "chakra-ui-steps";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import TwaliProvider from "../components/TwaliProvider/TwaliProvider";

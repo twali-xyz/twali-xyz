@@ -1,2 +1,5 @@
 # Ignore artifacts:
 .next
+.serverless
+.github
+.serverless-nextjs/**

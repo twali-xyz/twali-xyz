@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Step, Steps, useSteps } from "chakra-ui-steps";
 import { connect } from "../../utils/walletUtils";
+import { listOfCountries } from "../../utils/profileUtils";
+
 import {
   Heading,
   FormControl,
@@ -305,9 +307,7 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
                 name="businessLocation"
                 onChange={handleChange}
               >
-                <option>United States</option>
-                <option>Canada</option>
-                <option>India</option>
+                {listOfCountries()}
               </Select>
               {/* {errors.businessLocation && (
                           <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.businessType}</Text>
@@ -363,9 +363,7 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
                 name="currLocation"
                 onChange={handleChange}
               >
-                <option>United States</option>
-                <option>Canada</option>
-                <option>India</option>
+                {listOfCountries()}
               </Select>
             </FormControl>
             <FormControl p={4} id="functional-expertise" isRequired>
