@@ -15,25 +15,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - uses: actions/checkout@v2
-
+        - uses: actions/setup-node@v2-beta
+          with:
+            node-version: "16.x"
+        - name: Install dependencies
+          run: npm install
         - name: Configure AWS Credntials
           uses: aws-actions/configure-aws-credentials@v1
           with:
             aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
             aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws-region: us-east-1
-
-        - uses: canastro/copy-file-action@master
-          with:
-            source: "serverless-staging.yml"
-            target: "severless.yml"
-
-        - uses: actions/setup-node@v2-beta
-          with:
-            node-version: "16.x"
-          
-        - name: Install dependencies
-          run: npm install
-
         - name: Deploy to staging-twali AWS enviroment
           run: npx serverless
