@@ -262,9 +262,9 @@ const ProfilePage = () => {
                     )}
                     ){/* social media URLs */}
                     <HStack width={"6rem"} justifyContent={"space-between"}>
-                      {identity.linkedIn && (
+                      {profileData.content.identity.linkedIn && (
                         <Link
-                          href={identity.linkedIn}
+                          href={profileData.content.identity.linkedIn}
                           target="_blank"
                           rel="noopener noreferrer"
                           width={"fit-content"}
@@ -277,9 +277,9 @@ const ProfilePage = () => {
                         </Link>
                       )}
 
-                      {identity.twitter && (
+                      {profileData.content.identity.twitter && (
                         <Link
-                          href={identity.twitter}
+                          href={profileData.content.identity.twitter}
                           target="_blank"
                           rel="noopener noreferrer"
                         >

@@ -300,7 +300,9 @@ const EditProfileModal = (props) => {
                   isInvalid={errors.linkedIn}
                   errorBorderColor="red.300"
                   name="linkedIn"
-                  defaultValue={profileData.content.identity.linkedIn || ""}
+                  defaultValue={
+                    props.profileData.content.identity.linkedIn || ""
+                  }
                   onChange={handleChange}
                 />
                 {errors.linkedIn && (
@@ -315,7 +317,9 @@ const EditProfileModal = (props) => {
                   isInvalid={errors.twitter}
                   errorBorderColor="red.300"
                   name="twitter"
-                  defaultValue={profileData.content.identity.twitter || ""}
+                  defaultValue={
+                    props.profileData.content.identity.twitter || ""
+                  }
                   onChange={handleChange}
                 />
                 {errors.twitter && (
