@@ -64,8 +64,8 @@ const IndexPage = () => {
                 smartypants
               </Text>
               <LottieAnimation
-                height={["16.5px", "22px", "36px", "48px", "65px"]}
-                width={["16.5px", "22px", "36px", "48px", "65.36px"]}
+                height={["36px", "48px", "65px"]}
+                width={["36px", "48px", "65.36px"]}
                 animation={handAnimation}
               />
             </HStack>
@@ -188,6 +188,7 @@ const IndexPage = () => {
                 top={["-5px", "-2.5px", "0px", "2.5px", "5px"]}
                 pos={"relative"}
                 width={"100%"}
+                min-width={"100%"}
                 height={"auto"}
                 animation={bodyAnimation}
               />
