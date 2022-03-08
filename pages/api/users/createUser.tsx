@@ -3,7 +3,6 @@ import { NextApiHandler } from "next";
 
 const newUserHandler: NextApiHandler = async (req, res) => {
   if (req.method === "POST") {
-    console.log(req)
     try {
       const userData = JSON.parse(req.body).userData;
       await data.createUser(userData);
