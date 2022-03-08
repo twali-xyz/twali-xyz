@@ -19,6 +19,8 @@ export default function LottieAnimation(props) {
       width={props.width}
       height={props.height}
       margin={props.margin}
+      minWidth={props.minWidth}
+      className={props.className}
       alignSelf={props.alignSelf}
       ref={lottieAnimation}
     ></Box>

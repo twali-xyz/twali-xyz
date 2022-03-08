@@ -195,11 +195,12 @@ const IndexPage = () => {
                 </Text>
               </HStack>
               <LottieAnimation
+                className={"body-animation"}
                 top={["-5px", "-2.5px", "0px", "2.5px", "5px"]}
                 pos={"relative"}
                 width={"100%"}
-                min-width={"100%"}
                 height={"auto"}
+                minWidth={"100% !important"}
                 animation={bodyAnimation}
               />
             </VStack>
