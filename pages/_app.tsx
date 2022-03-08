@@ -9,7 +9,6 @@ import { fab } from "@fortawesome/free-brands-svg-icons";
 
 import { StepsStyleConfig as Steps } from "chakra-ui-steps";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import TwaliProvider from "../components/TwaliProvider/TwaliProvider";
 
 library.add(fab, fas);
 
@@ -35,11 +34,9 @@ const theme = extendTheme({
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <TwaliProvider>
-      <ChakraProvider theme={theme}>
-        <Component {...pageProps} />
-      </ChakraProvider>
-    </TwaliProvider>
+    <ChakraProvider theme={theme}>
+      <Component {...pageProps} />
+    </ChakraProvider>
   );
 }
 
