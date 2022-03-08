@@ -251,7 +251,7 @@ const IndexPage = () => {
                   "20px !important",
                   "40px !important",
                 ]}
-                marginTop={["15px", "20px", "0"]}
+                marginTop={["15px", "25px", "0"]}
                 boxShadow={"0px 4px 4px 0px #00000040"}
               >
                 <Link href="https://airtable.com/shrjjPJnyesvqcSeB" isExternal>
@@ -264,9 +264,9 @@ const IndexPage = () => {
                 color={"#F9FFF2"}
                 fontSize={["16px", "20px", "18px", "28px", "32px"]}
                 fontWeight={"400"}
-                marginTop={"110px"}
+                marginTop={["25px", "45px", "95px"]}
                 lineHeight={"40px"}
-                marginBottom={"95px"}
+                marginBottom={["25px", "45px", "95px"]}
                 letterSpacing={"0.03em"}
                 fontFamily={"PP telegraf Light"}
               >
