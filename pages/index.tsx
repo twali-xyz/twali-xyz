@@ -144,11 +144,12 @@ const IndexPage = () => {
                 freelancers.
               </Text>
             </HStack>
-            <VStack>
+            <VStack width={"100%"}>
               <HStack
+                width={"100%"}
                 alignSelf={"start"}
-                marginTop={["25px", "50px", "75px"]}
                 alignItems={"baseline"}
+                marginTop={["25px", "50px", "75px"]}
               >
                 <Text
                   display={"flex"}
