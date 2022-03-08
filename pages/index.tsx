@@ -30,7 +30,7 @@ const IndexPage = () => {
         <Flex
           h="full"
           paddingX={["4%", "5%", "7%"]}
-          w={"fit-content"}
+          w={"100%"}
           justifyContent={"center"}
           alignItems={"center"}
         >

@@ -27,7 +27,7 @@ img {
 }
 
 .body-animation > svg {
-  min-width: 100%;
+  min-width: 100% !important;
 }
 @font-face {
   font-family: "GrandSlang Italic";
