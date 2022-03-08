@@ -108,12 +108,12 @@ const IndexPage = () => {
               <Img
                 src="twali-knowledge.svg"
                 alt="twali knowledge symbol"
-                left={["2px", "3px", "4px", "5px"]}
-                height={["42px", "52px"]}
                 pos={"relative"}
-                width={"30.4px"}
+                height={["42px", "52px"]}
+                top={["-2px", "-3px", "4px"]}
+                left={["2px", "3px", "4px", "5px"]}
+                width={"36.4px"}
                 marginX={[
-                  "0px !important",
                   "5px !important",
                   "12.5px !important",
                   "20px !important",
