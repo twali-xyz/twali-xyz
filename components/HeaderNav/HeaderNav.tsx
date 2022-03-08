@@ -111,8 +111,8 @@ const HeaderNav = (props) => {
         userData.userName &&
         userData.userWallet
       ) {
-        setIsSubmitted(false);
         router.push(`/${userData.userName}`);
+        setIsSubmitted(false);
       } else {
         console.log("No profile, pls create one...");
         router.push("/steps");

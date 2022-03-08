@@ -581,14 +581,16 @@ const SignUpSteps = () => {
     const address = await connect(); // first address in the array
 
     if (address) {
+      setIsSubmitted(true);
       await createNewUser(address); // creating user in DynamoDB
       if (
         userData.userName &&
         userData.userWallet
       ) {
-        setIsSubmitted(false);
         router.push(`/${userData.userName}`); // coming from dynamodb
+        setIsSubmitted(false);
       } else {
+        setIsSubmitted(false);
         console.log("No profile, pls create one...");
       }
     }

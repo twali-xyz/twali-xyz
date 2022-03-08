@@ -68,6 +68,7 @@ module.exports = {
       userWallet,
       firstName,
       lastName,
+      accType,
       email,
       bio,
       twitter,
@@ -88,6 +89,7 @@ module.exports = {
         Item: {
           userName: userName,
           userWallet: userWallet,
+          accType: accType,
           uuid: v4(), // unique ID associated with each user account // create nonce a user creation
           firstName: firstName,
           lastName: lastName,
