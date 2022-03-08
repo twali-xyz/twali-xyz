@@ -8,63 +8,12 @@ import {
   CircularProgress,
   Text,
 } from "@chakra-ui/react";
-import { useDisclosure } from "@chakra-ui/react";
 import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
-
-import CeramicClient from "@ceramicnetwork/http-client";
-import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver";
 import Web3 from "web3";
 import Web3Modal from "web3modal";
-import { TileDocument } from "@ceramicnetwork/stream-tile";
-
 import WalletConnectProvider from "@walletconnect/web3-provider";
-
-import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
-import { DID } from "dids";
-import { IDX } from "@ceramicstudio/idx";
-
-// network node that we're interacting with, can be local/prod
-// we're using a test network here
-const endpoint = "https://ceramic-clay.3boxlabs.com";
-
-export interface ProfileData {
-  content: {
-    identity: Identity;
-    accType: string;
-  };
-}
-
-export interface Identity {
-  firstName: string;
-  lastName: string;
-  userWallet: string;
-  email: string;
-  userName: string;
-  bio: string;
-  twitter?: string;
-  linkedIn?: string;
-  website?: string;
-  businessName: string;
-  businessType: string;
-  businessLocation: string;
-  currTitle: string;
-  currLocation?: string;
-  funcExpertise: string;
-  industryExpertise: string;
-  companyInfo?: CompanyInfo[];
-  uuid: string;
-}
-
-export interface BasicProfile {
-  name: string;
-}
-export interface Profile {
-  identity: Identity;
-  name: string;
-  accType: string;
-}
 
 export interface UserData {
   userName: string;
@@ -120,7 +69,6 @@ const HeaderNav = (props) => {
 
   const getUserByWallet = async (userWallet) => {
     let lowerCaseWallet = userWallet.toLowerCase();
-    // let apiURL = process.env.NEXT_PUBLIC_LOCALHOST ? process.env.NEXT_PUBLIC_LOCALHOST : `https://${process.env.VERCEL_URL}`; // TEMP: vercel URL doesn't include http
     const res = await fetch(
       `/api/users/wallet/${lowerCaseWallet}`
     );
@@ -148,59 +96,22 @@ const HeaderNav = (props) => {
       },
     });
     const provider = await web3Modal.connect();
-    // console.log('p', provider);
     const web3 = new Web3(provider);
-    // console.log(web3);
     const accounts = await web3.eth.getAccounts();
     const currAccount = accounts[0];
     console.log(currAccount);
-    // const ceramic = new CeramicClient(endpoint);
-    // const idx = new IDX({ ceramic });
+
     setIsSubmitted(true);
     try {
       let userData: UserData = await getUserByWallet(currAccount);
       console.log(userData);
-      // const threeIdConnect = new ThreeIdConnect();
-      // const ethProvider = new EthereumAuthProvider(
-      //   window.ethereum,
-      //   currAccount
-      // );
-      // await threeIdConnect.connect(ethProvider);
 
-      // const did = new DID({
-      //   provider: threeIdConnect.getDidProvider(),
-      //   resolver: {
-      //     ...ThreeIdResolver.getResolver(ceramic),
-      //   },
-      // });
-
-      // ceramic.setDID(did);
-      // await ceramic.did.authenticate();
-
-      // // does not require signing to get user's public data
-      // const data: BasicProfile = await idx.get(
-      //   "basicProfile",
-      //   `${currAccount}@eip155:1`
-      // );
-
-      // const profileData: ProfileData = await TileDocument.deterministic(
-      //   ceramic,
-      //   { family: "user-profile-data" },
-      //   { anchor: false, publish: false }
-      // );
-
-      // let identity = profileData.content.identity;
-      // let userData: UserData = await getUserByWallet(currAccount);
-      // console.log(userData);
       if (
-        // identity.userName &&
-        // identity.userWallet &&
         userData &&
         userData.userName &&
         userData.userWallet
       ) {
         setIsSubmitted(false);
-        // router.push("/profile");
         router.push(`/${userData.userName}`);
       } else {
         console.log("No profile, pls create one...");

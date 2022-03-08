@@ -17,34 +17,16 @@ import {
 } from "@chakra-ui/react";
 import { connect } from "../../../utils/walletUtils";
 
-import CeramicClient from "@ceramicnetwork/http-client";
-import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver";
-
-import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
-import { DID } from "dids";
-import { IDX } from "@ceramicstudio/idx";
-import { TileDocument } from "@ceramicnetwork/stream-tile";
-
-// 3box test nodes with read/write access on ceramic clay testnet
-// network node that we're interacting with, can be local/prod
-// we're using a test network here
-const endpoint = "https://ceramic-clay.3boxlabs.com";
-
-export interface ProfileData {
-  content: {
-    identity: Identity;
-    accType: string;
-  };
-}
-
-export interface Identity {
+export interface UserData {
+  userName: string;
+  userWallet: string;
+  accType: string;
   firstName: string;
   lastName: string;
   email: string;
-  userName: string;
-  bio: string;
-  twitterUsrName?: string;
-  linkedInUsrName?: string;
+  bio?: string;
+  twitter?: string;
+  linkedIn?: string;
   website?: string;
   businessName: string;
   businessType: string;
@@ -54,16 +36,6 @@ export interface Identity {
   funcExpertise: string;
   industryExpertise: string;
   companyInfo?: CompanyInfo[];
-  uuid: string;
-}
-
-export interface BasicProfile {
-  name: string;
-}
-export interface Profile {
-  identity: Identity;
-  name: string;
-  accType: string;
 }
 
 export interface CompanyInfo {
@@ -79,12 +51,10 @@ export interface CompanyInfo {
 const EditExperienceModal = (props) => {
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [accType, setAccType] = useState(props.profileData.content.accType);
-  const [identity, setIdentity] = useState(props.profileData.content.identity);
   const [profileData, setProfileData] = useState(props.profileData);
   const [values, setValues] = useState({
-    userName: props.profileData.content.identity.userName,
-    email: props.profileData.content.identity.email,
+    userName: props.profileData.userName,
+    email: props.profileData.email,
   });
   const [errors, setErrors] = useState({
     userName: null,
@@ -96,39 +66,10 @@ const EditExperienceModal = (props) => {
     const address = await connect(); // first address in the array
 
     if (address) {
-      const ceramic = new CeramicClient(endpoint);
-      const threeIdConnect = new ThreeIdConnect();
-      const provider = new EthereumAuthProvider(window.ethereum, address);
-
       setIsSubmitted(true);
 
-      await threeIdConnect.connect(provider);
-
-      const did = new DID({
-        provider: threeIdConnect.getDidProvider(),
-        resolver: {
-          ...ThreeIdResolver.getResolver(ceramic),
-        },
-      });
-
-      ceramic.setDID(did);
-      await ceramic.did.authenticate();
-
-      const idx = new IDX({ ceramic });
-
-      // does not require signing to get user's public data
-      const data: BasicProfile = await idx.get(
-        "basicProfile",
-        `${address}@eip155:1`
-      );
-      console.log("data: ", data);
-
-      await updateProfileData(ceramic, identity, accType);
-
-      console.log("Profile updated!");
-      console.log(identity);
-
-      if (identity.firstName && identity.lastName && identity.email) {
+      // TODO: Need to run a update profile call here
+      if (profileData.firstName && profileData.lastName && profileData.email) {
         setIsSubmitted(false);
         props.handleUpdatedExperiences(profileData, false);
         props.onClose();
@@ -137,15 +78,6 @@ const EditExperienceModal = (props) => {
       }
     }
   }
-
-  // Updates a stream to store JSON data with ceramic
-  const updateProfileData = async (ceramic, identity, accType) => {
-    const profileData = await TileDocument.deterministic(ceramic, {
-      family: "user-profile-data",
-    });
-
-    await profileData.update({ identity, accType });
-  };
 
   const validate = (values) => {
     let errors: any = {};
@@ -179,17 +111,9 @@ const EditExperienceModal = (props) => {
     evt.persist();
     setValues((values) => ({ ...values, [evt.target.name]: evt.target.value }));
     setErrors(validate(values));
-    setIdentity({
-      ...identity,
-      [evt.target.name]: evt.target.value,
+    setProfileData({
+      ...profileData,
     });
-    const newProfileData: ProfileData = {
-      content: {
-        identity: identity,
-        accType: props.profileData.content.accType,
-      },
-    };
-    setProfileData(newProfileData);
   };
 
   return (
@@ -211,19 +135,19 @@ const EditExperienceModal = (props) => {
                   required
                   isInvalid={
                     errors.userName &&
-                    (!props.profileData.content.identity.userName ||
+                    (!props.profileData.userName ||
                       !values.userName)
                   }
                   errorBorderColor="red.300"
                   placeholder="User name"
                   name="userName"
                   defaultValue={
-                    props.profileData.content.identity.userName || ""
+                    props.profileData.userName || ""
                   }
                   onChange={handleChange}
                 />
                 {errors.userName &&
-                  (!props.profileData.content.identity.userName ||
+                  (!props.profileData.userName ||
                     !values.userName) && (
                     <Text fontSize="xs" fontWeight="400" color="red.500">
                       {errors.userName}
@@ -236,16 +160,16 @@ const EditExperienceModal = (props) => {
                   required
                   isInvalid={
                     errors.email &&
-                    props.profileData.content.identity.email === values.email
+                    props.profileData.email === values.email
                   }
                   errorBorderColor="red.300"
                   placeholder="Email"
                   name="email"
-                  defaultValue={props.profileData.content.identity.email || ""}
+                  defaultValue={props.profileData.email || ""}
                   onChange={handleChange}
                 />
                 {errors.email &&
-                  props.profileData.content.identity.email !== values.email && (
+                  props.profileData.email !== values.email && (
                     <Text fontSize="xs" fontWeight="400" color="red.500">
                       {errors.email}
                     </Text>
@@ -256,7 +180,7 @@ const EditExperienceModal = (props) => {
                 <Select
                   required
                   defaultValue={
-                    props.profileData.content.identity.funcExpertise
+                    props.profileData.funcExpertise
                   }
                   errorBorderColor="red.300"
                   placeholder="Select functional expertise"
@@ -315,7 +239,7 @@ const EditExperienceModal = (props) => {
                 <Select
                   required
                   defaultValue={
-                    props.profileData.content.identity.industryExpertise
+                    props.profileData.industryExpertise
                   }
                   placeholder="Select industry expertise"
                   name="industryExpertise"

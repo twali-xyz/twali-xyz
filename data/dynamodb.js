@@ -10,13 +10,13 @@ const getDynamoDBClient = () => {
     : "us-east-2";
 
   // Only needed with local development.
-  // if (process.env.LOCAL_DYNAMO_DB_ENDPOINT) {
-    // AWS.config.update({
-    //   // accessKeyId: 'xxxx',
-    //   // secretAccessKey: 'xxxx',
-    //   region: "us-east-1",
-    //   endpoint: "http://localhost:8000",
-    // });
+  if (process.env.LOCAL_DYNAMO_DB_ENDPOINT) {
+    AWS.config.update({
+      // accessKeyId: 'xxxx',
+      // secretAccessKey: 'xxxx',
+      region: "us-east-1",
+      endpoint: "http://localhost:8000",
+    })};
   
 
   const options = {
@@ -58,11 +58,11 @@ module.exports = {
 
   /**
    * @desc Creates a user profile with the `userName` being set as the primary key in the database.
-   * @param {Object} userDescription holds the primary key from object to process to database and any addtional metadata.
+   * @param {Object} userData holds the primary key from object to process to database and any addtional metadata.
    * @dev This is a flexible creation function and is not perminit. Can be adjusted to a required user needs.
    * @example See docs about including additonal attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#put-property
    **/
-  createUser: async (userDescription) => {
+  createUser: async (userData) => {
     const {
       userName,
       userWallet,
@@ -81,7 +81,7 @@ module.exports = {
       funcExpertise,
       industryExpertise,
       companyInfo,
-    } = userDescription;
+    } = userData;
     await getDynamoDBClient()
       .put({
         TableName,
