@@ -342,6 +342,7 @@ const CompanyModal = (props) => {
       </ModalContent>
     </>
   );
+  console.log("COMP: ", !companyName, "LOGO: ", tempLogo);
 
   return (
     <>
@@ -385,7 +386,7 @@ const CompanyModal = (props) => {
                           />
                         </Box>
                       </>
-                    ) : !tempLogo && companyInfo.logo.message ? (
+                    ) : !tempLogo && companyInfo.logo?.message ? (
                       <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
                         <Img
                           height="30px"
@@ -393,14 +394,20 @@ const CompanyModal = (props) => {
                           alt={companyInfo.logo?.message?.domain}
                         />
                       </Box>
-                    ) : (companyName || tempLogo) && companyInfo.companyName ? (
+                    ) : (companyName || tempLogo) &&
+                      shouldFetch &&
+                      companyInfo.companyName ? (
                       <>
                         <LogoFallBack companyName={companyInfo.companyName} />
                       </>
                     ) : !shouldFetch && !tempLogo && companyInfo.companyName ? (
-                      <LogoFallBack companyName={companyInfo.companyName} />
+                      <>
+                        <LogoFallBack companyName={companyInfo.companyName} />
+                      </>
                     ) : !shouldFetch && tempLogo && companyName ? (
-                      <LogoFallBack companyName={companyName} />
+                      <>
+                        <LogoFallBack companyName={companyName} />
+                      </>
                     ) : null}
                     <FormLabel>Company name</FormLabel>
                     <Input
@@ -681,7 +688,9 @@ function CompanyInfoData(props) {
           </Box>
         ) : props.companyName ? (
           // return when shouldFetch returns no data
-          <LogoFallBack companyName={props.companyName} />
+          <>
+            <LogoFallBack companyName={props.companyName} />
+          </>
         ) : null}
       </>
     );
@@ -699,7 +708,9 @@ function CompanyInfoData(props) {
         </Box>
       ) : (
         props.companyName !== "" && (
-          <LogoFallBack companyName={props.companyName} />
+          <>
+            <LogoFallBack companyName={props.companyName} />
+          </>
         )
       )}
     </>
@@ -707,6 +718,8 @@ function CompanyInfoData(props) {
 }
 
 export function LogoFallBack(props) {
+  console.log(3);
+
   return (
     <>
       <Box w="full" borderRadius="lg" overflow="hidden" p={4}>

@@ -84,6 +84,7 @@ const ProfilePage = () => {
       ) {
         elements.push(
           <GetCompany
+            key={`${i}--company-info`}
             company={identity.companyInfo[i]}
             companyName={identity.companyInfo[i].companyName}
             currCompany={i}
