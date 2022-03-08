@@ -42,8 +42,10 @@ const IndexPage = () => {
           >
             <HStack
               margin={0}
-              marginTop={["20px", "26px", "34px", "43px"]}
               alignItems={"baseline"}
+              marginTop={["26px", "34px", "43px"]}
+              pos={"relative"}
+              top={["5px", "0px"]}
             >
               <Text
                 margin={0}
@@ -110,8 +112,8 @@ const IndexPage = () => {
                 alt="twali knowledge symbol"
                 pos={"relative"}
                 height={["42px", "52px"]}
-                top={["-2px", "-3px", "4px"]}
-                left={["2px", "3px", "4px", "5px"]}
+                top={["-5px", "-3px", "4px"]}
+                left={["4px", "5px"]}
                 width={"36.4px"}
                 marginX={[
                   "5px !important",
