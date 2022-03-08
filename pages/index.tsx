@@ -40,7 +40,11 @@ const IndexPage = () => {
             py={[4, 6, 8, 10, 12]}
             alignItems="flex-start"
           >
-            <HStack margin={0} marginTop={["20px", "26px", "34px", "43px"]}>
+            <HStack
+              margin={0}
+              marginTop={["20px", "26px", "34px", "43px"]}
+              alignItems={"baseline"}
+            >
               <Text
                 margin={0}
                 padding={0}
@@ -59,17 +63,19 @@ const IndexPage = () => {
                 fontSize={["18px", "28px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 paddingRight={"10px"}
-                fontFamily={"GrandSlang Italic"}
+                fontFamily={"GrandSlang"}
+                fontStyle={"italic"}
               >
                 smartypants
               </Text>
               <LottieAnimation
+                alignSelf={"center"}
                 height={["36px", "48px", "65px"]}
                 width={["36px", "48px", "65.36px"]}
                 animation={handAnimation}
               />
             </HStack>
-            <HStack>
+            <HStack alignItems={"baseline"}>
               <Img
                 alt="twali-logo"
                 src="twali-logo.svg"
@@ -88,7 +94,7 @@ const IndexPage = () => {
                 is the community for
               </Text>
             </HStack>
-            <HStack display={"flex"} alignItems={"center"}>
+            <HStack display={"flex"} alignItems={"baseline"}>
               <Text
                 margin={0}
                 padding={0}
@@ -102,7 +108,6 @@ const IndexPage = () => {
               <Img
                 src="twali-knowledge.svg"
                 alt="twali knowledge symbol"
-                top={["2px", "3px", "4px", "5px"]}
                 left={["2px", "3px", "4px", "5px"]}
                 height={["42px", "52px"]}
                 pos={"relative"}
@@ -114,6 +119,7 @@ const IndexPage = () => {
                   "20px !important",
                   "25px !important",
                 ]}
+                alignSelf={"center"}
               />
               <Text
                 margin={0}
@@ -128,7 +134,6 @@ const IndexPage = () => {
               <Text
                 margin={0}
                 padding={0}
-                top={["2px", "3px", "4px", "5px"]}
                 left={["0px", "8px", "14px", "16px"]}
                 pos={"relative"}
                 color={"#F9FFF2"}
@@ -140,7 +145,11 @@ const IndexPage = () => {
               </Text>
             </HStack>
             <VStack>
-              <HStack alignSelf={"start"} marginTop={["25px", "50px", "75px"]}>
+              <HStack
+                alignSelf={"start"}
+                marginTop={["25px", "50px", "75px"]}
+                alignItems={"baseline"}
+              >
                 <Text
                   display={"flex"}
                   fontSize={["18px", "28px", "32px", "48px", "64px"]}
@@ -167,7 +176,8 @@ const IndexPage = () => {
                   marginLeft={"0 !important"}
                   alignItems={"center"}
                   letterSpacing={"0.06em"}
-                  fontFamily={"GrandSlang Italic"}
+                  fontFamily={"GrandSlang"}
+                  fontStyle={"italic"}
                 >
                   expert
                 </Text>
@@ -200,14 +210,16 @@ const IndexPage = () => {
             >
               <HStack
                 display={"flex"}
-                alignItems={"center"}
+                alignItems={"baseline"}
                 marginTop={"15px !important"}
               >
                 <Text
                   fontSize={["18px", "28px", "32px", "48px", "64px"]}
                   lineHeight={["22px", "32px", "48px", "64px", "80px"]}
-                  fontFamily={"GrandSlang Italic"}
+                  fontFamily={"GrandSlang"}
+                  fontStyle={"italic"}
                   letterSpacing={"0.06em"}
+                  marginRight={["0px", "5px", "10px", "15px"]}
                 >
                   . . . literally
                 </Text>
