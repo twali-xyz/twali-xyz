@@ -655,7 +655,7 @@ const SignUpSteps = () => {
           <Button
             size="sm"
             pl={40}
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/login")}
             colorScheme="gray"
             variant="link"
           >
@@ -824,7 +824,7 @@ const SignUpSteps = () => {
             {steps.map(({ label, content }) => (
               <Step label={label} key={label}>
                 {activeStep < 0 ? (
-                  router.push("/")
+                  router.push("/login")
                 ) : (
                   <Button
                     pl={264}
