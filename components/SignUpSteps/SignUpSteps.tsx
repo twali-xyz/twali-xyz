@@ -565,7 +565,6 @@ const SignUpSteps = () => {
     evt.persist();
     setValues((values) => ({ ...values, [evt.target.name]: evt.target.value }));
     setErrors(validate(values));
-    console.log(values);
 
     const value = evt.target.value;
     setIdentity({
@@ -620,7 +619,6 @@ const SignUpSteps = () => {
       await createProfileData(ceramic, identity, accType);
 
       console.log("Profile updated!");
-      console.log(identity);
 
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);

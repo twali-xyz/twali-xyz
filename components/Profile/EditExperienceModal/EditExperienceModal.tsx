@@ -125,12 +125,10 @@ const EditExperienceModal = (props) => {
         "basicProfile",
         `${address}@eip155:1`
       );
-      console.log("data: ", data);
 
       await updateProfileData(ceramic, identity, accType);
 
       console.log("Profile updated!");
-      console.log(identity);
 
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);
