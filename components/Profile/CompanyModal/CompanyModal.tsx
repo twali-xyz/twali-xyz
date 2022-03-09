@@ -33,6 +33,37 @@ import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
 import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
 
+export interface Identity {
+  firstName: string;
+  lastName: string;
+  email: string;
+  displayName: string;
+  bio: string;
+  twitterUsrName?: string;
+  linkedInUsrName?: string;
+  website?: string;
+  businessName: string;
+  businessType: string;
+  businessLocation: string;
+  currTitle: string;
+  currLocation?: string;
+  functionalExpertise: string;
+  functionalExpertise2: string;
+  functionalExpertise3: string;
+  industryExpertise: string;
+  industryExpertise2: string;
+  industryExpertise3: string;
+  companyInfo?: CompanyInfo[];
+}
+export interface CompanyInfo {
+  companyName: string;
+  companyTitle: string;
+  companyImg: any;
+  companyStart: Date;
+  companyEnd: Date;
+  companyFunc: string;
+  companyIndustry: string;
+}
 export interface ProfileData {
   content: {
     identity: Identity;
