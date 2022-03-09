@@ -202,6 +202,7 @@ const CompanyModal = (props) => {
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);
         props.handleUpdatedCompanyInfo(props.profileData, false);
+        props.setProfileData(newProfileData);
         props.onClose();
         setTempLogo(false);
         setShouldFetch(false);
@@ -219,7 +220,7 @@ const CompanyModal = (props) => {
 
     await profileData.update({ identity, accType });
   };
-
+  let newProfileData: ProfileData;
   const handleChange = (evt) => {
     evt.persist();
     setValues((values) => ({ ...values, [evt.target.name]: evt.target.value }));
@@ -227,7 +228,7 @@ const CompanyModal = (props) => {
     setIdentity({
       ...identity,
     });
-    const newProfileData: ProfileData = {
+    newProfileData = {
       content: {
         identity: identity,
         accType: props.profileData.content.accType,
