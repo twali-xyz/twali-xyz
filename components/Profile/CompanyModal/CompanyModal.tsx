@@ -406,7 +406,7 @@ const CompanyModal = (props) => {
                           shouldFetch={shouldFetch}
                         />
                       </>
-                    ) : tempLogo?.message ? (
+                    ) : tempLogo?.message?.logo ? (
                       <>
                         <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
                           <Img
