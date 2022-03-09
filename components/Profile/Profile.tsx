@@ -538,7 +538,7 @@ const ProfilePage = () => {
 const GetCompany = (props) => {
   return (
     <>
-      {props.company.logo.message ? (
+      {props.company?.logo?.message ? (
         <Box
           w="100px"
           height="100px"
