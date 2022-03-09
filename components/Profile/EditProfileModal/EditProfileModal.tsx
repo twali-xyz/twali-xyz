@@ -342,6 +342,7 @@ const EditProfileModal = (props) => {
                   errorBorderColor="red.300"
                   defaultValue={props.profileData.content.identity.bio || ""}
                   name="bio"
+                  maxLength={280}
                   onChange={handleChange}
                 />
                 {errors.bio && (
