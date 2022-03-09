@@ -87,7 +87,6 @@ const EditProfileModal = (props) => {
   const [accType, setAccType] = useState(props.profileData.content.accType);
   const [identity, setIdentity] = useState(props.profileData.content.identity);
   const [fileUploaded, setFileUploaded] = useState();
-  const [profileData, setProfileData] = useState(props.profileData);
   const [values, setValues] = useState({
     firstName: props.profileData.content.identity.firstName,
     lastName: props.profileData.content.identity.lastName,
@@ -148,7 +147,7 @@ const EditProfileModal = (props) => {
 
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);
-        props.handleUpdatedProfile(profileData, false);
+        props.handleUpdatedProfile(props.profileData, false);
         props.onClose();
       } else {
         console.log("No profile, pls create one...");
@@ -179,7 +178,6 @@ const EditProfileModal = (props) => {
         accType: props.profileData.content.accType,
       },
     };
-    setProfileData(newProfileData);
   };
 
   const handleFile = (fileUploaded) => {

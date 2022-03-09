@@ -100,7 +100,6 @@ const CompanyModal = (props) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [accType, setAccType] = useState(props.profileData.content.accType);
   const [identity, setIdentity] = useState(props.profileData.content.identity);
-  const [profileData, setProfileData] = useState(props.profileData);
   const emptyCompanyInfo = {
     companyName: "",
     companyTitle: "",
@@ -209,7 +208,8 @@ const CompanyModal = (props) => {
 
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);
-        props.handleUpdatedCompanyInfo(profileData, false);
+        props.handleUpdatedCompanyInfo(props.profileData, false);
+        props.setProfileData(newProfileData);
         props.onClose();
       } else {
         console.log("No profile, pls create one...");
@@ -225,7 +225,7 @@ const CompanyModal = (props) => {
 
     await profileData.update({ identity, accType });
   };
-
+  let newProfileData: ProfileData;
   const handleChange = (evt) => {
     evt.persist();
     setValues((values) => ({ ...values, [evt.target.name]: evt.target.value }));
@@ -233,13 +233,12 @@ const CompanyModal = (props) => {
     setIdentity({
       ...identity,
     });
-    const newProfileData: ProfileData = {
+    newProfileData = {
       content: {
         identity: identity,
         accType: props.profileData.content.accType,
       },
     };
-    setProfileData(newProfileData);
     if (evt.target.name == "companyName") {
       setCompanyName(evt.target.value);
       setShouldFetch(true);

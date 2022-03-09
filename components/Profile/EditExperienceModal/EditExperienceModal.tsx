@@ -85,7 +85,6 @@ const EditExperienceModal = (props) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [accType, setAccType] = useState(props.profileData.content.accType);
   const [identity, setIdentity] = useState(props.profileData.content.identity);
-  const [profileData, setProfileData] = useState(props.profileData);
   const [values, setValues] = useState({
     displayName: props.profileData.content.identity.displayName,
     email: props.profileData.content.identity.email,
@@ -132,7 +131,8 @@ const EditExperienceModal = (props) => {
 
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);
-        props.handleUpdatedExperiences(profileData, false);
+        props.handleUpdatedExperiences(props.profileData, false);
+        props.setProfileData(newProfileData);
         props.onClose();
       } else {
         console.log("No profile, pls create one...");
@@ -176,7 +176,7 @@ const EditExperienceModal = (props) => {
 
     return errors;
   };
-
+  let newProfileData: ProfileData;
   const handleChange = (evt) => {
     evt.persist();
     setValues((values) => ({ ...values, [evt.target.name]: evt.target.value }));
@@ -185,13 +185,12 @@ const EditExperienceModal = (props) => {
       ...identity,
       [evt.target.name]: evt.target.value,
     });
-    const newProfileData: ProfileData = {
+    newProfileData = {
       content: {
         identity: identity,
         accType: props.profileData.content.accType,
       },
     };
-    setProfileData(newProfileData);
   };
 
   return (

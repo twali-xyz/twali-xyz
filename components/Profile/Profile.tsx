@@ -358,6 +358,7 @@ const ProfilePage = () => {
       onClose={onCompanyModalClose}
       currCompany={currCompany}
       profileData={profileData}
+      setProfileData={setProfileData}
       userPermission="view"
       handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
     />
@@ -432,6 +433,7 @@ const ProfilePage = () => {
                       isOpen={isExpModalOpen}
                       onClose={onExpModalClose}
                       profileData={profileData}
+                      setProfileData={setProfileData}
                       handleUpdatedExperiences={handleUpdatedProfile}
                     />
                   </UserPermissionsRestricted>
@@ -552,6 +554,7 @@ const ProfilePage = () => {
                             onClose={onCompanyModalClose}
                             currCompany={currCompany}
                             profileData={profileData}
+                            setProfileData={setProfileData}
                             handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
                           />
                         </UserPermissionsRestricted>
@@ -613,6 +616,7 @@ const ProfilePage = () => {
                       isOpen={isProfileModalOpen}
                       onClose={onProfileModalClose}
                       profileData={profileData}
+                      setProfileData={setProfileData}
                       handleUpdatedProfile={handleUpdatedProfile}
                     />
                   </UserPermissionsRestricted>
