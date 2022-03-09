@@ -2,9 +2,22 @@ import { Button, FormControl, FormLabel, Select } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 
-export function Expertise({ title, formLabel, handleChange, options }) {
-  let [count, setCount] = useState(1);
-  let splitLabel = formLabel.split(" ");
+export function Expertise({
+  formLabel,
+  name,
+  handleChange,
+  options,
+  defaultValues,
+}) {
+  let defaults = [];
+  for (let i = 0; i < defaultValues.length; i++) {
+    const element = defaultValues[i];
+    if (element !== "") {
+      defaults.push(element);
+    }
+  }
+  let [count, setCount] = useState(defaults.length || 1);
+  let splitLabel = name.split(" ");
 
   function createSelectors() {
     let selectors = [];
@@ -16,6 +29,7 @@ export function Expertise({ title, formLabel, handleChange, options }) {
           handleChange={handleChange}
           options={options}
           idx={i}
+          defaultValue={defaultValues?.length ? defaultValues[i - 1] : null}
         />
       );
 
@@ -32,7 +46,7 @@ export function Expertise({ title, formLabel, handleChange, options }) {
   return (
     <>
       <FormControl p={4} id={`${splitLabel[0]}-${splitLabel[1]}`} isRequired>
-        <FormLabel>{title}</FormLabel>
+        <FormLabel>{formLabel}</FormLabel>
         {createSelectors()}
         <Button marginTop={"10px"} onClick={handleAddSelector}>
           <FontAwesomeIcon icon={"plus-circle"}></FontAwesomeIcon>
@@ -42,7 +56,7 @@ export function Expertise({ title, formLabel, handleChange, options }) {
   );
 }
 
-function Selector({ splitLabel, handleChange, options, idx }) {
+function Selector({ splitLabel, handleChange, options, idx, defaultValue }) {
   return (
     <Select
       key={`${splitLabel[0]}-${idx}`}
@@ -52,6 +66,7 @@ function Selector({ splitLabel, handleChange, options, idx }) {
         l.toUpperCase()
       )}${idx == 1 ? "" : idx}`}
       onChange={handleChange}
+      defaultValue={defaultValue}
     >
       {options?.map((option, idx) => {
         return <option key={`${option}--option-${idx}`}>{option}</option>;

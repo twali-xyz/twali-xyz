@@ -372,9 +372,10 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
               </Select>
             </FormControl>
             <Expertise
-              formLabel={"functional expertise"}
-              title={"Functional expertise"}
+              name={"functional expertise"}
+              formLabel={"Functional expertise"}
               handleChange={handleChange}
+              defaultValues={[]}
               options={[
                 "Accounting",
                 "Creative",
@@ -421,9 +422,10 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
               ]}
             />
             <Expertise
-              formLabel={"industry expertise"}
-              title={"Industry expertise"}
+              name={"industry expertise"}
               handleChange={handleChange}
+              formLabel={"Industry expertise"}
+              defaultValues={[]}
               options={[
                 "Accounting",
                 "Angel Investment",
