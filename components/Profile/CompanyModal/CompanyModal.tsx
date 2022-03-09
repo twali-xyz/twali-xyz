@@ -416,12 +416,12 @@ const CompanyModal = (props) => {
                           />
                         </Box>
                       </>
-                    ) : !tempLogo && companyInfo.logo?.message ? (
+                    ) : !tempLogo && companyInfo.logo?.message?.logo ? (
                       <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
                         <Img
                           height="30px"
                           src={companyInfo.logo?.message?.logo}
-                          alt={companyInfo.logo?.message?.domain}
+                          alt={companyInfo.logo?.message?.domain + "here"}
                         />
                       </Box>
                     ) : (companyName || tempLogo) &&
@@ -706,7 +706,7 @@ function CompanyInfoData(props) {
     return (
       // return when shouldFetch == true && logo data is found
       <>
-        {data && data?.message && data?.message.logo ? (
+        {data && data?.message && data?.message?.logo ? (
           <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
             <Img
               height="30px"
@@ -723,12 +723,13 @@ function CompanyInfoData(props) {
       </>
     );
   }
+
   // the return value if shouldFetch  == false, uses cached logo if available otherwise falls back to first letter of company name
   return (
     <>
       {props.tempLogo &&
       props.tempLogo?.message &&
-      props.tempLogo?.message.logo ? (
+      props.tempLogo?.message?.logo ? (
         <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
           <Img
             height="30px"
@@ -748,8 +749,6 @@ function CompanyInfoData(props) {
 }
 
 export function LogoFallBack(props) {
-  console.log(3);
-
   return (
     <>
       <Box w="full" borderRadius="lg" overflow="hidden" p={4}>

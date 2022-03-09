@@ -632,7 +632,7 @@ const ProfilePage = () => {
 const GetCompany = (props) => {
   return (
     <>
-      {props.company?.logo?.message ? (
+      {props.company?.logo?.message?.logo ? (
         <Box
           w="100px"
           height="100px"
@@ -666,7 +666,7 @@ const GetCompany = (props) => {
               key={`${props.companyName}--${props.currCompany}`}
               alignSelf="center"
               src={props.company.logo.message.logo}
-              alt="fox stock img"
+              alt={props.companyName + "THIS ONE"}
               onMouseEnter={(e) => (e.currentTarget.src = "edit.svg")}
               onMouseLeave={(e) =>
                 (e.currentTarget.src = props.company.logo.message.logo)
