@@ -51,8 +51,12 @@ export interface Identity {
   businessLocation: string;
   currTitle: string;
   currLocation?: string;
-  funcExpertise: string;
+  functionalExpertise: string;
+  functionalExpertise2: string;
+  functionalExpertise3: string;
   industryExpertise: string;
+  industryExpertise2: string;
+  industryExpertise3: string;
   companyInfo?: CompanyInfo[];
 }
 
@@ -163,8 +167,8 @@ const EditExperienceModal = (props) => {
       errors.email = "Email address is invalid";
     }
 
-    if (values.funcExpertise === "") {
-      errors.funcExpertise = "Functional expertise is required";
+    if (values.functionalExpertise === "") {
+      errors.functionalExpertise = "Functional expertise is required";
     }
 
     if (values.industryExpertise === "") {
@@ -255,11 +259,11 @@ const EditExperienceModal = (props) => {
                 <Select
                   required
                   defaultValue={
-                    props.profileData.content.identity.funcExpertise
+                    props.profileData.content.identity.functionalExpertise
                   }
                   errorBorderColor="red.300"
                   placeholder="Select functional expertise"
-                  name="funcExpertise"
+                  name="functionalExpertise"
                   onChange={handleChange}
                 >
                   <option>Accounting</option>

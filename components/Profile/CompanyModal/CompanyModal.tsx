@@ -59,8 +59,12 @@ export interface Identity {
   businessLocation: string;
   currTitle: string;
   currLocation?: string;
-  funcExpertise: string;
+  functionalExpertise: string;
+  functionalExpertise2: string;
+  functionalExpertise3: string;
   industryExpertise: string;
+  industryExpertise2: string;
+  industryExpertise3: string;
   companyInfo?: CompanyInfo[];
 }
 
@@ -79,7 +83,7 @@ export interface CompanyInfo {
   companyImg: any;
   companyStart: Date;
   companyEnd: Date;
-  companyFunc: string;
+  companyFunction: string;
   companyIndustry: string;
 }
 
@@ -90,7 +94,7 @@ const CompanyModal = (props) => {
   const [companyTitle, setCompanyTitle] = useState("");
   const [companyStart, setCompanyStart] = useState();
   const [companyEnd, setCompanyEnd] = useState();
-  const [companyFunc, setCompanyFunc] = useState();
+  const [companyFunction, setCompanyFunction] = useState();
   const [companyIndustry, setCompanyIndustry] = useState();
   const [shouldFetch, setShouldFetch] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -102,7 +106,7 @@ const CompanyModal = (props) => {
     companyTitle: "",
     companyStart: "",
     companyEnd: "",
-    companyFunc: "",
+    companyFunction: "",
     companyIndustry: "",
   };
 
@@ -117,7 +121,7 @@ const CompanyModal = (props) => {
     companyTitle: null,
     companyStart: null,
     companyEnd: null,
-    companyFunc: null,
+    companyFunction: null,
     companyIndustry: null,
   });
 
@@ -130,8 +134,10 @@ const CompanyModal = (props) => {
       companyInfo && companyInfo.companyStart ? companyInfo.companyStart : "",
     companyEnd:
       companyInfo && companyInfo.companyEnd ? companyInfo.companyEnd : "",
-    companyFunc:
-      companyInfo && companyInfo.companyFunc ? companyInfo.companyFunc : "",
+    companyFunction:
+      companyInfo && companyInfo.companyFunction
+        ? companyInfo.companyFunction
+        : "",
     companyIndustry:
       companyInfo && companyInfo.companyIndustry
         ? companyInfo.companyIndustry
@@ -192,7 +198,7 @@ const CompanyModal = (props) => {
         companyTitle: companyTitle,
         companyStart: companyStart,
         companyEnd: companyEnd,
-        companyFunc: companyFunc,
+        companyFunction: companyFunction,
         companyIndustry: companyIndustry,
       };
 
@@ -253,8 +259,8 @@ const CompanyModal = (props) => {
       setCompanyEnd(evt.target.value);
     }
 
-    if (evt.target.name == "funcExpertise") {
-      setCompanyFunc(evt.target.value);
+    if (evt.target.name == "functionalExpertise") {
+      setCompanyFunction(evt.target.value);
     }
 
     if (evt.target.name == "industryExpertise") {
@@ -292,8 +298,8 @@ const CompanyModal = (props) => {
       errors.companyEnd = "End date (DD-MM-YYYY) is incorrect";
     }
 
-    if (values.companyFunc === "") {
-      errors.companyFunc = "Functional expertise is required";
+    if (values.companyFunction === "") {
+      errors.companyFunction = "Functional expertise is required";
     }
 
     if (values.companyIndustry === "") {
@@ -335,20 +341,21 @@ const CompanyModal = (props) => {
                   </Text>
                 ) : null}
 
-                {companyInfo.companyFunc && companyInfo.companyIndustry ? (
+                {companyInfo.companyFunction && companyInfo.companyIndustry ? (
                   <HStack spacing={4}>
-                    {[companyInfo.companyFunc, companyInfo.companyIndustry].map(
-                      (name) => (
-                        <Tag
-                          size={"md"}
-                          key={`sm--${name}`}
-                          variant="solid"
-                          colorScheme="teal"
-                        >
-                          {name}
-                        </Tag>
-                      )
-                    )}
+                    {[
+                      companyInfo.companyFunction,
+                      companyInfo.companyIndustry,
+                    ].map((name) => (
+                      <Tag
+                        size={"md"}
+                        key={`sm--${name}`}
+                        variant="solid"
+                        colorScheme="teal"
+                      >
+                        {name}
+                      </Tag>
+                    ))}
                   </HStack>
                 ) : null}
               </>
@@ -478,10 +485,10 @@ const CompanyModal = (props) => {
                     <FormLabel>Functional expertise</FormLabel>
                     <Select
                       required
-                      defaultValue={companyInfo.companyFunc}
+                      defaultValue={companyInfo.companyFunction}
                       errorBorderColor="red.300"
                       placeholder="Select functional expertise"
-                      name="funcExpertise"
+                      name="functionalExpertise"
                       onChange={handleChange}
                     >
                       <option>Accounting</option>

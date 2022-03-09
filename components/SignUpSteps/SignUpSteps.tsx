@@ -1,3 +1,4 @@
+import { Expertise } from "./Expertise";
 import { useState } from "react";
 import { Step, Steps, useSteps } from "chakra-ui-steps";
 import { connect } from "../../utils/walletUtils";
@@ -57,8 +58,12 @@ export interface Identity {
   businessLocation: string;
   currTitle: string;
   currLocation?: string;
-  funcExpertise: string;
+  functionalExpertise: string;
+  functionalExpertise2: string;
+  functionalExpertise3: string;
   industryExpertise: string;
+  industryExpertise2: string;
+  industryExpertise3: string;
   companyInfo?: CompanyInfo[];
 }
 
@@ -366,116 +371,106 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
                 {listOfCountries()}
               </Select>
             </FormControl>
-            <FormControl p={4} id="functional-expertise" isRequired>
-              <FormLabel>Functional expertise</FormLabel>
-              <Select
-                placeholder="Select functional expertise"
-                name="funcExpertise"
-                onChange={handleChange}
-              >
-                <option>Accounting</option>
-                <option>Creative</option>
-                <option>Audit</option>
-                <option>Board & Advisory</option>
-                <option>Corporate Development</option>
-                <option>Comp & Benefits</option>
-                <option>Compliance</option>
-                <option>Management Consulting</option>
-                <option>Data & Analytics</option>
-                <option>Product Design</option>
-                <option>Digital</option>
-                <option>Engineering</option>
-                <option>Entrepreneurship</option>
-                <option>Finance</option>
-                <option>General Management</option>
-                <option>Human Resources</option>
-                <option>IT Infrastructure</option>
-                <option>Innovation</option>
-                <option>Investor</option>
-                <option>Legal</option>
-                <option>Marketing</option>
-                <option>Media & Comms</option>
-                <option>Merchandising</option>
-                <option>Security</option>
-                <option>Operations</option>
-                <option>Portfolio Operations</option>
-                <option>Procurement</option>
-                <option>Product Management</option>
-                <option>Investor Relations</option>
-                <option>Regulatory</option>
-                <option>Research</option>
-                <option>Risk</option>
-                <option>Strategy</option>
-                <option>Technology</option>
-                <option>Transformation</option>
-                <option>Sales & Customer</option>
-                <option>Data Science</option>
-                <option>Talent Acquisition</option>
-                <option>Tax</option>
-                <option>Cybersecurity</option>
-                <option>Investment Banking</option>
-                <option>Supply Chain</option>
-              </Select>
-              {/* {errors.funcExpertise && (
-                          <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.funcExpertise}</Text>
-                        )} */}
-            </FormControl>
-            <FormControl p={4} id="industry-expertise" isRequired>
-              <FormLabel>Industry expertise</FormLabel>
-              <Select
-                placeholder="Select industry expertise"
-                name="industryExpertise"
-                onChange={handleChange}
-              >
-                <option>Accounting</option>
-                <option>Angel Investment</option>
-                <option>Asset Management</option>
-                <option>Auto Insurance</option>
-                <option>Banking</option>
-                <option>Bitcoin</option>
-                <option>Commercial Insurance</option>
-                <option>Commercial Lending</option>
-                <option>Credit</option>
-                <option>Credit Bureau</option>
-                <option>Credit Cards</option>
-                <option>Crowdfunding</option>
-                <option>Cryptocurrency</option>
-                <option>Debit Cards</option>
-                <option>Debt Collections</option>
-                <option>Finance</option>
-                <option>Financial Exchanges</option>
-                <option>Financial Services</option>
-                <option>FinTech</option>
-                <option>Fraud Detection</option>
-                <option>Funding Platform</option>
-                <option>Gift Card</option>
-                <option>Health Insurance</option>
-                <option>Hedge Funds</option>
-                <option>Impact Investing</option>
-                <option>Incubators</option>
-                <option>Insurance</option>
-                <option>InsurTech</option>
-                <option>Leasing</option>
-                <option>Lending</option>
-                <option>Life Insurance</option>
-                <option>Micro Lending</option>
-                <option>Mobile Payments</option>
-                <option>Payments</option>
-                <option>Personal Finance</option>
-                <option>Prediction Markets</option>
-                <option>Property Insurance</option>
-                <option>Real Estate Investment</option>
-                <option>Stock Exchanges</option>
-                <option>Trading Platform</option>
-                <option>Transaction Processing</option>
-                <option>Venture Capital</option>
-                <option>Virtual Currency</option>
-                <option>Wealth Management</option>
-              </Select>
-              {/* {errors.industryExpertise && (
-                          <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.industryExpertise}</Text>
-                        )} */}
-            </FormControl>
+            <Expertise
+              formLabel={"functional expertise"}
+              title={"Functional expertise"}
+              handleChange={handleChange}
+              options={[
+                "Accounting",
+                "Creative",
+                "Audit",
+                "Board & Advisory",
+                "Corporate Development",
+                "Comp & Benefits",
+                "Compliance",
+                "Management Consulting",
+                "Data & Analytics",
+                "Product Design",
+                "Digital",
+                "Engineering",
+                "Entrepreneurship",
+                "Finance",
+                "General Management",
+                "Human Resources",
+                "IT Infrastructure",
+                "Innovation",
+                "Investor",
+                "Legal",
+                "Marketing",
+                "Media & Comms",
+                "Merchandising",
+                "Security",
+                "Operations",
+                "Portfolio Operations",
+                "Procurement",
+                "Product Management",
+                "Investor Relations",
+                "Regulatory",
+                "Research",
+                "Risk",
+                "Strategy",
+                "Technology",
+                "Transformation",
+                "Sales & Customer",
+                "Data Science",
+                "Talent Acquisition",
+                "Tax",
+                "Cybersecurity",
+                "Investment Banking",
+                "Supply Chain",
+              ]}
+            />
+            <Expertise
+              formLabel={"industry expertise"}
+              title={"Industry expertise"}
+              handleChange={handleChange}
+              options={[
+                "Accounting",
+                "Angel Investment",
+                "Asset Management",
+                "Auto Insurance",
+                "Banking",
+                "Bitcoin",
+                "Commercial Insurance",
+                "Commercial Lending",
+                "Credit",
+                "Credit Bureau",
+                "Credit Cards",
+                "Crowdfunding",
+                "Cryptocurrency",
+                "Debit Cards",
+                "Debt Collections",
+                "Finance",
+                "Financial Exchanges",
+                "Financial Services",
+                "FinTech",
+                "Fraud Detection",
+                "Funding Platform",
+                "Gift Card",
+                "Health Insurance",
+                "Hedge Funds",
+                "Impact Investing",
+                "Incubators",
+                "Insurance",
+                "InsurTech",
+                "Leasing",
+                "Lending",
+                "Life Insurance",
+                "Micro Lending",
+                "Mobile Payments",
+                "Payments",
+                "Personal Finance",
+                "Prediction Markets",
+                "Property Insurance",
+                "Real Estate Investment",
+                "Stock Exchanges",
+                "Trading Platform",
+                "Transaction Processing",
+                "Venture Capital",
+                "Virtual Currency",
+                "Wealth Management",
+              ]}
+            />
           </Box>
         </Box>
       </Box>
@@ -507,8 +502,12 @@ const SignUpSteps = () => {
     businessLocation: "",
     currTitle: "",
     currLocation: "",
-    funcExpertise: "",
+    functionalExpertise: "",
+    functionalExpertise2: "",
+    functionalExpertise3: "",
     industryExpertise: "",
+    industryExpertise2: "",
+    industryExpertise3: "",
     companyInfo: [],
   });
 
@@ -564,6 +563,8 @@ const SignUpSteps = () => {
     evt.persist();
     setValues((values) => ({ ...values, [evt.target.name]: evt.target.value }));
     setErrors(validate(values));
+    console.log(values);
+
     const value = evt.target.value;
     setIdentity({
       ...identity,

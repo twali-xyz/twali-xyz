@@ -58,8 +58,12 @@ export interface Identity {
   businessLocation: string;
   currTitle: string;
   currLocation?: string;
-  funcExpertise: string;
+  functionalExpertise: string;
+  functionalExpertise2: string;
+  functionalExpertise3: string;
   industryExpertise: string;
+  industryExpertise2: string;
+  industryExpertise3: string;
   companyInfo?: CompanyInfo[];
 }
 
@@ -358,6 +362,7 @@ const ProfilePage = () => {
       handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
     />
   );
+  console.log(profileData?.content?.identity);
 
   return (
     <>
@@ -451,9 +456,9 @@ const ProfilePage = () => {
                   >
                     {profileData &&
                       profileData.content.identity &&
-                      profileData.content.identity.funcExpertise && (
+                      profileData.content.identity.functionalExpertise && (
                         <Text fontSize="md">
-                          {profileData.content.identity.funcExpertise}
+                          {profileData.content.identity.functionalExpertise}
                         </Text>
                       )}
                   </Box>
