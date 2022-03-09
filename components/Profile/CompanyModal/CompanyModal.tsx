@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import {
   Box,
   HStack,
@@ -33,11 +33,6 @@ import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
 import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
 
-// 3box test nodes with read/write access on ceramic clay testnet
-// network node that we're interacting with, can be local/prod
-// we're using a test network here
-const endpoint = "https://ceramic-clay.3boxlabs.com";
-
 export interface ProfileData {
   content: {
     identity: Identity;
@@ -45,47 +40,13 @@ export interface ProfileData {
   };
 }
 
-export interface Identity {
-  firstName: string;
-  lastName: string;
-  email: string;
-  displayName: string;
-  bio: string;
-  twitterUsrName?: string;
-  linkedInUsrName?: string;
-  website?: string;
-  businessName: string;
-  businessType: string;
-  businessLocation: string;
-  currTitle: string;
-  currLocation?: string;
-  functionalExpertise: string;
-  functionalExpertise2: string;
-  functionalExpertise3: string;
-  industryExpertise: string;
-  industryExpertise2: string;
-  industryExpertise3: string;
-  companyInfo?: CompanyInfo[];
-}
-
 export interface BasicProfile {
   name: string;
 }
-export interface Profile {
-  identity: Identity;
-  name: string;
-  accType: string;
-}
-
-export interface CompanyInfo {
-  companyName: string;
-  companyTitle: string;
-  companyImg: any;
-  companyStart: Date;
-  companyEnd: Date;
-  companyFunction: string;
-  companyIndustry: string;
-}
+// 3box test nodes with read/write access on ceramic clay testnet
+// network node that we're interacting with, can be local/prod
+// we're using a test network here
+const endpoint = "https://ceramic-clay.3boxlabs.com";
 
 const CompanyModal = (props) => {
   const finalRef = useRef();
@@ -96,6 +57,7 @@ const CompanyModal = (props) => {
   const [companyEnd, setCompanyEnd] = useState();
   const [companyFunction, setCompanyFunction] = useState();
   const [companyIndustry, setCompanyIndustry] = useState();
+  const [tempLogo, setTempLogo] = useState<any>();
   const [shouldFetch, setShouldFetch] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [accType, setAccType] = useState(props.profileData.content.accType);
@@ -163,6 +125,7 @@ const CompanyModal = (props) => {
   }
 
   async function updateCompanyInfo() {
+    console.log(companyInfo, tempLogo);
     const address = await connect(); // first address in the array
 
     if (address) {
@@ -197,20 +160,20 @@ const CompanyModal = (props) => {
         companyTitle: companyTitle,
         companyStart: companyStart,
         companyEnd: companyEnd,
-        companyFunction: companyFunction,
+        companyFunc: companyFunction,
         companyIndustry: companyIndustry,
+        logo: tempLogo,
       };
 
       await updateProfileData(ceramic, identity, accType);
 
       console.log("Profile updated!");
-      console.log(identity);
-
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);
         props.handleUpdatedCompanyInfo(props.profileData, false);
-        props.setProfileData(newProfileData);
         props.onClose();
+        setTempLogo(false);
+        setShouldFetch(false);
       } else {
         console.log("No profile, pls create one...");
       }
@@ -225,7 +188,7 @@ const CompanyModal = (props) => {
 
     await profileData.update({ identity, accType });
   };
-  let newProfileData: ProfileData;
+
   const handleChange = (evt) => {
     evt.persist();
     setValues((values) => ({ ...values, [evt.target.name]: evt.target.value }));
@@ -233,16 +196,17 @@ const CompanyModal = (props) => {
     setIdentity({
       ...identity,
     });
-    newProfileData = {
+    const newProfileData: ProfileData = {
       content: {
         identity: identity,
         accType: props.profileData.content.accType,
       },
     };
+    props.setProfileData(newProfileData);
     if (evt.target.name == "companyName") {
       setCompanyName(evt.target.value);
       setShouldFetch(true);
-    } else {
+    } else if (evt.target.name !== "companyName") {
       setShouldFetch(false);
     }
 
@@ -258,7 +222,7 @@ const CompanyModal = (props) => {
       setCompanyEnd(evt.target.value);
     }
 
-    if (evt.target.name == "functionalExpertise") {
+    if (evt.target.name == "funcExpertise") {
       setCompanyFunction(evt.target.value);
     }
 
@@ -297,8 +261,8 @@ const CompanyModal = (props) => {
       errors.companyEnd = "End date (DD-MM-YYYY) is incorrect";
     }
 
-    if (values.companyFunction === "") {
-      errors.companyFunction = "Functional expertise is required";
+    if (values.companyFunc === "") {
+      errors.companyFunc = "Functional expertise is required";
     }
 
     if (values.companyIndustry === "") {
@@ -340,21 +304,20 @@ const CompanyModal = (props) => {
                   </Text>
                 ) : null}
 
-                {companyInfo.companyFunction && companyInfo.companyIndustry ? (
+                {companyInfo.companyFunc && companyInfo.companyIndustry ? (
                   <HStack spacing={4}>
-                    {[
-                      companyInfo.companyFunction,
-                      companyInfo.companyIndustry,
-                    ].map((name) => (
-                      <Tag
-                        size={"md"}
-                        key={`sm--${name}`}
-                        variant="solid"
-                        colorScheme="teal"
-                      >
-                        {name}
-                      </Tag>
-                    ))}
+                    {[companyInfo.companyFunc, companyInfo.companyIndustry].map(
+                      (name) => (
+                        <Tag
+                          size={"md"}
+                          key={`sm--${name}`}
+                          variant="solid"
+                          colorScheme="teal"
+                        >
+                          {name}
+                        </Tag>
+                      )
+                    )}
                   </HStack>
                 ) : null}
               </>
@@ -366,7 +329,9 @@ const CompanyModal = (props) => {
             colorScheme="blue"
             mr={3}
             onClick={() => {
+              setTempLogo(false);
               props.onClose();
+              setShouldFetch(false);
             }}
           >
             Close
@@ -375,13 +340,18 @@ const CompanyModal = (props) => {
       </ModalContent>
     </>
   );
+  console.log("COMP: ", !companyName, "LOGO: ", tempLogo);
 
   return (
     <>
       <Modal
         finalFocusRef={finalRef}
         isOpen={props.isOpen}
-        onClose={props.onClose}
+        onClose={() => {
+          setTempLogo(false);
+          props.onClose();
+          setShouldFetch(false);
+        }}
         key={`companymodal--${props.currCompany}`}
       >
         <ModalOverlay />
@@ -393,13 +363,51 @@ const CompanyModal = (props) => {
               {companyInfo ? (
                 <form style={{ alignSelf: "center" }}>
                   <FormControl p={2} id="company-name">
+                    {shouldFetch ? (
+                      <>
+                        <CompanyInfoData
+                          companyInfo={companyInfo}
+                          companyName={companyName}
+                          isDisabled={setDisabled}
+                          tempLogo={tempLogo}
+                          setTempLogo={setTempLogo}
+                          shouldFetch={shouldFetch}
+                        />
+                      </>
+                    ) : tempLogo?.message ? (
+                      <>
+                        <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+                          <Img
+                            height="30px"
+                            src={tempLogo?.message?.logo}
+                            alt={tempLogo?.message?.domain}
+                          />
+                        </Box>
+                      </>
+                    ) : !tempLogo && companyInfo.logo?.message ? (
+                      <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+                        <Img
+                          height="30px"
+                          src={companyInfo.logo?.message?.logo}
+                          alt={companyInfo.logo?.message?.domain}
+                        />
+                      </Box>
+                    ) : (companyName || tempLogo) &&
+                      shouldFetch &&
+                      companyInfo.companyName ? (
+                      <>
+                        <LogoFallBack companyName={companyInfo.companyName} />
+                      </>
+                    ) : !shouldFetch && !tempLogo && companyInfo.companyName ? (
+                      <>
+                        <LogoFallBack companyName={companyInfo.companyName} />
+                      </>
+                    ) : !shouldFetch && tempLogo && companyName ? (
+                      <>
+                        <LogoFallBack companyName={companyName} />
+                      </>
+                    ) : null}
                     <FormLabel>Company name</FormLabel>
-                    {shouldFetch && (
-                      <CompanyInfoData
-                        companyName={companyName}
-                        isDisabled={setDisabled}
-                      />
-                    )}
                     <Input
                       required
                       isInvalid={
@@ -479,15 +487,21 @@ const CompanyModal = (props) => {
                           {errors.companyEnd}
                         </Text>
                       )}
+                    {errors.companyName &&
+                      (!companyInfo.companyName || !values.companyName) && (
+                        <Text fontSize="xs" fontWeight="400" color="red.500">
+                          {errors.companyName}
+                        </Text>
+                      )}
                   </FormControl>
                   <FormControl p={2} id="company-func">
                     <FormLabel>Functional expertise</FormLabel>
                     <Select
                       required
-                      defaultValue={companyInfo.companyFunction}
+                      defaultValue={companyInfo.companyFunc}
                       errorBorderColor="red.300"
                       placeholder="Select functional expertise"
-                      name="functionalExpertise"
+                      name="funcExpertise"
                       onChange={handleChange}
                     >
                       <option>Accounting</option>
@@ -594,13 +608,20 @@ const CompanyModal = (props) => {
               ) : null}
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="blue" mr={3} onClick={props.onClose}>
+              <Button
+                colorScheme="blue"
+                mr={3}
+                onClick={() => {
+                  setTempLogo(false);
+                  props.onClose();
+                  setShouldFetch(false);
+                }}
+              >
                 Close
               </Button>
               <Button
                 isDisabled={isDisabled}
                 onClick={() => {
-                  setShouldFetch(false);
                   updateCompanyInfo();
                 }}
                 variant="ghost"
@@ -625,42 +646,103 @@ const CompanyModal = (props) => {
 
 // Client-side data fetching for Clearbit's NameToDomain API (on company modal load)
 function CompanyInfoData(props) {
-  console.log(props);
-  const fetcher = (companyDomain: string, ...args: Parameters<typeof fetch>) =>
-    fetch(companyDomain).then((response) => response.json());
+  //
+  // only fetch if event comes from 'company name' field
+  //
+  if (props.shouldFetch) {
+    const fetcher = (
+      companyDomain: string,
+      ...args: Parameters<typeof fetch>
+    ) => fetch(companyDomain).then((response) => response.json());
 
-  let paramsObj = { params: props.companyName };
-  let searchParams = new URLSearchParams(paramsObj);
+    let paramsObj = { params: props.companyName };
+    let searchParams = new URLSearchParams(paramsObj);
 
-  // Create a stable key for SWR
-  searchParams.sort();
-  const qs = searchParams.toString();
+    // Create a stable key for SWR
+    searchParams.sort();
+    const qs = searchParams.toString();
 
-  const { data } = useSWR(`/api/cors?${qs}`, fetcher);
-  console.log("DATA: ", data);
-  if (!data) {
-    props.isDisabled(true);
-  } else {
-    props.isDisabled(false);
+    const { data } = useSWR(`/api/cors?${qs}`, fetcher);
+    if (!data) {
+      props.isDisabled(false);
+      props.setTempLogo(true);
+    } else {
+      props.isDisabled(false);
+      props.setTempLogo(data);
+    }
+
+    return (
+      // return when shouldFetch == true && logo data is found
+      <>
+        {data && data?.message && data?.message.logo ? (
+          <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+            <Img
+              height="30px"
+              src={data.message.logo}
+              alt={data.message.domain}
+            />
+          </Box>
+        ) : props.companyName ? (
+          // return when shouldFetch returns no data
+          <>
+            <LogoFallBack companyName={props.companyName} />
+          </>
+        ) : null}
+      </>
+    );
   }
-
+  // the return value if shouldFetch  == false, uses cached logo if available otherwise falls back to first letter of company name
   return (
     <>
-      {data && data.message && data.message.logo ? (
+      {props.tempLogo &&
+      props.tempLogo?.message &&
+      props.tempLogo?.message.logo ? (
         <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
           <Img
             height="30px"
-            src={data.message.logo}
-            alt={data.message.domain}
+            src={props.tempLogo.message.logo}
+            alt={props.tempLogo.message.domain}
           />
         </Box>
       ) : (
-        <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
-          <Text fontSize="xs" fontWeight="400" color="red.500">
-            Company logo is unavailable or name is incorrect.
+        props.companyName !== "" && (
+          <>
+            <LogoFallBack companyName={props.companyName} />
+          </>
+        )
+      )}
+    </>
+  );
+}
+
+export function LogoFallBack(props) {
+  console.log(3);
+
+  return (
+    <>
+      <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+        <Box
+          w={"1.75rem"}
+          h={"1.75rem"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          bgGradient="linear-gradient(to right, #d1913c, #ffd194)"
+          borderRadius={"50%"}
+        >
+          <Text
+            w={"full"}
+            h={"full"}
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            fontSize="xl"
+            fontWeight="800"
+            color="blue.700"
+          >
+            {props.companyName[0]?.toUpperCase()}
           </Text>
         </Box>
-      )}
+      </Box>
     </>
   );
 }
