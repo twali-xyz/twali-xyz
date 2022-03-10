@@ -53,8 +53,8 @@ export interface Identity {
   businessLocation: string;
   currTitle: string;
   currLocation?: string;
-  functionalExpertise: [];
-  industryExpertise: [];
+  functionalExpertise: any[];
+  industryExpertise: any[];
   companyInfo?: CompanyInfo[];
 }
 
@@ -73,8 +73,8 @@ export interface CompanyInfo {
   companyImg: any;
   companyStart: Date;
   companyEnd: Date;
-  companyFunction: [];
-  companyIndustry: [];
+  companyFunc: string;
+  companyIndustry: string;
 }
 
 const EditProfileModal = (props) => {
