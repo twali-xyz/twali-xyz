@@ -12,10 +12,11 @@ export function Expertise({
   let defaults = [];
   for (let i = 0; i < defaultValues.length; i++) {
     const element = defaultValues[i];
-    if (element !== "") {
+    if (element !== "" && element !== null && element !== undefined) {
       defaults.push(element);
     }
   }
+
   let [count, setCount] = useState(defaults.length || 1);
   let splitLabel = name.split(" ");
 

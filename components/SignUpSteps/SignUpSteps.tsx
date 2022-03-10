@@ -1,4 +1,4 @@
-import { Expertise } from "./Expertise";
+import { Expertise } from "../Profile/Components/Expertise";
 import { useState } from "react";
 import { Step, Steps, useSteps } from "chakra-ui-steps";
 import { connect } from "../../utils/walletUtils";
@@ -31,6 +31,9 @@ import { DID } from "dids";
 import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { functionalExpertiseList } from "../../utils/functionalExpertiseConstants";
+import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
+import { setExpertise } from "../Profile/helpers/setExpertise";
 
 // 3box test nodes with read/write access on ceramic clay testnet
 // network node that we're interacting with, can be local/prod
@@ -58,12 +61,8 @@ export interface Identity {
   businessLocation: string;
   currTitle: string;
   currLocation?: string;
-  functionalExpertise: string;
-  functionalExpertise2: string;
-  functionalExpertise3: string;
-  industryExpertise: string;
-  industryExpertise2: string;
-  industryExpertise3: string;
+  functionalExpertise: any[];
+  industryExpertise: any[];
   companyInfo?: CompanyInfo[];
 }
 
@@ -376,102 +375,14 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
               formLabel={"Functional expertise"}
               handleChange={handleChange}
               defaultValues={[]}
-              options={[
-                "Accounting",
-                "Creative",
-                "Audit",
-                "Board & Advisory",
-                "Corporate Development",
-                "Comp & Benefits",
-                "Compliance",
-                "Management Consulting",
-                "Data & Analytics",
-                "Product Design",
-                "Digital",
-                "Engineering",
-                "Entrepreneurship",
-                "Finance",
-                "General Management",
-                "Human Resources",
-                "IT Infrastructure",
-                "Innovation",
-                "Investor",
-                "Legal",
-                "Marketing",
-                "Media & Comms",
-                "Merchandising",
-                "Security",
-                "Operations",
-                "Portfolio Operations",
-                "Procurement",
-                "Product Management",
-                "Investor Relations",
-                "Regulatory",
-                "Research",
-                "Risk",
-                "Strategy",
-                "Technology",
-                "Transformation",
-                "Sales & Customer",
-                "Data Science",
-                "Talent Acquisition",
-                "Tax",
-                "Cybersecurity",
-                "Investment Banking",
-                "Supply Chain",
-              ]}
+              options={functionalExpertiseList}
             />
             <Expertise
               name={"industry expertise"}
               handleChange={handleChange}
               formLabel={"Industry expertise"}
               defaultValues={[]}
-              options={[
-                "Accounting",
-                "Angel Investment",
-                "Asset Management",
-                "Auto Insurance",
-                "Banking",
-                "Bitcoin",
-                "Commercial Insurance",
-                "Commercial Lending",
-                "Credit",
-                "Credit Bureau",
-                "Credit Cards",
-                "Crowdfunding",
-                "Cryptocurrency",
-                "Debit Cards",
-                "Debt Collections",
-                "Finance",
-                "Financial Exchanges",
-                "Financial Services",
-                "FinTech",
-                "Fraud Detection",
-                "Funding Platform",
-                "Gift Card",
-                "Health Insurance",
-                "Hedge Funds",
-                "Impact Investing",
-                "Incubators",
-                "Insurance",
-                "InsurTech",
-                "Leasing",
-                "Lending",
-                "Life Insurance",
-                "Micro Lending",
-                "Mobile Payments",
-                "Payments",
-                "Personal Finance",
-                "Prediction Markets",
-                "Property Insurance",
-                "Real Estate Investment",
-                "Stock Exchanges",
-                "Trading Platform",
-                "Transaction Processing",
-                "Venture Capital",
-                "Virtual Currency",
-                "Wealth Management",
-              ]}
+              options={industryExpertiseList}
             />
           </Box>
         </Box>
@@ -485,7 +396,10 @@ const SignUpSteps = () => {
   // const [isContinueDisabled, setIsContinueDisabled] = useState(false);
   const [isAccTypeSelection, setIsAccTypeSelection] = useState(true);
   const [isAccTypeSelected, setIsAccTypeSelected] = useState(false);
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState({
+    functionalExpertise: [],
+    industryExpertise: [],
+  });
   const [errors, setErrors] = useState({});
   const [accType, setAccType] = useState("");
   const [btnActive, setBtnActive] = useState(0);
@@ -504,12 +418,8 @@ const SignUpSteps = () => {
     businessLocation: "",
     currTitle: "",
     currLocation: "",
-    functionalExpertise: "",
-    functionalExpertise2: "",
-    functionalExpertise3: "",
-    industryExpertise: "",
-    industryExpertise2: "",
-    industryExpertise3: "",
+    functionalExpertise: [],
+    industryExpertise: [],
     companyInfo: [],
   });
 
@@ -563,14 +473,33 @@ const SignUpSteps = () => {
 
   const handleChange = (evt) => {
     evt.persist();
-    setValues((values) => ({ ...values, [evt.target.name]: evt.target.value }));
-    setErrors(validate(values));
 
-    const value = evt.target.value;
-    setIdentity({
-      ...identity,
-      [evt.target.name]: value,
-    });
+    if (
+      evt.target.name === "functionalExpertise" ||
+      evt.target.name === "functionalExpertise2" ||
+      evt.target.name === "functionalExpertise3" ||
+      evt.target.name === "industryExpertise" ||
+      evt.target.name === "industryExpertise2" ||
+      evt.target.name === "industryExpertise3"
+    ) {
+      setExpertise(
+        evt.target.name,
+        evt,
+        setValues,
+        values,
+        setIdentity,
+        identity
+      );
+    } else {
+      setValues((values) => ({
+        ...values,
+        [evt.target.name]: evt.target.value,
+      }));
+      setIdentity({
+        ...identity,
+        [evt.target.name]: evt.target.value,
+      });
+    }
   };
 
   const steps = [
@@ -618,7 +547,7 @@ const SignUpSteps = () => {
 
       await createProfileData(ceramic, identity, accType);
 
-      console.log("Profile updated!");
+      console.log("Profile updated!", identity);
 
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);

@@ -24,7 +24,10 @@ import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
 import { DID } from "dids";
 import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
-import { Expertise } from "../../SignUpSteps/Expertise";
+import { Expertise } from "../Components/Expertise";
+import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
+import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
+import { setExpertise } from "../helpers/setExpertise";
 
 // 3box test nodes with read/write access on ceramic clay testnet
 // network node that we're interacting with, can be local/prod
@@ -52,12 +55,9 @@ export interface Identity {
   businessLocation: string;
   currTitle: string;
   currLocation?: string;
-  functionalExpertise: string;
-  functionalExpertise2: string;
-  functionalExpertise3: string;
-  industryExpertise: string;
-  industryExpertise2: string;
-  industryExpertise3: string;
+  functionalExpertise: any[];
+  industryExpertise: any[];
+
   companyInfo?: CompanyInfo[];
 }
 
@@ -88,6 +88,8 @@ const EditExperienceModal = (props) => {
   const [values, setValues] = useState({
     displayName: props.profileData.content.identity.displayName,
     email: props.profileData.content.identity.email,
+    functionalExpertise: props.profileData.content.identity.functionalExpertise,
+    industryExpertise: props.profileData.content.identity.industryExpertise,
   });
   const [errors, setErrors] = useState({
     displayName: null,
@@ -179,12 +181,33 @@ const EditExperienceModal = (props) => {
   let newProfileData: ProfileData;
   const handleChange = (evt) => {
     evt.persist();
-    setValues((values) => ({ ...values, [evt.target.name]: evt.target.value }));
-    setErrors(validate(values));
-    setIdentity({
-      ...identity,
-      [evt.target.name]: evt.target.value,
-    });
+
+    if (
+      evt.target.name === "functionalExpertise" ||
+      evt.target.name === "functionalExpertise2" ||
+      evt.target.name === "functionalExpertise3" ||
+      evt.target.name === "industryExpertise" ||
+      evt.target.name === "industryExpertise2" ||
+      evt.target.name === "industryExpertise3"
+    ) {
+      setExpertise(
+        evt.target.name,
+        evt,
+        setValues,
+        values,
+        setIdentity,
+        identity
+      );
+    } else {
+      setValues((values) => ({
+        ...values,
+        [evt.target.name]: evt.target.value,
+      }));
+      setIdentity({
+        ...identity,
+        [evt.target.name]: evt.target.value,
+      });
+    }
     newProfileData = {
       content: {
         identity: identity,
@@ -257,111 +280,19 @@ const EditExperienceModal = (props) => {
                 formLabel={"So...what would you say you do?"}
                 name={"functional expertise"}
                 handleChange={handleChange}
-                options={[
-                  "Accounting",
-                  "Creative",
-                  "Audit",
-                  "Board & Advisory",
-                  "Corporate Development",
-                  "Comp & Benefits",
-                  "Compliance",
-                  "Management Consulting",
-                  "Data & Analytics",
-                  "Product Design",
-                  "Digital",
-                  "Engineering",
-                  "Entrepreneurship",
-                  "Finance",
-                  "General Management",
-                  "Human Resources",
-                  "IT Infrastructure",
-                  "Innovation",
-                  "Investor",
-                  "Legal",
-                  "Marketing",
-                  "Media & Comms",
-                  "Merchandising",
-                  "Security",
-                  "Operations",
-                  "Portfolio Operations",
-                  "Procurement",
-                  "Product Management",
-                  "Investor Relations",
-                  "Regulatory",
-                  "Research",
-                  "Risk",
-                  "Strategy",
-                  "Technology",
-                  "Transformation",
-                  "Sales & Customer",
-                  "Data Science",
-                  "Talent Acquisition",
-                  "Tax",
-                  "Cybersecurity",
-                  "Investment Banking",
-                  "Supply Chain",
-                ]}
-                defaultValues={[
-                  props.profileData.content.identity.functionalExpertise,
-                  props.profileData.content.identity.functionalExpertise2,
-                  props.profileData.content.identity.functionalExpertise3,
-                ]}
+                options={functionalExpertiseList}
+                defaultValues={
+                  props.profileData.content.identity.functionalExpertise
+                }
               />
               <Expertise
                 formLabel={"Where would you say you work?"}
                 name={"industry expertise"}
                 handleChange={handleChange}
-                options={[
-                  "Accounting",
-                  "Angel Investment",
-                  "Asset Management",
-                  "Auto Insurance",
-                  "Banking",
-                  "Bitcoin",
-                  "Commercial Insurance",
-                  "Commercial Lending",
-                  "Credit",
-                  "Credit Bureau",
-                  "Credit Cards",
-                  "Crowdfunding",
-                  "Cryptocurrency",
-                  "Debit Cards",
-                  "Debt Collections",
-                  "Finance",
-                  "Financial Exchanges",
-                  "Financial Services",
-                  "FinTech",
-                  "Fraud Detection",
-                  "Funding Platform",
-                  "Gift Card",
-                  "Health Insurance",
-                  "Hedge Funds",
-                  "Impact Investing",
-                  "Incubators",
-                  "Insurance",
-                  "InsurTech",
-                  "Leasing",
-                  "Lending",
-                  "Life Insurance",
-                  "Micro Lending",
-                  "Mobile Payments",
-                  "Payments",
-                  "Personal Finance",
-                  "Prediction Markets",
-                  "Property Insurance",
-                  "Real Estate Investment",
-                  "Stock Exchanges",
-                  "Trading Platform",
-                  "Transaction Processing",
-                  "Venture Capital",
-                  "Virtual Currency",
-                  "Wealth Management",
-                ]}
-                defaultValues={[
-                  props.profileData.content.identity.industryExpertise,
-                  props.profileData.content.identity.industryExpertise2,
-                  props.profileData.content.identity.industryExpertise3,
-                ]}
+                options={industryExpertiseList}
+                defaultValues={
+                  props.profileData.content.identity.industryExpertise
+                }
               />
             </form>
           </ModalBody>

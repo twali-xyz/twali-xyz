@@ -58,12 +58,8 @@ export interface Identity {
   businessLocation: string;
   currTitle: string;
   currLocation?: string;
-  functionalExpertise: string;
-  functionalExpertise2: string;
-  functionalExpertise3: string;
-  industryExpertise: string;
-  industryExpertise2: string;
-  industryExpertise3: string;
+  functionalExpertise: any[];
+  industryExpertise: any[];
   companyInfo?: CompanyInfo[];
 }
 
@@ -137,7 +133,6 @@ const ProfilePage = () => {
         "basicProfile",
         `${address}@eip155:1`
       );
-      console.log("data: ", data);
 
       const profile: ProfileData = await TileDocument.deterministic(
         ceramic,
@@ -180,7 +175,6 @@ const ProfilePage = () => {
           "basicProfile",
           `${address}@eip155:1`
         );
-        console.log("data: ", data);
 
         const profile: ProfileData = await TileDocument.deterministic(
           ceramic,
@@ -363,7 +357,6 @@ const ProfilePage = () => {
       handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
     />
   );
-  console.log(profileData?.content?.identity);
 
   return (
     <>
@@ -458,10 +451,15 @@ const ProfilePage = () => {
                   >
                     {profileData &&
                       profileData.content.identity &&
-                      profileData.content.identity.functionalExpertise && (
-                        <Text fontSize="md">
-                          {profileData.content.identity.functionalExpertise}
-                        </Text>
+                      profileData.content.identity.functionalExpertise &&
+                      typeof profileData.content.identity
+                        ?.functionalExpertise === "object" &&
+                      profileData.content.identity?.functionalExpertise.map(
+                        (expertise, idx) => (
+                          <Text key={idx} fontSize="md">
+                            {expertise}
+                          </Text>
+                        )
                       )}
                   </Box>
                   <Box
@@ -475,10 +473,15 @@ const ProfilePage = () => {
                   >
                     {profileData &&
                       profileData.content.identity &&
-                      profileData.content.identity.industryExpertise && (
-                        <Text fontSize="md">
-                          {profileData.content.identity.industryExpertise}
-                        </Text>
+                      profileData.content.identity.industryExpertise &&
+                      typeof profileData.content.identity?.industryExpertise ===
+                        "object" &&
+                      profileData.content.identity?.industryExpertise.map(
+                        (expertise, idx) => (
+                          <Text key={idx} fontSize="md">
+                            {expertise}
+                          </Text>
+                        )
                       )}
                   </Box>
                 </VStack>

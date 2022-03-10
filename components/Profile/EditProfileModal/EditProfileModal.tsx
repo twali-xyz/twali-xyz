@@ -53,12 +53,8 @@ export interface Identity {
   businessLocation: string;
   currTitle: string;
   currLocation?: string;
-  functionalExpertise: string;
-  functionalExpertise2: string;
-  functionalExpertise3: string;
-  industryExpertise: string;
-  industryExpertise2: string;
-  industryExpertise3: string;
+  functionalExpertise: [];
+  industryExpertise: [];
   companyInfo?: CompanyInfo[];
 }
 
@@ -77,8 +73,8 @@ export interface CompanyInfo {
   companyImg: any;
   companyStart: Date;
   companyEnd: Date;
-  companyFunc: string;
-  companyIndustry: string;
+  companyFunction: [];
+  companyIndustry: [];
 }
 
 const EditProfileModal = (props) => {
@@ -133,7 +129,6 @@ const EditProfileModal = (props) => {
         "basicProfile",
         `${address}@eip155:1`
       );
-      console.log("data: ", data);
 
       if (fileUploaded) {
         // await idx.merge('basicProfile', { image: '💻' })
@@ -143,7 +138,6 @@ const EditProfileModal = (props) => {
       await updateProfileData(ceramic, identity, accType);
 
       console.log("Profile updated!");
-      console.log(identity);
 
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);
