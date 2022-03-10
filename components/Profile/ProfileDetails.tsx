@@ -15,14 +15,6 @@ import {
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { connect } from "../../utils/walletUtils";
-
-import CeramicClient from "@ceramicnetwork/http-client";
-import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver";
-
-import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
-import { DID } from "dids";
-import { IDX } from "@ceramicstudio/idx";
-import { TileDocument } from "@ceramicnetwork/stream-tile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import EditProfileModal from "./EditProfileModal/EditProfileModal";
 import EditExperienceModal from "./EditExperienceModal/EditExperienceModal";
@@ -33,47 +25,6 @@ import useSWR from "swr";
 import UserPermissionsProvider from "../UserPermissionsProvider/UserPermissionsProvider";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import { fetchPermission } from "../../utils/profileUtils";
-
-// network node that we're interacting with, can be local/prod
-// we're using a test network here
-const endpoint = "https://ceramic-clay.3boxlabs.com";
-
-export interface ProfileData {
-  content: {
-    identity: Identity;
-    accType: string;
-  };
-}
-
-export interface Identity {
-  firstName: string;
-  lastName: string;
-  email: string;
-  userName: string;
-  userWallet: string;
-  bio: string;
-  twitter?: string;
-  linkedIn?: string;
-  website?: string;
-  businessName: string;
-  businessType: string;
-  businessLocation: string;
-  currTitle: string;
-  currLocation?: string;
-  funcExpertise: string;
-  industryExpertise: string;
-  companyInfo?: CompanyInfo[];
-  uuid: string;
-}
-
-export interface BasicProfile {
-  name: string;
-}
-export interface Profile {
-  identity: Identity;
-  name: string;
-  accType: string;
-}
 
 export interface UserData {
   userName: string;
@@ -116,10 +67,7 @@ const ProfileDetails = ({ user }) => {
     return <div>Loading data</div>;
   }
 
-  const [profileData, setProfileData] = useState<ProfileData>();
-  const [userData, setUserData] = useState<UserData>();
-
-  const [name, setName] = useState("");
+  const [profileData, setProfileData] = useState<UserData>();
   const {
     isOpen: isProfileModalOpen,
     onOpen: onProfileModalOpen,
@@ -149,38 +97,12 @@ const ProfileDetails = ({ user }) => {
 
   async function readProfile() {
     const address = await connect(); // first address in the array
-    const ceramic = new CeramicClient(endpoint);
-    const idx = new IDX({ ceramic });
-    const threeIdConnect = new ThreeIdConnect();
-    const authProvider = new EthereumAuthProvider(window.ethereum, address);
-    await threeIdConnect.connect(authProvider);
-    const provider = await threeIdConnect.getDidProvider();
     console.log('outside useEffect', address);
-    ceramic.did = new DID({
-      provider: provider,
-      resolver: {
-        ...ThreeIdResolver.getResolver(ceramic),
-      },
-    });
-    await ceramic.did.authenticate();
 
     try {
       // does not require signing to get user's public data
-      const data: BasicProfile = await idx.get(
-        "basicProfile",
-        `${address}@eip155:1`
-      );
-      console.log("data: ", data);
-
-      const profile: ProfileData = await TileDocument.deterministic(
-        ceramic,
-        { family: "user-profile-data" },
-        { anchor: false, publish: false }
-      );
-
-      if (data.name) setName(data.name);
-      if (profile) {
-        setProfileData(profile);
+      if (user) {
+        setProfileData(user);
       }
 
       setLoaded(true);
@@ -192,83 +114,57 @@ const ProfileDetails = ({ user }) => {
   useEffect(() => {
     async function readProfile() {
       const address = await connect(); // first address in the array
-      const ceramic = new CeramicClient(endpoint);
-      const idx = new IDX({ ceramic });
-      const threeIdConnect = new ThreeIdConnect();
-      const authProvider = new EthereumAuthProvider(window.ethereum, address);
-      await threeIdConnect.connect(authProvider);
-      const provider = await threeIdConnect.getDidProvider();
       console.log('useEffect', address);
-      ceramic.did = new DID({
-        provider: provider,
-        resolver: {
-          ...ThreeIdResolver.getResolver(ceramic),
-        },
-      });
-      await ceramic.did.authenticate();
 
       try {
         // does not require signing to get user's public data
-        const data: BasicProfile = await idx.get(
-          "basicProfile",
-          `${address}@eip155:1`
-        );
-        console.log("data: ", data);
-
-        const profile: ProfileData = await TileDocument.deterministic(
-          ceramic,
-          { family: "user-profile-data" },
-          { anchor: false, publish: false }
-        );
-
-        if (data.name) setName(data.name);
-        if (profile) {
-          setProfileData(profile);
-        }
-
-        if (user) {
-          console.log('users set', user);
-          setUserData(user);
+        if (user && user.userWallet) {
+          console.log('user set', user);
+          setProfileData(user);
+          setLoaded(true);
+          setupSnapshotQueries(user.userWallet);
         }
 
         if (address) {
           setLoggedInUserAddress(address);
         }
-        setLoaded(true);
+
         } catch (err) {
         console.log("error: ", err);
         setLoaded(false);
       }
+    }
 
+    function setupSnapshotQueries(address) {
       const query = gql`
-        query getSnapshotVotes($wallet: String!) {
-          votes(where: { voter: $wallet }) {
+      query getSnapshotVotes($wallet: String!) {
+        votes(where: { voter: $wallet }) {
+          id
+          space {
             id
-            space {
-              id
-              avatar
-            }
+            avatar
           }
         }
-      `;
-      const walletVar = {
-        wallet: address,
-      };
+      }
+    `;
+    const walletVar = {
+      wallet: address,
+    };
 
-      // Run GraphQL queries
-      request("https://hub.snapshot.org/graphql", query, walletVar).then(
-        (data) => {
-          data.votes.find((v) => {
-            if (v.space.avatar) {
-              v.space.avatar = v.space.avatar.replace(
-                "ipfs://",
-                "https://ipfs.io/ipfs/"
-              );
-            }
-          });
-          getVoterSnapshotQueries(data, address);
-        }
-      );
+    // Run GraphQL queries
+    request("https://hub.snapshot.org/graphql", query, walletVar).then(
+      (data) => {
+        data.votes.find((v) => {
+          if (v.space.avatar) {
+            v.space.avatar = v.space.avatar.replace(
+              "ipfs://",
+              "https://ipfs.io/ipfs/"
+            );
+          }
+        });
+        getVoterSnapshotQueries(data, address);
+      }
+    );
     }
 
     async function getVoterSnapshotQueries(data, address) {
@@ -352,19 +248,19 @@ const ProfileDetails = ({ user }) => {
 
   function createWorkElements(number) {
     var elements = [];
-    let totalLen = profileData.content.identity.companyInfo
-      ? profileData.content.identity.companyInfo.length
+    let totalLen = profileData.companyInfo
+      ? profileData.companyInfo.length
       : 0;
     for (let i = 0; i < number; i++) {
       if (
-        profileData.content.identity.companyInfo &&
+        profileData.companyInfo &&
         i < totalLen &&
-        profileData.content.identity.companyInfo[i].companyName
+        profileData.companyInfo[i].companyName
       ) {
         elements.push(
           <GetCompany
             companyName={
-              profileData.content.identity.companyInfo[i].companyName
+              profileData.companyInfo[i].companyName
             }
             currCompany={i}
             setCurrCompany={setCurrCompany}
@@ -419,14 +315,11 @@ const ProfileDetails = ({ user }) => {
         </VStack>
       ) : (
         profileData &&
-        name &&
-        profileData.content &&
-        profileData.content.accType &&
-        profileData.content.identity && (
+        profileData.userName && profileData.userWallet && (
           <>
             <UserPermissionsProvider
               fetchPermission={fetchPermission(
-                userData.userName,
+                profileData.userName,
                 loggedInUserAddress ? loggedInUserAddress : null
               )}
             >
@@ -477,14 +370,14 @@ const ProfileDetails = ({ user }) => {
                       handleUpdatedExperiences={handleUpdatedProfile}
                     />
                   </UserPermissionsRestricted>
-                  {profileData.content.identity.userName && (
+                  {profileData.userName && (
                     <Text fontSize="xl">
-                      @{profileData.content.identity.userName}
+                      @{profileData.userName}
                     </Text>
                   )}
-                  {profileData.content.identity.email && (
+                  {profileData.email && (
                     <Text fontSize="md">
-                      {profileData.content.identity.email}
+                      {profileData.email}
                     </Text>
                   )}
                   <Box
@@ -497,10 +390,9 @@ const ProfileDetails = ({ user }) => {
                     backgroundColor="rgb(222, 222, 222)"
                   >
                     {profileData &&
-                      profileData.content.identity &&
-                      profileData.content.identity.funcExpertise && (
+                      profileData.funcExpertise && (
                         <Text fontSize="md">
-                          {profileData.content.identity.funcExpertise}
+                          {profileData.funcExpertise}
                         </Text>
                       )}
                   </Box>
@@ -514,10 +406,9 @@ const ProfileDetails = ({ user }) => {
                     backgroundColor="rgb(222, 222, 222)"
                   >
                     {profileData &&
-                      profileData.content.identity &&
-                      profileData.content.identity.industryExpertise && (
+                      profileData.industryExpertise && (
                         <Text fontSize="md">
-                          {profileData.content.identity.industryExpertise}
+                          {profileData.industryExpertise}
                         </Text>
                       )}
                   </Box>
@@ -532,28 +423,28 @@ const ProfileDetails = ({ user }) => {
                   <Stack spacing={6}>
                     <HStack>
                       <Text fontSize="xl">
-                        {name + ", " + profileData.content.accType}
+                        {profileData.firstName + ' ' + profileData.lastName + ", " + profileData.accType}
                       </Text>
                       <FontAwesomeIcon size="lg" icon={["fas", "map-pin"]} />
-                      {profileData.content.identity.businessLocation && (
+                      {profileData.businessLocation && (
                         <Text fontSize="md">
-                          {profileData.content.identity.businessLocation}
+                          {profileData.businessLocation}
                         </Text>
                       )}
                     </HStack>
                     <Text fontSize="md">
-                      {profileData.content.identity.currTitle}
+                      {profileData.currTitle}
                     </Text>
-                    {profileData.content.identity.bio && (
+                    {profileData.bio && (
                       <Text fontSize="md">
-                        {profileData.content.identity.bio}
+                        {profileData.bio}
                       </Text>
                     )}
                     ){/* social media URLs */}
                     <HStack width={"6rem"} justifyContent={"space-between"}>
-                      {profileData.content.identity.linkedIn && (
+                      {profileData.linkedIn && (
                         <Link
-                          href={profileData.content.identity.linkedIn}
+                          href={profileData.linkedIn}
                           target="_blank"
                           rel="noopener noreferrer"
                           width={"fit-content"}
@@ -565,9 +456,9 @@ const ProfileDetails = ({ user }) => {
                           />
                         </Link>
                       )}
-                      {profileData.content.identity.twitter && (
+                      {profileData.twitter && (
                         <Link
-                          href={profileData.content.identity.twitter}
+                          href={profileData.twitter}
                           target="_blank"
                           rel="noopener noreferrer"
                         >

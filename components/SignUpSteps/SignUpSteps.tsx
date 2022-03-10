@@ -19,57 +19,7 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-
-
-import CeramicClient from "@ceramicnetwork/http-client";
-import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver";
-
-import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
-import { DID } from "dids";
-import { IDX } from "@ceramicstudio/idx";
-import { TileDocument } from "@ceramicnetwork/stream-tile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-// 3box test nodes with read/write access on ceramic clay testnet
-// network node that we're interacting with, can be local/prod
-// we're using a test network here
-const endpoint = "https://ceramic-clay.3boxlabs.com";
-
-export interface ProfileData {
-  content: {
-    identity: Identity;
-    accType: string;
-  };
-}
-
-export interface Identity {
-  firstName: string;
-  lastName: string;
-  email: string;
-  userName: string;
-  userWallet: string;
-  bio: string;
-  twitter?: string;
-  linkedIn?: string;
-  website?: string;
-  businessName: string;
-  businessType: string;
-  businessLocation: string;
-  currTitle: string;
-  currLocation?: string;
-  funcExpertise: string;
-  industryExpertise: string;
-  companyInfo?: CompanyInfo[];
-}
-
-export interface BasicProfile {
-  name: string;
-}
-export interface Profile {
-  identity: Identity;
-  name: string;
-  accType: string;
-}
 
 export interface UserData {
   userName: string;
@@ -511,7 +461,6 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
 const SignUpSteps = () => {
   const router = useRouter();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  // const [isContinueDisabled, setIsContinueDisabled] = useState(false);
   const [isAccTypeSelection, setIsAccTypeSelection] = useState(true);
   const [isAccTypeSelected, setIsAccTypeSelected] = useState(false);
   const [values, setValues] = useState({});
@@ -519,7 +468,7 @@ const SignUpSteps = () => {
   const [accType, setAccType] = useState("");
   const [btnActive, setBtnActive] = useState(0);
 
-  const [userDescription, setUserDescription] = useState<UserData>({
+  const [userData, setUserData] = useState<UserData>({
     userName: "",
     userWallet: "",
     accType: "",
@@ -540,25 +489,6 @@ const SignUpSteps = () => {
     companyInfo: [],
   });
 
-  const [identity, setIdentity] = useState<Identity>({
-    firstName: "",
-    lastName: "",
-    userWallet: "",
-    email: "",
-    userName: "",
-    bio: "",
-    twitter: "",
-    linkedIn: "",
-    website: "",
-    businessName: "",
-    businessType: "",
-    businessLocation: "",
-    currTitle: "",
-    currLocation: "",
-    funcExpertise: "",
-    industryExpertise: "",
-    companyInfo: [],
-  });
 
   const validate = (values) => {
     let errors: any = {};
@@ -613,13 +543,8 @@ const SignUpSteps = () => {
     setValues((values) => ({ ...values, [evt.target.name]: evt.target.value }));
     setErrors(validate(values));
     const value = evt.target.value;
-    setIdentity({
-      ...identity,
-      [evt.target.name]: value,
-    });
-
-    setUserDescription({
-      ...userDescription,
+    setUserData({
+      ...userData,
       [evt.target.name]: value,
     });
   };
@@ -640,77 +565,36 @@ const SignUpSteps = () => {
   ];
 
   const createNewUser = async (address) => {
-    // const web3 = new Web3(provider);
-    userDescription.userWallet = address;
+    userData.userWallet = address;
     // check if user doesnt already exsist with current address
-    userDescription.accType = accType;
+    userData.accType = accType;
     await fetch('/api/users/createUser', {
       method: "POST",
-      body: JSON.stringify({ userDescription }),
+      body: JSON.stringify({ userData }),
     });
     console.log("NEW USER CREATED BRUH");
     // For now for test case the userName is pushed as query param into a user 'page'
-    router.push(`/${userDescription.userName}`);
+    router.push(`/${userData.userName}`);
   };
 
   async function updateAccType() {
     const address = await connect(); // first address in the array
 
     if (address) {
+      setIsSubmitted(true);
       await createNewUser(address); // creating user in DynamoDB
-      // const ceramic = new CeramicClient(endpoint);
-      // const threeIdConnect = new ThreeIdConnect();
-      // const provider = new EthereumAuthProvider(window.ethereum, address);
-
-      // setIsSubmitted(true);
-
-      // await threeIdConnect.connect(provider);
-
-      // const did = new DID({
-      //   provider: threeIdConnect.getDidProvider(),
-      //   resolver: {
-      //     ...ThreeIdResolver.getResolver(ceramic),
-      //   },
-      // });
-
-      // ceramic.setDID(did);
-      // await ceramic.did.authenticate();
-
-      // const idx = new IDX({ ceramic });
-
-      // await idx.set("basicProfile", {
-      //   name: identity.firstName + " " + identity.lastName,
-      // });
-
-      // identity.userWallet = address;
-      // await createProfileData(ceramic, identity, accType);
-
-      // console.log("Profile updated!");
-      // console.log(identity);
-
       if (
-        // identity.userName &&
-        // identity.userWallet &&
-        userDescription.userName &&
-        userDescription.userWallet
+        userData.userName &&
+        userData.userWallet
       ) {
+        router.push(`/${userData.userName}`); // coming from dynamodb
         setIsSubmitted(false);
-        // router.push(`/${identity.userName}`);
-        router.push(`/${userDescription.userName}`); // coming from dynamodb
       } else {
+        setIsSubmitted(false);
         console.log("No profile, pls create one...");
       }
     }
   }
-
-  // Creates a stream to store JSON data with ceramic
-  const createProfileData = async (ceramic, identity, accType) => {
-    const profileData = await TileDocument.deterministic(ceramic, {
-      family: "user-profile-data",
-    });
-
-    await profileData.update({ identity, accType });
-  };
 
   const { nextStep, prevStep, setStep, reset, activeStep } = useSteps({
     initialStep: 0,
@@ -906,7 +790,6 @@ const SignUpSteps = () => {
                     alignSelf="left"
                     onClick={() => {
                       prevStep();
-                      // setIsContinueDisabled(true);
                     }}
                     colorScheme="gray"
                     variant="link"
@@ -922,7 +805,6 @@ const SignUpSteps = () => {
             w="md"
             alignSelf="center"
             onClick={() => {
-              // setIsContinueDisabled(true);
               if (activeStep > 2) {
                 updateAccType();
               } else {

@@ -23,36 +23,18 @@ import {
 } from "@chakra-ui/react";
 import useSWR from "swr";
 import { connect } from "../../../utils/walletUtils";
-
-import CeramicClient from "@ceramicnetwork/http-client";
-import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver";
-
-import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
-import { DID } from "dids";
-import { IDX } from "@ceramicstudio/idx";
-import { TileDocument } from "@ceramicnetwork/stream-tile";
 import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
 
-// 3box test nodes with read/write access on ceramic clay testnet
-// network node that we're interacting with, can be local/prod
-// we're using a test network here
-const endpoint = "https://ceramic-clay.3boxlabs.com";
-
-export interface ProfileData {
-  content: {
-    identity: Identity;
-    accType: string;
-  };
-}
-
-export interface Identity {
+export interface UserData {
+  userName: string;
+  userWallet: string;
+  accType: string;
   firstName: string;
   lastName: string;
   email: string;
-  userName: string;
-  bio: string;
-  twitterUsrName?: string;
-  linkedInUsrName?: string;
+  bio?: string;
+  twitter?: string;
+  linkedIn?: string;
   website?: string;
   businessName: string;
   businessType: string;
@@ -62,16 +44,6 @@ export interface Identity {
   funcExpertise: string;
   industryExpertise: string;
   companyInfo?: CompanyInfo[];
-  uuid: string;
-}
-
-export interface BasicProfile {
-  name: string;
-}
-export interface Profile {
-  identity: Identity;
-  name: string;
-  accType: string;
 }
 
 export interface CompanyInfo {
@@ -95,8 +67,6 @@ const CompanyModal = (props) => {
   const [companyIndustry, setCompanyIndustry] = useState();
   const [shouldFetch, setShouldFetch] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [accType, setAccType] = useState(props.profileData.content.accType);
-  const [identity, setIdentity] = useState(props.profileData.content.identity);
   const [profileData, setProfileData] = useState(props.profileData);
   const emptyCompanyInfo = {
     companyName: "",
@@ -108,9 +78,9 @@ const CompanyModal = (props) => {
   };
 
   const companyInfo =
-    props.profileData.content.identity.companyInfo &&
-    props.profileData.content.identity.companyInfo[props.currCompany]
-      ? props.profileData.content.identity.companyInfo[props.currCompany]
+    props.profileData.companyInfo &&
+    props.profileData.companyInfo[props.currCompany]
+      ? props.profileData.companyInfo[props.currCompany]
       : emptyCompanyInfo;
 
   const [errors, setErrors] = useState({
@@ -162,47 +132,10 @@ const CompanyModal = (props) => {
     const address = await connect(); // first address in the array
 
     if (address) {
-      const ceramic = new CeramicClient(endpoint);
-      const threeIdConnect = new ThreeIdConnect();
-      const provider = new EthereumAuthProvider(window.ethereum, address);
-
       setIsSubmitted(true);
 
-      await threeIdConnect.connect(provider);
-
-      const did = new DID({
-        provider: threeIdConnect.getDidProvider(),
-        resolver: {
-          ...ThreeIdResolver.getResolver(ceramic),
-        },
-      });
-
-      ceramic.setDID(did);
-      await ceramic.did.authenticate();
-
-      const idx = new IDX({ ceramic });
-
-      // does not require signing to get user's public data
-      const data: BasicProfile = await idx.get(
-        "basicProfile",
-        `${address}@eip155:1`
-      );
-
-      identity.companyInfo[props.currCompany] = {
-        companyName: companyName,
-        companyTitle: companyTitle,
-        companyStart: companyStart,
-        companyEnd: companyEnd,
-        companyFunc: companyFunc,
-        companyIndustry: companyIndustry,
-      };
-
-      await updateProfileData(ceramic, identity, accType);
-
-      console.log("Profile updated!");
-      console.log(identity);
-
-      if (identity.firstName && identity.lastName && identity.email) {
+      // TODO: Need to run a update profile call here
+      if (profileData.firstName && profileData.lastName && profileData.email) {
         setIsSubmitted(false);
         props.handleUpdatedCompanyInfo(profileData, false);
         props.onClose();
@@ -212,29 +145,15 @@ const CompanyModal = (props) => {
     }
   }
 
-  // Updates a stream to store JSON data with ceramic
-  const updateProfileData = async (ceramic, identity, accType) => {
-    const profileData = await TileDocument.deterministic(ceramic, {
-      family: "user-profile-data",
-    });
 
-    await profileData.update({ identity, accType });
-  };
 
   const handleChange = (evt) => {
     evt.persist();
     setValues((values) => ({ ...values, [evt.target.name]: evt.target.value }));
     setErrors(validate(values));
-    setIdentity({
-      ...identity,
+    setProfileData({
+      ...profileData,
     });
-    const newProfileData: ProfileData = {
-      content: {
-        identity: identity,
-        accType: props.profileData.content.accType,
-      },
-    };
-    setProfileData(newProfileData);
     if (evt.target.name == "companyName") {
       setCompanyName(evt.target.value);
       setShouldFetch(true);
@@ -261,6 +180,7 @@ const CompanyModal = (props) => {
     if (evt.target.name == "industryExpertise") {
       setCompanyIndustry(evt.target.value);
     }
+    console.log('Updated profile datA ON COMPANY MODAL: ', profileData);
   };
 
   const validate = (values) => {
