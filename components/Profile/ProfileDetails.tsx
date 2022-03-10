@@ -118,49 +118,53 @@ const ProfileDetails = ({ user }) => {
 
       try {
         // does not require signing to get user's public data
-        if (user) {
+        if (user && user.userWallet) {
           console.log('user set', user);
           setProfileData(user);
+          setLoaded(true);
+          setupSnapshotQueries(user.userWallet);
         }
 
         if (address) {
           setLoggedInUserAddress(address);
         }
-        setLoaded(true);
+
         } catch (err) {
         console.log("error: ", err);
         setLoaded(false);
       }
+    }
 
+    function setupSnapshotQueries(address) {
       const query = gql`
-        query getSnapshotVotes($wallet: String!) {
-          votes(where: { voter: $wallet }) {
+      query getSnapshotVotes($wallet: String!) {
+        votes(where: { voter: $wallet }) {
+          id
+          space {
             id
-            space {
-              id
-              avatar
-            }
+            avatar
           }
         }
-      `;
-      const walletVar = {
-        wallet: address,
-      };
+      }
+    `;
+    const walletVar = {
+      wallet: address,
+    };
 
-      // Run GraphQL queries
-      request("https://hub.snapshot.org/graphql", query, walletVar).then(
-        (data) => {
-          data.votes.find((v) => {
-            if (v.space.avatar) {
-              v.space.avatar = v.space.avatar.replace(
-                "ipfs://",
-                "https://ipfs.io/ipfs/"
-              );
-            }
-          });
-          getVoterSnapshotQueries(data, address);
-        }
-      );
+    // Run GraphQL queries
+    request("https://hub.snapshot.org/graphql", query, walletVar).then(
+      (data) => {
+        data.votes.find((v) => {
+          if (v.space.avatar) {
+            v.space.avatar = v.space.avatar.replace(
+              "ipfs://",
+              "https://ipfs.io/ipfs/"
+            );
+          }
+        });
+        getVoterSnapshotQueries(data, address);
+      }
+    );
     }
 
     async function getVoterSnapshotQueries(data, address) {
