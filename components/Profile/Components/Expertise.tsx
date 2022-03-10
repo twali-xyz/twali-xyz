@@ -10,28 +10,36 @@ export function Expertise({
   defaultValues,
 }) {
   let defaults = [];
+  let maxIdx = 0;
   for (let i = 0; i < defaultValues.length; i++) {
     const element = defaultValues[i];
     if (element !== "" && element !== null && element !== undefined) {
       defaults.push(element);
+      if (i >= maxIdx) maxIdx = i;
     }
   }
 
-  let [count, setCount] = useState(defaults.length || 1);
+  let [count, setCount] = useState(maxIdx + 1 || 1);
   let splitLabel = name.split(" ");
 
   function createSelectors() {
     let selectors = [];
 
-    for (let i = 1; i <= count; i++) {
+    for (let i = 1; i <= defaultValues.length; i++) {
+      console.log(count, i);
+
       const element = (
-        <Selector
-          splitLabel={splitLabel}
-          handleChange={handleChange}
-          options={options}
-          idx={i}
-          defaultValue={defaultValues?.length ? defaultValues[i - 1] : null}
-        />
+        <>
+          {(defaultValues[i - 1] || i === 1 || count >= i) && (
+            <Selector
+              splitLabel={splitLabel}
+              handleChange={handleChange}
+              options={options}
+              idx={i}
+              defaultValue={defaultValues?.length ? defaultValues[i - 1] : null}
+            />
+          )}
+        </>
       );
 
       selectors.push(element);
