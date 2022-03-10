@@ -83,6 +83,8 @@ export interface CompanyInfo {
 const EditExperienceModal = (props) => {
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [profileData, setProfileData] = useState(props.profileData);
+
   const [accType, setAccType] = useState(props.profileData.content.accType);
   const [identity, setIdentity] = useState(props.profileData.content.identity);
   const [values, setValues] = useState({
@@ -133,8 +135,8 @@ const EditExperienceModal = (props) => {
 
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);
-        props.handleUpdatedExperiences(props.profileData, false);
         props.setProfileData(newProfileData);
+        props.handleUpdatedExperiences(profileData, false);
         props.onClose();
       } else {
         console.log("No profile, pls create one...");

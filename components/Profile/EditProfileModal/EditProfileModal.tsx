@@ -80,6 +80,7 @@ export interface CompanyInfo {
 const EditProfileModal = (props) => {
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [profileData, setProfileData] = useState(props.profileData);
   const [accType, setAccType] = useState(props.profileData.content.accType);
   const [identity, setIdentity] = useState(props.profileData.content.identity);
   const [fileUploaded, setFileUploaded] = useState();
@@ -102,6 +103,7 @@ const EditProfileModal = (props) => {
 
   async function updateProfileInfo() {
     const address = await connect(); // first address in the array
+    let newProfileData: ProfileData;
 
     if (address) {
       const ceramic = new CeramicClient(endpoint);
@@ -139,14 +141,23 @@ const EditProfileModal = (props) => {
 
       console.log("Profile updated!");
 
+      newProfileData = {
+        content: {
+          identity: identity,
+          accType: props.profileData.content.accType,
+        },
+      };
+
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);
-        props.handleUpdatedProfile(props.profileData, false);
+        props.setProfileData(newProfileData);
+        props.handleUpdatedProfile(profileData, false);
         props.onClose();
       } else {
         console.log("No profile, pls create one...");
       }
     }
+    setProfileData(newProfileData);
   }
 
   // Updates a stream to store JSON data with ceramic
