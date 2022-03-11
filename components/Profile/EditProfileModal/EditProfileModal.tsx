@@ -82,15 +82,56 @@ const EditProfileModal = (props) => {
       }
 
       // TODO: Need to run a update profile call here
-      if (profileData.firstName && profileData.lastName && profileData.email) {
-        setIsSubmitted(false);
-        props.handleUpdatedProfile(profileData, false);
+      if (profileData.userWallet && profileData.userName && profileData.firstName && profileData.lastName && profileData.currTitle) {
+        let userData = await getUser(profileData.userName);
+        let experienceAttributes = {
+          userName: profileData.userName,
+          firstName: profileData.firstName,
+          lastName: profileData.lastName,
+          currTitle: profileData.currTitle,
+          bio: profileData.bio ? profileData.bio: null,
+          linkedIn: profileData.linkedIn ? profileData.linkedIn: null,
+          twitter: profileData.twitter ? profileData.twitter: null,
+        };
+        userData.userName = profileData.userName;
+        userData.firstName = profileData.firstName;
+        userData.lastName = profileData.lastName;
+        userData.currTitle = profileData.currTitle;
+        userData.bio = profileData.bio ? profileData.bio: null;
+        userData.linkedIn = profileData.linkedIn ? profileData.linkedIn: null;
+        userData.twitter = profileData.twitter ? profileData.twitter: null;
+        console.log(profileData);
+        updateUserProfile(profileData.userWallet, experienceAttributes);
+        // setProfileData({ ...userData });
+
+        props.handleUpdatedProfile(userData);
         props.onClose();
+        setIsSubmitted(false);
       } else {
         console.log("No profile, pls create one...");
       }
     }
   }
+
+  const updateUserProfile = async (userWallet, attributes) => {
+    let userData = { userWallet, attributes}
+    await fetch(`/api/users/updateUser?updateUser=profile`, {
+      method: "PUT",
+      body: JSON.stringify({ userData }),
+    });
+    console.log("USER profile UPDATED BRUH");
+  };
+
+  const getUser = async (userName) => {
+    const res = await fetch(
+      `/api/users/${userName}`
+    );
+
+    const data: any = await res.json();
+
+    console.log("RETRIEVE USER BY username YO");
+    return data;
+  };
 
   const handleChange = (evt) => {
     evt.persist();
@@ -98,6 +139,7 @@ const EditProfileModal = (props) => {
     setErrors(validate(values));
     setProfileData({
       ...profileData,
+      [evt.target.name]: evt.target.value
     });
   };
 

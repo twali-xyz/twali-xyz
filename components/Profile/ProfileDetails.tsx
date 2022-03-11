@@ -236,15 +236,28 @@ const ProfileDetails = ({ user }) => {
     readProfile();
   }, []);
 
-  const handleUpdatedProfile = (profileData) => {
-    setProfileData({ ...profileData });
-    readProfile();
-  };
+  // const handleUpdatedProfile = async (userName) => {
+  //   // setProfileData({ ...profileData });
+  //   // readProfile();
+  //   let userData = await getUser(userName);
+  //   setProfileData({ ...userData });
+  // };
 
   const handleUpdatedCompanyInfo = (profileData) => {
     setProfileData({ ...profileData });
     readProfile();
   };
+
+  // const getUser = async (userName) => {
+  //   const res = await fetch(
+  //     `/api/users/${userName}`
+  //   );
+
+  //   const data: any = await res.json();
+
+  //   console.log("RETRIEVE USER BY username YO");
+  //   return data;
+  // };
 
   function createWorkElements(number) {
     var elements = [];
@@ -367,7 +380,7 @@ const ProfileDetails = ({ user }) => {
                       isOpen={isExpModalOpen}
                       onClose={onExpModalClose}
                       profileData={profileData}
-                      handleUpdatedExperiences={handleUpdatedProfile}
+                      handleUpdatedExperiences={setProfileData}
                     />
                   </UserPermissionsRestricted>
                   {profileData.userName && (
@@ -546,7 +559,7 @@ const ProfileDetails = ({ user }) => {
                       isOpen={isProfileModalOpen}
                       onClose={onProfileModalClose}
                       profileData={profileData}
-                      handleUpdatedProfile={handleUpdatedProfile}
+                      handleUpdatedProfile={setProfileData}
                     />
                   </UserPermissionsRestricted>
                 </Box>

@@ -69,15 +69,50 @@ const EditExperienceModal = (props) => {
       setIsSubmitted(true);
 
       // TODO: Need to run a update profile call here
-      if (profileData.firstName && profileData.lastName && profileData.email) {
-        setIsSubmitted(false);
-        props.handleUpdatedExperiences(profileData, false);
+      if (profileData.userWallet && profileData.userName && profileData.email && profileData.funcExpertise && profileData.industryExpertise) {
+        let userData = await getUser(profileData.userName);
+        let experienceAttributes = {
+          userName: profileData.userName,
+          email: profileData.email,
+          funcExpertise: profileData.funcExpertise,
+          industryExpertise: profileData.industryExpertise
+        };
+        userData.email = profileData.email;
+        userData.funcExpertise = profileData.funcExpertise;
+        userData.industryExpertise = profileData.industryExpertise;
+        
+        console.log(profileData);
+        updateUserExperience(profileData.userWallet, experienceAttributes);
+        
+        props.handleUpdatedExperiences(userData);
         props.onClose();
+        setIsSubmitted(false);
       } else {
         console.log("No profile, pls create one...");
       }
     }
   }
+
+  const updateUserExperience = async (userWallet, attributes) => {
+    let userData = { userWallet, attributes}
+    await fetch(`/api/users/updateUser?updateUser=experience`, {
+      method: "PUT",
+      body: JSON.stringify({ userData }),
+    });
+    console.log("USER Experience UPDATED BRUH");
+  };
+
+  const getUser = async (userName) => {
+    const res = await fetch(
+      `/api/users/${userName}`
+    );
+
+    const data: any = await res.json();
+
+    console.log("RETRIEVE USER BY username YO");
+    return data;
+  };
+
 
   const validate = (values) => {
     let errors: any = {};
@@ -113,6 +148,7 @@ const EditExperienceModal = (props) => {
     setErrors(validate(values));
     setProfileData({
       ...profileData,
+      [evt.target.name]: evt.target.value
     });
   };
 

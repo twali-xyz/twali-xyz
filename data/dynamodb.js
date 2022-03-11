@@ -83,6 +83,7 @@ module.exports = {
       industryExpertise,
       companyInfo,
     } = userData;
+
     await getDynamoDBClient()
       .put({
         TableName,
@@ -167,18 +168,111 @@ module.exports = {
    * @dev New items can be added to a user and does need to be predefined in the table. Any values in 'UpdateExpression' need to be defined will values within 'ExpressionAttributeValues'.
    * @example See docs about editing existing attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#update-property
    */
-  updateUser: async (userName) => {
-    const { updateAttributes } = await getDynamoDBClient().update({
+  updateUserExperience: async (userWallet, attributes) => {
+    console.log('UPDATE USER EXP DYNAMO');
+    console.log(userWallet);
+    console.log(attributes);
+    let {
+      userName,
+      email,
+      funcExpertise,
+      industryExpertise,
+    } = attributes;
+
+  await getDynamoDBClient().update({
       TableName,
       Key: {
+        userWallet: userWallet,
         userName: userName,
       },
-      UpdateExpression: "SET ",
-      ExpressionAttributeValues: {},
-      ReturnValues: "",
-    });
-    return updateAttributes;
-  },
+      UpdateExpression: "SET email = :email, funcExpertise = :funcExpertise, industryExpertise = :industryExpertise",
+      // ConditionExpression: "",
+      ExpressionAttributeValues: {
+        ":email": email,
+        ":funcExpertise": funcExpertise,
+        ":industryExpertise": industryExpertise,
+      },
+    }).promise()
+    .then(data => console.log(data)).catch(console.error);
+  }, 
+    /**
+   * @desc Edits an existing users item's attributes, or adds a new item to the table if it does not already exist.
+   * @param {object} - function takes an object as a the parameter with primary and attributes. Object will need to the primary key and any attributes that are being updated or created.
+   * @dev New items can be added to a user and does need to be predefined in the table. Any values in 'UpdateExpression' need to be defined will values within 'ExpressionAttributeValues'.
+   * @example See docs about editing existing attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#update-property
+   */
+     updateUserProfile: async (userWallet, attributes) => {
+      console.log('UPDATE USER PROF DYNAMO');
+      console.log(userWallet);
+      console.log(attributes);
+      let {
+        userName,
+        firstName,
+        lastName,
+        currTitle,
+        bio,
+        linkedIn,
+        twitter,
+      } = attributes;
+  
+    await getDynamoDBClient().update({
+        TableName,
+        Key: {
+          userWallet: userWallet,
+          userName: userName,
+        },
+        UpdateExpression: "SET firstName = :firstName, lastName = :lastName, currTitle = :currTitle, bio = :bio, linkedIn = :linkedIn, twitter = :twitter",
+        // ConditionExpression: "",
+        ExpressionAttributeValues: {
+          ":firstName": firstName,
+          ":lastName": lastName,
+          ":currTitle": currTitle,
+          ":bio": bio,
+          ":linkedIn": linkedIn,
+          ":twitter": twitter,
+        },
+      }).promise()
+      .then(data => console.log(data)).catch(console.error);
+    }, 
+        /**
+   * @desc Edits an existing users item's attributes, or adds a new item to the table if it does not already exist.
+   * @param {object} - function takes an object as a the parameter with primary and attributes. Object will need to the primary key and any attributes that are being updated or created.
+   * @dev New items can be added to a user and does need to be predefined in the table. Any values in 'UpdateExpression' need to be defined will values within 'ExpressionAttributeValues'.
+   * @example See docs about editing existing attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#update-property
+   */
+    updateUserCompanyData: async (userWallet, attributes) => {
+      console.log('UPDATE USER PROF DYNAMO');
+      console.log(userWallet);
+      console.log(attributes);
+      let {
+        userName,
+        firstName,
+        lastName,
+        currTitle,
+        bio,
+        linkedIn,
+        twitter,
+      } = attributes;
+  
+    await getDynamoDBClient().update({
+        TableName,
+        Key: {
+          userWallet: userWallet,
+          userName: userName,
+        },
+        UpdateExpression: "SET firstName = :firstName, lastName = :lastName, currTitle = :currTitle, bio = :bio, linkedIn = :linkedIn, twitter = :twitter",
+        // ConditionExpression: "",
+        ExpressionAttributeValues: {
+          ":firstName": firstName,
+          ":lastName": lastName,
+          ":currTitle": currTitle,
+          ":bio": bio,
+          ":linkedIn": linkedIn,
+          ":twitter": twitter,
+        },
+      }).promise()
+      .then(data => console.log(data)).catch(console.error);
+    }, 
   /**
    * @desc Directly access a list of users in the table by scanning the table with `TableName`
    * @dev This can be altered to included any additional attributes with 'ProjectionExpression'.
