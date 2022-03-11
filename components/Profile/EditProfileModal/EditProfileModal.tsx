@@ -264,7 +264,9 @@ const EditProfileModal = (props) => {
                   placeholder="First name"
                   name="firstName"
                   defaultValue={
-                    props.profileData.content.identity.firstName || ""
+                    identity.firstName ||
+                    props.profileData.content.identity.firstName ||
+                    ""
                   }
                   onChange={handleChange}
                 />
@@ -289,7 +291,9 @@ const EditProfileModal = (props) => {
                   placeholder="Last name"
                   name="lastName"
                   defaultValue={
-                    props.profileData.content.identity.lastName || ""
+                    identity.lastName ||
+                    props.profileData.content.identity.lastName ||
+                    ""
                   }
                   onChange={handleChange}
                 />
@@ -312,7 +316,9 @@ const EditProfileModal = (props) => {
                   required
                   errorBorderColor="red.300"
                   defaultValue={
-                    props.profileData.content.identity.currTitle || ""
+                    identity.currTitle ||
+                    props.profileData.content.identity.currTitle ||
+                    ""
                   }
                   name="currTitle"
                   onChange={handleChange}
@@ -329,6 +335,7 @@ const EditProfileModal = (props) => {
                 <FormLabel>Where do you call home?</FormLabel>
                 <Select
                   defaultValue={
+                    identity.currLocation ||
                     props.profileData.content.identity.currLocation
                       ? props.profileData.content.identity.currLocation
                       : ""
@@ -345,7 +352,9 @@ const EditProfileModal = (props) => {
                 <Textarea
                   isInvalid={errors.bio}
                   errorBorderColor="red.300"
-                  defaultValue={props.profileData.content.identity.bio || ""}
+                  defaultValue={
+                    identity.bio || props.profileData.content.identity.bio || ""
+                  }
                   name="bio"
                   maxLength={280}
                   onChange={handleChange}
@@ -363,7 +372,9 @@ const EditProfileModal = (props) => {
                   errorBorderColor="red.300"
                   name="linkedIn"
                   defaultValue={
-                    props.profileData.content.identity.linkedIn || ""
+                    identity.linkedIn ||
+                    props.profileData.content.identity.linkedIn ||
+                    ""
                   }
                   onChange={handleChange}
                 />
@@ -380,7 +391,9 @@ const EditProfileModal = (props) => {
                   errorBorderColor="red.300"
                   name="twitter"
                   defaultValue={
-                    props.profileData.content.identity.twitter || ""
+                    identity.twitter ||
+                    props.profileData.content.identity.twitter ||
+                    ""
                   }
                   onChange={handleChange}
                 />

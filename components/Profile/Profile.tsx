@@ -129,10 +129,6 @@ const ProfilePage = () => {
 
     try {
       // does not require signing to get user's public data
-      const data: BasicProfile = await idx.get(
-        "basicProfile",
-        `${address}@eip155:1`
-      );
 
       const profile: ProfileData = await TileDocument.deterministic(
         ceramic,
@@ -140,7 +136,6 @@ const ProfilePage = () => {
         { anchor: false, publish: false }
       );
 
-      if (data.name) setName(data.name);
       if (profile) {
         setProfileData(profile);
       }
@@ -170,19 +165,12 @@ const ProfilePage = () => {
       await ceramic.did.authenticate();
 
       try {
-        // does not require signing to get user's public data
-        const data: BasicProfile = await idx.get(
-          "basicProfile",
-          `${address}@eip155:1`
-        );
-
         const profile: ProfileData = await TileDocument.deterministic(
           ceramic,
           { family: "user-profile-data" },
           { anchor: false, publish: false }
         );
 
-        if (data.name) setName(data.name);
         if (profile) {
           setProfileData(profile);
         }
@@ -372,7 +360,6 @@ const ProfilePage = () => {
         </VStack>
       ) : (
         profileData &&
-        name &&
         profileData.content &&
         profileData.content.accType &&
         profileData.content.identity && (
@@ -495,7 +482,11 @@ const ProfilePage = () => {
                   <Stack spacing={6}>
                     <HStack>
                       <Text fontSize="xl">
-                        {name + ", " + profileData.content.accType}
+                        {profileData?.content?.identity?.firstName +
+                          " " +
+                          profileData?.content?.identity?.lastName +
+                          ", " +
+                          profileData.content.accType}
                       </Text>
                       <FontAwesomeIcon size="lg" icon={["fas", "map-pin"]} />
                       {profileData.content.identity.currLocation && (
