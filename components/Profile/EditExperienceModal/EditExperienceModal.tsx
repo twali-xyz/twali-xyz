@@ -236,7 +236,9 @@ const EditExperienceModal = (props) => {
                   placeholder="Display name"
                   name="displayName"
                   defaultValue={
-                    props.profileData.content.identity.displayName || ""
+                    values.displayName ||
+                    props.profileData.content.identity.displayName ||
+                    ""
                   }
                   onChange={handleChange}
                 />
@@ -259,7 +261,11 @@ const EditExperienceModal = (props) => {
                   errorBorderColor="red.300"
                   placeholder="Email"
                   name="email"
-                  defaultValue={props.profileData.content.identity.email || ""}
+                  defaultValue={
+                    values.email ||
+                    props.profileData.content.identity.email ||
+                    ""
+                  }
                   onChange={handleChange}
                 />
                 {errors.email &&
@@ -275,6 +281,7 @@ const EditExperienceModal = (props) => {
                 handleChange={handleChange}
                 options={functionalExpertiseList}
                 defaultValues={
+                  values.functionalExpertise ||
                   props.profileData.content.identity.functionalExpertise
                 }
                 maxSelections={3}
@@ -285,6 +292,7 @@ const EditExperienceModal = (props) => {
                 handleChange={handleChange}
                 options={industryExpertiseList}
                 defaultValues={
+                  values.industryExpertise ||
                   props.profileData.content.identity.industryExpertise
                 }
                 maxSelections={3}
