@@ -235,11 +235,7 @@ const EditExperienceModal = (props) => {
                   errorBorderColor="red.300"
                   placeholder="Display name"
                   name="displayName"
-                  defaultValue={
-                    values.displayName ||
-                    props.profileData.content.identity.displayName ||
-                    ""
-                  }
+                  defaultValue={values.displayName || ""}
                   onChange={handleChange}
                 />
                 {errors.displayName &&
@@ -261,11 +257,7 @@ const EditExperienceModal = (props) => {
                   errorBorderColor="red.300"
                   placeholder="Email"
                   name="email"
-                  defaultValue={
-                    values.email ||
-                    props.profileData.content.identity.email ||
-                    ""
-                  }
+                  defaultValue={values.email || ""}
                   onChange={handleChange}
                 />
                 {errors.email &&

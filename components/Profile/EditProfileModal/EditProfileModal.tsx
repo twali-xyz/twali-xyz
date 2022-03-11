@@ -88,6 +88,7 @@ const EditProfileModal = (props) => {
     firstName: props.profileData.content.identity.firstName,
     lastName: props.profileData.content.identity.lastName,
     currTitle: props.profileData.content.identity.currTitle,
+    currLocation: props.profileData.content.identity.currLocation,
     bio: props.profileData.content.identity.bio,
     linkedIn: props.profileData.content.identity.linkedIn,
     twitter: props.profileData.content.identity.twitter,
@@ -263,11 +264,7 @@ const EditProfileModal = (props) => {
                   errorBorderColor="red.300"
                   placeholder="First name"
                   name="firstName"
-                  defaultValue={
-                    identity.firstName ||
-                    props.profileData.content.identity.firstName ||
-                    ""
-                  }
+                  defaultValue={identity.firstName || ""}
                   onChange={handleChange}
                 />
                 {errors.firstName &&
@@ -290,11 +287,7 @@ const EditProfileModal = (props) => {
                   errorBorderColor="red.300"
                   placeholder="Last name"
                   name="lastName"
-                  defaultValue={
-                    identity.lastName ||
-                    props.profileData.content.identity.lastName ||
-                    ""
-                  }
+                  defaultValue={identity.lastName || ""}
                   onChange={handleChange}
                 />
                 {errors.lastName &&
@@ -315,11 +308,7 @@ const EditProfileModal = (props) => {
                   }
                   required
                   errorBorderColor="red.300"
-                  defaultValue={
-                    identity.currTitle ||
-                    props.profileData.content.identity.currTitle ||
-                    ""
-                  }
+                  defaultValue={identity.currTitle || ""}
                   name="currTitle"
                   onChange={handleChange}
                 />
@@ -334,12 +323,7 @@ const EditProfileModal = (props) => {
               <FormControl p={2} id="currLocation" isRequired>
                 <FormLabel>Where do you call home?</FormLabel>
                 <Select
-                  defaultValue={
-                    identity.currLocation ||
-                    props.profileData.content.identity.currLocation
-                      ? props.profileData.content.identity.currLocation
-                      : ""
-                  }
+                  defaultValue={identity.currLocation || ""}
                   placeholder="Select current location"
                   name="currLocation"
                   onChange={handleChange}
@@ -352,9 +336,7 @@ const EditProfileModal = (props) => {
                 <Textarea
                   isInvalid={errors.bio}
                   errorBorderColor="red.300"
-                  defaultValue={
-                    identity.bio || props.profileData.content.identity.bio || ""
-                  }
+                  defaultValue={identity.bio || ""}
                   name="bio"
                   maxLength={280}
                   onChange={handleChange}
@@ -371,11 +353,7 @@ const EditProfileModal = (props) => {
                   isInvalid={errors.linkedIn}
                   errorBorderColor="red.300"
                   name="linkedIn"
-                  defaultValue={
-                    identity.linkedIn ||
-                    props.profileData.content.identity.linkedIn ||
-                    ""
-                  }
+                  defaultValue={identity.linkedIn || ""}
                   onChange={handleChange}
                 />
                 {errors.linkedIn && (
@@ -390,11 +368,7 @@ const EditProfileModal = (props) => {
                   isInvalid={errors.twitter}
                   errorBorderColor="red.300"
                   name="twitter"
-                  defaultValue={
-                    identity.twitter ||
-                    props.profileData.content.identity.twitter ||
-                    ""
-                  }
+                  defaultValue={identity.twitter || ""}
                   onChange={handleChange}
                 />
                 {errors.twitter && (
