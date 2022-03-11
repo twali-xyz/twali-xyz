@@ -50,8 +50,8 @@ export interface Identity {
   businessLocation: string;
   currTitle: string;
   currLocation?: string;
-  funcExpertise: string;
-  industryExpertise: string;
+  functionalExpertise: any[];
+  industryExpertise: any[];
   companyInfo?: CompanyInfo[];
 }
 

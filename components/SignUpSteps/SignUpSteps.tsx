@@ -1,3 +1,4 @@
+import { MulitSelect } from "../Profile/Components/MulitSelect";
 import { useState } from "react";
 import { Step, Steps, useSteps } from "chakra-ui-steps";
 import { connect } from "../../utils/walletUtils";
@@ -30,6 +31,9 @@ import { DID } from "dids";
 import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { functionalExpertiseList } from "../../utils/functionalExpertiseConstants";
+import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
+import { setEventArray } from "../Profile/helpers/setEventArray";
 
 // 3box test nodes with read/write access on ceramic clay testnet
 // network node that we're interacting with, can be local/prod
@@ -57,8 +61,8 @@ export interface Identity {
   businessLocation: string;
   currTitle: string;
   currLocation?: string;
-  funcExpertise: string;
-  industryExpertise: string;
+  functionalExpertise: any[];
+  industryExpertise: any[];
   companyInfo?: CompanyInfo[];
 }
 
@@ -366,116 +370,22 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
                 {listOfCountries()}
               </Select>
             </FormControl>
-            <FormControl p={4} id="functional-expertise" isRequired>
-              <FormLabel>Functional expertise</FormLabel>
-              <Select
-                placeholder="Select functional expertise"
-                name="funcExpertise"
-                onChange={handleChange}
-              >
-                <option>Accounting</option>
-                <option>Creative</option>
-                <option>Audit</option>
-                <option>Board & Advisory</option>
-                <option>Corporate Development</option>
-                <option>Comp & Benefits</option>
-                <option>Compliance</option>
-                <option>Management Consulting</option>
-                <option>Data & Analytics</option>
-                <option>Product Design</option>
-                <option>Digital</option>
-                <option>Engineering</option>
-                <option>Entrepreneurship</option>
-                <option>Finance</option>
-                <option>General Management</option>
-                <option>Human Resources</option>
-                <option>IT Infrastructure</option>
-                <option>Innovation</option>
-                <option>Investor</option>
-                <option>Legal</option>
-                <option>Marketing</option>
-                <option>Media & Comms</option>
-                <option>Merchandising</option>
-                <option>Security</option>
-                <option>Operations</option>
-                <option>Portfolio Operations</option>
-                <option>Procurement</option>
-                <option>Product Management</option>
-                <option>Investor Relations</option>
-                <option>Regulatory</option>
-                <option>Research</option>
-                <option>Risk</option>
-                <option>Strategy</option>
-                <option>Technology</option>
-                <option>Transformation</option>
-                <option>Sales & Customer</option>
-                <option>Data Science</option>
-                <option>Talent Acquisition</option>
-                <option>Tax</option>
-                <option>Cybersecurity</option>
-                <option>Investment Banking</option>
-                <option>Supply Chain</option>
-              </Select>
-              {/* {errors.funcExpertise && (
-                          <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.funcExpertise}</Text>
-                        )} */}
-            </FormControl>
-            <FormControl p={4} id="industry-expertise" isRequired>
-              <FormLabel>Industry expertise</FormLabel>
-              <Select
-                placeholder="Select industry expertise"
-                name="industryExpertise"
-                onChange={handleChange}
-              >
-                <option>Accounting</option>
-                <option>Angel Investment</option>
-                <option>Asset Management</option>
-                <option>Auto Insurance</option>
-                <option>Banking</option>
-                <option>Bitcoin</option>
-                <option>Commercial Insurance</option>
-                <option>Commercial Lending</option>
-                <option>Credit</option>
-                <option>Credit Bureau</option>
-                <option>Credit Cards</option>
-                <option>Crowdfunding</option>
-                <option>Cryptocurrency</option>
-                <option>Debit Cards</option>
-                <option>Debt Collections</option>
-                <option>Finance</option>
-                <option>Financial Exchanges</option>
-                <option>Financial Services</option>
-                <option>FinTech</option>
-                <option>Fraud Detection</option>
-                <option>Funding Platform</option>
-                <option>Gift Card</option>
-                <option>Health Insurance</option>
-                <option>Hedge Funds</option>
-                <option>Impact Investing</option>
-                <option>Incubators</option>
-                <option>Insurance</option>
-                <option>InsurTech</option>
-                <option>Leasing</option>
-                <option>Lending</option>
-                <option>Life Insurance</option>
-                <option>Micro Lending</option>
-                <option>Mobile Payments</option>
-                <option>Payments</option>
-                <option>Personal Finance</option>
-                <option>Prediction Markets</option>
-                <option>Property Insurance</option>
-                <option>Real Estate Investment</option>
-                <option>Stock Exchanges</option>
-                <option>Trading Platform</option>
-                <option>Transaction Processing</option>
-                <option>Venture Capital</option>
-                <option>Virtual Currency</option>
-                <option>Wealth Management</option>
-              </Select>
-              {/* {errors.industryExpertise && (
-                          <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.industryExpertise}</Text>
-                        )} */}
-            </FormControl>
+            <MulitSelect
+              name={"functionalExpertise"}
+              formLabel={"Functional expertise"}
+              handleChange={handleChange}
+              defaultValues={[]}
+              options={functionalExpertiseList}
+              maxSelections={3}
+            />
+            <MulitSelect
+              name={"industry expertise"}
+              handleChange={handleChange}
+              formLabel={"IndustryExpertise"}
+              defaultValues={[]}
+              options={industryExpertiseList}
+              maxSelections={3}
+            />
           </Box>
         </Box>
       </Box>
@@ -488,7 +398,10 @@ const SignUpSteps = () => {
   // const [isContinueDisabled, setIsContinueDisabled] = useState(false);
   const [isAccTypeSelection, setIsAccTypeSelection] = useState(true);
   const [isAccTypeSelected, setIsAccTypeSelected] = useState(false);
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState({
+    functionalExpertise: [],
+    industryExpertise: [],
+  });
   const [errors, setErrors] = useState({});
   const [accType, setAccType] = useState("");
   const [btnActive, setBtnActive] = useState(0);
@@ -507,8 +420,8 @@ const SignUpSteps = () => {
     businessLocation: "",
     currTitle: "",
     currLocation: "",
-    funcExpertise: "",
-    industryExpertise: "",
+    functionalExpertise: [],
+    industryExpertise: [],
     companyInfo: [],
   });
 
@@ -562,13 +475,26 @@ const SignUpSteps = () => {
 
   const handleChange = (evt) => {
     evt.persist();
-    setValues((values) => ({ ...values, [evt.target.name]: evt.target.value }));
-    setErrors(validate(values));
-    const value = evt.target.value;
-    setIdentity({
-      ...identity,
-      [evt.target.name]: value,
-    });
+    let strippedEventName = evt.target.name.substring(
+      0,
+      evt.target.name.length - 1
+    );
+    if (
+      strippedEventName === "functionalExpertise" ||
+      strippedEventName === "industryExpertise"
+    ) {
+      // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
+      setEventArray(evt, setValues, values, setIdentity, identity);
+    } else {
+      setValues((values) => ({
+        ...values,
+        [evt.target.name]: evt.target.value,
+      }));
+      setIdentity({
+        ...identity,
+        [evt.target.name]: evt.target.value,
+      });
+    }
   };
 
   const steps = [
@@ -616,8 +542,7 @@ const SignUpSteps = () => {
 
       await createProfileData(ceramic, identity, accType);
 
-      console.log("Profile updated!");
-      console.log(identity);
+      console.log("Profile updated!", identity);
 
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);
