@@ -152,7 +152,6 @@ const CompanyModal = (props) => {
   }
 
   async function updateCompanyInfo() {
-    console.log(companyInfo, tempLogo);
     const address = await connect(); // first address in the array
 
     if (address) {
@@ -368,7 +367,6 @@ const CompanyModal = (props) => {
       </ModalContent>
     </>
   );
-  console.log("COMP: ", !companyName, "LOGO: ", tempLogo);
 
   return (
     <>

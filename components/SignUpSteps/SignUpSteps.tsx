@@ -1,4 +1,4 @@
-import { Expertise } from "../Profile/Components/Expertise";
+import { MulitSelect } from "../Profile/Components/MulitSelect";
 import { useState } from "react";
 import { Step, Steps, useSteps } from "chakra-ui-steps";
 import { connect } from "../../utils/walletUtils";
@@ -33,7 +33,7 @@ import { TileDocument } from "@ceramicnetwork/stream-tile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { functionalExpertiseList } from "../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
-import { setExpertise } from "../Profile/helpers/setExpertise";
+import { setEventArray } from "../Profile/helpers/setEventArray";
 
 // 3box test nodes with read/write access on ceramic clay testnet
 // network node that we're interacting with, can be local/prod
@@ -370,19 +370,21 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
                 {listOfCountries()}
               </Select>
             </FormControl>
-            <Expertise
-              name={"functional expertise"}
+            <MulitSelect
+              name={"functionalExpertise"}
               formLabel={"Functional expertise"}
               handleChange={handleChange}
               defaultValues={[]}
               options={functionalExpertiseList}
+              maxSelections={3}
             />
-            <Expertise
+            <MulitSelect
               name={"industry expertise"}
               handleChange={handleChange}
-              formLabel={"Industry expertise"}
+              formLabel={"IndustryExpertise"}
               defaultValues={[]}
               options={industryExpertiseList}
+              maxSelections={3}
             />
           </Box>
         </Box>
@@ -473,23 +475,16 @@ const SignUpSteps = () => {
 
   const handleChange = (evt) => {
     evt.persist();
-
+    let strippedEventName = evt.target.name.substring(
+      0,
+      evt.target.name.length - 1
+    );
     if (
-      evt.target.name === "functionalExpertise" ||
-      evt.target.name === "functionalExpertise2" ||
-      evt.target.name === "functionalExpertise3" ||
-      evt.target.name === "industryExpertise" ||
-      evt.target.name === "industryExpertise2" ||
-      evt.target.name === "industryExpertise3"
+      strippedEventName === "functionalExpertise" ||
+      strippedEventName === "industryExpertise"
     ) {
-      setExpertise(
-        evt.target.name,
-        evt,
-        setValues,
-        values,
-        setIdentity,
-        identity
-      );
+      // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
+      setEventArray(evt, setValues, values, setIdentity, identity);
     } else {
       setValues((values) => ({
         ...values,

@@ -11,7 +11,6 @@ import {
   ModalFooter,
   FormControl,
   FormLabel,
-  Select,
   Text,
   CircularProgress,
 } from "@chakra-ui/react";
@@ -24,10 +23,10 @@ import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
 import { DID } from "dids";
 import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
-import { Expertise } from "../Components/Expertise";
+import { Expertise, MulitSelect } from "../Components/MulitSelect";
 import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
-import { setExpertise } from "../helpers/setExpertise";
+import { setEventArray } from "../helpers/setEventArray";
 
 // 3box test nodes with read/write access on ceramic clay testnet
 // network node that we're interacting with, can be local/prod
@@ -183,23 +182,16 @@ const EditExperienceModal = (props) => {
   let newProfileData: ProfileData;
   const handleChange = (evt) => {
     evt.persist();
-
+    const strippedEventName = evt.target.name.substring(
+      0,
+      evt.target.name.length - 1
+    );
     if (
-      evt.target.name === "functionalExpertise" ||
-      evt.target.name === "functionalExpertise2" ||
-      evt.target.name === "functionalExpertise3" ||
-      evt.target.name === "industryExpertise" ||
-      evt.target.name === "industryExpertise2" ||
-      evt.target.name === "industryExpertise3"
+      strippedEventName === "functionalExpertise" ||
+      strippedEventName === "industryExpertise"
     ) {
-      setExpertise(
-        evt.target.name,
-        evt,
-        setValues,
-        values,
-        setIdentity,
-        identity
-      );
+      // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
+      setEventArray(evt, setValues, values, setIdentity, identity);
     } else {
       setValues((values) => ({
         ...values,
@@ -277,24 +269,25 @@ const EditExperienceModal = (props) => {
                     </Text>
                   )}
               </FormControl>
-
-              <Expertise
+              <MulitSelect
                 formLabel={"So...what would you say you do?"}
-                name={"functional expertise"}
+                name={"functionalExpertise"}
                 handleChange={handleChange}
                 options={functionalExpertiseList}
                 defaultValues={
                   props.profileData.content.identity.functionalExpertise
                 }
+                maxSelections={3}
               />
-              <Expertise
+              <MulitSelect
                 formLabel={"Where would you say you work?"}
-                name={"industry expertise"}
+                name={"industryExpertise"}
                 handleChange={handleChange}
                 options={industryExpertiseList}
                 defaultValues={
                   props.profileData.content.identity.industryExpertise
                 }
+                maxSelections={3}
               />
             </form>
           </ModalBody>

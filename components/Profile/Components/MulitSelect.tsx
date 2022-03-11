@@ -2,32 +2,31 @@ import { Button, FormControl, FormLabel, Select } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 
-export function Expertise({
+export function MulitSelect({
   formLabel,
   name,
   handleChange,
   options,
   defaultValues,
+  maxSelections,
 }) {
   let defaults = [];
-  let maxIdx = 0;
+  let maxDisplayIndex = 0;
   for (let i = 0; i < defaultValues.length; i++) {
     const element = defaultValues[i];
     if (element !== "" && element !== null && element !== undefined) {
       defaults.push(element);
-      if (i >= maxIdx) maxIdx = i;
+      if (i >= maxDisplayIndex) maxDisplayIndex = i;
     }
   }
 
-  let [count, setCount] = useState(maxIdx + 1 || 1);
-  let splitLabel = name.split(" ");
+  let [count, setCount] = useState(maxDisplayIndex + 1 || 1);
+  let splitLabel = name.split(/(?=[A-Z])/);
 
   function createSelectors() {
     let selectors = [];
 
-    for (let i = 1; i <= defaultValues.length; i++) {
-      console.log(count, i);
-
+    for (let i = 1; i <= maxSelections; i++) {
       const element = (
         <>
           {(defaultValues[i - 1] || i === 1 || count >= i) && (
@@ -48,7 +47,7 @@ export function Expertise({
   }
 
   function handleAddSelector() {
-    if (count < 3) {
+    if (count < maxSelections) {
       setCount(count + 1);
     }
   }
@@ -71,9 +70,7 @@ function Selector({ splitLabel, handleChange, options, idx, defaultValue }) {
       key={`${splitLabel[0]}-${idx}`}
       marginTop={"8px"}
       placeholder={`Select ${splitLabel[0]} ${splitLabel[1]}`}
-      name={`${splitLabel[0]}${splitLabel[1].replace(/\b\w/g, (l) =>
-        l.toUpperCase()
-      )}${idx == 1 ? "" : idx}`}
+      name={`${splitLabel[0]}${splitLabel[1] + idx}`}
       onChange={handleChange}
       defaultValue={defaultValue}
     >
