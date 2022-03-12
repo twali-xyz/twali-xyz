@@ -379,9 +379,9 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
               maxSelections={3}
             />
             <MulitSelect
-              name={"industry expertise"}
+              name={"industryExpertise"}
+              formLabel={"Industry expertise"}
               handleChange={handleChange}
-              formLabel={"IndustryExpertise"}
               defaultValues={[]}
               options={industryExpertiseList}
               maxSelections={3}
