@@ -482,11 +482,7 @@ const ProfilePage = () => {
                   <Stack spacing={6}>
                     <HStack>
                       <Text fontSize="xl">
-                        {profileData?.content?.identity?.firstName +
-                          " " +
-                          profileData?.content?.identity?.lastName +
-                          ", " +
-                          profileData.content.accType}
+                        {`${profileData?.content?.identity?.firstName} ${profileData?.content?.identity?.lastName}, ${profileData.content.accType}`}
                       </Text>
                       <FontAwesomeIcon size="lg" icon={["fas", "map-pin"]} />
                       {profileData.content.identity.currLocation && (
