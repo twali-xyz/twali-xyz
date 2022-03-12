@@ -1,4 +1,4 @@
-import { MulitSelect } from "../Profile/Components/MulitSelect";
+import { MultiSelect } from "../Profile/Components/MultiSelect";
 import { useState } from "react";
 import { Step, Steps, useSteps } from "chakra-ui-steps";
 import { connect } from "../../utils/walletUtils";
@@ -370,7 +370,7 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
                 {listOfCountries()}
               </Select>
             </FormControl>
-            <MulitSelect
+            <MultiSelect
               name={"functionalExpertise"}
               formLabel={"Functional expertise"}
               handleChange={handleChange}
@@ -378,7 +378,7 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
               options={functionalExpertiseList}
               maxSelections={3}
             />
-            <MulitSelect
+            <MultiSelect
               name={"industryExpertise"}
               formLabel={"Industry expertise"}
               handleChange={handleChange}
@@ -484,7 +484,7 @@ const SignUpSteps = () => {
       strippedEventName === "industryExpertise"
     ) {
       // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
-      setEventArray(evt, setValues, values, setIdentity, identity);
+      setEventArray({ evt, setValues, values, setIdentity, identity });
     } else {
       setValues((values) => ({
         ...values,

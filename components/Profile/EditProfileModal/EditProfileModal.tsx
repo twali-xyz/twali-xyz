@@ -125,14 +125,6 @@ const EditProfileModal = (props) => {
       ceramic.setDID(did);
       await ceramic.did.authenticate();
 
-      const idx = new IDX({ ceramic });
-
-      // does not require signing to get user's public data
-      const data: BasicProfile = await idx.get(
-        "basicProfile",
-        `${address}@eip155:1`
-      );
-
       if (fileUploaded) {
         // await idx.merge('basicProfile', { image: '💻' })
         console.log(fileUploaded);
@@ -166,7 +158,6 @@ const EditProfileModal = (props) => {
     const profileData = await TileDocument.deterministic(ceramic, {
       family: "user-profile-data",
     });
-
     await profileData.update({ identity, accType });
   };
 
@@ -178,12 +169,6 @@ const EditProfileModal = (props) => {
       ...identity,
       [evt.target.name]: evt.target.value,
     });
-    const newProfileData: ProfileData = {
-      content: {
-        identity: identity,
-        accType: props.profileData.content.accType,
-      },
-    };
   };
 
   const handleFile = (fileUploaded) => {

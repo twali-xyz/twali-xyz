@@ -23,7 +23,7 @@ import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
 import { DID } from "dids";
 import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
-import { MulitSelect } from "../Components/MulitSelect";
+import { MultiSelect } from "../Components/MultiSelect";
 import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
 import { setEventArray } from "../helpers/setEventArray";
@@ -120,14 +120,6 @@ const EditExperienceModal = (props) => {
       ceramic.setDID(did);
       await ceramic.did.authenticate();
 
-      const idx = new IDX({ ceramic });
-
-      // does not require signing to get user's public data
-      const data: BasicProfile = await idx.get(
-        "basicProfile",
-        `${address}@eip155:1`
-      );
-
       await updateProfileData(ceramic, identity, accType);
 
       console.log("Profile updated!");
@@ -191,7 +183,7 @@ const EditExperienceModal = (props) => {
       strippedEventName === "industryExpertise"
     ) {
       // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
-      setEventArray(evt, setValues, values, setIdentity, identity);
+      setEventArray({ evt, setValues, values, setIdentity, identity });
     } else {
       setValues((values) => ({
         ...values,
@@ -267,7 +259,7 @@ const EditExperienceModal = (props) => {
                     </Text>
                   )}
               </FormControl>
-              <MulitSelect
+              <MultiSelect
                 formLabel={"So...what would you say you do?"}
                 name={"functionalExpertise"}
                 handleChange={handleChange}
@@ -278,7 +270,7 @@ const EditExperienceModal = (props) => {
                 }
                 maxSelections={3}
               />
-              <MulitSelect
+              <MultiSelect
                 formLabel={"Where would you say you work?"}
                 name={"industryExpertise"}
                 handleChange={handleChange}

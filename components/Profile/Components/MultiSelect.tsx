@@ -2,7 +2,7 @@ import { Button, FormControl, FormLabel, Select } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 
-export function MulitSelect({
+export function MultiSelect({
   formLabel,
   name,
   handleChange,
@@ -11,7 +11,10 @@ export function MulitSelect({
   maxSelections,
 }) {
   let defaults = [];
+  // maxDisplayIndex tracks the index of the last element in the array that contains data
   let maxDisplayIndex = 0;
+  const [count, setCount] = useState(maxDisplayIndex + 1 || 1);
+
   for (let i = 0; i < defaultValues.length; i++) {
     const element = defaultValues[i];
     if (element !== "" && element !== null && element !== undefined) {
@@ -20,12 +23,16 @@ export function MulitSelect({
     }
   }
 
-  let [count, setCount] = useState(maxDisplayIndex + 1 || 1);
-  let splitLabel = name.split(/(?=[A-Z])/);
+  const splitLabel = name.split(/(?=[A-Z])/);
+
+  function handleAddSelector() {
+    if (count < maxSelections) {
+      setCount(count + 1);
+    }
+  }
 
   function createSelectors() {
     let selectors = [];
-
     for (let i = 1; i <= maxSelections; i++) {
       const element = (
         <>
@@ -40,17 +47,11 @@ export function MulitSelect({
           )}
         </>
       );
-
       selectors.push(element);
     }
     return selectors;
   }
 
-  function handleAddSelector() {
-    if (count < maxSelections) {
-      setCount(count + 1);
-    }
-  }
   return (
     <>
       <FormControl p={4} id={`${splitLabel[0]}-${splitLabel[1]}`} isRequired>

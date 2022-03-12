@@ -32,6 +32,7 @@ export function setEventArray({
   setIdentity,
   identity,
 }) {
+  if (!evt) return;
   const eventName = evt.target.name;
   const [strippedEventName, eventIndex] = [
     eventName.substring(0, eventName.length - 1),
