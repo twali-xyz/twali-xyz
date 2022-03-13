@@ -32,7 +32,8 @@ import { DID } from "dids";
 import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
 import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
-
+import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
+import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
 export interface Identity {
   firstName: string;
   lastName: string;
@@ -561,48 +562,9 @@ const CompanyModal = (props) => {
                       name="funcExpertise"
                       onChange={handleChange}
                     >
-                      <option>Accounting</option>
-                      <option>Creative</option>
-                      <option>Audit</option>
-                      <option>Board & Advisory</option>
-                      <option>Corporate Development</option>
-                      <option>Comp & Benefits</option>
-                      <option>Compliance</option>
-                      <option>Management Consulting</option>
-                      <option>Data & Analytics</option>
-                      <option>Product Design</option>
-                      <option>Digital</option>
-                      <option>Engineering</option>
-                      <option>Entrepreneurship</option>
-                      <option>Finance</option>
-                      <option>General Management</option>
-                      <option>Human Resources</option>
-                      <option>IT Infrastructure</option>
-                      <option>Innovation</option>
-                      <option>Investor</option>
-                      <option>Legal</option>
-                      <option>Marketing</option>
-                      <option>Media & Comms</option>
-                      <option>Merchandising</option>
-                      <option>Security</option>
-                      <option>Operations</option>
-                      <option>Portfolio Operations</option>
-                      <option>Procurement</option>
-                      <option>Product Management</option>
-                      <option>Investor Relations</option>
-                      <option>Regulatory</option>
-                      <option>Research</option>
-                      <option>Risk</option>
-                      <option>Strategy</option>
-                      <option>Technology</option>
-                      <option>Transformation</option>
-                      <option>Sales & Customer</option>
-                      <option>Data Science</option>
-                      <option>Talent Acquisition</option>
-                      <option>Tax</option>
-                      <option>Cybersecurity</option>
-                      <option>Investment Banking</option>
-                      <option>Supply Chain</option>
+                      {functionalExpertiseList.map((item, idx) => {
+                        return <option key={`&{item}--${idx}`}>{item}</option>;
+                      })}
                     </Select>
                   </FormControl>
                   <FormControl p={2} id="company-industry">
@@ -615,50 +577,9 @@ const CompanyModal = (props) => {
                       name="industryExpertise"
                       onChange={handleChange}
                     >
-                      <option>Accounting</option>
-                      <option>Angel Investment</option>
-                      <option>Asset Management</option>
-                      <option>Auto Insurance</option>
-                      <option>Banking</option>
-                      <option>Bitcoin</option>
-                      <option>Commercial Insurance</option>
-                      <option>Commercial Lending</option>
-                      <option>Credit</option>
-                      <option>Credit Bureau</option>
-                      <option>Credit Cards</option>
-                      <option>Crowdfunding</option>
-                      <option>Cryptocurrency</option>
-                      <option>Debit Cards</option>
-                      <option>Debt Collections</option>
-                      <option>Finance</option>
-                      <option>Financial Exchanges</option>
-                      <option>Financial Services</option>
-                      <option>FinTech</option>
-                      <option>Fraud Detection</option>
-                      <option>Funding Platform</option>
-                      <option>Gift Card</option>
-                      <option>Health Insurance</option>
-                      <option>Hedge Funds</option>
-                      <option>Impact Investing</option>
-                      <option>Incubators</option>
-                      <option>Insurance</option>
-                      <option>InsurTech</option>
-                      <option>Leasing</option>
-                      <option>Lending</option>
-                      <option>Life Insurance</option>
-                      <option>Micro Lending</option>
-                      <option>Mobile Payments</option>
-                      <option>Payments</option>
-                      <option>Personal Finance</option>
-                      <option>Prediction Markets</option>
-                      <option>Property Insurance</option>
-                      <option>Real Estate Investment</option>
-                      <option>Stock Exchanges</option>
-                      <option>Trading Platform</option>
-                      <option>Transaction Processing</option>
-                      <option>Venture Capital</option>
-                      <option>Virtual Currency</option>
-                      <option>Wealth Management</option>
+                      {industryExpertiseList.map((item, idx) => {
+                        return <option key={`&{item}--${idx}`}>{item}</option>;
+                      })}
                     </Select>
                   </FormControl>
                 </form>
