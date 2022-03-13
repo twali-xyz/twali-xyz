@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Box,
   HStack,
@@ -77,6 +77,7 @@ const endpoint = "https://ceramic-clay.3boxlabs.com";
 
 const CompanyModal = (props) => {
   const finalRef = useRef();
+  const [count, setCount] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [companyName, setCompanyName] = useState("");
   const [companyTitle, setCompanyTitle] = useState("");
@@ -97,6 +98,38 @@ const CompanyModal = (props) => {
     companyFunction: "",
     companyIndustry: "",
   };
+
+  useEffect(() => {
+    if (!props.isOpen) return;
+    console.log("OPEN");
+    setCompanyName(
+      props.profileData?.content?.identity?.companyInfo[props.currCompany]
+        ?.companyName
+    );
+    setCompanyTitle(
+      props.profileData?.content?.identity?.companyInfo[props.currCompany]
+        ?.companyTitle
+    );
+    setCompanyStart(
+      props.profileData?.content?.identity?.companyInfo[props.currCompany]
+        ?.companyStart
+    );
+    setCompanyEnd(
+      props.profileData?.content?.identity?.companyInfo[props.currCompany]
+        ?.companyEnd
+    );
+    setCompanyFunction(
+      props.profileData?.content?.identity?.companyInfo[props.currCompany]
+        ?.funcExpertise
+    );
+    setCompanyIndustry(
+      props.profileData?.content?.identity?.companyInfo[props.currCompany]
+        ?.industryExpertise
+    );
+    setTempLogo(
+      props.profileData?.content?.identity?.companyInfo[props.currCompany]?.logo
+    );
+  }, [props.isOpen]);
 
   const companyInfo =
     props.profileData.content.identity.companyInfo &&
@@ -199,7 +232,7 @@ const CompanyModal = (props) => {
         props.handleUpdatedCompanyInfo(props.profileData, false);
         props.setProfileData(newProfileData);
         props.onClose();
-        setTempLogo(false);
+
         setShouldFetch(false);
       } else {
         console.log("No profile, pls create one...");
@@ -356,7 +389,6 @@ const CompanyModal = (props) => {
             colorScheme="blue"
             mr={3}
             onClick={() => {
-              setTempLogo(false);
               props.onClose();
               setShouldFetch(false);
             }}
@@ -374,7 +406,6 @@ const CompanyModal = (props) => {
         finalFocusRef={finalRef}
         isOpen={props.isOpen}
         onClose={() => {
-          setTempLogo(false);
           props.onClose();
           setShouldFetch(false);
         }}
@@ -638,7 +669,6 @@ const CompanyModal = (props) => {
                 colorScheme="blue"
                 mr={3}
                 onClick={() => {
-                  setTempLogo(false);
                   props.onClose();
                   setShouldFetch(false);
                 }}
