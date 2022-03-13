@@ -80,8 +80,8 @@ const CompanyModal = (props) => {
   const finalRef = useRef();
   const [count, setCount] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [companyName, setCompanyName] = useState("");
-  const [companyTitle, setCompanyTitle] = useState("");
+  const [companyName, setCompanyName] = useState();
+  const [companyTitle, setCompanyTitle] = useState();
   const [companyStart, setCompanyStart] = useState();
   const [companyEnd, setCompanyEnd] = useState();
   const [companyFunction, setCompanyFunction] = useState();
@@ -89,7 +89,7 @@ const CompanyModal = (props) => {
   const [tempLogo, setTempLogo] = useState<any>();
   const [shouldFetch, setShouldFetch] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [accType, setAccType] = useState(props.profileData.content.accType);
+  const [accType, setAccType] = useState();
   const [identity, setIdentity] = useState(props.profileData.content.identity);
   const emptyCompanyInfo = {
     companyName: "",
@@ -100,9 +100,11 @@ const CompanyModal = (props) => {
     companyIndustry: "",
   };
 
+  // on open, set the values to the current company
   useEffect(() => {
     if (!props.isOpen) return;
-    console.log("OPEN");
+    setAccType(props.profileData.content.accType);
+    setIdentity(props.profileData.content.identity);
     setCompanyName(
       props.profileData?.content?.identity?.companyInfo[props.currCompany]
         ?.companyName
@@ -121,11 +123,11 @@ const CompanyModal = (props) => {
     );
     setCompanyFunction(
       props.profileData?.content?.identity?.companyInfo[props.currCompany]
-        ?.funcExpertise
+        ?.companyFunc
     );
     setCompanyIndustry(
       props.profileData?.content?.identity?.companyInfo[props.currCompany]
-        ?.industryExpertise
+        ?.companyExpertise
     );
     setTempLogo(
       props.profileData?.content?.identity?.companyInfo[props.currCompany]?.logo
@@ -157,11 +159,9 @@ const CompanyModal = (props) => {
     companyEnd:
       companyInfo && companyInfo.companyEnd ? companyInfo.companyEnd : "",
     companyFunction:
-      companyInfo && companyInfo.companyFunction
-        ? companyInfo.companyFunction
-        : "",
+      companyInfo && companyInfo.companyFunc ? companyInfo.companyFunc : "",
     companyIndustry:
-      companyInfo && companyInfo.companyIndustry
+      companyInfo && companyInfo.industryExpertise
         ? companyInfo.companyIndustry
         : "",
   });
