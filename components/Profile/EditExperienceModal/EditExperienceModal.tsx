@@ -27,57 +27,12 @@ import { MulitSelect } from "../Components/MulitSelect";
 import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
 import { setEventArray } from "../helpers/setEventArray";
+import { BasicProfile, ProfileData } from "../../../utils/interfaces";
 
 // 3box test nodes with read/write access on ceramic clay testnet
 // network node that we're interacting with, can be local/prod
 // we're using a test network here
 const endpoint = "https://ceramic-clay.3boxlabs.com";
-
-export interface ProfileData {
-  content: {
-    identity: Identity;
-    accType: string;
-  };
-}
-
-export interface Identity {
-  firstName: string;
-  lastName: string;
-  email: string;
-  displayName: string;
-  bio: string;
-  twitterUsrName?: string;
-  linkedInUsrName?: string;
-  website?: string;
-  businessName: string;
-  businessType: string;
-  businessLocation: string;
-  currTitle: string;
-  currLocation?: string;
-  functionalExpertise: any[];
-  industryExpertise: any[];
-
-  companyInfo?: CompanyInfo[];
-}
-
-export interface BasicProfile {
-  name: string;
-}
-export interface Profile {
-  identity: Identity;
-  name: string;
-  accType: string;
-}
-
-export interface CompanyInfo {
-  companyName: string;
-  companyTitle: string;
-  companyImg: any;
-  companyStart: Date;
-  companyEnd: Date;
-  companyFunc: string;
-  companyIndustry: string;
-}
 
 const EditExperienceModal = (props) => {
   const finalRef = useRef();

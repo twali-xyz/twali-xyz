@@ -32,44 +32,8 @@ import { DID } from "dids";
 import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
 import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
+import { BasicProfile, ProfileData } from "../../../utils/interfaces";
 
-export interface Identity {
-  firstName: string;
-  lastName: string;
-  email: string;
-  displayName: string;
-  bio: string;
-  twitterUsrName?: string;
-  linkedInUsrName?: string;
-  website?: string;
-  businessName: string;
-  businessType: string;
-  businessLocation: string;
-  currTitle: string;
-  currLocation?: string;
-  functionalExpertise: any[];
-  industryExpertise: any[];
-  companyInfo?: CompanyInfo[];
-}
-export interface CompanyInfo {
-  companyName: string;
-  companyTitle: string;
-  companyImg: any;
-  companyStart: Date;
-  companyEnd: Date;
-  companyFunc: string;
-  companyIndustry: string;
-}
-export interface ProfileData {
-  content: {
-    identity: Identity;
-    accType: string;
-  };
-}
-
-export interface BasicProfile {
-  name: string;
-}
 // 3box test nodes with read/write access on ceramic clay testnet
 // network node that we're interacting with, can be local/prod
 // we're using a test network here
