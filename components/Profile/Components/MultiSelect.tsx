@@ -1,6 +1,6 @@
 import { Button, FormControl, FormLabel, Select } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export function MultiSelect({
   formLabel,
@@ -10,26 +10,26 @@ export function MultiSelect({
   defaultValues,
   maxSelections,
 }) {
-  let defaults = [];
   // maxDisplayIndex tracks the index of the last element in the array that contains data
-  let maxDisplayIndex = 0;
+  const [maxDisplayIndex, setMaxDisplayIndex] = useState(0);
   const [count, setCount] = useState(maxDisplayIndex + 1 || 1);
 
-  for (let i = 0; i < defaultValues.length; i++) {
-    const element = defaultValues[i];
-    if (element !== "" && element !== null && element !== undefined) {
-      defaults.push(element);
-      if (i >= maxDisplayIndex) maxDisplayIndex = i;
+  useEffect(() => {
+    let defaults = [];
+    for (let i = 0; i < defaultValues.length; i++) {
+      const element = defaultValues[i];
+
+      if (element !== "" && element !== null && element !== undefined) {
+        defaults.push(element);
+        if (i >= maxDisplayIndex) {
+          setMaxDisplayIndex(i + 1);
+          setCount(i + 1);
+        }
+      }
     }
-  }
+  }, [count]);
 
   const splitLabel = name.split(/(?=[A-Z])/);
-
-  function handleAddSelector() {
-    if (count < maxSelections) {
-      setCount(count + 1);
-    }
-  }
 
   function createSelectors() {
     let selectors = [];
@@ -50,6 +50,11 @@ export function MultiSelect({
       selectors.push(element);
     }
     return selectors;
+  }
+  function handleAddSelector() {
+    if (count < maxSelections) {
+      setCount(count + 1);
+    }
   }
 
   return (
