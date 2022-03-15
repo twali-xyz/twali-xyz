@@ -11,7 +11,6 @@ import {
   ModalFooter,
   FormControl,
   FormLabel,
-  Select,
   Text,
   CircularProgress,
 } from "@chakra-ui/react";
@@ -24,6 +23,10 @@ import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
 import { DID } from "dids";
 import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
+import { MulitSelect } from "../Components/MulitSelect";
+import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
+import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
+import { setEventArray } from "../helpers/setEventArray";
 
 // 3box test nodes with read/write access on ceramic clay testnet
 // network node that we're interacting with, can be local/prod
@@ -51,8 +54,9 @@ export interface Identity {
   businessLocation: string;
   currTitle: string;
   currLocation?: string;
-  funcExpertise: string;
-  industryExpertise: string;
+  functionalExpertise: any[];
+  industryExpertise: any[];
+
   companyInfo?: CompanyInfo[];
 }
 
@@ -78,12 +82,15 @@ export interface CompanyInfo {
 const EditExperienceModal = (props) => {
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [profileData, setProfileData] = useState(props.profileData);
+
   const [accType, setAccType] = useState(props.profileData.content.accType);
   const [identity, setIdentity] = useState(props.profileData.content.identity);
-  const [profileData, setProfileData] = useState(props.profileData);
   const [values, setValues] = useState({
     displayName: props.profileData.content.identity.displayName,
     email: props.profileData.content.identity.email,
+    functionalExpertise: props.profileData.content.identity.functionalExpertise,
+    industryExpertise: props.profileData.content.identity.industryExpertise,
   });
   const [errors, setErrors] = useState({
     displayName: null,
@@ -120,15 +127,14 @@ const EditExperienceModal = (props) => {
         "basicProfile",
         `${address}@eip155:1`
       );
-      console.log("data: ", data);
 
       await updateProfileData(ceramic, identity, accType);
 
       console.log("Profile updated!");
-      console.log(identity);
 
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);
+        props.setProfileData(newProfileData);
         props.handleUpdatedExperiences(profileData, false);
         props.onClose();
       } else {
@@ -163,8 +169,8 @@ const EditExperienceModal = (props) => {
       errors.email = "Email address is invalid";
     }
 
-    if (values.funcExpertise === "") {
-      errors.funcExpertise = "Functional expertise is required";
+    if (values.functionalExpertise === "") {
+      errors.functionalExpertise = "Functional expertise is required";
     }
 
     if (values.industryExpertise === "") {
@@ -173,22 +179,35 @@ const EditExperienceModal = (props) => {
 
     return errors;
   };
-
+  let newProfileData: ProfileData;
   const handleChange = (evt) => {
     evt.persist();
-    setValues((values) => ({ ...values, [evt.target.name]: evt.target.value }));
-    setErrors(validate(values));
-    setIdentity({
-      ...identity,
-      [evt.target.name]: evt.target.value,
-    });
-    const newProfileData: ProfileData = {
+    const strippedEventName = evt.target.name.substring(
+      0,
+      evt.target.name.length - 1
+    );
+    if (
+      strippedEventName === "functionalExpertise" ||
+      strippedEventName === "industryExpertise"
+    ) {
+      // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
+      setEventArray(evt, setValues, values, setIdentity, identity);
+    } else {
+      setValues((values) => ({
+        ...values,
+        [evt.target.name]: evt.target.value,
+      }));
+      setIdentity({
+        ...identity,
+        [evt.target.name]: evt.target.value,
+      });
+    }
+    newProfileData = {
       content: {
         identity: identity,
         accType: props.profileData.content.accType,
       },
     };
-    setProfileData(newProfileData);
   };
 
   return (
@@ -250,125 +269,26 @@ const EditExperienceModal = (props) => {
                     </Text>
                   )}
               </FormControl>
-              <FormControl p={2} id="functional-expertise" isRequired>
-                <FormLabel>So...what would you say you do?</FormLabel>
-                <Select
-                  required
-                  defaultValue={
-                    props.profileData.content.identity.funcExpertise
-                  }
-                  errorBorderColor="red.300"
-                  placeholder="Select functional expertise"
-                  name="funcExpertise"
-                  onChange={handleChange}
-                >
-                  <option>Accounting</option>
-                  <option>Creative</option>
-                  <option>Audit</option>
-                  <option>Board & Advisory</option>
-                  <option>Corporate Development</option>
-                  <option>Comp & Benefits</option>
-                  <option>Compliance</option>
-                  <option>Management Consulting</option>
-                  <option>Data & Analytics</option>
-                  <option>Product Design</option>
-                  <option>Digital</option>
-                  <option>Engineering</option>
-                  <option>Entrepreneurship</option>
-                  <option>Finance</option>
-                  <option>General Management</option>
-                  <option>Human Resources</option>
-                  <option>IT Infrastructure</option>
-                  <option>Innovation</option>
-                  <option>Investor</option>
-                  <option>Legal</option>
-                  <option>Marketing</option>
-                  <option>Media & Comms</option>
-                  <option>Merchandising</option>
-                  <option>Security</option>
-                  <option>Operations</option>
-                  <option>Portfolio Operations</option>
-                  <option>Procurement</option>
-                  <option>Product Management</option>
-                  <option>Investor Relations</option>
-                  <option>Regulatory</option>
-                  <option>Research</option>
-                  <option>Risk</option>
-                  <option>Strategy</option>
-                  <option>Technology</option>
-                  <option>Transformation</option>
-                  <option>Sales & Customer</option>
-                  <option>Data Science</option>
-                  <option>Talent Acquisition</option>
-                  <option>Tax</option>
-                  <option>Cybersecurity</option>
-                  <option>Investment Banking</option>
-                  <option>Supply Chain</option>
-                </Select>
-                {/* {errors.funcExpertise && (
-                          <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.funcExpertise}</Text>
-                        )} */}
-              </FormControl>
-              <FormControl p={2} id="industry-expertise" isRequired>
-                <FormLabel>Where would you say you work?</FormLabel>
-                <Select
-                  required
-                  defaultValue={
-                    props.profileData.content.identity.industryExpertise
-                  }
-                  placeholder="Select industry expertise"
-                  name="industryExpertise"
-                  onChange={handleChange}
-                >
-                  <option>Accounting</option>
-                  <option>Angel Investment</option>
-                  <option>Asset Management</option>
-                  <option>Auto Insurance</option>
-                  <option>Banking</option>
-                  <option>Bitcoin</option>
-                  <option>Commercial Insurance</option>
-                  <option>Commercial Lending</option>
-                  <option>Credit</option>
-                  <option>Credit Bureau</option>
-                  <option>Credit Cards</option>
-                  <option>Crowdfunding</option>
-                  <option>Cryptocurrency</option>
-                  <option>Debit Cards</option>
-                  <option>Debt Collections</option>
-                  <option>Finance</option>
-                  <option>Financial Exchanges</option>
-                  <option>Financial Services</option>
-                  <option>FinTech</option>
-                  <option>Fraud Detection</option>
-                  <option>Funding Platform</option>
-                  <option>Gift Card</option>
-                  <option>Health Insurance</option>
-                  <option>Hedge Funds</option>
-                  <option>Impact Investing</option>
-                  <option>Incubators</option>
-                  <option>Insurance</option>
-                  <option>InsurTech</option>
-                  <option>Leasing</option>
-                  <option>Lending</option>
-                  <option>Life Insurance</option>
-                  <option>Micro Lending</option>
-                  <option>Mobile Payments</option>
-                  <option>Payments</option>
-                  <option>Personal Finance</option>
-                  <option>Prediction Markets</option>
-                  <option>Property Insurance</option>
-                  <option>Real Estate Investment</option>
-                  <option>Stock Exchanges</option>
-                  <option>Trading Platform</option>
-                  <option>Transaction Processing</option>
-                  <option>Venture Capital</option>
-                  <option>Virtual Currency</option>
-                  <option>Wealth Management</option>
-                </Select>
-                {/* {errors.industryExpertise && (
-                          <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.industryExpertise}</Text>
-                        )} */}
-              </FormControl>
+              <MulitSelect
+                formLabel={"So...what would you say you do?"}
+                name={"functionalExpertise"}
+                handleChange={handleChange}
+                options={functionalExpertiseList}
+                defaultValues={
+                  props.profileData.content.identity.functionalExpertise
+                }
+                maxSelections={3}
+              />
+              <MulitSelect
+                formLabel={"Where would you say you work?"}
+                name={"industryExpertise"}
+                handleChange={handleChange}
+                options={industryExpertiseList}
+                defaultValues={
+                  props.profileData.content.identity.industryExpertise
+                }
+                maxSelections={3}
+              />
             </form>
           </ModalBody>
 

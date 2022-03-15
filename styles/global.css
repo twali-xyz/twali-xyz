@@ -25,6 +25,10 @@ img {
   max-width: 100%;
   display: block;
 }
+
+.body-animation > svg {
+  min-width: 100% !important;
+}
 @font-face {
   font-family: "GrandSlang Italic";
   src: url("../public/fonts/GrandSlang-Italic.eot");

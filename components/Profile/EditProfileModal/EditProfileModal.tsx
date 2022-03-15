@@ -14,6 +14,7 @@ import {
   Text,
   CircularProgress,
   Input,
+  Select,
 } from "@chakra-ui/react";
 import { connect } from "../../../utils/walletUtils";
 import FileUpload from "../../FileUpload/FileUpload";
@@ -24,6 +25,7 @@ import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
 import { DID } from "dids";
 import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
+import { listOfCountries } from "../../../utils/profileUtils";
 
 // 3box test nodes with read/write access on ceramic clay testnet
 // network node that we're interacting with, can be local/prod
@@ -51,8 +53,8 @@ export interface Identity {
   businessLocation: string;
   currTitle: string;
   currLocation?: string;
-  funcExpertise: string;
-  industryExpertise: string;
+  functionalExpertise: any[];
+  industryExpertise: any[];
   companyInfo?: CompanyInfo[];
 }
 
@@ -78,10 +80,10 @@ export interface CompanyInfo {
 const EditProfileModal = (props) => {
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [profileData, setProfileData] = useState(props.profileData);
   const [accType, setAccType] = useState(props.profileData.content.accType);
   const [identity, setIdentity] = useState(props.profileData.content.identity);
   const [fileUploaded, setFileUploaded] = useState();
-  const [profileData, setProfileData] = useState(props.profileData);
   const [values, setValues] = useState({
     firstName: props.profileData.content.identity.firstName,
     lastName: props.profileData.content.identity.lastName,
@@ -101,6 +103,7 @@ const EditProfileModal = (props) => {
 
   async function updateProfileInfo() {
     const address = await connect(); // first address in the array
+    let newProfileData: ProfileData;
 
     if (address) {
       const ceramic = new CeramicClient(endpoint);
@@ -128,7 +131,6 @@ const EditProfileModal = (props) => {
         "basicProfile",
         `${address}@eip155:1`
       );
-      console.log("data: ", data);
 
       if (fileUploaded) {
         // await idx.merge('basicProfile', { image: '💻' })
@@ -138,16 +140,24 @@ const EditProfileModal = (props) => {
       await updateProfileData(ceramic, identity, accType);
 
       console.log("Profile updated!");
-      console.log(identity);
+
+      newProfileData = {
+        content: {
+          identity: identity,
+          accType: props.profileData.content.accType,
+        },
+      };
 
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);
+        props.setProfileData(newProfileData);
         props.handleUpdatedProfile(profileData, false);
         props.onClose();
       } else {
         console.log("No profile, pls create one...");
       }
     }
+    setProfileData(newProfileData);
   }
 
   // Updates a stream to store JSON data with ceramic
@@ -173,7 +183,6 @@ const EditProfileModal = (props) => {
         accType: props.profileData.content.accType,
       },
     };
-    setProfileData(newProfileData);
   };
 
   const handleFile = (fileUploaded) => {
@@ -318,13 +327,18 @@ const EditProfileModal = (props) => {
               </FormControl>
               <FormControl p={2} id="currLocation" isRequired>
                 <FormLabel>Where do you call home?</FormLabel>
-                <Input
+                <Select
                   defaultValue={
-                    props.profileData.content.identity.currLocation || ""
+                    props.profileData.content.identity.currLocation
+                      ? props.profileData.content.identity.currLocation
+                      : ""
                   }
+                  placeholder="Select current location"
                   name="currLocation"
                   onChange={handleChange}
-                />
+                >
+                  {listOfCountries()}
+                </Select>
               </FormControl>
               <FormControl p={2} id="bio">
                 <FormLabel>Bio</FormLabel>
@@ -333,6 +347,7 @@ const EditProfileModal = (props) => {
                   errorBorderColor="red.300"
                   defaultValue={props.profileData.content.identity.bio || ""}
                   name="bio"
+                  maxLength={280}
                   onChange={handleChange}
                 />
                 {errors.bio && (

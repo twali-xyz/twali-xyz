@@ -58,8 +58,8 @@ export interface Identity {
   businessLocation: string;
   currTitle: string;
   currLocation?: string;
-  funcExpertise: string;
-  industryExpertise: string;
+  functionalExpertise: any[];
+  industryExpertise: any[];
   companyInfo?: CompanyInfo[];
 }
 
@@ -133,7 +133,6 @@ const ProfilePage = () => {
         "basicProfile",
         `${address}@eip155:1`
       );
-      console.log("data: ", data);
 
       const profile: ProfileData = await TileDocument.deterministic(
         ceramic,
@@ -176,7 +175,6 @@ const ProfilePage = () => {
           "basicProfile",
           `${address}@eip155:1`
         );
-        console.log("data: ", data);
 
         const profile: ProfileData = await TileDocument.deterministic(
           ceramic,
@@ -303,7 +301,6 @@ const ProfilePage = () => {
     setProfileData({ ...profileData });
     readProfile();
   };
-
   function createWorkElements(number) {
     var elements = [];
     let totalLen = profileData.content.identity.companyInfo
@@ -317,6 +314,8 @@ const ProfilePage = () => {
       ) {
         elements.push(
           <GetCompany
+            key={`${i}--company-info`}
+            company={profileData.content.identity.companyInfo[i]}
             companyName={
               profileData.content.identity.companyInfo[i].companyName
             }
@@ -347,13 +346,13 @@ const ProfilePage = () => {
     }
     return elements;
   }
-
   const viewCompany = (
     <CompanyModal
       isOpen={isCompanyModalOpen}
       onClose={onCompanyModalClose}
       currCompany={currCompany}
       profileData={profileData}
+      setProfileData={setProfileData}
       userPermission="view"
       handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
     />
@@ -427,6 +426,7 @@ const ProfilePage = () => {
                       isOpen={isExpModalOpen}
                       onClose={onExpModalClose}
                       profileData={profileData}
+                      setProfileData={setProfileData}
                       handleUpdatedExperiences={handleUpdatedProfile}
                     />
                   </UserPermissionsRestricted>
@@ -451,10 +451,15 @@ const ProfilePage = () => {
                   >
                     {profileData &&
                       profileData.content.identity &&
-                      profileData.content.identity.funcExpertise && (
-                        <Text fontSize="md">
-                          {profileData.content.identity.funcExpertise}
-                        </Text>
+                      profileData.content.identity.functionalExpertise &&
+                      typeof profileData.content.identity
+                        ?.functionalExpertise === "object" &&
+                      profileData.content.identity?.functionalExpertise.map(
+                        (expertise, idx) => (
+                          <Text key={idx} fontSize="md">
+                            {expertise}
+                          </Text>
+                        )
                       )}
                   </Box>
                   <Box
@@ -468,10 +473,15 @@ const ProfilePage = () => {
                   >
                     {profileData &&
                       profileData.content.identity &&
-                      profileData.content.identity.industryExpertise && (
-                        <Text fontSize="md">
-                          {profileData.content.identity.industryExpertise}
-                        </Text>
+                      profileData.content.identity.industryExpertise &&
+                      typeof profileData.content.identity?.industryExpertise ===
+                        "object" &&
+                      profileData.content.identity?.industryExpertise.map(
+                        (expertise, idx) => (
+                          <Text key={idx} fontSize="md">
+                            {expertise}
+                          </Text>
+                        )
                       )}
                   </Box>
                 </VStack>
@@ -488,69 +498,70 @@ const ProfilePage = () => {
                         {name + ", " + profileData.content.accType}
                       </Text>
                       <FontAwesomeIcon size="lg" icon={["fas", "map-pin"]} />
-                      {profileData.content.identity.businessLocation && (
+                      {profileData.content.identity.currLocation && (
                         <Text fontSize="md">
-                          {profileData.content.identity.businessLocation}
+                          {profileData.content.identity.currLocation}
                         </Text>
                       )}
-                  </HStack>
-                  <Text fontSize="md">
-                    {profileData.content.identity.currTitle}
-                  </Text>
-                  {profileData.content.identity.bio && (
+                    </HStack>
                     <Text fontSize="md">
-                      {profileData.content.identity.bio}
+                      {profileData.content.identity.currTitle}
                     </Text>
-                  )}
-                  ){/* social media URLs */}
-                  <HStack width={"6rem"} justifyContent={"space-between"}>
-                    {profileData.content.identity.linkedIn && (
-                      <Link
-                        href={profileData.content.identity.linkedIn}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        width={"fit-content"}
-                      >
-                        <Image
-                          src="LI-In-Bug.png"
-                          height={"2rem"}
-                          width={"auto"}
-                        />
-                      </Link>
-                    )}
-                    {profileData.content.identity.twitter && (
-                      <Link
-                        href={profileData.content.identity.twitter}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Image
-                          src="2021_Twitter_logo - blue.png"
-                          height={"2rem"}
-                          width={"auto"}
-                        />
-                      </Link>
-                    )}
-                  </HStack>
-                  <VStack>
-                    <Box alignSelf="flex-start" w="full" overflow="hidden">
-                      <Text pb={8} fontSize="xl">
-                        Work Experience
+                    {profileData.content.identity.bio && (
+                      <Text fontSize="md">
+                        {profileData.content.identity.bio}
                       </Text>
-                      <HStack spacing={4}>{createWorkElements(5)}</HStack>
-                      <UserPermissionsRestricted
+                    )}
+                    ){/* social media URLs */}
+                    <HStack width={"6rem"} justifyContent={"space-between"}>
+                      {profileData.content.identity.linkedIn && (
+                        <Link
+                          href={profileData.content.identity.linkedIn}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          width={"fit-content"}
+                        >
+                          <Image
+                            src="LI-In-Bug.png"
+                            height={"2rem"}
+                            width={"auto"}
+                          />
+                        </Link>
+                      )}
+                      {profileData.content.identity.twitter && (
+                        <Link
+                          href={profileData.content.identity.twitter}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Image
+                            src="2021_Twitter_logo - blue.png"
+                            height={"2rem"}
+                            width={"auto"}
+                          />
+                        </Link>
+                      )}
+                    </HStack>
+                    <VStack>
+                      <Box alignSelf="flex-start" w="full" overflow="hidden">
+                        <Text pb={8} fontSize="xl">
+                          Work Experience
+                        </Text>
+                        <HStack spacing={4}>{createWorkElements(5)}</HStack>
+                        <UserPermissionsRestricted
                           to="edit"
                           fallback={viewCompany}
                         >
-                        <CompanyModal
-                          isOpen={isCompanyModalOpen}
-                          onClose={onCompanyModalClose}
-                          currCompany={currCompany}
-                          profileData={profileData}
-                          handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
-                        />
-                      </UserPermissionsRestricted>
-                    </Box>
+                          <CompanyModal
+                            isOpen={isCompanyModalOpen}
+                            onClose={onCompanyModalClose}
+                            currCompany={currCompany}
+                            profileData={profileData}
+                            setProfileData={setProfileData}
+                            handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
+                          />
+                        </UserPermissionsRestricted>
+                      </Box>
                       <Box alignSelf="flex-start" w="full" overflow="hidden">
                         <Text pt={8} pb={4} fontSize="xl">
                           Web3 Credentials
@@ -608,6 +619,7 @@ const ProfilePage = () => {
                       isOpen={isProfileModalOpen}
                       onClose={onProfileModalClose}
                       profileData={profileData}
+                      setProfileData={setProfileData}
                       handleUpdatedProfile={handleUpdatedProfile}
                     />
                   </UserPermissionsRestricted>
@@ -620,44 +632,33 @@ const ProfilePage = () => {
     </>
   );
 };
-
-// Client-side data fetching for Clearbit's NameToDomain API (on page load)
-const GetCompany = (companyName) => {
-  const fetcher = (companyDomain: string, ...args: Parameters<typeof fetch>) =>
-    fetch(companyDomain).then((response) => response.json());
-  let paramsObj = { params: companyName.companyName };
-  let searchParams = new URLSearchParams(paramsObj);
-
-  // Create a stable key for SWR
-  searchParams.sort();
-  const qs = searchParams.toString();
-
-  const { data, error } = useSWR(`/api/cors?${qs}`, fetcher);
-  console.log("DATA: ", data);
-
+const GetCompany = (props) => {
   return (
     <>
-      {data && data.message && data.message.logo ? (
+      {props.company?.logo?.message?.logo ? (
         <Box
           w="100px"
           height="100px"
+          display="flex"
           borderRadius="full"
+          alignItems="center"
+          justifyContent="center"
           backgroundColor="rgb(222, 222, 222)"
           overflow="hidden"
           p={4}
-          key={`${data.message.name}--${companyName.currCompany}--box`}
+          key={`${props.companyName}--${props.currCompany}--box`}
         >
           <UserPermissionsRestricted to="view">
             <Img
               backgroundColor="rgb(222, 222, 222)"
               style={{ cursor: "pointer" }}
-              key={`${data.message.name}--${companyName.currCompany}`}
+              key={`${props.companyName}--${props.currCompany}`}
               alignSelf="center"
-              src={data.message.logo}
-              alt="fox stock img"
+              src={props.company.logo.message.logo}
+              alt={props.companyName}
               onClick={() => {
-                companyName.setCurrCompany(companyName.currCompany);
-                companyName.onCompanyModalOpen();
+                props.setCurrCompany(props.currCompany);
+                props.onCompanyModalOpen();
               }}
             />
           </UserPermissionsRestricted>
@@ -665,33 +666,85 @@ const GetCompany = (companyName) => {
             <Img
               backgroundColor="rgb(222, 222, 222)"
               style={{ cursor: "pointer" }}
-              key={`${data.message.name}--${companyName.currCompany}`}
+              key={`${props.companyName}--${props.currCompany}`}
               alignSelf="center"
-              src={data.message.logo}
-              alt="fox stock img"
+              src={props.company.logo.message.logo}
+              alt={props.companyName + "THIS ONE"}
               onMouseEnter={(e) => (e.currentTarget.src = "edit.svg")}
-              onMouseLeave={(e) => (e.currentTarget.src = data.message.logo)}
+              onMouseLeave={(e) =>
+                (e.currentTarget.src = props.company.logo.message.logo)
+              }
               onClick={() => {
-                companyName.setCurrCompany(companyName.currCompany);
-                companyName.onCompanyModalOpen();
+                props.setCurrCompany(props.currCompany);
+                props.onCompanyModalOpen();
               }}
             />
           </UserPermissionsRestricted>
         </Box>
-      ) : (
-        <Img
-          key={`${companyName.currCompany}--empty-company-exp`}
+      ) : props ? (
+        <Box
+          w="100px"
+          height="100px"
           borderRadius="full"
-          style={{ cursor: "pointer" }}
-          backgroundColor="lightgray"
-          width="100px"
-          src="add.svg"
-          alt="add img"
-          onClick={() => {
-            companyName.setCurrCompany(companyName.currCompany);
-            companyName.onCompanyModalOpen();
+          backgroundColor="rgb(222, 222, 222)"
+          overflow="hidden"
+          p={4}
+          key={`${props.companyName}--${props.currCompany}--box`}
+          onMouseEnter={(e) => {
+            let addImg = e.currentTarget.children[0] as HTMLElement;
+            let compLogo = e.currentTarget.children[1] as HTMLElement;
+            addImg.style.display = "flex";
+            compLogo.style.display = "none";
           }}
-        />
+          onMouseLeave={(e) => {
+            let addImg = e.currentTarget.children[0] as HTMLElement;
+            let compLogo = e.currentTarget.children[1] as HTMLElement;
+            addImg.style.display = "none";
+            compLogo.style.display = "flex";
+          }}
+          onClick={() => {
+            props.setCurrCompany(props.currCompany);
+            props.onCompanyModalOpen();
+          }}
+        >
+          <Img
+            backgroundColor="rgb(222, 222, 222)"
+            style={{ cursor: "pointer" }}
+            key={`${props.companyName}--${props.currCompany}`}
+            alignSelf="center"
+            src="edit.svg"
+            alt="edit stock img"
+            display={"none"}
+          />
+          <Text
+            w={"full"}
+            h={"full"}
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            fontSize="4xl"
+            fontWeight="800"
+            color="blue.700"
+          >
+            {props.companyName[0].toUpperCase()}
+          </Text>
+        </Box>
+      ) : (
+        <>
+          <Img
+            key={`${props.currCompany}--empty-company-exp`}
+            borderRadius="full"
+            style={{ cursor: "pointer" }}
+            backgroundColor="lightgray"
+            width="100px"
+            src="add.svg"
+            alt="add img"
+            onClick={() => {
+              props.setCurrCompany(props.currCompany);
+              props.onCompanyModalOpen();
+            }}
+          />
+        </>
       )}
     </>
   );
