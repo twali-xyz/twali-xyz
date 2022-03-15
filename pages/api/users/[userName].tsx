@@ -7,7 +7,7 @@ const getUserHandler: NextApiHandler = async (req, res) => {
     const jsonData = await data.getUser(req.query.userName)
     // console.log('api data',jsonData);
     if(jsonData){
-      console.log('api data',jsonData);
+      // console.log('USERNAME api data',jsonData);
       res.status(200).json(JSON.stringify(jsonData));
     }
     } catch {

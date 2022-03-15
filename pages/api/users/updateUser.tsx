@@ -26,16 +26,18 @@ const updateUserProfileHandler: NextApiHandler = async (req, res) => {
           } catch (error) {
             console.log(error);
           }
-        }
-      } else if (req.query.updateUser == 'company') {
-        try {
-          const attributes = JSON.parse(req.body).userData.attributes;
-          const userWallet = JSON.parse(req.body).userData.userWallet;
-          await data.updateUserCompanyData(userWallet, attributes);
-          res.setHeader("Content-Type", "application/json");
-          res.status(200).json("data posted");
-        } catch (error) {
-          console.log(error);
+        } else if (req.query.updateUser == 'company') {
+          try {
+            console.log(JSON.parse(req.body).userData);
+            const attributes = JSON.parse(req.body).userData.attributes.companyInfo;
+            const userWallet = JSON.parse(req.body).userData.userWallet;
+            console.log(userWallet);
+            await data.updateUserCompanyData(userWallet, attributes);
+            res.setHeader("Content-Type", "application/json");
+            res.status(200).json("data posted");
+          } catch (error) {
+            console.log(error);
+          }
         }
       } else {
         console.log("error");

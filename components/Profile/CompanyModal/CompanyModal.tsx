@@ -83,6 +83,8 @@ const CompanyModal = (props) => {
       ? props.profileData.companyInfo[props.currCompany]
       : emptyCompanyInfo;
 
+  const [companyData, setCompanyData] = useState(companyInfo);
+
   const [errors, setErrors] = useState({
     companyName: null,
     companyTitle: null,
@@ -134,16 +136,58 @@ const CompanyModal = (props) => {
     if (address) {
       setIsSubmitted(true);
 
+      let tempProfileData = profileData;
+      tempProfileData.companyInfo.push(companyData);
+
+      setProfileData({
+        ...profileData,
+        companyInfo: {
+          ...companyInfo,
+          companyData
+        }
+      });
+
       // TODO: Need to run a update profile call here
-      if (profileData.firstName && profileData.lastName && profileData.email) {
-        setIsSubmitted(false);
-        props.handleUpdatedCompanyInfo(profileData, false);
+      if (profileData.userWallet && profileData.userName && companyData) {
+        console.log(profileData.companyInfo);
+        console.log('Updated profile datA ON COMPANY MODAL: ', profileData);
+        console.log('Updated company datA ON COMPANY MODAL: ', companyData);
+        let userData = await getUser(profileData.userName);
+        let companyAttributes = {
+          companyInfo: companyData,
+          userName: profileData.userName,
+          currCompany: props.currCompany,
+        };
+        userData.companyInfo[props.currCompany] = companyData;
+        updateUserCompanyData(profileData.userWallet, companyAttributes);
+        props.handleUpdatedCompanyInfo(userData);
         props.onClose();
+        setIsSubmitted(false);
       } else {
         console.log("No profile, pls create one...");
       }
     }
   }
+
+  const updateUserCompanyData = async (userWallet, attributes) => {
+    let userData = { userWallet, attributes}
+    await fetch(`/api/users/updateUser?updateUser=company`, {
+      method: "PUT",
+      body: JSON.stringify({ userData }),
+    });
+    console.log("USER Company data UPDATED BRUH");
+  };
+
+  const getUser = async (userName) => {
+    const res = await fetch(
+      `/api/users/${userName}`
+    );
+
+    const data: any = await res.json();
+
+    console.log("RETRIEVE USER BY username YO");
+    return data;
+  };
 
 
 
@@ -151,9 +195,12 @@ const CompanyModal = (props) => {
     evt.persist();
     setValues((values) => ({ ...values, [evt.target.name]: evt.target.value }));
     setErrors(validate(values));
-    setProfileData({
-      ...profileData,
+
+    setCompanyData({
+      ...companyData,
+      [evt.target.name]: evt.target.value
     });
+
     if (evt.target.name == "companyName") {
       setCompanyName(evt.target.value);
       setShouldFetch(true);
@@ -180,7 +227,6 @@ const CompanyModal = (props) => {
     if (evt.target.name == "industryExpertise") {
       setCompanyIndustry(evt.target.value);
     }
-    console.log('Updated profile datA ON COMPANY MODAL: ', profileData);
   };
 
   const validate = (values) => {
@@ -402,7 +448,7 @@ const CompanyModal = (props) => {
                       defaultValue={companyInfo.companyFunc}
                       errorBorderColor="red.300"
                       placeholder="Select functional expertise"
-                      name="funcExpertise"
+                      name="companyFunc"
                       onChange={handleChange}
                     >
                       <option>Accounting</option>
@@ -456,7 +502,7 @@ const CompanyModal = (props) => {
                       defaultValue={companyInfo.companyIndustry}
                       errorBorderColor="red.300"
                       placeholder="Select industry expertise"
-                      name="industryExpertise"
+                      name="companyIndustry"
                       onChange={handleChange}
                     >
                       <option>Accounting</option>
