@@ -42,7 +42,7 @@ export function setEventArray({
   const eventValues = values[strippedEventName];
 
   let eventArray = [];
-  for (let i = 0; i <= 2; i++) {
+  for (let i = 0; i <= eventValues.length; i++) {
     if (i === eventIndex - 1) {
       eventArray.push(evt.target.value);
     } else {
