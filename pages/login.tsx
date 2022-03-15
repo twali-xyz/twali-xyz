@@ -1,33 +1,110 @@
-import { Container, Flex, VStack } from "@chakra-ui/react";
-
+import {
+  Button,
+  CircularProgress,
+  Container,
+  Img,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import background from "../public/twali-assets/backgroundscreen.png";
 import HeaderNav from "../components/HeaderNav/HeaderNav";
+import { handleConnect } from "../components/Profile/helpers/handleConnect";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
-const LoginPage = () => {
+const LoginPage = (props) => {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [accType, setAccType] = useState("");
+  const [loaded, setLoaded] = useState(false);
+  const [profileData, setProfileData] = useState();
+  const router = useRouter();
+
+  useEffect(() => {
+    setLoaded(props.loaded);
+  }, []);
+
+  const handleWalletConnect = handleConnect(
+    setIsSubmitted,
+    setName,
+    setEmail,
+    setAccType,
+    router,
+    setLoaded,
+    setProfileData
+  );
   return (
-    <Container maxW="container.xl" p={12}>
-      <HeaderNav whichPage="index" />
-      <Flex h="full">
-        <VStack w="full" h="full" p={10} spacing={10} alignItems="flex-start">
-          <p>
-            I, Twali, am the sum of many parts. A decentralized professional
-            services platform interacting, operating, and servicing on-chain. A
-            collective composed of individuals, experts, builders, educators, &
-            advisors, intent on destroying the hegemony of so-called
-            "consultancies" by developing a peer-reviewed, validated body of
-            knowledge and an expertise-as-a-service platform. It may be easy for
-            you to think of me as an on-chain consultancy, a professional
-            services DAO, and that's a good place to start. Start there. Here.
-            Come with me.
-          </p>
-          <p>
-            In Twali, there are two types of people: Builders and Experts.
-            Experts provide their knowledge and expertise to Builders, who book
-            it, who come to experts for help on projects. Which are you
-          </p>
-          <p>Which are you?</p>
+    <>
+      <Container
+        width="100%"
+        height="1024px"
+        minH={"100vh"}
+        maxW={"100%"}
+        pos={"relative"}
+        bgSize={"cover"}
+        bgPosition={"center"}
+        bgImg={`url(${background.src})`}
+      >
+        <HeaderNav whichPage="index" />
+        <VStack
+          width="100%"
+          minH={"100vh"}
+          maxW={"100%"}
+          pos={"absolute"}
+          right={"1.9%"}
+          bottom={"4.5%"}
+          display={"flex"}
+          flexDir={"column"}
+          alignItems={"center"}
+          justifyContent={"center"}
+        >
+          <Text
+            alignSelf={"center"}
+            fontFamily={"PP Telegraf"}
+            fontSize={"16px"}
+            lineHeight={"24px"}
+            letterSpacing={"wide"}
+          >
+            Welcome to
+          </Text>
+          <Img
+            src="twali-assets/twali_rainbow.png"
+            width={"300px"}
+            height={"64.38px"}
+            marginTop={"49px !important"}
+          />
+          {loaded ? (
+            <CircularProgress
+              marginTop={"89px !important"}
+              size="32px"
+              thickness="4px"
+              isIndeterminate
+              color="#3C2E26"
+            />
+          ) : (
+            <Button
+              marginTop={"89px !important"}
+              width={"207px"}
+              height={"52px"}
+              color={"#062B2A"}
+              backgroundColor={"#C7F83C"}
+              onClick={handleWalletConnect}
+            >
+              Connect Wallet{" "}
+              {isSubmitted ? (
+                <CircularProgress
+                  size="22px"
+                  thickness="4px"
+                  isIndeterminate
+                  color="#3C2E26"
+                />
+              ) : null}
+            </Button>
+          )}
         </VStack>
-      </Flex>
-    </Container>
+      </Container>
+    </>
   );
 };
 

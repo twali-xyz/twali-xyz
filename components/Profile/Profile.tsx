@@ -10,6 +10,7 @@ import {
   IconButton,
   Link,
   Image,
+  Container,
 } from "@chakra-ui/react";
 
 import { useState, useEffect } from "react";
@@ -32,6 +33,7 @@ import useSWR from "swr";
 import UserPermissionsProvider from "../UserPermissionsProvider/UserPermissionsProvider";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import { fetchPermission } from "../../utils/profileUtils";
+import LoginPage from "../../pages/login";
 
 // network node that we're interacting with, can be local/prod
 // we're using a test network here
@@ -349,21 +351,13 @@ const ProfilePage = () => {
   return (
     <>
       {!loaded ? (
-        <VStack alignSelf="center" spacing={8} pt={8}>
-          <CircularProgress
-            size="50px"
-            thickness="8px"
-            isIndeterminate
-            color="#3C2E26"
-          />
-          <Text fontSize="2xl">Loading</Text>
-        </VStack>
+        <LoginPage loaded={!loaded} />
       ) : (
         profileData &&
         profileData.content &&
         profileData.content.accType &&
         profileData.content.identity && (
-          <>
+          <Container maxW="container.xl" p={12}>
             <UserPermissionsProvider
               fetchPermission={fetchPermission(
                 profileData.content.identity.displayName
@@ -613,7 +607,7 @@ const ProfilePage = () => {
                 </Box>
               </HStack>
             </UserPermissionsProvider>
-          </>
+          </Container>
         )
       )}
     </>
