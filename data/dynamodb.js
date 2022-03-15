@@ -10,13 +10,14 @@ const getDynamoDBClient = () => {
     : "us-east-2";
 
   // Only needed with local development.
-  if (process.env.LOCAL_DYNAMO_DB_ENDPOINT) {
+  // if (process.env.LOCAL_DYNAMO_DB_ENDPOINT) {
     AWS.config.update({
-      // accessKeyId: 'xxxx',
-      // secretAccessKey: 'xxxx',
+      accessKeyId: 'xxxx',
+      secretAccessKey: 'xxxx',
       region: "us-east-1",
       endpoint: "http://localhost:8000",
-    })};
+    });
+    // };
   
 
   const options = {
@@ -243,36 +244,40 @@ module.exports = {
     updateUserCompanyData: async (userWallet, attributes) => {
       console.log('UPDATE USER COMPANY DATA DYNAMO');
       console.log(userWallet);
-      // console.log(attributes);
+      console.log(attributes);
       let {
-        companyInfo,
+        companyName,
+        companyTitle,
+        companyStart,
+        companyEnd,
+        companyFunc,
+        companyIndustry,
         userName,
         currCompany
       } = attributes;
 
       let data = {
         companyInfo: {
-          companyName: companyInfo.companyName,
-          companyTitle: companyInfo.companyTitle,
-          companyStart: companyInfo.companyStart,
-          companyEnd: companyInfo.companyEnd,
-          companyFunc: companyInfo.companyFunc,
-          companyIndustry: companyInfo.companyIndustry
+          companyName: companyName,
+          companyTitle: companyTitle,
+          companyStart: companyStart,
+          companyEnd: companyEnd,
+          companyFunc: companyFunc,
+          companyIndustry: companyIndustry
         }
       };
 
       const generateUpdateQuery = (fields) => {
         let exp = {
-            UpdateExpression: 'set',
-            ExpressionAttributeNames: {},
+            UpdateExpression: 'SET ',
             ExpressionAttributeValues: {}
         }
         Object.entries(fields).forEach(([key, item]) => {
-            exp.UpdateExpression += ` #${key} = :${key},`;
-            exp.ExpressionAttributeNames[`#${key}`] = key;
-            exp.ExpressionAttributeValues[`:${key}`] = item
+          // console.log('obj', `${key} - ${item.companyName}`);
+            exp.UpdateExpression += `${key} = :updateObj`;
+            exp.ExpressionAttributeValues[":updateObj"] = item
         })
-        exp.UpdateExpression = exp.UpdateExpression.slice(0, -1);
+  
         return exp
     }
     
@@ -284,9 +289,11 @@ module.exports = {
         TableName,
         Key: {
           userWallet: userWallet,
-          userName: userName,
+          userName: "NickGonzalez4__",
         },
-        expression
+        UpdateExpression: expression.UpdateExpression,
+        ExpressionAttributeValues: expression.ExpressionAttributeValues,
+        ReturnValues:"ALL_NEW"
         // UpdateExpression: "SET companyInfo = :companyInfo",
         // // ConditionExpression: "",
         // ExpressionAttributeValues: {
