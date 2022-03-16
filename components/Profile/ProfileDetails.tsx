@@ -121,7 +121,7 @@ const ProfileDetails = ({ user }) => {
         // does not require signing to get user's public data
         if (user && user.userWallet) {
           // Unmarshalling company data from dynamodb and saving it to the current user state
-          const formattedData = convertFromDB(user.companyInfo);
+          const formattedData = await convertFromDB(user.companyInfo);
           user.companyInfo = formattedData;
           console.log('user set', user);
 

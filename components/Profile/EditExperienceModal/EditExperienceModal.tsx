@@ -74,7 +74,7 @@ const EditExperienceModal = (props) => {
         let userData = await getUser(profileData.userName);
 
         // Unmarshalling company data from dynamodb and saving it to the current userData state
-        const formattedData = convertFromDB(userData.companyInfo);
+        const formattedData = await convertFromDB(userData.companyInfo);
         userData.companyInfo = formattedData;
 
         let experienceAttributes = {

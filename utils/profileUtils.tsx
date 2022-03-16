@@ -1,5 +1,9 @@
 import { Permission } from "./PermissionTypes";
-import AWS from "aws-sdk";
+// import AWS from "aws-sdk";
+// import { DynamoDB } from "@aws-sdk/client-dynamodb";
+import { 
+  // marshall, 
+  unmarshall } from "@aws-sdk/util-dynamodb";
 
 // Function that simulates fetching a permission from remote server
 export const fetchPermission =
@@ -31,17 +35,23 @@ export const fetchPermission =
     console.log("PERMISSION DATA:", userData);
   };
 
-export const convertFromDB = (companyInfo) => {
-  AWS.config.update({
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-      region: "us-east-1",
-      // endpoint: "http://localhost:8000",
-  });
+export const convertFromDB = async (companyInfo) => {
+
+// let clientParams = {
+//   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+//   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+//   region: "us-east-1",
+// }
+
+// const client = new DynamoDB(clientParams);
+
+
   let converterOptions = {
     convertEmptyValues: true,
     wrapNumbers: true,
   }
-  const formattedData =  AWS.DynamoDB.Converter.output(companyInfo, converterOptions);
-  return formattedData;
+  // const formattedData =  AWS.DynamoDB.Converter.output(companyInfo, converterOptions);
+  const formattedData2 = unmarshall(companyInfo, converterOptions);
+  console.log(formattedData2);
+  return formattedData2;
 }
