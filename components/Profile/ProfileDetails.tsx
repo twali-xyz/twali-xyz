@@ -120,10 +120,11 @@ const ProfileDetails = ({ user }) => {
       try {
         // does not require signing to get user's public data
         if (user && user.userWallet) {
+          // Unmarshalling company data from dynamodb and saving it to the current user state
           const formattedData =  AWS.DynamoDB.Converter.output(user.companyInfo, true);
-          console.log('user data', formattedData);
-          console.log('user set', user);
           user.companyInfo = formattedData;
+          console.log('user set', user);
+
           setProfileData(user);
           setLoaded(true);
           setupSnapshotQueries(user.userWallet);
@@ -240,29 +241,6 @@ const ProfileDetails = ({ user }) => {
     readProfile();
   }, []);
 
-  // const handleUpdatedProfile = async (userName) => {
-  //   // setProfileData({ ...profileData });
-  //   // readProfile();
-  //   let userData = await getUser(userName);
-  //   setProfileData({ ...userData });
-  // };
-
-  const handleUpdatedCompanyInfo = (profileData) => {
-    setProfileData({ ...profileData });
-    readProfile();
-  };
-
-  // const getUser = async (userName) => {
-  //   const res = await fetch(
-  //     `/api/users/${userName}`
-  //   );
-
-  //   const data: any = await res.json();
-
-  //   console.log("RETRIEVE USER BY username YO");
-  //   return data;
-  // };
-
   function createWorkElements(number) {
     var elements = [];
     let totalLen = profileData.companyInfo
@@ -315,7 +293,7 @@ const ProfileDetails = ({ user }) => {
       currCompany={currCompany}
       profileData={profileData}
       userPermission="view"
-      handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
+      handleUpdatedCompanyInfo={setProfileData}
     />
   );
 
@@ -503,7 +481,7 @@ const ProfileDetails = ({ user }) => {
                             onClose={onCompanyModalClose}
                             currCompany={currCompany}
                             profileData={profileData}
-                            handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
+                            handleUpdatedCompanyInfo={setProfileData}
                           />
                         </UserPermissionsRestricted>
                       </Box>

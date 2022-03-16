@@ -171,23 +171,11 @@ const CompanyModal = (props) => {
     if (address) {
       setIsSubmitted(true);
 
-      let tempProfileData: UserData = profileData;
-      if (tempProfileData && tempProfileData.companyInfo) {
-        tempProfileData.companyInfo[props.currCompany] = companyData;
-      }
-
-      setProfileData({
-        ...profileData,
-        companyInfo: {
-          ...companyInfo,
-          companyData
-        }
-      });
-
-      // TODO: Need to run a update profile call here
       if (profileData.userWallet && profileData.userName && companyData) {
         console.log(props.currCompany);
         let userData = await getUser(profileData.userName);
+        
+        // Unmarshalling company data from dynamodb and saving it to the current userData state
         const formattedData2 =  AWS.DynamoDB.Converter.output(userData.companyInfo, true);
         userData.companyInfo = formattedData2;
         userData.companyInfo[props.currCompany] = companyData;

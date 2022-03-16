@@ -84,6 +84,7 @@ module.exports = {
       industryExpertise,
     } = userData;
 
+    // Initialize a null array for Company Data and convert it to dynamodb record
     let companyInfo = [null, null, null, null, null];
     let companyData = AWS.DynamoDB.Converter.input(companyInfo, true);
 
@@ -251,7 +252,7 @@ module.exports = {
         userName,
       } = attributes;
   
-      let companyInfo = companyData;
+      let companyInfo = companyData; // to use companyInfo as the new array obj in the front-end
 
       console.log('COMPANY INFO', companyInfo);
       const getParams = (updatedCompanyData) => {
@@ -270,8 +271,8 @@ module.exports = {
         return params;
         }
 
+    // Marshalling company data from JSON format and saving it as a dynamodb record
     let updatedCompanyData = AWS.DynamoDB.Converter.input(companyInfo, true);
-    console.log('updated company data formatted ', updatedCompanyData);
     let params = getParams(updatedCompanyData);
   
     await getDynamoDBClient().update({

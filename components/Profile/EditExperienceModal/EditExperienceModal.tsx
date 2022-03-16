@@ -16,6 +16,7 @@ import {
   CircularProgress,
 } from "@chakra-ui/react";
 import { connect } from "../../../utils/walletUtils";
+const AWS = require("aws-sdk");
 
 export interface UserData {
   userName: string;
@@ -71,6 +72,11 @@ const EditExperienceModal = (props) => {
       // TODO: Need to run a update profile call here
       if (profileData.userWallet && profileData.userName && profileData.email && profileData.funcExpertise && profileData.industryExpertise) {
         let userData = await getUser(profileData.userName);
+
+        // Unmarshalling company data from dynamodb and saving it to the current userData state
+        const formattedData2 =  AWS.DynamoDB.Converter.output(userData.companyInfo, true);
+        userData.companyInfo = formattedData2;
+
         let experienceAttributes = {
           userName: profileData.userName,
           email: profileData.email,
@@ -83,7 +89,7 @@ const EditExperienceModal = (props) => {
         
         console.log(profileData);
         updateUserExperience(profileData.userWallet, experienceAttributes);
-        
+        console.log('Experience userData:', userData);
         props.handleUpdatedExperiences(userData);
         props.onClose();
         setIsSubmitted(false);

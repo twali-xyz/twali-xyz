@@ -17,6 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { connect } from "../../../utils/walletUtils";
 import FileUpload from "../../FileUpload/FileUpload";
+const AWS = require("aws-sdk");
 
 export interface UserData {
   userName: string;
@@ -84,6 +85,11 @@ const EditProfileModal = (props) => {
       // TODO: Need to run a update profile call here
       if (profileData.userWallet && profileData.userName && profileData.firstName && profileData.lastName && profileData.currTitle) {
         let userData = await getUser(profileData.userName);
+        
+        // Unmarshalling company data from dynamodb and saving it to the current userData state
+        const formattedData2 =  AWS.DynamoDB.Converter.output(userData.companyInfo, true);
+        userData.companyInfo = formattedData2;
+        
         let experienceAttributes = {
           userName: profileData.userName,
           firstName: profileData.firstName,
