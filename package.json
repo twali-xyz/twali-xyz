@@ -10,6 +10,8 @@
   "dependencies": {
     "@3id/connect": "^0.2.5",
     "@apollo/client": "^3.5.6",
+    "@aws-sdk/client-dynamodb": "^3.54.1",
+    "@aws-sdk/util-dynamodb": "^3.54.1",
     "@ceramicnetwork/3id-did-resolver": "^1.4.12",
     "@ceramicnetwork/http-client": "^1.5.3",
     "@ceramicnetwork/stream-tile": "^1.5.3",
