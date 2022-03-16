@@ -25,6 +25,7 @@ import useSWR from "swr";
 import UserPermissionsProvider from "../UserPermissionsProvider/UserPermissionsProvider";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import { fetchPermission } from "../../utils/profileUtils";
+const AWS = require("aws-sdk");
 
 export interface UserData {
   userName: string;
@@ -119,7 +120,10 @@ const ProfileDetails = ({ user }) => {
       try {
         // does not require signing to get user's public data
         if (user && user.userWallet) {
+          const formattedData =  AWS.DynamoDB.Converter.output(user.companyInfo, true);
+          console.log('user data', formattedData);
           console.log('user set', user);
+          user.companyInfo = formattedData;
           setProfileData(user);
           setLoaded(true);
           setupSnapshotQueries(user.userWallet);
@@ -267,11 +271,12 @@ const ProfileDetails = ({ user }) => {
     for (let i = 0; i < number; i++) {
       if (
         profileData.companyInfo &&
-        i < totalLen &&
+        i < totalLen && profileData.companyInfo[i] &&
         profileData.companyInfo[i].companyName
       ) {
         elements.push(
           <GetCompany
+            key={`${profileData.companyInfo[i].companyName}-${i}--company`}
             companyName={
               profileData.companyInfo[i].companyName
             }
@@ -282,7 +287,7 @@ const ProfileDetails = ({ user }) => {
         );
       } else {
         elements.push(
-          <UserPermissionsRestricted to="edit">
+          <UserPermissionsRestricted to="edit" key={`${i}--empty-company-usr-permission`}>
             <Img
               key={`${i}--empty-company-exp`}
               borderRadius="full"

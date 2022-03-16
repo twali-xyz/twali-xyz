@@ -1,8 +1,8 @@
 const { v4 } = require("uuid");
 const TableName = process.env.TABLE_NAME;
+const AWS = require("aws-sdk");
 
 const getDynamoDBClient = () => {
-  const AWS = require("aws-sdk");
 
   const edgeRegion = process.env.CURRENT_AWS_REGION || "us-east-1";
   const dynamoDBRegion = edgeRegion.startsWith("us")
@@ -11,12 +11,12 @@ const getDynamoDBClient = () => {
 
   // Only needed with local development.
   // if (process.env.LOCAL_DYNAMO_DB_ENDPOINT) {
-    AWS.config.update({
-      accessKeyId: 'xxxx',
-      secretAccessKey: 'xxxx',
-      region: "us-east-1",
-      endpoint: "http://localhost:8000",
-    });
+    // AWS.config.update({
+    //   accessKeyId: 'xxxx',
+    //   secretAccessKey: 'xxxx',
+    //   region: "us-east-1",
+    //   endpoint: "http://localhost:8000",
+    // });
     // };
   
 
@@ -82,8 +82,10 @@ module.exports = {
       currLocation,
       funcExpertise,
       industryExpertise,
-      companyInfo,
     } = userData;
+
+    let companyInfo = [null, null, null, null, null];
+    let companyData = AWS.DynamoDB.Converter.input(companyInfo, true);
 
     await getDynamoDBClient()
       .put({
@@ -107,7 +109,7 @@ module.exports = {
           currLocation: currLocation ? currLocation : null,
           funcExpertise: funcExpertise ? funcExpertise : null,
           industryExpertise: industryExpertise ? industryExpertise : null,
-          companyInfo: companyInfo ? companyInfo : null,
+          companyInfo: companyData
         },
         // ConditionExpression: attribute_not_exists(userWallet)
       })
@@ -243,64 +245,45 @@ module.exports = {
    */
     updateUserCompanyData: async (userWallet, attributes) => {
       console.log('UPDATE USER COMPANY DATA DYNAMO');
-      console.log(userWallet);
-      console.log(attributes);
+
       let {
-        companyName,
-        companyTitle,
-        companyStart,
-        companyEnd,
-        companyFunc,
-        companyIndustry,
+        companyData,
         userName,
-        currCompany
       } = attributes;
-
-      let data = {
-        companyInfo: {
-          companyName: companyName,
-          companyTitle: companyTitle,
-          companyStart: companyStart,
-          companyEnd: companyEnd,
-          companyFunc: companyFunc,
-          companyIndustry: companyIndustry
-        }
-      };
-
-      const generateUpdateQuery = (fields) => {
-        let exp = {
-            UpdateExpression: 'SET ',
-            ExpressionAttributeValues: {}
-        }
-        Object.entries(fields).forEach(([key, item]) => {
-          // console.log('obj', `${key} - ${item.companyName}`);
-            exp.UpdateExpression += `${key} = :updateObj`;
-            exp.ExpressionAttributeValues[":updateObj"] = item
-        })
   
-        return exp
-    }
-    
-    let expression = generateUpdateQuery(data);
-    console.log('EXPRESSION: ', expression);
+      let companyInfo = companyData;
 
+      console.log('COMPANY INFO', companyInfo);
+      const getParams = (updatedCompanyData) => {
+        const params = {
+          TableName,
+          Key: {
+            userWallet: userWallet,
+            userName: userName,
+          },
+          UpdateExpression: 'SET companyInfo = :updatedData',
+           ExpressionAttributeValues: {
+                ":updatedData": updatedCompanyData,
+            },
+            ReturnValues:"UPDATED_NEW"
+        };
+        return params;
+        }
+
+    let updatedCompanyData = AWS.DynamoDB.Converter.input(companyInfo, true);
+    console.log('updated company data formatted ', updatedCompanyData);
+    let params = getParams(updatedCompanyData);
   
     await getDynamoDBClient().update({
-        TableName,
+        TableName: params.TableName,
         Key: {
           userWallet: userWallet,
-          userName: "NickGonzalez4__",
+          userName: userName,
         },
-        UpdateExpression: expression.UpdateExpression,
-        ExpressionAttributeValues: expression.ExpressionAttributeValues,
+        UpdateExpression: params.UpdateExpression,
+        ExpressionAttributeValues: params.ExpressionAttributeValues,
         ReturnValues:"ALL_NEW"
-        // UpdateExpression: "SET companyInfo = :companyInfo",
-        // // ConditionExpression: "",
-        // ExpressionAttributeValues: {
-        //   ":companyInfo": companyInfo,
-        // },
-      }).promise()
-      .then(data => console.log('COMPANY THINGY: ', data)).catch(console.error);
+      }).promise().catch(console.error);
     }, 
   /**
    * @desc Directly access a list of users in the table by scanning the table with `TableName`

@@ -24,6 +24,7 @@ import {
 import useSWR from "swr";
 import { connect } from "../../../utils/walletUtils";
 import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
+const AWS = require("aws-sdk");
 
 export interface UserData {
   userName: string;
@@ -68,20 +69,54 @@ const CompanyModal = (props) => {
   const [shouldFetch, setShouldFetch] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [profileData, setProfileData] = useState(props.profileData);
-  const emptyCompanyInfo = {
+  const emptyCompanyInfo = [{
     companyName: "",
     companyTitle: "",
     companyStart: "",
     companyEnd: "",
     companyFunc: "",
     companyIndustry: "",
-  };
+  }, 
+  {
+    companyName: "",
+    companyTitle: "",
+    companyStart: "",
+    companyEnd: "",
+    companyFunc: "",
+    companyIndustry: "",
+  },
+  {
+    companyName: "",
+    companyTitle: "",
+    companyStart: "",
+    companyEnd: "",
+    companyFunc: "",
+    companyIndustry: "",
+  },
+  {
+    companyName: "",
+    companyTitle: "",
+    companyStart: "",
+    companyEnd: "",
+    companyFunc: "",
+    companyIndustry: "",
+  },
+  {
+    companyName: "",
+    companyTitle: "",
+    companyStart: "",
+    companyEnd: "",
+    companyFunc: "",
+    companyIndustry: "",
+  },
+];
 
   const companyInfo =
     props.profileData.companyInfo &&
     props.profileData.companyInfo[props.currCompany]
       ? props.profileData.companyInfo[props.currCompany]
-      : emptyCompanyInfo;
+      : emptyCompanyInfo[props.currCompany];
+  
 
   const [companyData, setCompanyData] = useState(companyInfo);
 
@@ -136,8 +171,10 @@ const CompanyModal = (props) => {
     if (address) {
       setIsSubmitted(true);
 
-      let tempProfileData = profileData;
-      tempProfileData.companyInfo.push(companyData);
+      let tempProfileData: UserData = profileData;
+      if (tempProfileData && tempProfileData.companyInfo) {
+        tempProfileData.companyInfo[props.currCompany] = companyData;
+      }
 
       setProfileData({
         ...profileData,
@@ -149,16 +186,19 @@ const CompanyModal = (props) => {
 
       // TODO: Need to run a update profile call here
       if (profileData.userWallet && profileData.userName && companyData) {
-        console.log(profileData.companyInfo);
-        console.log('Updated profile datA ON COMPANY MODAL: ', profileData);
-        console.log('Updated company datA ON COMPANY MODAL: ', companyData);
+        console.log(props.currCompany);
         let userData = await getUser(profileData.userName);
+        const formattedData2 =  AWS.DynamoDB.Converter.output(userData.companyInfo, true);
+        userData.companyInfo = formattedData2;
+        userData.companyInfo[props.currCompany] = companyData;
+
         let companyAttributes = {
-          companyInfo: companyData,
+          companyData: userData.companyInfo,
           userName: profileData.userName,
           currCompany: props.currCompany,
         };
-        userData.companyInfo[props.currCompany] = companyData;
+        console.log('Updated profile datA ON COMPANY MODAL: ', userData);
+
         updateUserCompanyData(profileData.userWallet, companyAttributes);
         props.handleUpdatedCompanyInfo(userData);
         props.onClose();
