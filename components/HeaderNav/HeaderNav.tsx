@@ -109,7 +109,7 @@ const HeaderNav = (props) => {
           package: WalletConnectProvider,
           options: {
             rpc: {
-              1: "https://eth-rinkeby.alchemyapi.io/v2/QtLM8rW9nB6DobDu8KQx-7fYMS2rBlky",
+              1: `${process.env.ALCHEMY_KEY_HTTP}`,
             },
           },
         },
