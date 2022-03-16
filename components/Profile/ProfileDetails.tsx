@@ -24,8 +24,8 @@ import CompanyModal from "./CompanyModal/CompanyModal";
 import useSWR from "swr";
 import UserPermissionsProvider from "../UserPermissionsProvider/UserPermissionsProvider";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
-import { fetchPermission } from "../../utils/profileUtils";
-const AWS = require("aws-sdk");
+import { fetchPermission, convertFromDB } from "../../utils/profileUtils";
+
 
 export interface UserData {
   userName: string;
@@ -121,7 +121,7 @@ const ProfileDetails = ({ user }) => {
         // does not require signing to get user's public data
         if (user && user.userWallet) {
           // Unmarshalling company data from dynamodb and saving it to the current user state
-          const formattedData =  AWS.DynamoDB.Converter.output(user.companyInfo, true);
+          const formattedData = convertFromDB(user.companyInfo);
           user.companyInfo = formattedData;
           console.log('user set', user);
 

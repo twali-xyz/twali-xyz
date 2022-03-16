@@ -1,4 +1,5 @@
 import { Permission } from "./PermissionTypes";
+import AWS from "aws-sdk";
 
 // Function that simulates fetching a permission from remote server
 export const fetchPermission =
@@ -29,3 +30,18 @@ export const fetchPermission =
     }
     console.log("PERMISSION DATA:", userData);
   };
+
+export const convertFromDB = (companyInfo) => {
+  AWS.config.update({
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      region: "us-east-1",
+      // endpoint: "http://localhost:8000",
+  });
+  let converterOptions = {
+    convertEmptyValues: true,
+    wrapNumbers: true,
+  }
+  const formattedData =  AWS.DynamoDB.Converter.output(companyInfo, converterOptions);
+  return formattedData;
+}
