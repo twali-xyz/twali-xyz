@@ -69,7 +69,6 @@ const EditExperienceModal = (props) => {
       // TODO: Need to run a update profile call here
       if (profileData.firstName && profileData.lastName && profileData.email) {
         setIsSubmitted(false);
-        props.setProfileData(newProfileData);
         props.handleUpdatedExperiences(profileData, false);
         props.onClose();
       } else {
@@ -91,7 +90,6 @@ const EditExperienceModal = (props) => {
 
     return errors;
   };
-  let newProfileData: ProfileData;
   const handleChange = (evt) => {
     evt.persist();
     const strippedEventName = evt.target.name.substring(
@@ -110,12 +108,6 @@ const EditExperienceModal = (props) => {
         [evt.target.name]: evt.target.value,
       }));
     }
-    newProfileData = {
-      content: {
-        identity: { ...profileData, values },
-        accType: props.profileData.accType,
-      },
-    };
   };
   console.log(props);
 
