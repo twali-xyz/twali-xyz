@@ -26,13 +26,14 @@ import { connect } from "../../../utils/walletUtils";
 
 import CeramicClient from "@ceramicnetwork/http-client";
 import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver";
-
 import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
 import { DID } from "dids";
 import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
 import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
 import { BasicProfile, ProfileData } from "../../../utils/interfaces";
+import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
+import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
 
 // 3box test nodes with read/write access on ceramic clay testnet
 // network node that we're interacting with, can be local/prod
