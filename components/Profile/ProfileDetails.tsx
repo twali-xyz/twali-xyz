@@ -8,22 +8,13 @@ import {
   VStack,
   Text,
   useDisclosure,
-  IconButton,
-  Container,
   Flex,
+  Container,
 } from "@chakra-ui/react";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { connect } from "../../utils/walletUtils";
-
-import CeramicClient from "@ceramicnetwork/http-client";
-import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver";
-
-import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
-import { DID } from "dids";
-import { IDX } from "@ceramicstudio/idx";
-import { TileDocument } from "@ceramicnetwork/stream-tile";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { request, gql } from "graphql-request";
 import CompanyModal from "./CompanyModal/CompanyModal";
 import useSWR from "swr";
@@ -32,15 +23,19 @@ import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermission
 import { fetchPermission } from "../../utils/profileUtils";
 import LoginPage from "../../pages/login";
 import HeaderNav from "../HeaderNav/HeaderNav";
-import { ProfileData } from "../../utils/interfaces";
+import { UserData } from "../../utils/interfaces";
 
-// network node that we're interacting with, can be local/prod
-// we're using a test network here
-const endpoint = "https://ceramic-clay.3boxlabs.com";
+const ProfileDetails = ({ user }) => {
+  // Fallback for getStaticPaths, when fallback: true
+  // Useful for an app that has a large number of static pages, and this prevents the build time from slowing down
+  // More info in Nextjs docs here: https://nextjs.org/docs/api-reference/data-fetching/get-static-paths#fallback-true
+  const router = useRouter();
 
-const ProfilePage = () => {
-  const [profileData, setProfileData] = useState<ProfileData>();
-  const [name, setName] = useState("");
+  if (router.isFallback) {
+    return <LoginPage loaded={router.isFallback} />;
+  }
+
+  const [profileData, setProfileData] = useState<UserData>();
 
   const {
     isOpen: isExpModalOpen,
@@ -60,36 +55,18 @@ const ProfilePage = () => {
   const [loaded, setLoaded] = useState(false);
   const [snapshotData, setSnapshotData] = useState<any>();
   const [currentSnapshot, setCurrentSnapshot] = useState();
+  const [loggedInUserAddress, setLoggedInUserAddress] = useState("");
   const [currCompany, setCurrCompany] = useState(0);
+  // console.log(user);
 
   async function readProfile() {
     const address = await connect(); // first address in the array
-    const ceramic = new CeramicClient(endpoint);
-    const idx = new IDX({ ceramic });
-    const threeIdConnect = new ThreeIdConnect();
-    const authProvider = new EthereumAuthProvider(window.ethereum, address);
-    await threeIdConnect.connect(authProvider);
-    const provider = await threeIdConnect.getDidProvider();
-
-    ceramic.did = new DID({
-      provider: provider,
-      resolver: {
-        ...ThreeIdResolver.getResolver(ceramic),
-      },
-    });
-    await ceramic.did.authenticate();
+    console.log("outside useEffect", address);
 
     try {
       // does not require signing to get user's public data
-
-      const profile: ProfileData = await TileDocument.deterministic(
-        ceramic,
-        { family: "user-profile-data" },
-        { anchor: false, publish: false }
-      );
-
-      if (profile) {
-        setProfileData(profile);
+      if (user) {
+        setProfileData(user);
       }
 
       setLoaded(true);
@@ -101,37 +78,27 @@ const ProfilePage = () => {
   useEffect(() => {
     async function readProfile() {
       const address = await connect(); // first address in the array
-      const ceramic = new CeramicClient(endpoint);
-      const idx = new IDX({ ceramic });
-      const threeIdConnect = new ThreeIdConnect();
-      const authProvider = new EthereumAuthProvider(window.ethereum, address);
-      await threeIdConnect.connect(authProvider);
-      const provider = await threeIdConnect.getDidProvider();
-
-      ceramic.did = new DID({
-        provider: provider,
-        resolver: {
-          ...ThreeIdResolver.getResolver(ceramic),
-        },
-      });
-      await ceramic.did.authenticate();
+      console.log("useEffect", address);
 
       try {
-        const profile: ProfileData = await TileDocument.deterministic(
-          ceramic,
-          { family: "user-profile-data" },
-          { anchor: false, publish: false }
-        );
-
-        if (profile) {
-          setProfileData(profile);
+        // does not require signing to get user's public data
+        if (user && user.userWallet) {
+          console.log("user set", user);
+          setProfileData(user);
+          setLoaded(true);
+          setupSnapshotQueries(user.userWallet);
         }
-        setLoaded(true);
+
+        if (address) {
+          setLoggedInUserAddress(address);
+        }
       } catch (err) {
         console.log("error: ", err);
         setLoaded(false);
       }
+    }
 
+    function setupSnapshotQueries(address) {
       const query = gql`
         query getSnapshotVotes($wallet: String!) {
           votes(where: { voter: $wallet }) {
@@ -243,22 +210,18 @@ const ProfilePage = () => {
   };
   function createWorkElements(number) {
     var elements = [];
-    let totalLen = profileData.content.identity.companyInfo
-      ? profileData.content.identity.companyInfo.length
-      : 0;
+    let totalLen = profileData.companyInfo ? profileData.companyInfo.length : 0;
     for (let i = 0; i < number; i++) {
       if (
-        profileData.content.identity.companyInfo &&
+        profileData.companyInfo &&
         i < totalLen &&
-        profileData.content.identity.companyInfo[i].companyName
+        profileData.companyInfo[i].companyName
       ) {
         elements.push(
           <GetCompany
             key={`${i}--company-info`}
-            company={profileData.content.identity.companyInfo[i]}
-            companyName={
-              profileData.content.identity.companyInfo[i].companyName
-            }
+            company={profileData.companyInfo[i]}
+            companyName={profileData.companyInfo[i].companyName}
             currCompany={i}
             setCurrCompany={setCurrCompany}
             onCompanyModalOpen={onCompanyModalOpen}
@@ -303,9 +266,8 @@ const ProfilePage = () => {
         <LoginPage loaded={!loaded} />
       ) : (
         profileData &&
-        profileData.content &&
-        profileData.content.accType &&
-        profileData.content.identity && (
+        profileData.userName &&
+        profileData.userWallet && (
           <>
             <HeaderNav whichPage="profile" />
             <Container
@@ -316,12 +278,11 @@ const ProfilePage = () => {
             >
               <UserPermissionsProvider
                 fetchPermission={fetchPermission(
-                  profileData.content.identity.displayName
+                  profileData.userName,
+                  loggedInUserAddress ? loggedInUserAddress : null
                 )}
               >
-                <ProfileHeader
-                  displayName={profileData.content.identity.displayName}
-                />
+                <ProfileHeader userName={profileData.userName} />
                 <Flex
                   w="full"
                   justifyContent={"space-around"}
@@ -359,7 +320,7 @@ const ProfilePage = () => {
                         handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
                       />
                       {/* <Box alignSelf="flex-start" w="full" overflow='hidden'>
-                            <Text pt={8} pb={4} fontSize='xl'>Book a session with {profileData.content.identity.firstName}</Text>
+                            <Text pt={8} pb={4} fontSize='xl'>Book a session with {profileData.firstName}</Text>
                             <Button size='md' colorScheme='teal'>Book</Button>
                         </Box> */}
                     </VStack>
@@ -502,4 +463,4 @@ const GetCompany = (props) => {
   );
 };
 
-export default ProfilePage;
+export default ProfileDetails;

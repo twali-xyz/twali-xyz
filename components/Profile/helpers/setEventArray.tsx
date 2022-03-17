@@ -27,10 +27,10 @@
 
 export function setEventArray({
   evt,
-  setValues,
   values,
-  setIdentity,
-  identity,
+  setValues,
+  userData,
+  setUserData,
 }) {
   if (!evt) return;
   const eventName = evt.target.name;
@@ -42,7 +42,7 @@ export function setEventArray({
   const eventValues = values[strippedEventName];
 
   let eventArray = [];
-  for (let i = 0; i <= eventValues.length; i++) {
+  for (let i = 0; i <= eventValues?.length; i++) {
     if (i === eventIndex - 1) {
       eventArray.push(evt.target.value);
     } else {
@@ -53,8 +53,9 @@ export function setEventArray({
     ...values,
     [strippedEventName]: eventArray,
   }));
-  setIdentity({
-    ...identity,
-    [strippedEventName]: eventArray,
+  const value = evt.target.value;
+  setUserData({
+    ...userData,
+    [evt.target.name]: value,
   });
 }

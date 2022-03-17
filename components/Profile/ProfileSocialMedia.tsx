@@ -4,9 +4,9 @@ import React from "react";
 export function ProfileSocialMedia({ profileData, ...props }) {
   return (
     <HStack width={"6rem"} {...props}>
-      {profileData.content.identity.linkedIn && (
+      {profileData.linkedIn && (
         <Link
-          href={profileData.content.identity.linkedIn}
+          href={profileData.linkedIn}
           target="_blank"
           rel="noopener noreferrer"
           width={"fit-content"}
@@ -18,9 +18,9 @@ export function ProfileSocialMedia({ profileData, ...props }) {
           />
         </Link>
       )}
-      {profileData.content.identity.twitter && (
+      {profileData.twitter && (
         <Link
-          href={profileData.content.identity.twitter}
+          href={profileData.twitter}
           target="_blank"
           rel="noopener noreferrer"
           marginLeft={"16px !important"}

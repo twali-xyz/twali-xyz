@@ -2,7 +2,7 @@ import { Button, Img, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 import bannerImage from "/public/twali-assets/bannerimage.png";
 
-export function ProfileHeader({ displayName }) {
+export function ProfileHeader({ userName }) {
   return (
     <VStack
       w="100%"
@@ -32,7 +32,7 @@ export function ProfileHeader({ displayName }) {
           alt="fox stock img"
         />
       </Button>
-      {displayName && (
+      {userName && (
         <Text
           fontFamily={"GrandSlang"}
           fontSize="64px"
@@ -41,7 +41,7 @@ export function ProfileHeader({ displayName }) {
           pos={"relative"}
           top={"5px"}
         >
-          {displayName}
+          {userName}
         </Text>
       )}
       <Text

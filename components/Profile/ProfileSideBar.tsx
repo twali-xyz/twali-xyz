@@ -6,7 +6,6 @@ import {
   Button,
   HStack,
   Flex,
-  IconButton,
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
@@ -14,7 +13,6 @@ import EditProfileModal from "./EditProfileModal/EditProfileModal";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import EditExperienceModal from "./EditExperienceModal/EditExperienceModal";
 import { ProfileSocialMedia } from "./ProfileSocialMedia";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export function ProfileSideBar({
   onExpModalOpen,
   isExpModalOpen,
@@ -58,7 +56,7 @@ export function ProfileSideBar({
           fontFamily={"GrandSlang"}
           textTransform={"capitalize"}
         >
-          {profileData.content.identity.currTitle}
+          {profileData.currTitle}
         </Text>
         <UserPermissionsRestricted to="edit">
           <Button
@@ -104,7 +102,7 @@ export function ProfileSideBar({
           letterSpacing={"wide"}
           fontFamily={"PP Telegraf Light"}
         >
-          {profileData.content.identity.currLocation}
+          {profileData.currLocation}
         </Text>
       </HStack>
       <Box marginTop={"8px !important"}>
@@ -125,7 +123,7 @@ export function ProfileSideBar({
           maxW={"496px"}
           fontFamily={"PP Telegraf Light"}
         >
-          {profileData.content.identity.bio}
+          {profileData.bio}
         </Text>
       </Box>
       <ProfileSocialMedia
@@ -197,40 +195,37 @@ export function ProfileSideBar({
             flexFlow={"wrap"}
           >
             {profileData &&
-              profileData.content.identity &&
-              profileData.content.identity.functionalExpertise &&
-              typeof profileData.content.identity?.functionalExpertise ===
-                "object" &&
-              profileData.content.identity?.functionalExpertise.map(
-                (expertise, idx) => {
-                  if (expertise)
-                    return (
-                      <Box
-                        key={idx}
+              profileData &&
+              profileData.funcExpertise &&
+              typeof profileData?.funcExpertise === "object" &&
+              profileData?.funcExpertise.map((expertise, idx) => {
+                if (expertise)
+                  return (
+                    <Box
+                      key={idx}
+                      borderRadius={"32px"}
+                      backgroundImage={
+                        "linear-gradient(#0DD5D1 0%, #9350B3 100%)"
+                      }
+                      marginRight={idx === 2 ? 0 : 4}
+                      marginBottom={4}
+                      p={"1px"}
+                    >
+                      <Text
+                        fontSize="14px"
+                        lineHeight={"24px"}
+                        fontFamily={"PP Telegraf"}
+                        alignSelf={"start"}
+                        backgroundColor={"#0A2625"}
+                        p={"4px 12px"}
                         borderRadius={"32px"}
-                        backgroundImage={
-                          "linear-gradient(#0DD5D1 0%, #9350B3 100%)"
-                        }
-                        marginRight={idx === 2 ? 0 : 4}
-                        marginBottom={4}
-                        p={"1px"}
+                        whiteSpace={"nowrap"}
                       >
-                        <Text
-                          fontSize="14px"
-                          lineHeight={"24px"}
-                          fontFamily={"PP Telegraf"}
-                          alignSelf={"start"}
-                          backgroundColor={"#0A2625"}
-                          p={"4px 12px"}
-                          borderRadius={"32px"}
-                          whiteSpace={"nowrap"}
-                        >
-                          {expertise}
-                        </Text>
-                      </Box>
-                    );
-                }
-              )}
+                        {expertise}
+                      </Text>
+                    </Box>
+                  );
+              })}
           </Flex>
         </VStack>
         <VStack
@@ -261,40 +256,37 @@ export function ProfileSideBar({
             justifyContent={"flex-start"}
           >
             {profileData &&
-              profileData.content.identity &&
-              profileData.content.identity.industryExpertise &&
-              typeof profileData.content.identity?.industryExpertise ===
-                "object" &&
-              profileData.content.identity?.industryExpertise.map(
-                (expertise, idx) => {
-                  if (expertise)
-                    return (
-                      <Box
-                        key={idx}
+              profileData &&
+              profileData.industryExpertise &&
+              typeof profileData?.industryExpertise === "object" &&
+              profileData?.industryExpertise.map((expertise, idx) => {
+                if (expertise)
+                  return (
+                    <Box
+                      key={idx}
+                      borderRadius={"32px"}
+                      backgroundImage={
+                        "linear-gradient(#0DD5D1 0%, #9350B3 100%)"
+                      }
+                      p={"1px"}
+                      marginRight={idx === 2 ? 0 : 4}
+                      marginBottom={4}
+                    >
+                      <Text
+                        fontSize="14px"
+                        lineHeight={"24px"}
+                        fontFamily={"PP Telegraf"}
+                        alignSelf={"start"}
+                        backgroundColor={"#0A2625"}
+                        p={"4px 12px"}
+                        whiteSpace={"nowrap"}
                         borderRadius={"32px"}
-                        backgroundImage={
-                          "linear-gradient(#0DD5D1 0%, #9350B3 100%)"
-                        }
-                        p={"1px"}
-                        marginRight={idx === 2 ? 0 : 4}
-                        marginBottom={4}
                       >
-                        <Text
-                          fontSize="14px"
-                          lineHeight={"24px"}
-                          fontFamily={"PP Telegraf"}
-                          alignSelf={"start"}
-                          backgroundColor={"#0A2625"}
-                          p={"4px 12px"}
-                          whiteSpace={"nowrap"}
-                          borderRadius={"32px"}
-                        >
-                          {expertise}
-                        </Text>
-                      </Box>
-                    );
-                }
-              )}
+                        {expertise}
+                      </Text>
+                    </Box>
+                  );
+              })}
           </Flex>
         </VStack>
       </Flex>

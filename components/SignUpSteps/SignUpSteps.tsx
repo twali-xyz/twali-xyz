@@ -21,25 +21,12 @@ import {
   Img,
   Link,
 } from "@chakra-ui/react";
-import router from "next/router";
-
-import CeramicClient from "@ceramicnetwork/http-client";
-import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver";
-
-import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
-import { DID } from "dids";
-import { IDX } from "@ceramicstudio/idx";
-import { TileDocument } from "@ceramicnetwork/stream-tile";
+import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { functionalExpertiseList } from "../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
 import { setEventArray } from "../Profile/helpers/setEventArray";
-import { Identity } from "../../utils/interfaces";
-
-// 3box test nodes with read/write access on ceramic clay testnet
-// network node that we're interacting with, can be local/prod
-// we're using a test network here
-const endpoint = "https://ceramic-clay.3boxlabs.com";
+import { UserData } from "../../utils/interfaces";
 
 const userProfileStep = ({ handleChange, values, errors }) => {
   return (
@@ -97,19 +84,19 @@ const userProfileStep = ({ handleChange, values, errors }) => {
               </FormControl>
             </HStack>
             <FormControl p={2} id="display-name" isRequired>
-              <FormLabel>Display name</FormLabel>
+              <FormLabel>User name</FormLabel>
               <Input
                 required
-                isInvalid={errors.displayName}
+                isInvalid={errors.userName}
                 errorBorderColor="red.300"
-                placeholder="Display name"
-                name="displayName"
-                value={values.displayName || ""}
+                placeholder="User name"
+                name="userName"
+                value={values.userName || ""}
                 onChange={handleChange}
               />
-              {errors.displayName && (
+              {errors.userName && (
                 <Text fontSize="xs" fontWeight="400" color="red.500">
-                  {errors.displayName}
+                  {errors.userName}
                 </Text>
               )}
             </FormControl>
@@ -327,7 +314,7 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
               </Select>
             </FormControl>
             <MultiSelect
-              name={"functionalExpertise"}
+              name={"funcExpertise"}
               formLabel={"Functional expertise"}
               handleChange={handleChange}
               defaultValues={[]}
@@ -350,23 +337,25 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
 };
 
 const SignUpSteps = () => {
+  const router = useRouter();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  // const [isContinueDisabled, setIsContinueDisabled] = useState(false);
   const [isAccTypeSelection, setIsAccTypeSelection] = useState(true);
   const [isAccTypeSelected, setIsAccTypeSelected] = useState(false);
   const [values, setValues] = useState({
-    functionalExpertise: [],
+    functExpertise: [],
     industryExpertise: [],
   });
   const [errors, setErrors] = useState({});
   const [accType, setAccType] = useState("");
   const [btnActive, setBtnActive] = useState(0);
 
-  const [identity, setIdentity] = useState<Identity>({
+  const [userData, setUserData] = useState<UserData>({
+    userName: "",
+    userWallet: "",
+    accType: "",
     firstName: "",
     lastName: "",
     email: "",
-    displayName: "",
     bio: "",
     twitter: "",
     linkedIn: "",
@@ -376,7 +365,7 @@ const SignUpSteps = () => {
     businessLocation: "",
     currTitle: "",
     currLocation: "",
-    functionalExpertise: [],
+    funcExpertise: [],
     industryExpertise: [],
     companyInfo: [],
   });
@@ -392,8 +381,8 @@ const SignUpSteps = () => {
       errors.lastName = "Last name is required";
     }
 
-    if (!values.displayName) {
-      errors.displayName = "Display name is required";
+    if (!values.userName) {
+      errors.userName = "User name is required";
     }
 
     if (!values.email) {
@@ -436,19 +425,20 @@ const SignUpSteps = () => {
       evt.target.name.length - 1
     );
     if (
-      strippedEventName === "functionalExpertise" ||
+      strippedEventName === "funcExpertise" ||
       strippedEventName === "industryExpertise"
     ) {
       // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
-      setEventArray({ evt, setValues, values, setIdentity, identity });
+      setEventArray({ evt, setValues, values, userData, setUserData });
     } else {
       setValues((values) => ({
         ...values,
         [evt.target.name]: evt.target.value,
       }));
-      setIdentity({
-        ...identity,
-        [evt.target.name]: evt.target.value,
+      const value = evt.target.value;
+      setUserData({
+        ...userData,
+        [evt.target.name]: value,
       });
     }
   };
@@ -468,55 +458,35 @@ const SignUpSteps = () => {
     },
   ];
 
+  const createNewUser = async (address) => {
+    console.log(userData);
+    userData.userWallet = address;
+    // check if user doesnt already exsist with current address
+    userData.accType = accType;
+    await fetch("/api/users/createUser", {
+      method: "POST",
+      body: JSON.stringify({ userData }),
+    });
+    console.log("NEW USER CREATED BRUH");
+    // For now for test case the userName is pushed as query param into a user 'page'
+    router.push(`/${userData.userName}`);
+  };
+
   async function updateAccType() {
     const address = await connect(); // first address in the array
 
     if (address) {
-      const ceramic = new CeramicClient(endpoint);
-      const threeIdConnect = new ThreeIdConnect();
-      const provider = new EthereumAuthProvider(window.ethereum, address);
-
       setIsSubmitted(true);
-
-      await threeIdConnect.connect(provider);
-
-      const did = new DID({
-        provider: threeIdConnect.getDidProvider(),
-        resolver: {
-          ...ThreeIdResolver.getResolver(ceramic),
-        },
-      });
-
-      ceramic.setDID(did);
-      await ceramic.did.authenticate();
-
-      const idx = new IDX({ ceramic });
-
-      await idx.set("basicProfile", {
-        name: identity.firstName + " " + identity.lastName,
-      });
-
-      await createProfileData(ceramic, identity, accType);
-
-      console.log("Profile updated!", identity);
-
-      if (identity.firstName && identity.lastName && identity.email) {
+      await createNewUser(address); // creating user in DynamoDB
+      if (userData.userName && userData.userWallet) {
+        router.push(`/${userData.userName}`); // coming from dynamodb
         setIsSubmitted(false);
-        router.push("/profile");
       } else {
+        setIsSubmitted(false);
         console.log("No profile, pls create one...");
       }
     }
   }
-
-  // Creates a stream to store JSON data with ceramic
-  const createProfileData = async (ceramic, identity, accType) => {
-    const profileData = await TileDocument.deterministic(ceramic, {
-      family: "user-profile-data",
-    });
-
-    await profileData.update({ identity, accType });
-  };
 
   const { nextStep, prevStep, setStep, reset, activeStep } = useSteps({
     initialStep: 0,
@@ -712,7 +682,6 @@ const SignUpSteps = () => {
                     alignSelf="left"
                     onClick={() => {
                       prevStep();
-                      // setIsContinueDisabled(true);
                     }}
                     colorScheme="gray"
                     variant="link"
@@ -728,7 +697,6 @@ const SignUpSteps = () => {
             w="md"
             alignSelf="center"
             onClick={() => {
-              // setIsContinueDisabled(true);
               if (activeStep > 2) {
                 updateAccType();
               } else {

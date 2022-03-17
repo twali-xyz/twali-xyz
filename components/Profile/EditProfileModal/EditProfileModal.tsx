@@ -13,37 +13,46 @@ import {
 } from "@chakra-ui/react";
 import { connect } from "../../../utils/walletUtils";
 
-import CeramicClient from "@ceramicnetwork/http-client";
-import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver";
-
-import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
-import { DID } from "dids";
-import { TileDocument } from "@ceramicnetwork/stream-tile";
 import { MultiSelect } from "../Components/MultiSelect";
 import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
 import { setEventArray } from "../helpers/setEventArray";
-import { ProfileData } from "../../../utils/interfaces";
-
-// 3box test nodes with read/write access on ceramic clay testnet
-// network node that we're interacting with, can be local/prod
-// we're using a test network here
-const endpoint = "https://ceramic-clay.3boxlabs.com";
+import { UserData } from "../../../utils/interfaces";
+import FileUpload from "../../FileUpload/FileUpload";
 
 const EditExperienceModal = (props) => {
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [fileUploaded, setFileUploaded] = useState();
   const [profileData, setProfileData] = useState(props.profileData);
-
-  const [accType, setAccType] = useState(props.profileData.content.accType);
-  const [identity, setIdentity] = useState(props.profileData.content.identity);
   const [values, setValues] = useState({
-    functionalExpertise: props.profileData.content.identity.functionalExpertise,
-    industryExpertise: props.profileData.content.identity.industryExpertise,
+    funcExpertise: props.profileData.funcExpertise,
+    industryExpertise: props.profileData.industryExpertise,
   });
+  const [userData, setUserData] = useState<UserData>({
+    userName: "",
+    userWallet: "",
+    accType: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    bio: "",
+    twitter: "",
+    linkedIn: "",
+    website: "",
+    businessName: "",
+    businessType: "",
+    businessLocation: "",
+    currTitle: "",
+    currLocation: "",
+    funcExpertise: [],
+    industryExpertise: [],
+    companyInfo: [],
+  });
+
   const [errors, setErrors] = useState({
     industryExpertise: null,
-    functionalExpertise: null,
+    funcExpertise: null,
   });
 
   async function updateExperiences() {
@@ -51,29 +60,14 @@ const EditExperienceModal = (props) => {
     const address = await connect(); // first address in the array
 
     if (address) {
-      const ceramic = new CeramicClient(endpoint);
-      const threeIdConnect = new ThreeIdConnect();
-      const provider = new EthereumAuthProvider(window.ethereum, address);
-
       setIsSubmitted(true);
 
-      await threeIdConnect.connect(provider);
+      if (fileUploaded) {
+        console.log(fileUploaded);
+      }
 
-      const did = new DID({
-        provider: threeIdConnect.getDidProvider(),
-        resolver: {
-          ...ThreeIdResolver.getResolver(ceramic),
-        },
-      });
-
-      ceramic.setDID(did);
-      await ceramic.did.authenticate();
-
-      await updateProfileData(ceramic, identity, accType);
-
-      console.log("Profile updated!");
-
-      if (identity.firstName && identity.lastName && identity.email) {
+      // TODO: Need to run a update profile call here
+      if (profileData.firstName && profileData.lastName && profileData.email) {
         setIsSubmitted(false);
         props.setProfileData(newProfileData);
         props.handleUpdatedExperiences(profileData, false);
@@ -84,20 +78,11 @@ const EditExperienceModal = (props) => {
     }
   }
 
-  // Updates a stream to store JSON data with ceramic
-  const updateProfileData = async (ceramic, identity, accType) => {
-    const profileData = await TileDocument.deterministic(ceramic, {
-      family: "user-profile-data",
-    });
-
-    await profileData.update({ identity, accType });
-  };
-
   const validate = (values) => {
     let errors: any = {};
 
-    if (values.functionalExpertise === "") {
-      errors.functionalExpertise = "Functional expertise is required";
+    if (values.funcExpertise === "") {
+      errors.funcExpertise = "Functional expertise is required";
     }
 
     if (values.industryExpertise === "") {
@@ -114,25 +99,21 @@ const EditExperienceModal = (props) => {
       evt.target.name.length - 1
     );
     if (
-      strippedEventName === "functionalExpertise" ||
+      strippedEventName === "funcExpertise" ||
       strippedEventName === "industryExpertise"
     ) {
       // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
-      setEventArray({ evt, setValues, values, setIdentity, identity });
+      setEventArray({ evt, setValues, values, userData, setUserData });
     } else {
       setValues((values) => ({
         ...values,
         [evt.target.name]: evt.target.value,
       }));
-      setIdentity({
-        ...identity,
-        [evt.target.name]: evt.target.value,
-      });
     }
     newProfileData = {
       content: {
-        identity: identity,
-        accType: props.profileData.content.accType,
+        identity: { ...profileData, values },
+        accType: props.profileData.accType,
       },
     };
   };
@@ -153,12 +134,11 @@ const EditExperienceModal = (props) => {
             <form style={{ alignSelf: "center" }}>
               <MultiSelect
                 formLabel={"So...what would you say you do?"}
-                name={"functionalExpertise"}
+                name={"funcExpertise"}
                 handleChange={handleChange}
                 options={functionalExpertiseList}
                 defaultValues={
-                  values.functionalExpertise ||
-                  props.profileData.content.identity.functionalExpertise
+                  values.funcExpertise || props.profileData.funcExpertise
                 }
                 maxSelections={3}
               />
@@ -169,7 +149,7 @@ const EditExperienceModal = (props) => {
                 options={industryExpertiseList}
                 defaultValues={
                   values.industryExpertise ||
-                  props.profileData.content.identity.industryExpertise
+                  props.profileData.industryExpertise
                 }
                 maxSelections={3}
               />

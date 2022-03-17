@@ -9,51 +9,9 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
 import { DID } from "dids";
 import { IDX } from "@ceramicstudio/idx";
+import { BasicProfile, ProfileData } from "../../../utils/interfaces";
 
-export interface ProfileData {
-    content: {
-      identity: Identity;
-      accType: string;
-    };
-  }
-  
-  export interface Identity {
-    firstName: string;
-    lastName: string;
-    email: string;
-    displayName: string;
-    bio: string;
-    twitter?: string;
-    linkedIn?: string;
-    website?: string;
-    businessName: string;
-    businessType: string;
-    businessLocation: string;
-    currTitle: string;
-    currLocation?: string;
-    functionalExpertise: any[];
-    industryExpertise: any[];
-    companyInfo?: CompanyInfo[];
-  }
-  
-  export interface BasicProfile {
-    name: string;
-  }
-  export interface Profile {
-    identity: Identity;
-    name: string;
-    accType: string;
-  }
-  
-  export interface CompanyInfo {
-    companyName: string;
-    companyTitle: string;
-    companyImg: any;
-    companyStart: Date;
-    companyEnd: Date;
-    companyFunc: string;
-    companyIndustry: string;
-  }
+
 
 // network node that we're interacting with, can be local/prod
 // we're using a test network here
@@ -118,9 +76,9 @@ export function handleConnect(setIsSubmitted: React.Dispatch<React.SetStateActio
           { anchor: false, publish: false }
         );
   
-        console.log("profileData: ", profileData.content);
-        let identity = profileData.content.identity;
-        let profileAccType = profileData.content.accType;
+        console.log("profileData: ", profileData);
+        let identity = profileData;
+        let profileAccType = profileData.accType;
   
         if (data.name && identity.email && profileAccType) {
           setName(data.name);

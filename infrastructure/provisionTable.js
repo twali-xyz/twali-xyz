@@ -15,14 +15,28 @@ let dynamodb = new AWS.DynamoDB();
  *
  * **/
 let params = {
-  TableName: "user_profile_test",
+  TableName: "dev_staging_user_profile_test",
   KeySchema: [
-    { AttributeName: "user_name", KeyType: "HASH" }, // Partition Key
-    { AttributeName: "user_wallet", KeyType: "RANGE" }, // Sort Ket
+    { AttributeName: "userWallet", KeyType: "HASH" }, // Partition Key
+    { AttributeName: "userName", KeyType: "RANGE" }, // Sort Ket
   ],
   AttributeDefinitions: [
-    { AttributeName: "user_name", AttributeType: "S" },
-    { AttributeName: "user_wallet", AttributeType: "S" },
+    { AttributeName: "userWallet", AttributeType: "S" },
+    { AttributeName: "userName", AttributeType: "S" },
+  ],
+  GlobalSecondaryIndexes: [
+    {
+      IndexName: "wallet_name_index",
+      KeySchema: [
+        {
+          AttributeName: "userName",
+          KeyType: "HASH",
+        },
+      ],
+      Projection: {
+        ProjectionType: "ALL",
+      },
+    },
   ],
   StreamSpecification: {
     StreamEnabled: true,
@@ -36,6 +50,7 @@ let params = {
   await dynamodb.createTable(params).promise();
 
   console.log("Created table in us-east-1");
+
   // Only a replicated instance for production. Not Supported by local.
   if (!process.env.LOCAL_DYNAMO_DB_ENDPOINT) {
     AWS.config.update({ region: "us-east-1" });
@@ -47,7 +62,7 @@ let params = {
     console.log("Created table in us-east-1");
 
     const createGlobalTableParams = {
-      GlobalTableName: "user_profile_test",
+      GlobalTableName: "prestaging_user_profile_test",
       ReplicationGroup: [
         {
           RegionName: "us-east-1",

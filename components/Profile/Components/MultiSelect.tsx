@@ -18,7 +18,7 @@ export function MultiSelect({
 
   useEffect(() => {
     let defaults = [];
-    for (let i = 0; i < defaultValues.length; i++) {
+    for (let i = 0; i < defaultValues?.length; i++) {
       const element = defaultValues[i];
 
       if (element !== "" && element !== null && element !== undefined) {
@@ -35,10 +35,22 @@ export function MultiSelect({
 
   function createSelectors() {
     let selectors = [];
-    for (let i = 1; i <= maxSelections; i++) {
+    for (let i = 1; i <= count; i++) {
       const element = (
         <>
-          {(defaultValues[i - 1] || i === 1 || count >= i) && (
+          {defaultValues ? (
+            (defaultValues[i - 1] || i === 1 || count >= i) && (
+              <Selector
+                splitLabel={splitLabel}
+                handleChange={handleChange}
+                options={options}
+                idx={i}
+                defaultValue={
+                  defaultValues?.length ? defaultValues[i - 1] : null
+                }
+              />
+            )
+          ) : (
             <Selector
               splitLabel={splitLabel}
               handleChange={handleChange}

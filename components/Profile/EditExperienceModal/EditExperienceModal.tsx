@@ -17,43 +17,47 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { connect } from "../../../utils/walletUtils";
-
-import CeramicClient from "@ceramicnetwork/http-client";
-import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver";
-
-import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
-import { DID } from "dids";
-import { IDX } from "@ceramicstudio/idx";
-import { TileDocument } from "@ceramicnetwork/stream-tile";
-import { MultiSelect } from "../Components/MultiSelect";
-import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
-import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
 import { setEventArray } from "../helpers/setEventArray";
-import { BasicProfile, ProfileData } from "../../../utils/interfaces";
 import { listOfCountries } from "../../../utils/profileUtils";
-
-// 3box test nodes with read/write access on ceramic clay testnet
-// network node that we're interacting with, can be local/prod
-// we're using a test network here
-const endpoint = "https://ceramic-clay.3boxlabs.com";
+import { UserData } from "../../../utils/interfaces";
 
 const EditExperienceModal = (props) => {
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [profileData, setProfileData] = useState(props.profileData);
 
-  const [accType, setAccType] = useState(props.profileData.content.accType);
-  const [identity, setIdentity] = useState(props.profileData.content.identity);
+  const [accType, setAccType] = useState(props.profileData.accType);
+  const [identity, setIdentity] = useState(props.profileData);
   const [values, setValues] = useState({
-    firstName: props.profileData.content.identity.firstName,
-    lastName: props.profileData.content.identity.lastName,
-    currTitle: props.profileData.content.identity.currTitle,
-    currLocation: props.profileData.content.identity.currLocation,
-    bio: props.profileData.content.identity.bio,
-    linkedIn: props.profileData.content.identity.linkedIn,
-    twitter: props.profileData.content.identity.twitter,
-    displayName: props.profileData.content.identity.displayName,
-    email: props.profileData.content.identity.email,
+    firstName: props.profileData.firstName,
+    lastName: props.profileData.lastName,
+    currTitle: props.profileData.currTitle,
+    currLocation: props.profileData.currLocation,
+    bio: props.profileData.bio,
+    linkedIn: props.profileData.linkedIn,
+    twitter: props.profileData.twitter,
+    userName: props.profileData.userName,
+    email: props.profileData.email,
+  });
+  const [userData, setUserData] = useState<UserData>({
+    userName: "",
+    userWallet: "",
+    accType: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    bio: "",
+    twitter: "",
+    linkedIn: "",
+    website: "",
+    businessName: "",
+    businessType: "",
+    businessLocation: "",
+    currTitle: "",
+    currLocation: "",
+    funcExpertise: [],
+    industryExpertise: [],
+    companyInfo: [],
   });
   const [errors, setErrors] = useState({
     firstName: null,
@@ -62,7 +66,7 @@ const EditExperienceModal = (props) => {
     bio: null,
     linkedIn: null,
     twitter: null,
-    displayName: null,
+    userName: null,
     email: null,
   });
 
@@ -71,31 +75,11 @@ const EditExperienceModal = (props) => {
     const address = await connect(); // first address in the array
 
     if (address) {
-      const ceramic = new CeramicClient(endpoint);
-      const threeIdConnect = new ThreeIdConnect();
-      const provider = new EthereumAuthProvider(window.ethereum, address);
-
       setIsSubmitted(true);
 
-      await threeIdConnect.connect(provider);
-
-      const did = new DID({
-        provider: threeIdConnect.getDidProvider(),
-        resolver: {
-          ...ThreeIdResolver.getResolver(ceramic),
-        },
-      });
-
-      ceramic.setDID(did);
-      await ceramic.did.authenticate();
-
-      await updateProfileData(ceramic, identity, accType);
-
-      console.log("Profile updated!");
-
-      if (identity.firstName && identity.lastName && identity.email) {
+      // TODO: Need to run a update profile call here
+      if (profileData.firstName && profileData.lastName && profileData.email) {
         setIsSubmitted(false);
-        props.setProfileData(newProfileData);
         props.handleUpdatedExperiences(profileData, false);
         props.onClose();
       } else {
@@ -104,20 +88,11 @@ const EditExperienceModal = (props) => {
     }
   }
 
-  // Updates a stream to store JSON data with ceramic
-  const updateProfileData = async (ceramic, identity, accType) => {
-    const profileData = await TileDocument.deterministic(ceramic, {
-      family: "user-profile-data",
-    });
-
-    await profileData.update({ identity, accType });
-  };
-
   const validate = (values) => {
     let errors: any = {};
 
-    if (!values.displayName) {
-      errors.displayName = "Display name is required";
+    if (!values.userName) {
+      errors.userName = "User name is required";
     }
     if (!values.firstName) {
       errors.firstName = "First name is required";
@@ -155,8 +130,8 @@ const EditExperienceModal = (props) => {
       errors.email = "Email address is invalid";
     }
 
-    if (values.functionalExpertise === "") {
-      errors.functionalExpertise = "Functional expertise is required";
+    if (values.funcExpertise === "") {
+      errors.funcExpertise = "Functional expertise is required";
     }
 
     if (values.industryExpertise === "") {
@@ -165,35 +140,29 @@ const EditExperienceModal = (props) => {
 
     return errors;
   };
-  let newProfileData: ProfileData;
   const handleChange = (evt) => {
     evt.persist();
+    const value = evt.target.value;
     const strippedEventName = evt.target.name.substring(
       0,
       evt.target.name.length - 1
     );
     if (
-      strippedEventName === "functionalExpertise" ||
+      strippedEventName === "funcExpertise" ||
       strippedEventName === "industryExpertise"
     ) {
       // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
-      setEventArray({ evt, setValues, values, setIdentity, identity });
+      setEventArray({ evt, values, setValues, userData, setUserData });
     } else {
-      setValues((values) => ({
+      setProfileData((values) => ({
         ...values,
-        [evt.target.name]: evt.target.value,
+        [evt.target.name]: value,
       }));
-      setIdentity({
-        ...identity,
-        [evt.target.name]: evt.target.value,
+      setUserData({
+        ...userData,
+        [evt.target.name]: value,
       });
     }
-    newProfileData = {
-      content: {
-        identity: identity,
-        accType: props.profileData.content.accType,
-      },
-    };
   };
   console.log(props);
 
@@ -211,25 +180,23 @@ const EditExperienceModal = (props) => {
           <ModalBody>
             <form style={{ alignSelf: "center" }}>
               <FormControl p={2} id="display-name" isRequired>
-                <FormLabel>Display name</FormLabel>
+                <FormLabel>User name</FormLabel>
                 <Input
                   required
                   isInvalid={
-                    errors.displayName &&
-                    (!props.profileData.content.identity.displayName ||
-                      !values.displayName)
+                    errors.userName &&
+                    (!props.profileData.userName || !values.userName)
                   }
                   errorBorderColor="red.300"
                   placeholder="Display name"
-                  name="displayName"
-                  defaultValue={values.displayName || ""}
+                  name="userName"
+                  defaultValue={values.userName || ""}
                   onChange={handleChange}
                 />
-                {errors.displayName &&
-                  (!props.profileData.content.identity.displayName ||
-                    !values.displayName) && (
+                {errors.userName &&
+                  (!props.profileData.userName || !values.userName) && (
                     <Text fontSize="xs" fontWeight="400" color="red.500">
-                      {errors.displayName}
+                      {errors.userName}
                     </Text>
                   )}
               </FormControl>
@@ -255,8 +222,7 @@ const EditExperienceModal = (props) => {
                   required
                   isInvalid={
                     errors.firstName &&
-                    (!props.profileData.content.identity.firstName ||
-                      !values.firstName)
+                    (!props.profileData.firstName || !values.firstName)
                   }
                   errorBorderColor="red.300"
                   placeholder="First name"
@@ -265,8 +231,7 @@ const EditExperienceModal = (props) => {
                   onChange={handleChange}
                 />
                 {errors.firstName &&
-                  (!props.profileData.content.identity.firstName ||
-                    !values.firstName) && (
+                  (!props.profileData.firstName || !values.firstName) && (
                     <Text fontSize="xs" fontWeight="400" color="red.500">
                       {errors.firstName}
                     </Text>
@@ -278,8 +243,7 @@ const EditExperienceModal = (props) => {
                   required
                   isInvalid={
                     errors.lastName &&
-                    (!props.profileData.content.identity.lastName ||
-                      !values.lastName)
+                    (!props.profileData.lastName || !values.lastName)
                   }
                   errorBorderColor="red.300"
                   placeholder="Last name"
@@ -288,8 +252,7 @@ const EditExperienceModal = (props) => {
                   onChange={handleChange}
                 />
                 {errors.lastName &&
-                  (!props.profileData.content.identity.lastName ||
-                    !values.lastName) && (
+                  (!props.profileData.lastName || !values.lastName) && (
                     <Text fontSize="xs" fontWeight="400" color="red.500">
                       {errors.lastName}
                     </Text>
@@ -300,8 +263,7 @@ const EditExperienceModal = (props) => {
                 <Input
                   required
                   isInvalid={
-                    errors.email &&
-                    props.profileData.content.identity.email === values.email
+                    errors.email && props.profileData.email === values.email
                   }
                   errorBorderColor="red.300"
                   placeholder="Email"
@@ -309,35 +271,13 @@ const EditExperienceModal = (props) => {
                   defaultValue={values.email || ""}
                   onChange={handleChange}
                 />
-                {errors.email &&
-                  props.profileData.content.identity.email !== values.email && (
-                    <Text fontSize="xs" fontWeight="400" color="red.500">
-                      {errors.email}
-                    </Text>
-                  )}
+                {errors.email && props.profileData.email !== values.email && (
+                  <Text fontSize="xs" fontWeight="400" color="red.500">
+                    {errors.email}
+                  </Text>
+                )}
               </FormControl>
-              <FormControl p={2} id="current-title" isRequired>
-                <FormLabel>What's your current title?</FormLabel>
-                <Input
-                  isInvalid={
-                    errors.currTitle &&
-                    (!props.profileData.content.identity.currTitle ||
-                      !values.currTitle)
-                  }
-                  required
-                  errorBorderColor="red.300"
-                  defaultValue={identity.currTitle || ""}
-                  name="currTitle"
-                  onChange={handleChange}
-                />
-                {errors.currTitle &&
-                  (!props.profileData.content.identity.currTitle ||
-                    !values.currTitle) && (
-                    <Text fontSize="xs" fontWeight="400" color="red.500">
-                      {errors.currTitle}
-                    </Text>
-                  )}
-              </FormControl>
+
               <FormControl p={2} id="currLocation" isRequired>
                 <FormLabel>Where do you call home?</FormLabel>
                 <Select
