@@ -34,21 +34,24 @@ export function ProfileSideBar({
       marginTop={0}
       padding={0}
       my={0}
+      p={["0", "0", "0", "0 2%", "0 2% 0 1.5% "]}
       align="flex-start"
+      justifyContent={"center"}
       borderRight={"1px solid #587070"}
       width={"73vw"}
-      maxWidth={"600px"}
-      px={4}
+      maxW={"565px"}
+      mx={"auto"}
     >
       <Flex
-        flexDir={"row"}
-        alignItems={"center"}
         width={"100%"}
+        flexDir={"row"}
+        marginBottom={"24px"}
+        alignItems={"center"}
         justifyContent={"space-between"}
       >
         <Text
           fontSize="40px"
-          marginTop={"48px"}
+          marginTop={"52px"}
           color={"#C7F83C"}
           lineHeight={"56px"}
           letterSpacing={"wide"}
@@ -84,7 +87,7 @@ export function ProfileSideBar({
           />
         </UserPermissionsRestricted>
       </Flex>
-      <HStack marginTop={10}>
+      <HStack marginTop={10} marginBottom={0}>
         <Text
           color={"#C7F83C"}
           fontSize={"18px"}
@@ -104,7 +107,7 @@ export function ProfileSideBar({
           {profileData.content.identity.currLocation}
         </Text>
       </HStack>
-      <Box marginTop={"12px !important"}>
+      <Box marginTop={"8px !important"}>
         <Text
           color={"#C7F83C"}
           fontSize={"18px"}
@@ -125,7 +128,10 @@ export function ProfileSideBar({
           {profileData.content.identity.bio}
         </Text>
       </Box>
-      <ProfileSocialMedia profileData={profileData} />
+      <ProfileSocialMedia
+        profileData={profileData}
+        marginTop={"24px !important"}
+      />
       <Flex
         p={6}
         mx={"auto"}
@@ -154,14 +160,7 @@ export function ProfileSideBar({
             justifyContent={"space-between"}
             height={"fit-content"}
           >
-            <Text
-              alignSelf={"start"}
-              fontFamily={"PP Telegraf"}
-              pb={0}
-              mb={-100}
-            >
-              Superpowers
-            </Text>
+            <Text fontFamily={"PP Telegraf"}>Superpowers</Text>
             <UserPermissionsRestricted to="edit">
               <Button
                 onClick={onProfileModalOpen}
@@ -172,6 +171,7 @@ export function ProfileSideBar({
                 width={"fit-content"}
                 p={0}
                 top={-4}
+                left={"16px"}
               >
                 <Img
                   width={"20px"}
@@ -211,12 +211,14 @@ export function ProfileSideBar({
                         backgroundImage={
                           "linear-gradient(#0DD5D1 0%, #9350B3 100%)"
                         }
-                        marginRight={4}
+                        marginRight={idx === 2 ? 0 : 4}
                         marginBottom={4}
                         p={"1px"}
                       >
                         <Text
-                          fontSize="md"
+                          fontSize="14px"
+                          lineHeight={"24px"}
+                          fontFamily={"PP Telegraf"}
                           alignSelf={"start"}
                           backgroundColor={"#0A2625"}
                           p={"4px 12px"}
@@ -274,11 +276,13 @@ export function ProfileSideBar({
                           "linear-gradient(#0DD5D1 0%, #9350B3 100%)"
                         }
                         p={"1px"}
-                        marginRight={4}
+                        marginRight={idx === 2 ? 0 : 4}
                         marginBottom={4}
                       >
                         <Text
-                          fontSize="md"
+                          fontSize="14px"
+                          lineHeight={"24px"}
+                          fontFamily={"PP Telegraf"}
                           alignSelf={"start"}
                           backgroundColor={"#0A2625"}
                           p={"4px 12px"}

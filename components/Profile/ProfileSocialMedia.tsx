@@ -1,9 +1,9 @@
 import { HStack, Link, Image } from "@chakra-ui/react";
 import React from "react";
 
-export function ProfileSocialMedia({ profileData }) {
+export function ProfileSocialMedia({ profileData, ...props }) {
   return (
-    <HStack width={"6rem"}>
+    <HStack width={"6rem"} {...props}>
       {profileData.content.identity.linkedIn && (
         <Link
           href={profileData.content.identity.linkedIn}

@@ -82,6 +82,8 @@ export function handleConnect(setIsSubmitted: React.Dispatch<React.SetStateActio
       console.log(web3);
       const accounts = await web3.eth.getAccounts();
       const currAccount = accounts[0];
+      console.log("CURRACOUNT: " , currAccount);
+      
       const ceramic = new CeramicClient(endpoint);
       const idx = new IDX({ ceramic });
       setIsSubmitted(true);

@@ -325,7 +325,8 @@ const ProfilePage = () => {
                 <Flex
                   w="full"
                   justifyContent={"space-around"}
-                  px={["0", "0", "0", "2%", "3%"]}
+                  margin={"auto"}
+                  maxW={"1350px"}
                 >
                   <ProfileSideBar
                     onExpModalOpen={onExpModalOpen}

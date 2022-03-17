@@ -66,7 +66,7 @@ const LoginPage = (props) => {
             lineHeight={"24px"}
             letterSpacing={"wide"}
           >
-            Welcome to
+            welcome to
           </Text>
           <Img
             src="twali-assets/twali_rainbow.png"
