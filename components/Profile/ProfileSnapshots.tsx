@@ -49,7 +49,7 @@ export function ProfileSnapshots({
                   borderRadius="full"
                   width="80px"
                   src={vote.avatar}
-                  alt="fox stock img"
+                  alt={`snapshot${vote.spaceID}`}
                   onClick={() => {
                     setCurrentSnapshot(vote);
                     onSnapshotModalOpen();
@@ -62,7 +62,7 @@ export function ProfileSnapshots({
                 style={{ cursor: "pointer" }}
                 backgroundColor="transparent"
                 width="80px"
-                src="twali-assets/plusicon.png"
+                src="twali-assets/questionmark.png"
                 alt="add img"
               />
             )}

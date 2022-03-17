@@ -13,6 +13,8 @@ import {
   FormLabel,
   Text,
   CircularProgress,
+  Select,
+  Textarea,
 } from "@chakra-ui/react";
 import { connect } from "../../../utils/walletUtils";
 
@@ -28,6 +30,7 @@ import { functionalExpertiseList } from "../../../utils/functionalExpertiseConst
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
 import { setEventArray } from "../helpers/setEventArray";
 import { BasicProfile, ProfileData } from "../../../utils/interfaces";
+import { listOfCountries } from "../../../utils/profileUtils";
 
 // 3box test nodes with read/write access on ceramic clay testnet
 // network node that we're interacting with, can be local/prod
@@ -42,12 +45,23 @@ const EditExperienceModal = (props) => {
   const [accType, setAccType] = useState(props.profileData.content.accType);
   const [identity, setIdentity] = useState(props.profileData.content.identity);
   const [values, setValues] = useState({
+    firstName: props.profileData.content.identity.firstName,
+    lastName: props.profileData.content.identity.lastName,
+    currTitle: props.profileData.content.identity.currTitle,
+    currLocation: props.profileData.content.identity.currLocation,
+    bio: props.profileData.content.identity.bio,
+    linkedIn: props.profileData.content.identity.linkedIn,
+    twitter: props.profileData.content.identity.twitter,
     displayName: props.profileData.content.identity.displayName,
     email: props.profileData.content.identity.email,
-    functionalExpertise: props.profileData.content.identity.functionalExpertise,
-    industryExpertise: props.profileData.content.identity.industryExpertise,
   });
   const [errors, setErrors] = useState({
+    firstName: null,
+    lastName: null,
+    currTitle: null,
+    bio: null,
+    linkedIn: null,
+    twitter: null,
     displayName: null,
     email: null,
   });
@@ -105,7 +119,32 @@ const EditExperienceModal = (props) => {
     if (!values.displayName) {
       errors.displayName = "Display name is required";
     }
+    if (!values.firstName) {
+      errors.firstName = "First name is required";
+    }
 
+    if (!values.lastName) {
+      errors.lastName = "Last name is required";
+    }
+
+    if (!values.currTitle) {
+      errors.currTitle = "Current title is required";
+    }
+
+    if (values.bio && values.bio.length > 280) {
+      errors.bio = "Bio is too long. It should be less than 280 characters.";
+    }
+
+    var urlPattern =
+      /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
+
+    if (values.linkedIn && !urlPattern.test(values.linkedIn)) {
+      errors.linkedIn = "Please enter a valid URL";
+    }
+
+    if (values.twitter && !urlPattern.test(values.twitter)) {
+      errors.twitter = "Please enter a valid URL";
+    }
     var emailPattern = /(.+)@(.+){1,}\.(.+){1,}/;
 
     if (!values.email) {
@@ -156,6 +195,7 @@ const EditExperienceModal = (props) => {
       },
     };
   };
+  console.log(props);
 
   return (
     <>
@@ -193,6 +233,68 @@ const EditExperienceModal = (props) => {
                     </Text>
                   )}
               </FormControl>
+              {/* <FormControl p={2}>
+                isInvalid={!!errors.file_}
+                <FormLabel>{"Update profile picture"}</FormLabel>
+
+                {/* <FileUpload
+                handleFile={handleFile}
+                >
+                    <Button>
+                    Upload
+                    </Button>
+                </FileUpload> */}
+
+              {/* <FormErrorMessage>
+                    {errors.file_ && errors?.file_.message}
+                </FormErrorMessage> */}
+              {/* </FormControl> */}
+              <FormControl p={2} id="first-name" isRequired>
+                <FormLabel>First name</FormLabel>
+                <Input
+                  required
+                  isInvalid={
+                    errors.firstName &&
+                    (!props.profileData.content.identity.firstName ||
+                      !values.firstName)
+                  }
+                  errorBorderColor="red.300"
+                  placeholder="First name"
+                  name="firstName"
+                  defaultValue={identity.firstName || ""}
+                  onChange={handleChange}
+                />
+                {errors.firstName &&
+                  (!props.profileData.content.identity.firstName ||
+                    !values.firstName) && (
+                    <Text fontSize="xs" fontWeight="400" color="red.500">
+                      {errors.firstName}
+                    </Text>
+                  )}
+              </FormControl>
+              <FormControl p={2} id="last-name" isRequired>
+                <FormLabel>Last name</FormLabel>
+                <Input
+                  required
+                  isInvalid={
+                    errors.lastName &&
+                    (!props.profileData.content.identity.lastName ||
+                      !values.lastName)
+                  }
+                  errorBorderColor="red.300"
+                  placeholder="Last name"
+                  name="lastName"
+                  defaultValue={identity.lastName || ""}
+                  onChange={handleChange}
+                />
+                {errors.lastName &&
+                  (!props.profileData.content.identity.lastName ||
+                    !values.lastName) && (
+                    <Text fontSize="xs" fontWeight="400" color="red.500">
+                      {errors.lastName}
+                    </Text>
+                  )}
+              </FormControl>
               <FormControl p={2} id="email" isRequired>
                 <FormLabel>Email</FormLabel>
                 <Input
@@ -214,28 +316,86 @@ const EditExperienceModal = (props) => {
                     </Text>
                   )}
               </FormControl>
-              <MultiSelect
-                formLabel={"So...what would you say you do?"}
-                name={"functionalExpertise"}
-                handleChange={handleChange}
-                options={functionalExpertiseList}
-                defaultValues={
-                  values.functionalExpertise ||
-                  props.profileData.content.identity.functionalExpertise
-                }
-                maxSelections={3}
-              />
-              <MultiSelect
-                formLabel={"Where would you say you work?"}
-                name={"industryExpertise"}
-                handleChange={handleChange}
-                options={industryExpertiseList}
-                defaultValues={
-                  values.industryExpertise ||
-                  props.profileData.content.identity.industryExpertise
-                }
-                maxSelections={3}
-              />
+              <FormControl p={2} id="current-title" isRequired>
+                <FormLabel>What's your current title?</FormLabel>
+                <Input
+                  isInvalid={
+                    errors.currTitle &&
+                    (!props.profileData.content.identity.currTitle ||
+                      !values.currTitle)
+                  }
+                  required
+                  errorBorderColor="red.300"
+                  defaultValue={identity.currTitle || ""}
+                  name="currTitle"
+                  onChange={handleChange}
+                />
+                {errors.currTitle &&
+                  (!props.profileData.content.identity.currTitle ||
+                    !values.currTitle) && (
+                    <Text fontSize="xs" fontWeight="400" color="red.500">
+                      {errors.currTitle}
+                    </Text>
+                  )}
+              </FormControl>
+              <FormControl p={2} id="currLocation" isRequired>
+                <FormLabel>Where do you call home?</FormLabel>
+                <Select
+                  defaultValue={identity.currLocation || ""}
+                  placeholder="Select current location"
+                  name="currLocation"
+                  onChange={handleChange}
+                >
+                  {listOfCountries()}
+                </Select>
+              </FormControl>
+              <FormControl p={2} id="bio">
+                <FormLabel>Bio</FormLabel>
+                <Textarea
+                  isInvalid={errors.bio}
+                  errorBorderColor="red.300"
+                  defaultValue={identity.bio || ""}
+                  name="bio"
+                  maxLength={280}
+                  onChange={handleChange}
+                />
+                {errors.bio && (
+                  <Text fontSize="xs" fontWeight="400" color="red.500">
+                    {errors.bio}
+                  </Text>
+                )}
+              </FormControl>
+
+              <FormControl p={2} id="linkedIn">
+                <FormLabel>LinkedIn URL</FormLabel>
+                <Input
+                  isInvalid={errors.linkedIn}
+                  errorBorderColor="red.300"
+                  name="linkedIn"
+                  defaultValue={identity.linkedIn || ""}
+                  onChange={handleChange}
+                />
+                {errors.linkedIn && (
+                  <Text fontSize="xs" fontWeight="400" color="red.500">
+                    {errors.linkedIn}
+                  </Text>
+                )}
+              </FormControl>
+              <FormControl p={2} id="twitter">
+                <FormLabel>Twitter URL</FormLabel>
+                <Input
+                  isInvalid={errors.twitter}
+                  errorBorderColor="red.300"
+                  name="twitter"
+                  defaultValue={identity.twitter || ""}
+                  onChange={handleChange}
+                />
+                {errors.twitter && (
+                  <Text fontSize="xs" fontWeight="400" color="red.500">
+                    {errors.twitter}
+                  </Text>
+                )}
+              </FormControl>
             </form>
           </ModalBody>
 

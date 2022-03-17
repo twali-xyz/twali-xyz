@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import {
   Button,
+  Input,
   Modal,
   ModalOverlay,
   ModalHeader,
@@ -8,59 +9,46 @@ import {
   ModalBody,
   ModalContent,
   ModalFooter,
-  FormControl,
-  FormLabel,
-  Textarea,
-  Text,
   CircularProgress,
-  Input,
-  Select,
 } from "@chakra-ui/react";
 import { connect } from "../../../utils/walletUtils";
-import FileUpload from "../../FileUpload/FileUpload";
+
 import CeramicClient from "@ceramicnetwork/http-client";
 import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver";
 
 import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
 import { DID } from "dids";
-import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
-import { listOfCountries } from "../../../utils/profileUtils";
-import { BasicProfile, ProfileData } from "../../../utils/interfaces";
+import { MultiSelect } from "../Components/MultiSelect";
+import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
+import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
+import { setEventArray } from "../helpers/setEventArray";
+import { ProfileData } from "../../../utils/interfaces";
 
 // 3box test nodes with read/write access on ceramic clay testnet
 // network node that we're interacting with, can be local/prod
 // we're using a test network here
 const endpoint = "https://ceramic-clay.3boxlabs.com";
 
-const EditProfileModal = (props) => {
+const EditExperienceModal = (props) => {
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [profileData, setProfileData] = useState(props.profileData);
+
   const [accType, setAccType] = useState(props.profileData.content.accType);
   const [identity, setIdentity] = useState(props.profileData.content.identity);
-  const [fileUploaded, setFileUploaded] = useState();
   const [values, setValues] = useState({
-    firstName: props.profileData.content.identity.firstName,
-    lastName: props.profileData.content.identity.lastName,
-    currTitle: props.profileData.content.identity.currTitle,
-    currLocation: props.profileData.content.identity.currLocation,
-    bio: props.profileData.content.identity.bio,
-    linkedIn: props.profileData.content.identity.linkedIn,
-    twitter: props.profileData.content.identity.twitter,
+    functionalExpertise: props.profileData.content.identity.functionalExpertise,
+    industryExpertise: props.profileData.content.identity.industryExpertise,
   });
   const [errors, setErrors] = useState({
-    firstName: null,
-    lastName: null,
-    currTitle: null,
-    bio: null,
-    linkedIn: null,
-    twitter: null,
+    industryExpertise: null,
+    functionalExpertise: null,
   });
 
-  async function updateProfileInfo() {
+  async function updateExperiences() {
+    setErrors(validate(values));
     const address = await connect(); // first address in the array
-    let newProfileData: ProfileData;
 
     if (address) {
       const ceramic = new CeramicClient(endpoint);
@@ -81,32 +69,19 @@ const EditProfileModal = (props) => {
       ceramic.setDID(did);
       await ceramic.did.authenticate();
 
-      if (fileUploaded) {
-        // await idx.merge('basicProfile', { image: '💻' })
-        console.log(fileUploaded);
-      }
-
       await updateProfileData(ceramic, identity, accType);
 
       console.log("Profile updated!");
 
-      newProfileData = {
-        content: {
-          identity: identity,
-          accType: props.profileData.content.accType,
-        },
-      };
-
       if (identity.firstName && identity.lastName && identity.email) {
         setIsSubmitted(false);
         props.setProfileData(newProfileData);
-        props.handleUpdatedProfile(profileData, false);
+        props.handleUpdatedExperiences(profileData, false);
         props.onClose();
       } else {
         console.log("No profile, pls create one...");
       }
     }
-    setProfileData(newProfileData);
   }
 
   // Updates a stream to store JSON data with ceramic
@@ -114,55 +89,54 @@ const EditProfileModal = (props) => {
     const profileData = await TileDocument.deterministic(ceramic, {
       family: "user-profile-data",
     });
+
     await profileData.update({ identity, accType });
-  };
-
-  const handleChange = (evt) => {
-    evt.persist();
-    setValues((values) => ({ ...values, [evt.target.name]: evt.target.value }));
-    setErrors(validate(values));
-    setIdentity({
-      ...identity,
-      [evt.target.name]: evt.target.value,
-    });
-  };
-
-  const handleFile = (fileUploaded) => {
-    setFileUploaded(fileUploaded);
   };
 
   const validate = (values) => {
     let errors: any = {};
 
-    if (!values.firstName) {
-      errors.firstName = "First name is required";
+    if (values.functionalExpertise === "") {
+      errors.functionalExpertise = "Functional expertise is required";
     }
 
-    if (!values.lastName) {
-      errors.lastName = "Last name is required";
-    }
-
-    if (!values.currTitle) {
-      errors.currTitle = "Current title is required";
-    }
-
-    if (values.bio && values.bio.length > 280) {
-      errors.bio = "Bio is too long. It should be less than 280 characters.";
-    }
-
-    var urlPattern =
-      /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
-
-    if (values.linkedIn && !urlPattern.test(values.linkedIn)) {
-      errors.linkedIn = "Please enter a valid URL";
-    }
-
-    if (values.twitter && !urlPattern.test(values.twitter)) {
-      errors.twitter = "Please enter a valid URL";
+    if (values.industryExpertise === "") {
+      errors.industryExpertise = "Industry expertise is required";
     }
 
     return errors;
   };
+  let newProfileData: ProfileData;
+  const handleChange = (evt) => {
+    evt.persist();
+    const strippedEventName = evt.target.name.substring(
+      0,
+      evt.target.name.length - 1
+    );
+    if (
+      strippedEventName === "functionalExpertise" ||
+      strippedEventName === "industryExpertise"
+    ) {
+      // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
+      setEventArray({ evt, setValues, values, setIdentity, identity });
+    } else {
+      setValues((values) => ({
+        ...values,
+        [evt.target.name]: evt.target.value,
+      }));
+      setIdentity({
+        ...identity,
+        [evt.target.name]: evt.target.value,
+      });
+    }
+    newProfileData = {
+      content: {
+        identity: identity,
+        accType: props.profileData.content.accType,
+      },
+    };
+  };
+  console.log(props);
 
   return (
     <>
@@ -173,151 +147,32 @@ const EditProfileModal = (props) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Edit your profile details</ModalHeader>
+          <ModalHeader>Update your background expertise</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form style={{ alignSelf: "center" }}>
-              <FormControl p={2}>
-                {/* isInvalid={!!errors.file_} */}
-                <FormLabel>{"Update profile picture"}</FormLabel>
-
-                {/* <FileUpload
-                handleFile={handleFile}
-                >
-                    <Button>
-                    Upload
-                    </Button>
-                </FileUpload> */}
-
-                {/* <FormErrorMessage>
-                    {errors.file_ && errors?.file_.message}
-                </FormErrorMessage> */}
-              </FormControl>
-              <FormControl p={2} id="first-name" isRequired>
-                <FormLabel>First name</FormLabel>
-                <Input
-                  required
-                  isInvalid={
-                    errors.firstName &&
-                    (!props.profileData.content.identity.firstName ||
-                      !values.firstName)
-                  }
-                  errorBorderColor="red.300"
-                  placeholder="First name"
-                  name="firstName"
-                  defaultValue={identity.firstName || ""}
-                  onChange={handleChange}
-                />
-                {errors.firstName &&
-                  (!props.profileData.content.identity.firstName ||
-                    !values.firstName) && (
-                    <Text fontSize="xs" fontWeight="400" color="red.500">
-                      {errors.firstName}
-                    </Text>
-                  )}
-              </FormControl>
-              <FormControl p={2} id="last-name" isRequired>
-                <FormLabel>Last name</FormLabel>
-                <Input
-                  required
-                  isInvalid={
-                    errors.lastName &&
-                    (!props.profileData.content.identity.lastName ||
-                      !values.lastName)
-                  }
-                  errorBorderColor="red.300"
-                  placeholder="Last name"
-                  name="lastName"
-                  defaultValue={identity.lastName || ""}
-                  onChange={handleChange}
-                />
-                {errors.lastName &&
-                  (!props.profileData.content.identity.lastName ||
-                    !values.lastName) && (
-                    <Text fontSize="xs" fontWeight="400" color="red.500">
-                      {errors.lastName}
-                    </Text>
-                  )}
-              </FormControl>
-              <FormControl p={2} id="current-title" isRequired>
-                <FormLabel>What's your current title?</FormLabel>
-                <Input
-                  isInvalid={
-                    errors.currTitle &&
-                    (!props.profileData.content.identity.currTitle ||
-                      !values.currTitle)
-                  }
-                  required
-                  errorBorderColor="red.300"
-                  defaultValue={identity.currTitle || ""}
-                  name="currTitle"
-                  onChange={handleChange}
-                />
-                {errors.currTitle &&
-                  (!props.profileData.content.identity.currTitle ||
-                    !values.currTitle) && (
-                    <Text fontSize="xs" fontWeight="400" color="red.500">
-                      {errors.currTitle}
-                    </Text>
-                  )}
-              </FormControl>
-              <FormControl p={2} id="currLocation" isRequired>
-                <FormLabel>Where do you call home?</FormLabel>
-                <Select
-                  defaultValue={identity.currLocation || ""}
-                  placeholder="Select current location"
-                  name="currLocation"
-                  onChange={handleChange}
-                >
-                  {listOfCountries()}
-                </Select>
-              </FormControl>
-              <FormControl p={2} id="bio">
-                <FormLabel>Bio</FormLabel>
-                <Textarea
-                  isInvalid={errors.bio}
-                  errorBorderColor="red.300"
-                  defaultValue={identity.bio || ""}
-                  name="bio"
-                  maxLength={280}
-                  onChange={handleChange}
-                />
-                {errors.bio && (
-                  <Text fontSize="xs" fontWeight="400" color="red.500">
-                    {errors.bio}
-                  </Text>
-                )}
-              </FormControl>
-              <FormControl p={2} id="linkedIn">
-                <FormLabel>LinkedIn URL</FormLabel>
-                <Input
-                  isInvalid={errors.linkedIn}
-                  errorBorderColor="red.300"
-                  name="linkedIn"
-                  defaultValue={identity.linkedIn || ""}
-                  onChange={handleChange}
-                />
-                {errors.linkedIn && (
-                  <Text fontSize="xs" fontWeight="400" color="red.500">
-                    {errors.linkedIn}
-                  </Text>
-                )}
-              </FormControl>
-              <FormControl p={2} id="twitter">
-                <FormLabel>Twitter URL</FormLabel>
-                <Input
-                  isInvalid={errors.twitter}
-                  errorBorderColor="red.300"
-                  name="twitter"
-                  defaultValue={identity.twitter || ""}
-                  onChange={handleChange}
-                />
-                {errors.twitter && (
-                  <Text fontSize="xs" fontWeight="400" color="red.500">
-                    {errors.twitter}
-                  </Text>
-                )}
-              </FormControl>
+              <MultiSelect
+                formLabel={"So...what would you say you do?"}
+                name={"functionalExpertise"}
+                handleChange={handleChange}
+                options={functionalExpertiseList}
+                defaultValues={
+                  values.functionalExpertise ||
+                  props.profileData.content.identity.functionalExpertise
+                }
+                maxSelections={3}
+              />
+              <MultiSelect
+                formLabel={"Where would you say you work?"}
+                name={"industryExpertise"}
+                handleChange={handleChange}
+                options={industryExpertiseList}
+                defaultValues={
+                  values.industryExpertise ||
+                  props.profileData.content.identity.industryExpertise
+                }
+                maxSelections={3}
+              />
             </form>
           </ModalBody>
 
@@ -325,7 +180,7 @@ const EditProfileModal = (props) => {
             <Button colorScheme="blue" mr={3} onClick={props.onClose}>
               Close
             </Button>
-            <Button variant="ghost" onClick={updateProfileInfo}>
+            <Button variant="ghost" onClick={updateExperiences}>
               Save{" "}
               {isSubmitted ? (
                 <CircularProgress
@@ -343,4 +198,4 @@ const EditProfileModal = (props) => {
   );
 };
 
-export default EditProfileModal;
+export default EditExperienceModal;

@@ -1,64 +1,90 @@
-import { VStack, Box, Img, Text, Button, HStack, Flex } from "@chakra-ui/react";
+import {
+  VStack,
+  Box,
+  Img,
+  Text,
+  Button,
+  HStack,
+  Flex,
+  IconButton,
+  useDisclosure,
+} from "@chakra-ui/react";
 import React from "react";
+import EditProfileModal from "./EditProfileModal/EditProfileModal";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import EditExperienceModal from "./EditExperienceModal/EditExperienceModal";
 import { ProfileSocialMedia } from "./ProfileSocialMedia";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export function ProfileSideBar({
   onExpModalOpen,
   isExpModalOpen,
   onExpModalClose,
   profileData,
   setProfileData,
+  handleUpdatedExperiences,
   handleUpdatedProfile,
 }) {
+  const {
+    isOpen: isProfileModalOpen,
+    onOpen: onProfileModalOpen,
+    onClose: onProfileModalClose,
+  } = useDisclosure();
   return (
     <VStack
       marginTop={0}
       padding={0}
       my={0}
       align="flex-start"
-      spacing={6}
       borderRight={"1px solid #587070"}
       width={"73vw"}
+      maxWidth={"600px"}
       px={4}
-      pr={0}
     >
-      <UserPermissionsRestricted to="edit">
-        <Button
-          onClick={onExpModalOpen}
-          alignSelf="flex-end"
-          variant="ghost"
-          aria-label="Update experience"
-          margin={"14px"}
-          mx={"8px"}
-          mb={-8}
-        >
-          <Img
-            width={"20px"}
-            height={"20px"}
-            src={"twali-assets/editicon.png"}
-          />
-        </Button>
-        <EditExperienceModal
-          isOpen={isExpModalOpen}
-          onClose={onExpModalClose}
-          profileData={profileData}
-          setProfileData={setProfileData}
-          handleUpdatedExperiences={handleUpdatedProfile}
-        />
-      </UserPermissionsRestricted>
-
-      <Text
-        fontSize="40px"
-        color={"#C7F83C"}
-        lineHeight={"56px"}
-        letterSpacing={"wide"}
-        fontFamily={"GrandSlang"}
-        textTransform={"capitalize"}
+      <Flex
+        flexDir={"row"}
+        alignItems={"center"}
+        width={"100%"}
+        justifyContent={"space-between"}
       >
-        {profileData.content.identity.currTitle}
-      </Text>
-      <HStack pos={"relative"} top={1}>
+        <Text
+          fontSize="40px"
+          marginTop={"48px"}
+          color={"#C7F83C"}
+          lineHeight={"56px"}
+          letterSpacing={"wide"}
+          fontFamily={"GrandSlang"}
+          textTransform={"capitalize"}
+        >
+          {profileData.content.identity.currTitle}
+        </Text>
+        <UserPermissionsRestricted to="edit">
+          <Button
+            onClick={onExpModalOpen}
+            alignSelf="flex-end"
+            variant="ghost"
+            aria-label="Update experience"
+            margin={"0px"}
+            mx={"0px"}
+            pos={"relative"}
+            top={"-45px !important"}
+            left={"16px"}
+          >
+            <Img
+              width={"20px"}
+              height={"20px"}
+              src={"twali-assets/editicon.png"}
+            />
+          </Button>
+          <EditExperienceModal
+            isOpen={isExpModalOpen}
+            onClose={onExpModalClose}
+            profileData={profileData}
+            setProfileData={setProfileData}
+            handleUpdatedExperiences={handleUpdatedProfile}
+          />
+        </UserPermissionsRestricted>
+      </Flex>
+      <HStack marginTop={10}>
         <Text
           color={"#C7F83C"}
           fontSize={"18px"}
@@ -116,7 +142,6 @@ export function ProfileSideBar({
       >
         <VStack
           color="#F9FFF2"
-          overflow="hidden"
           fontSize={"18px"}
           fontWeight={"400"}
           lineHeight={"28px"}
@@ -124,9 +149,46 @@ export function ProfileSideBar({
           fontFamily={"PP Telegraf Light"}
           borderRadius={"16px 16px 16px 16px"}
         >
-          <Text alignSelf={"start"} fontFamily={"PP Telegraf"} pb={0}>
-            Superpowers
-          </Text>
+          <HStack
+            width={"100%"}
+            justifyContent={"space-between"}
+            height={"fit-content"}
+          >
+            <Text
+              alignSelf={"start"}
+              fontFamily={"PP Telegraf"}
+              pb={0}
+              mb={-100}
+            >
+              Superpowers
+            </Text>
+            <UserPermissionsRestricted to="edit">
+              <Button
+                onClick={onProfileModalOpen}
+                alignSelf="flex-end"
+                variant="ghost"
+                aria-label="Update experience"
+                pos={"relative"}
+                width={"fit-content"}
+                p={0}
+                top={-4}
+              >
+                <Img
+                  width={"20px"}
+                  height={"20px"}
+                  src={"twali-assets/editicon.png"}
+                />
+              </Button>
+
+              <EditProfileModal
+                isOpen={isProfileModalOpen}
+                onClose={onProfileModalClose}
+                profileData={profileData}
+                setProfileData={setProfileData}
+                handleUpdatedExperiences={handleUpdatedExperiences}
+              />
+            </UserPermissionsRestricted>
+          </HStack>
           <Flex
             flexDir={"row"}
             width={"100%"}
@@ -171,7 +233,6 @@ export function ProfileSideBar({
         </VStack>
         <VStack
           color="#F9FFF2"
-          overflow="hidden"
           fontSize={"18px"}
           fontWeight={"400"}
           lineHeight={"28px"}
@@ -179,14 +240,22 @@ export function ProfileSideBar({
           fontFamily={"PP Telegraf Light"}
           borderRadius={"16px 16px 16px 16px"}
         >
-          <Text alignSelf={"start"} fontFamily={"PP Telegraf"} pb={0}>
-            Industries
-          </Text>
+          <HStack
+            width={"100%"}
+            justifyContent={"space-between"}
+            height={"40px"}
+          >
+            <Text alignSelf={"start"} fontFamily={"PP Telegraf"} pb={0}>
+              Industries
+            </Text>
+          </HStack>
+
           <Flex
             m={0}
             px={0}
             width={"100%"}
             flexDir={"row"}
+            flexFlow={"wrap"}
             justifyContent={"flex-start"}
           >
             {profileData &&
@@ -213,6 +282,7 @@ export function ProfileSideBar({
                           alignSelf={"start"}
                           backgroundColor={"#0A2625"}
                           p={"4px 12px"}
+                          whiteSpace={"nowrap"}
                           borderRadius={"32px"}
                         >
                           {expertise}

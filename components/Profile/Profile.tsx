@@ -1,5 +1,5 @@
 import { ProfileSnapshots } from "./ProfileSnapshots";
-import { ProfileExperience } from "./ProfileExperience";
+import { ProfileExperience } from "./ProfileWorkExperience";
 import { ProfileSideBar } from "./ProfileSideBar";
 import { ProfileHeader } from "./ProfileHeader";
 import {
@@ -24,7 +24,6 @@ import { DID } from "dids";
 import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import EditProfileModal from "./EditProfileModal/EditProfileModal";
 import { request, gql } from "graphql-request";
 import CompanyModal from "./CompanyModal/CompanyModal";
 import useSWR from "swr";
@@ -42,11 +41,7 @@ const endpoint = "https://ceramic-clay.3boxlabs.com";
 const ProfilePage = () => {
   const [profileData, setProfileData] = useState<ProfileData>();
   const [name, setName] = useState("");
-  const {
-    isOpen: isProfileModalOpen,
-    onOpen: onProfileModalOpen,
-    onClose: onProfileModalClose,
-  } = useDisclosure();
+
   const {
     isOpen: isExpModalOpen,
     onOpen: onExpModalOpen,
@@ -338,6 +333,7 @@ const ProfilePage = () => {
                     onExpModalClose={onExpModalClose}
                     profileData={profileData}
                     setProfileData={setProfileData}
+                    handleUpdatedExperiences={handleUpdatedProfile}
                     handleUpdatedProfile={handleUpdatedProfile}
                   />
                   <Box alignSelf="flex-start" w="full" overflow="hidden">
@@ -366,31 +362,6 @@ const ProfilePage = () => {
                             <Button size='md' colorScheme='teal'>Book</Button>
                         </Box> */}
                     </VStack>
-                  </Box>
-                  <Box
-                    marginTop={8}
-                    w="150px"
-                    alignSelf="flex-start"
-                    overflow="hidden"
-                  >
-                    <UserPermissionsRestricted to="edit">
-                      <IconButton
-                        onClick={onProfileModalOpen}
-                        alignSelf="flex-end"
-                        variant="ghost"
-                        aria-label="Update experience"
-                        icon={
-                          <FontAwesomeIcon size="sm" icon={["fas", "edit"]} />
-                        }
-                      />
-                      <EditProfileModal
-                        isOpen={isProfileModalOpen}
-                        onClose={onProfileModalClose}
-                        profileData={profileData}
-                        setProfileData={setProfileData}
-                        handleUpdatedProfile={handleUpdatedProfile}
-                      />
-                    </UserPermissionsRestricted>
                   </Box>
                 </Flex>
               </UserPermissionsProvider>
