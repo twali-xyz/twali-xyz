@@ -270,7 +270,7 @@ const IndexPage = () => {
                 lineHeight={"40px"}
                 marginBottom={["25px", "45px", "95px"]}
                 letterSpacing={"0.03em"}
-                fontFamily={"PP telegraf Light"}
+                fontFamily={"PP telegraf Medium"}
               >
                 Need expertise? Email{" "}
                 <Link

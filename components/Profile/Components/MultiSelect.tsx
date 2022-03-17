@@ -12,7 +12,9 @@ export function MultiSelect({
 }) {
   // maxDisplayIndex tracks the index of the last element in the array that contains data
   const [maxDisplayIndex, setMaxDisplayIndex] = useState(0);
-  const [count, setCount] = useState(maxDisplayIndex + 1 || 1);
+  const [count, setCount] = useState(
+    maxDisplayIndex + 1 > 1 ? maxDisplayIndex + 1 : 1
+  );
 
   useEffect(() => {
     let defaults = [];
@@ -54,6 +56,7 @@ export function MultiSelect({
   function handleAddSelector() {
     if (count < maxSelections) {
       setCount(count + 1);
+      setMaxDisplayIndex(maxDisplayIndex + 1);
     }
   }
 
@@ -62,9 +65,11 @@ export function MultiSelect({
       <FormControl p={4} id={`${splitLabel[0]}-${splitLabel[1]}`} isRequired>
         <FormLabel>{formLabel}</FormLabel>
         {createSelectors()}
-        <Button marginTop={"10px"} onClick={handleAddSelector}>
-          <FontAwesomeIcon icon={"plus-circle"}></FontAwesomeIcon>
-        </Button>
+        {count !== maxSelections ? (
+          <Button marginTop={"10px"} onClick={handleAddSelector}>
+            <FontAwesomeIcon icon={"plus-circle"}></FontAwesomeIcon>
+          </Button>
+        ) : null}
       </FormControl>
     </>
   );

@@ -1,3 +1,7 @@
+import { ProfileSnapshots } from "./ProfileSnapshots";
+import { ProfileExperience } from "./ProfileExperience";
+import { ProfileSideBar } from "./ProfileSideBar";
+import { ProfileHeader } from "./ProfileHeader";
 import {
   Box,
   Img,
@@ -5,12 +9,10 @@ import {
   HStack,
   Stack,
   Text,
-  CircularProgress,
   useDisclosure,
   IconButton,
-  Link,
-  Image,
   Container,
+  Flex,
 } from "@chakra-ui/react";
 
 import { useState, useEffect } from "react";
@@ -25,15 +27,14 @@ import { IDX } from "@ceramicstudio/idx";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import EditProfileModal from "./EditProfileModal/EditProfileModal";
-import EditExperienceModal from "./EditExperienceModal/EditExperienceModal";
 import { request, gql } from "graphql-request";
-import SnapshotModal from "./SnapshotModal/SnapshotModal";
 import CompanyModal from "./CompanyModal/CompanyModal";
 import useSWR from "swr";
 import UserPermissionsProvider from "../UserPermissionsProvider/UserPermissionsProvider";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import { fetchPermission } from "../../utils/profileUtils";
 import LoginPage from "../../pages/login";
+import HeaderNav from "../HeaderNav/HeaderNav";
 
 // network node that we're interacting with, can be local/prod
 // we're using a test network here
@@ -316,14 +317,13 @@ const ProfilePage = () => {
         );
       } else {
         elements.push(
-          <UserPermissionsRestricted to="edit">
+          <UserPermissionsRestricted to="edit" key={`${i}--empty-company-exp`}>
             <Img
-              key={`${i}--empty-company-exp`}
               borderRadius="full"
               style={{ cursor: "pointer" }}
-              backgroundColor="lightgray"
-              width="100px"
-              src="add.svg"
+              backgroundColor="transparent"
+              width="80px"
+              src="twali-assets/plusicon.png"
               alt="add img"
               onClick={() => {
                 setCurrCompany(i);
@@ -357,257 +357,92 @@ const ProfilePage = () => {
         profileData.content &&
         profileData.content.accType &&
         profileData.content.identity && (
-          <Container maxW="container.xl" p={12}>
-            <UserPermissionsProvider
-              fetchPermission={fetchPermission(
-                profileData.content.identity.displayName
-              )}
+          <>
+            <HeaderNav whichPage="profile" />
+            <Container
+              maxW="100%"
+              p={0}
+              marginTop={"0 !important"}
+              backgroundColor={"#0A1313"}
             >
-              <Box
-                w="full"
-                borderWidth="1px"
-                borderRadius="lg"
-                overflow="hidden"
+              <UserPermissionsProvider
+                fetchPermission={fetchPermission(
+                  profileData.content.identity.displayName
+                )}
               >
-                <Img
-                  objectFit="cover"
-                  width="100%"
-                  height="200px"
-                  overflow="hidden"
-                  src="https://i.pinimg.com/originals/92/4e/c3/924ec3d75761aa0e5b84e4031f718de6.jpg"
-                  alt="aesthetic brown"
+                <ProfileHeader
+                  displayName={profileData.content.identity.displayName}
                 />
-              </Box>
-              <HStack w="full" spacing={24}>
-                <VStack
-                  marginTop={0}
-                  paddingTop={0}
-                  align="flex-start"
-                  spacing={6}
-                >
-                  <Box alignSelf="flex-start" overflow="hidden">
-                    <Img
-                      borderRadius="full"
-                      width="500px"
-                      src="fox-pfp.png"
-                      alt="fox stock img"
-                    />
-                  </Box>
-                  <UserPermissionsRestricted to="edit">
-                    <IconButton
-                      onClick={onExpModalOpen}
-                      alignSelf="flex-end"
-                      variant="ghost"
-                      aria-label="Update experience"
-                      icon={
-                        <FontAwesomeIcon size="sm" icon={["fas", "edit"]} />
-                      }
-                    />
-                    <EditExperienceModal
-                      isOpen={isExpModalOpen}
-                      onClose={onExpModalClose}
-                      profileData={profileData}
-                      setProfileData={setProfileData}
-                      handleUpdatedExperiences={handleUpdatedProfile}
-                    />
-                  </UserPermissionsRestricted>
-                  {profileData.content.identity.displayName && (
-                    <Text fontSize="xl">
-                      @{profileData.content.identity.displayName}
-                    </Text>
-                  )}
-                  {profileData.content.identity.email && (
-                    <Text fontSize="md">
-                      {profileData.content.identity.email}
-                    </Text>
-                  )}
-                  <Box
-                    p={4}
-                    ml={8}
-                    borderWidth="1px"
-                    color="rgb(0, 0, 0)"
-                    borderRadius="lg"
-                    overflow="hidden"
-                    backgroundColor="rgb(222, 222, 222)"
-                  >
-                    {profileData &&
-                      profileData.content.identity &&
-                      profileData.content.identity.functionalExpertise &&
-                      typeof profileData.content.identity
-                        ?.functionalExpertise === "object" &&
-                      profileData.content.identity?.functionalExpertise.map(
-                        (expertise, idx) => (
-                          <Text key={idx} fontSize="md">
-                            {expertise}
-                          </Text>
-                        )
-                      )}
-                  </Box>
-                  <Box
-                    p={4}
-                    ml={8}
-                    borderWidth="1px"
-                    borderRadius="lg"
-                    overflow="hidden"
-                    color="rgb(0, 0, 0)"
-                    backgroundColor="rgb(222, 222, 222)"
-                  >
-                    {profileData &&
-                      profileData.content.identity &&
-                      profileData.content.identity.industryExpertise &&
-                      typeof profileData.content.identity?.industryExpertise ===
-                        "object" &&
-                      profileData.content.identity?.industryExpertise.map(
-                        (expertise, idx) => (
-                          <Text key={idx} fontSize="md">
-                            {expertise}
-                          </Text>
-                        )
-                      )}
-                  </Box>
-                </VStack>
-                <Box
-                  alignSelf="flex-start"
+                <Flex
                   w="full"
-                  pt={16}
-                  pl={4}
-                  overflow="hidden"
+                  justifyContent={"space-around"}
+                  px={["0", "0", "0", "2%", "3%"]}
                 >
-                  <Stack spacing={6}>
-                    <HStack>
-                      <Text fontSize="xl">
-                        {`${profileData?.content?.identity?.firstName} ${profileData?.content?.identity?.lastName}, ${profileData.content.accType}`}
-                      </Text>
-                      <FontAwesomeIcon size="lg" icon={["fas", "map-pin"]} />
-                      {profileData.content.identity.currLocation && (
-                        <Text fontSize="md">
-                          {profileData.content.identity.currLocation}
-                        </Text>
-                      )}
-                    </HStack>
-                    <Text fontSize="md">
-                      {profileData.content.identity.currTitle}
-                    </Text>
-                    {profileData.content.identity.bio && (
-                      <Text fontSize="md">
-                        {profileData.content.identity.bio}
-                      </Text>
-                    )}
-                    ){/* social media URLs */}
-                    <HStack width={"6rem"} justifyContent={"space-between"}>
-                      {profileData.content.identity.linkedIn && (
-                        <Link
-                          href={profileData.content.identity.linkedIn}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          width={"fit-content"}
-                        >
-                          <Image
-                            src="LI-In-Bug.png"
-                            height={"2rem"}
-                            width={"auto"}
-                          />
-                        </Link>
-                      )}
-                      {profileData.content.identity.twitter && (
-                        <Link
-                          href={profileData.content.identity.twitter}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <Image
-                            src="2021_Twitter_logo - blue.png"
-                            height={"2rem"}
-                            width={"auto"}
-                          />
-                        </Link>
-                      )}
-                    </HStack>
-                    <VStack>
-                      <Box alignSelf="flex-start" w="full" overflow="hidden">
-                        <Text pb={8} fontSize="xl">
-                          Work Experience
-                        </Text>
-                        <HStack spacing={4}>{createWorkElements(5)}</HStack>
-                        <UserPermissionsRestricted
-                          to="edit"
-                          fallback={viewCompany}
-                        >
-                          <CompanyModal
-                            isOpen={isCompanyModalOpen}
-                            onClose={onCompanyModalClose}
-                            currCompany={currCompany}
-                            profileData={profileData}
-                            setProfileData={setProfileData}
-                            handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
-                          />
-                        </UserPermissionsRestricted>
-                      </Box>
-                      <Box alignSelf="flex-start" w="full" overflow="hidden">
-                        <Text pt={8} pb={4} fontSize="xl">
-                          Web3 Credentials
-                        </Text>
-                        {snapshotData ? (
-                          <>
-                            <HStack spacing={4}>
-                              {snapshotData.map((vote) => (
-                                <Img
-                                  style={{ cursor: "pointer" }}
-                                  key={vote.spaceID}
-                                  borderRadius="full"
-                                  width="100px"
-                                  src={vote.avatar}
-                                  alt="fox stock img"
-                                  onClick={() => {
-                                    setCurrentSnapshot(vote);
-                                    onSnapshotModalOpen();
-                                  }}
-                                />
-                              ))}
-                            </HStack>
-                            <SnapshotModal
-                              isOpen={isSnapshotModalOpen}
-                              onClose={onSnapshotModalClose}
-                              snapshotData={currentSnapshot}
-                            />
-                          </>
-                        ) : null}
-                      </Box>
+                  <ProfileSideBar
+                    onExpModalOpen={onExpModalOpen}
+                    isExpModalOpen={isExpModalOpen}
+                    onExpModalClose={onExpModalClose}
+                    profileData={profileData}
+                    setProfileData={setProfileData}
+                    handleUpdatedProfile={handleUpdatedProfile}
+                  />
+                  <Box alignSelf="flex-start" w="full" overflow="hidden">
+                    {/* social media URLs */}
+                    <VStack pt={"60px"} pl={"12.5%"}>
+                      <ProfileSnapshots
+                        snapshotData={snapshotData}
+                        setCurrentSnapshot={setCurrentSnapshot}
+                        onSnapshotModalOpen={onSnapshotModalOpen}
+                        isSnapshotModalOpen={isSnapshotModalOpen}
+                        onSnapshotModalClose={onSnapshotModalClose}
+                        currentSnapshot={currentSnapshot}
+                      />
+                      <ProfileExperience
+                        createWorkElements={createWorkElements}
+                        viewCompany={viewCompany}
+                        isCompanyModalOpen={isCompanyModalOpen}
+                        onCompanyModalClose={onCompanyModalClose}
+                        currCompany={currCompany}
+                        profileData={profileData}
+                        setProfileData={setProfileData}
+                        handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
+                      />
                       {/* <Box alignSelf="flex-start" w="full" overflow='hidden'>
                             <Text pt={8} pb={4} fontSize='xl'>Book a session with {profileData.content.identity.firstName}</Text>
                             <Button size='md' colorScheme='teal'>Book</Button>
                         </Box> */}
                     </VStack>
-                  </Stack>
-                </Box>
-                <Box
-                  marginTop={8}
-                  w="150px"
-                  alignSelf="flex-start"
-                  overflow="hidden"
-                >
-                  <UserPermissionsRestricted to="edit">
-                    <IconButton
-                      onClick={onProfileModalOpen}
-                      alignSelf="flex-end"
-                      variant="ghost"
-                      aria-label="Update experience"
-                      icon={
-                        <FontAwesomeIcon size="sm" icon={["fas", "edit"]} />
-                      }
-                    />
-                    <EditProfileModal
-                      isOpen={isProfileModalOpen}
-                      onClose={onProfileModalClose}
-                      profileData={profileData}
-                      setProfileData={setProfileData}
-                      handleUpdatedProfile={handleUpdatedProfile}
-                    />
-                  </UserPermissionsRestricted>
-                </Box>
-              </HStack>
-            </UserPermissionsProvider>
-          </Container>
+                  </Box>
+                  <Box
+                    marginTop={8}
+                    w="150px"
+                    alignSelf="flex-start"
+                    overflow="hidden"
+                  >
+                    <UserPermissionsRestricted to="edit">
+                      <IconButton
+                        onClick={onProfileModalOpen}
+                        alignSelf="flex-end"
+                        variant="ghost"
+                        aria-label="Update experience"
+                        icon={
+                          <FontAwesomeIcon size="sm" icon={["fas", "edit"]} />
+                        }
+                      />
+                      <EditProfileModal
+                        isOpen={isProfileModalOpen}
+                        onClose={onProfileModalClose}
+                        profileData={profileData}
+                        setProfileData={setProfileData}
+                        handleUpdatedProfile={handleUpdatedProfile}
+                      />
+                    </UserPermissionsRestricted>
+                  </Box>
+                </Flex>
+              </UserPermissionsProvider>
+              <Box height={"80px"} borderTop={"1px solid #587070"}></Box>
+            </Container>
+          </>
         )
       )}
     </>
@@ -618,20 +453,22 @@ const GetCompany = (props) => {
     <>
       {props.company?.logo?.message?.logo ? (
         <Box
-          w="100px"
-          height="100px"
+          w="80px"
+          height="80px"
           display="flex"
           borderRadius="full"
           alignItems="center"
           justifyContent="center"
-          backgroundColor="rgb(222, 222, 222)"
+          backgroundColor="rgb(222,222,222)"
           overflow="hidden"
           p={4}
           key={`${props.companyName}--${props.currCompany}--box`}
         >
           <UserPermissionsRestricted to="view">
             <Img
-              backgroundColor="rgb(222, 222, 222)"
+              backgroundColor="rgb(222, 222, 0)"
+              backgroundImage={"twali-assets/bannerimage.png"}
+              bgSize={"contain"}
               style={{ cursor: "pointer" }}
               key={`${props.companyName}--${props.currCompany}`}
               alignSelf="center"
@@ -650,7 +487,7 @@ const GetCompany = (props) => {
               key={`${props.companyName}--${props.currCompany}`}
               alignSelf="center"
               src={props.company.logo.message.logo}
-              alt={props.companyName + "THIS ONE"}
+              alt={props.companyName}
               onMouseEnter={(e) => (e.currentTarget.src = "edit.svg")}
               onMouseLeave={(e) =>
                 (e.currentTarget.src = props.company.logo.message.logo)
@@ -664,10 +501,13 @@ const GetCompany = (props) => {
         </Box>
       ) : props ? (
         <Box
-          w="100px"
-          height="100px"
+          w="80px"
+          height="80px"
           borderRadius="full"
           backgroundColor="rgb(222, 222, 222)"
+          bgGradient={
+            "linear-gradient(136.3deg, #0DD5D1 -3.88%, #9350B3 84.78%)"
+          }
           overflow="hidden"
           p={4}
           key={`${props.companyName}--${props.currCompany}--box`}
@@ -690,6 +530,10 @@ const GetCompany = (props) => {
         >
           <Img
             backgroundColor="rgb(222, 222, 222)"
+            bgGradient={
+              "linear-gradient(136.3deg, #0DD5D1 -3.88%, #9350B3 84.78%)"
+            }
+            borderRadius="full"
             style={{ cursor: "pointer" }}
             key={`${props.companyName}--${props.currCompany}`}
             alignSelf="center"
@@ -700,12 +544,13 @@ const GetCompany = (props) => {
           <Text
             w={"full"}
             h={"full"}
+            fontSize="4xl"
+            fontWeight="400"
             display={"flex"}
+            color={"#F9FFF2"}
             justifyContent={"center"}
             alignItems={"center"}
-            fontSize="4xl"
-            fontWeight="800"
-            color="blue.700"
+            fontFamily={"GrandSlang"}
           >
             {props.companyName[0].toUpperCase()}
           </Text>
@@ -716,9 +561,9 @@ const GetCompany = (props) => {
             key={`${props.currCompany}--empty-company-exp`}
             borderRadius="full"
             style={{ cursor: "pointer" }}
-            backgroundColor="lightgray"
-            width="100px"
-            src="add.svg"
+            backgroundColor="transparent"
+            width="80px"
+            src="twali-assets/plusicon.png"
             alt="add img"
             onClick={() => {
               props.setCurrCompany(props.currCompany);

@@ -368,10 +368,10 @@ const CompanyModal = (props) => {
                 {companyInfo.companyFunc && companyInfo.companyIndustry ? (
                   <HStack spacing={4}>
                     {[companyInfo.companyFunc, companyInfo.companyIndustry].map(
-                      (name) => (
+                      (name, idx) => (
                         <Tag
                           size={"md"}
-                          key={`sm--${name}`}
+                          key={`sm--${name}-${idx}`}
                           variant="solid"
                           colorScheme="teal"
                         >

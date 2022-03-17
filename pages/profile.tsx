@@ -1,6 +1,5 @@
-import { Container, Flex, VStack } from "@chakra-ui/react";
+import { Flex, VStack } from "@chakra-ui/react";
 
-import HeaderNav from "../components/HeaderNav/HeaderNav";
 import Profile from "../components/Profile/Profile";
 
 const ProfilePage = () => {

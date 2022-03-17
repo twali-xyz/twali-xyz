@@ -22,7 +22,7 @@ const LoginPage = (props) => {
   const router = useRouter();
 
   useEffect(() => {
-    setLoaded(props.loaded);
+    setLoaded(!props.loaded);
   }, []);
 
   const handleWalletConnect = handleConnect(
@@ -61,7 +61,7 @@ const LoginPage = (props) => {
         >
           <Text
             alignSelf={"center"}
-            fontFamily={"PP Telegraf"}
+            fontFamily={"Scope Light"}
             fontSize={"16px"}
             lineHeight={"24px"}
             letterSpacing={"wide"}
@@ -74,9 +74,9 @@ const LoginPage = (props) => {
             height={"64.38px"}
             marginTop={"49px !important"}
           />
-          {loaded ? (
+          {!loaded ? (
             <CircularProgress
-              marginTop={"89px !important"}
+              marginTop={"109px !important"}
               size="32px"
               thickness="4px"
               isIndeterminate
