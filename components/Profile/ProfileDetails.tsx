@@ -200,6 +200,7 @@ const ProfileDetails = ({ user }) => {
     readProfile();
   }, []);
 
+  // TODO: check if u can directly run handleUpdatedProfile={setProfileData} instead of these
   const handleUpdatedProfile = (profileData) => {
     setProfileData({ ...profileData });
     readProfile();
