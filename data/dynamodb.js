@@ -104,8 +104,8 @@ module.exports = {
           businessLocation: businessLocation,
           currTitle: currTitle,
           currLocation: currLocation ? currLocation : null,
-          functionalExpertise: functionalExpertise ? functionalExpertise : null,
-          industryExpertise: industryExpertise ? industryExpertise : null,
+          functionalExpertise: functionalExpertise,
+          industryExpertise: industryExpertise,
           companyInfo: companyInfo ? companyInfo: null,
         },
         // ConditionExpression: attribute_not_exists(userWallet)
@@ -167,28 +167,26 @@ module.exports = {
    * @dev New items can be added to a user and does need to be predefined in the table. Any values in 'UpdateExpression' need to be defined will values within 'ExpressionAttributeValues'.
    * @example See docs about editing existing attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#update-property
    */
-  updateUserExperience: async (userWallet, attributes) => {
+  updateUserExpertise: async (userWallet, attributes) => {
     console.log('UPDATE USER EXP DYNAMO');
     console.log(userWallet);
     console.log(attributes);
     let {
       userName,
-      email,
-      funcExpertise,
+      functionalExpertise,
       industryExpertise,
     } = attributes;
-
+    console.log(attributes);
   await getDynamoDBClient().update({
       TableName,
       Key: {
         userWallet: userWallet,
         userName: userName,
       },
-      UpdateExpression: "SET email = :email, funcExpertise = :funcExpertise, industryExpertise = :industryExpertise",
+      UpdateExpression: "SET functionalExpertise = :functionalExpertise, industryExpertise = :industryExpertise",
       // ConditionExpression: "",
       ExpressionAttributeValues: {
-        ":email": email,
-        ":funcExpertise": funcExpertise,
+        ":functionalExpertise": functionalExpertise,
         ":industryExpertise": industryExpertise,
       },
     }).promise()
@@ -209,9 +207,11 @@ module.exports = {
         firstName,
         lastName,
         currTitle,
+        currLocation,
         bio,
         linkedIn,
         twitter,
+        email
       } = attributes;
   
     await getDynamoDBClient().update({
@@ -220,15 +220,17 @@ module.exports = {
           userWallet: userWallet,
           userName: userName,
         },
-        UpdateExpression: "SET firstName = :firstName, lastName = :lastName, currTitle = :currTitle, bio = :bio, linkedIn = :linkedIn, twitter = :twitter",
+        UpdateExpression: "SET firstName = :firstName, lastName = :lastName, currTitle = :currTitle, currLocation = :currLocation, bio = :bio, linkedIn = :linkedIn, twitter = :twitter, email = :email",
         // ConditionExpression: "",
         ExpressionAttributeValues: {
           ":firstName": firstName,
           ":lastName": lastName,
           ":currTitle": currTitle,
+          ":currLocation": currLocation,
           ":bio": bio,
           ":linkedIn": linkedIn,
           ":twitter": twitter,
+          ":email": email,
         },
       }).promise()
       .then(data => console.log(data)).catch(console.error);

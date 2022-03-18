@@ -6,11 +6,11 @@ const updateUserProfileHandler: NextApiHandler = async (req, res) => {
     console.log('BODYYYYY', req.body);
     console.log(req.query);
     if (req.method === "PUT") {
-      if (req.query.updateUser == 'experience') {
+      if (req.query.updateUser == 'expertise') {
         try {
           const attributes = JSON.parse(req.body).userData.attributes;
           const userWallet = JSON.parse(req.body).userData.userWallet;
-          await data.updateUserExperience(userWallet, attributes);
+          await data.updateUserExpertise(userWallet, attributes);
           res.setHeader("Content-Type", "application/json");
           res.status(200).json("data posted");
         } catch (error) {

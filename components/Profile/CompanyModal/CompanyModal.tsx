@@ -40,7 +40,7 @@ const CompanyModal = (props) => {
   const [tempLogo, setTempLogo] = useState<any>();
   const [shouldFetch, setShouldFetch] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [profileData, setProfileData] = useState(props.profileData);
+  const [userData, setUserData] = useState(props.userData);
   const emptyCompanyInfo = [{
     companyName: "",
     companyTitle: "",
@@ -87,38 +87,32 @@ const CompanyModal = (props) => {
   useEffect(() => {
     if (!props.isOpen) return;
     setCompanyName(
-      props.profileData?.content?.identity?.companyInfo[props.currCompany]
-        ?.companyName
+      props.userData?.companyInfo[props.currCompany]?.companyName
     );
     setCompanyTitle(
-      props.profileData?.content?.identity?.companyInfo[props.currCompany]
-        ?.companyTitle
+      props.userData?.companyInfo[props.currCompany]?.companyTitle
     );
     setCompanyStart(
-      props.profileData?.content?.identity?.companyInfo[props.currCompany]
-        ?.companyStart
+      props.userData?.companyInfo[props.currCompany]?.companyStart
     );
     setCompanyEnd(
-      props.profileData?.content?.identity?.companyInfo[props.currCompany]
-        ?.companyEnd
+      props.userData?.companyInfo[props.currCompany]?.companyEnd
     );
     setCompanyFunction(
-      props.profileData?.content?.identity?.companyInfo[props.currCompany]
-        ?.companyFunc
+      props.userData?.companyInfo[props.currCompany]?.companyFunc
     );
     setCompanyIndustry(
-      props.profileData?.content?.identity?.companyInfo[props.currCompany]
-        ?.companyExpertise
+      props.userData?.companyInfo[props.currCompany]?.companyExpertise
     );
     setTempLogo(
-      props.profileData?.content?.identity?.companyInfo[props.currCompany]?.logo
+      props.userData?.companyInfo[props.currCompany]?.logo
     );
   }, [props.isOpen]);
 
   const companyInfo =
-    props.profileData.companyInfo &&
-    props.profileData.companyInfo[props.currCompany]
-      ? props.profileData.companyInfo[props.currCompany]
+    props.userData.companyInfo &&
+    props.userData.companyInfo[props.currCompany]
+      ? props.userData.companyInfo[props.currCompany]
       : emptyCompanyInfo[props.currCompany];
   
 
@@ -175,18 +169,18 @@ const CompanyModal = (props) => {
     if (address) {
       setIsSubmitted(true);
 
-      if (profileData.userWallet && profileData.userName && companyData) {
-        profileData.companyInfo[props.currCompany] = companyData;
+      if (userData.userWallet && userData.userName && companyData) {
+        userData.companyInfo[props.currCompany] = companyData;
 
         let companyAttributes = {
-          companyData: profileData.companyInfo,
-          userName: profileData.userName,
+          companyData: userData.companyInfo,
+          userName: userData.userName,
           currCompany: props.currCompany,
         };
-        console.log('Updated profile datA ON COMPANY MODAL: ', profileData);
+        console.log('Updated profile datA ON COMPANY MODAL: ', userData);
 
-        updateUserCompanyData(profileData.userWallet, companyAttributes);
-        props.handleUpdatedCompanyInfo(props.profileData, false); // TODO: check if this works or profileData itself works
+        updateUserCompanyData(userData.userWallet, companyAttributes);
+        props.handleUpdatedCompanyInfo(props.userData, false);
         props.onClose();
         setShouldFetch(false);
         setIsSubmitted(false);

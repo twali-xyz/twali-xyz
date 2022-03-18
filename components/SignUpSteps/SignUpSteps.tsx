@@ -342,7 +342,7 @@ const SignUpSteps = () => {
   const [isAccTypeSelection, setIsAccTypeSelection] = useState(true);
   const [isAccTypeSelected, setIsAccTypeSelected] = useState(false);
   const [values, setValues] = useState({
-    functExpertise: [],
+    functionalExpertise: [],
     industryExpertise: [],
   });
   const [errors, setErrors] = useState({});

@@ -22,30 +22,10 @@ import { UserData } from "../../../utils/interfaces";
 const EditExperienceModal = (props) => {
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [profileData, setProfileData] = useState(props.profileData);
+  const [userData, setUserData] = useState<UserData>(props.userData);
   const [values, setValues] = useState({
-    functionalExpertise: props.profileData.functionalExpertise,
-    industryExpertise: props.profileData.industryExpertise,
-  });
-  const [userData, setUserData] = useState<UserData>({
-    userName: "",
-    userWallet: "",
-    accType: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    bio: "",
-    twitter: "",
-    linkedIn: "",
-    website: "",
-    businessName: "",
-    businessType: "",
-    businessLocation: "",
-    currTitle: "",
-    currLocation: "",
-    functionalExpertise: [],
-    industryExpertise: [],
-    companyInfo: [],
+    functionalExpertise: props.userData.functionalExpertise,
+    industryExpertise: props.userData.industryExpertise,
   });
 
   const [errors, setErrors] = useState({
@@ -59,17 +39,34 @@ const EditExperienceModal = (props) => {
 
     if (address) {
       setIsSubmitted(true);
-
+      console.log('User data', userData);
       // TODO: Need to run a update profile call here
-      if (profileData.firstName && profileData.lastName && profileData.email) {
-        setIsSubmitted(false);
-        props.handleUpdatedExperiences(profileData, false);
+      if (userData.userWallet && userData.userName && userData.functionalExpertise && userData.industryExpertise) {
+        let expertiseAttributes = {
+          userName: userData.userName,
+          functionalExpertise: userData.functionalExpertise,
+          industryExpertise: userData.industryExpertise
+        };
+        console.log(userData);
+        updateUserExpertise(userData.userWallet, expertiseAttributes);
+        props.handleUpdatedExperiences(userData, false);
         props.onClose();
+        window.location.reload();
+        setIsSubmitted(false);
       } else {
         console.log("No profile, pls create one...");
       }
     }
   }
+
+  const updateUserExpertise = async (userWallet, attributes) => {
+    let userData = { userWallet, attributes}
+    await fetch(`/api/users/updateUser?updateUser=expertise`, {
+      method: "PUT",
+      body: JSON.stringify({ userData }),
+    });
+    console.log("USER expertise UPDATED BRUH");
+  };
 
   const validate = (values) => {
     let errors: any = {};
@@ -125,7 +122,7 @@ const EditExperienceModal = (props) => {
                 options={functionalExpertiseList}
                 defaultValues={
                   values.functionalExpertise ||
-                  props.profileData.functionalExpertise
+                  props.userData.functionalExpertise
                 }
                 maxSelections={3}
               />
@@ -136,7 +133,7 @@ const EditExperienceModal = (props) => {
                 options={industryExpertiseList}
                 defaultValues={
                   values.industryExpertise ||
-                  props.profileData.industryExpertise
+                  props.userData.industryExpertise
                 }
                 maxSelections={3}
               />

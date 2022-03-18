@@ -17,8 +17,8 @@ export function ProfileSideBar({
   onExpModalOpen,
   isExpModalOpen,
   onExpModalClose,
-  profileData,
-  setProfileData,
+  userData,
+  setUserData,
   handleUpdatedExperiences,
   handleUpdatedProfile,
 }) {
@@ -56,7 +56,7 @@ export function ProfileSideBar({
           fontFamily={"GrandSlang"}
           textTransform={"capitalize"}
         >
-          {profileData.currTitle}
+          {userData.currTitle}
         </Text>
         <UserPermissionsRestricted to="edit">
           <Button
@@ -79,8 +79,8 @@ export function ProfileSideBar({
           <EditProfileModal
             isOpen={isExpModalOpen}
             onClose={onExpModalClose}
-            profileData={profileData}
-            setProfileData={setProfileData}
+            userData={userData}
+            setUserData={setUserData}
             handleUpdatedExperiences={handleUpdatedProfile}
           />
         </UserPermissionsRestricted>
@@ -102,7 +102,7 @@ export function ProfileSideBar({
           letterSpacing={"wide"}
           fontFamily={"PP Telegraf Light"}
         >
-          {profileData.currLocation}
+          {userData.currLocation}
         </Text>
       </HStack>
       <Box marginTop={"8px !important"}>
@@ -123,11 +123,11 @@ export function ProfileSideBar({
           maxW={"496px"}
           fontFamily={"PP Telegraf Light"}
         >
-          {profileData.bio}
+          {userData.bio}
         </Text>
       </Box>
       <ProfileSocialMedia
-        profileData={profileData}
+        userData={userData}
         marginTop={"24px !important"}
       />
       <Flex
@@ -181,8 +181,8 @@ export function ProfileSideBar({
               <EditExpertiseModal
                 isOpen={isProfileModalOpen}
                 onClose={onProfileModalClose}
-                profileData={profileData}
-                setProfileData={setProfileData}
+                userData={userData}
+                setUserData={setUserData}
                 handleUpdatedExperiences={handleUpdatedExperiences}
               />
             </UserPermissionsRestricted>
@@ -194,11 +194,11 @@ export function ProfileSideBar({
             m={0}
             flexFlow={"wrap"}
           >
-            {profileData &&
-              profileData &&
-              profileData.functionalExpertise &&
-              typeof profileData?.functionalExpertise === "object" &&
-              profileData?.functionalExpertise.map((expertise, idx) => {
+            {userData &&
+              userData &&
+              userData.functionalExpertise &&
+              typeof userData?.functionalExpertise === "object" &&
+              userData?.functionalExpertise.map((expertise, idx) => {
                 if (expertise)
                   return (
                     <Box
@@ -255,11 +255,11 @@ export function ProfileSideBar({
             flexFlow={"wrap"}
             justifyContent={"flex-start"}
           >
-            {profileData &&
-              profileData &&
-              profileData.industryExpertise &&
-              typeof profileData?.industryExpertise === "object" &&
-              profileData?.industryExpertise.map((expertise, idx) => {
+            {userData &&
+              userData &&
+              userData.industryExpertise &&
+              typeof userData?.industryExpertise === "object" &&
+              userData?.industryExpertise.map((expertise, idx) => {
                 if (expertise)
                   return (
                     <Box

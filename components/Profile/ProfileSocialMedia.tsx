@@ -1,12 +1,12 @@
 import { HStack, Link, Image } from "@chakra-ui/react";
 import React from "react";
 
-export function ProfileSocialMedia({ profileData, ...props }) {
+export function ProfileSocialMedia({ userData, ...props }) {
   return (
     <HStack width={"6rem"} {...props}>
-      {profileData.linkedIn && (
+      {userData.linkedIn && (
         <Link
-          href={profileData.linkedIn}
+          href={userData.linkedIn}
           target="_blank"
           rel="noopener noreferrer"
           width={"fit-content"}
@@ -18,9 +18,9 @@ export function ProfileSocialMedia({ profileData, ...props }) {
           />
         </Link>
       )}
-      {profileData.twitter && (
+      {userData.twitter && (
         <Link
-          href={profileData.twitter}
+          href={userData.twitter}
           target="_blank"
           rel="noopener noreferrer"
           marginLeft={"16px !important"}
