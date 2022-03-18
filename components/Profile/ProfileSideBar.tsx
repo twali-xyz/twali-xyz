@@ -11,7 +11,7 @@ import {
 import React from "react";
 import EditExpertiseModal from "./EditExpertiseModal/EditExpertiseModal";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
-import EditExperienceModal from "./EditExperienceModal/EditExperienceModal";
+import EditProfileModal from "./EditProfileModal/EditProfileModal";
 import { ProfileSocialMedia } from "./ProfileSocialMedia";
 export function ProfileSideBar({
   onExpModalOpen,
@@ -76,7 +76,7 @@ export function ProfileSideBar({
               src={"twali-assets/editicon.png"}
             />
           </Button>
-          <EditExperienceModal
+          <EditProfileModal
             isOpen={isExpModalOpen}
             onClose={onExpModalClose}
             profileData={profileData}
