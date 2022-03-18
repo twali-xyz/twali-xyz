@@ -11,11 +11,11 @@ import HeaderNav from "../components/HeaderNav/HeaderNav";
 // import { handleConnect } from "../components/Profile/helpers/handleConnect";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { UserData } from "../pages/user";
 
 import Web3 from "web3";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
+import { UserData } from "../utils/interfaces";
 
 const LoginPage = (props) => {
   useEffect(() => {
@@ -24,7 +24,6 @@ const LoginPage = (props) => {
 
   const [show, setShow] = useState(false);
   const toggleMenu = () => setShow(!show);
-
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [loaded, setLoaded] = useState(false);
   const router = useRouter();
@@ -66,8 +65,8 @@ const LoginPage = (props) => {
       let userData: UserData = await getUserByWallet(currAccount);
       console.log(userData);
 
-      if (userData && userData.user_name && userData.user_wallet) {
-        router.push(`/${userData.user_name}`);
+      if (userData && userData.userName && userData.userWallet) {
+        router.push(`/${userData.userName}`);
         setIsSubmitted(false);
       } else {
         console.log("No profile, pls create one...");
