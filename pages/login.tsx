@@ -11,19 +11,74 @@ import HeaderNav from "../components/HeaderNav/HeaderNav";
 // import { handleConnect } from "../components/Profile/helpers/handleConnect";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { UserData } from "../pages/user";
+
+import Web3 from "web3";
+import Web3Modal from "web3modal";
+import WalletConnectProvider from "@walletconnect/web3-provider";
 
 const LoginPage = (props) => {
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [accType, setAccType] = useState("");
-  const [loaded, setLoaded] = useState(false);
-  const [profileData, setProfileData] = useState();
-  const router = useRouter();
-
   useEffect(() => {
     setLoaded(!props.loaded);
   }, []);
+
+  const [show, setShow] = useState(false);
+  const toggleMenu = () => setShow(!show);
+
+  const [isSubmitted, setIsSubmitted] = React.useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const router = useRouter();
+
+  const getUserByWallet = async (userWallet) => {
+    let lowerCaseWallet = userWallet.toLowerCase();
+    const res = await fetch(`/api/users/wallet/${lowerCaseWallet}`);
+
+    const data: any = await res.json();
+
+    console.log("RETRIEVE USER BY WALLET YO");
+    return data;
+  };
+
+  const handleWalletConnect = async () => {
+    const web3Modal = new Web3Modal({
+      disableInjectedProvider: false,
+      network: "rinkeby",
+      cacheProvider: false,
+      providerOptions: {
+        walletconnect: {
+          package: WalletConnectProvider,
+          options: {
+            rpc: {
+              1: "https://eth-rinkeby.alchemyapi.io/v2/QtLM8rW9nB6DobDu8KQx-7fYMS2rBlky",
+            },
+          },
+        },
+      },
+    });
+    const provider = await web3Modal.connect();
+    const web3 = new Web3(provider);
+    const accounts = await web3.eth.getAccounts();
+    const currAccount = accounts[0];
+    console.log(currAccount);
+
+    setIsSubmitted(true);
+    try {
+      let userData: UserData = await getUserByWallet(currAccount);
+      console.log(userData);
+
+      if (userData && userData.user_name && userData.user_wallet) {
+        router.push(`/${userData.user_name}`);
+        setIsSubmitted(false);
+      } else {
+        console.log("No profile, pls create one...");
+        router.push("/steps");
+      }
+    } catch (err) {
+      console.log("error: ", err);
+      router.push("/steps");
+      setLoaded(true);
+    }
+  };
 
   // const handleWalletConnect = handleConnect(
   //   setIsSubmitted,
@@ -89,6 +144,7 @@ const LoginPage = (props) => {
               height={"52px"}
               color={"#062B2A"}
               backgroundColor={"#C7F83C"}
+              onClick={handleWalletConnect}
             >
               Connect Wallet{" "}
               {isSubmitted ? (

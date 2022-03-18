@@ -456,7 +456,7 @@ const CompanyModal = (props) => {
                       defaultValue={companyInfo.companyFunc}
                       errorBorderColor="red.300"
                       placeholder="Select functional expertise"
-                      name="functionalExpertise"
+                      name="companyFunc"
                       onChange={handleChange}
                     >
                       {functionalExpertiseList.map((item, idx) => {
@@ -471,7 +471,7 @@ const CompanyModal = (props) => {
                       defaultValue={companyInfo.companyIndustry}
                       errorBorderColor="red.300"
                       placeholder="Select industry expertise"
-                      name="industryExpertise"
+                      name="companyIndustry"
                       onChange={handleChange}
                     >
                       {industryExpertiseList.map((item, idx) => {
