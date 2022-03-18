@@ -1,61 +1,29 @@
+import { ProfileSnapshots } from "./ProfileSnapshots";
+import { ProfileExperience } from "./ProfileWorkExperience";
+import { ProfileSideBar } from "./ProfileSideBar";
+import { ProfileHeader } from "./ProfileHeader";
 import {
   Box,
   Img,
   VStack,
-  HStack,
-  Stack,
   Text,
-  CircularProgress,
   useDisclosure,
-  IconButton,
-  Link,
-  Image,
+  Flex,
+  Container,
 } from "@chakra-ui/react";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { connect } from "../../utils/walletUtils";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import EditProfileModal from "./EditProfileModal/EditProfileModal";
-import EditExperienceModal from "./EditExperienceModal/EditExperienceModal";
 import { request, gql } from "graphql-request";
-import SnapshotModal from "./SnapshotModal/SnapshotModal";
 import CompanyModal from "./CompanyModal/CompanyModal";
 import useSWR from "swr";
 import UserPermissionsProvider from "../UserPermissionsProvider/UserPermissionsProvider";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import { fetchPermission } from "../../utils/profileUtils";
-
-export interface UserData {
-  userName: string;
-  userWallet: string;
-  accType: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  bio?: string;
-  twitter?: string;
-  linkedIn?: string;
-  website?: string;
-  businessName: string;
-  businessType: string;
-  businessLocation: string;
-  currTitle: string;
-  currLocation?: string;
-  funcExpertise: string;
-  industryExpertise: string;
-  companyInfo?: CompanyInfo[];
-}
-
-export interface CompanyInfo {
-  companyName: string;
-  companyTitle: string;
-  companyImg: any;
-  companyStart: Date;
-  companyEnd: Date;
-  companyFunc: string;
-  companyIndustry: string;
-}
+import LoginPage from "../../pages/login";
+import HeaderNav from "../HeaderNav/HeaderNav";
+import { UserData } from "../../utils/interfaces";
 
 const ProfileDetails = ({ user }) => {
   // Fallback for getStaticPaths, when fallback: true
@@ -64,15 +32,11 @@ const ProfileDetails = ({ user }) => {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <div>Loading data</div>;
+    return <LoginPage loaded={router.isFallback} />;
   }
 
   const [profileData, setProfileData] = useState<UserData>();
-  const {
-    isOpen: isProfileModalOpen,
-    onOpen: onProfileModalOpen,
-    onClose: onProfileModalClose,
-  } = useDisclosure();
+
   const {
     isOpen: isExpModalOpen,
     onOpen: onExpModalOpen,
@@ -97,7 +61,7 @@ const ProfileDetails = ({ user }) => {
 
   async function readProfile() {
     const address = await connect(); // first address in the array
-    console.log('outside useEffect', address);
+    console.log("outside useEffect", address);
 
     try {
       // does not require signing to get user's public data
@@ -114,12 +78,12 @@ const ProfileDetails = ({ user }) => {
   useEffect(() => {
     async function readProfile() {
       const address = await connect(); // first address in the array
-      console.log('useEffect', address);
+      console.log("useEffect", address);
 
       try {
         // does not require signing to get user's public data
         if (user && user.userWallet) {
-          console.log('user set', user);
+          console.log("user set", user);
           setProfileData(user);
           setLoaded(true);
           setupSnapshotQueries(user.userWallet);
@@ -128,8 +92,7 @@ const ProfileDetails = ({ user }) => {
         if (address) {
           setLoggedInUserAddress(address);
         }
-
-        } catch (err) {
+      } catch (err) {
         console.log("error: ", err);
         setLoaded(false);
       }
@@ -137,34 +100,34 @@ const ProfileDetails = ({ user }) => {
 
     function setupSnapshotQueries(address) {
       const query = gql`
-      query getSnapshotVotes($wallet: String!) {
-        votes(where: { voter: $wallet }) {
-          id
-          space {
+        query getSnapshotVotes($wallet: String!) {
+          votes(where: { voter: $wallet }) {
             id
-            avatar
+            space {
+              id
+              avatar
+            }
           }
         }
-      }
-    `;
-    const walletVar = {
-      wallet: address,
-    };
+      `;
+      const walletVar = {
+        wallet: address,
+      };
 
-    // Run GraphQL queries
-    request("https://hub.snapshot.org/graphql", query, walletVar).then(
-      (data) => {
-        data.votes.find((v) => {
-          if (v.space.avatar) {
-            v.space.avatar = v.space.avatar.replace(
-              "ipfs://",
-              "https://ipfs.io/ipfs/"
-            );
-          }
-        });
-        getVoterSnapshotQueries(data, address);
-      }
-    );
+      // Run GraphQL queries
+      request("https://hub.snapshot.org/graphql", query, walletVar).then(
+        (data) => {
+          data.votes.find((v) => {
+            if (v.space.avatar) {
+              v.space.avatar = v.space.avatar.replace(
+                "ipfs://",
+                "https://ipfs.io/ipfs/"
+              );
+            }
+          });
+          getVoterSnapshotQueries(data, address);
+        }
+      );
     }
 
     async function getVoterSnapshotQueries(data, address) {
@@ -245,12 +208,9 @@ const ProfileDetails = ({ user }) => {
     setProfileData({ ...profileData });
     readProfile();
   };
-
   function createWorkElements(number) {
     var elements = [];
-    let totalLen = profileData.companyInfo
-      ? profileData.companyInfo.length
-      : 0;
+    let totalLen = profileData.companyInfo ? profileData.companyInfo.length : 0;
     for (let i = 0; i < number; i++) {
       if (
         profileData.companyInfo &&
@@ -259,9 +219,9 @@ const ProfileDetails = ({ user }) => {
       ) {
         elements.push(
           <GetCompany
-            companyName={
-              profileData.companyInfo[i].companyName
-            }
+            key={`${i}--company-info`}
+            company={profileData.companyInfo[i]}
+            companyName={profileData.companyInfo[i].companyName}
             currCompany={i}
             setCurrCompany={setCurrCompany}
             onCompanyModalOpen={onCompanyModalOpen}
@@ -269,14 +229,13 @@ const ProfileDetails = ({ user }) => {
         );
       } else {
         elements.push(
-          <UserPermissionsRestricted to="edit">
+          <UserPermissionsRestricted to="edit" key={`${i}--empty-company-exp`}>
             <Img
-              key={`${i}--empty-company-exp`}
               borderRadius="full"
               style={{ cursor: "pointer" }}
-              backgroundColor="lightgray"
-              width="100px"
-              src="add.svg"
+              backgroundColor="transparent"
+              width="80px"
+              src="twali-assets/plusicon.png"
               alt="add img"
               onClick={() => {
                 setCurrCompany(i);
@@ -289,13 +248,13 @@ const ProfileDetails = ({ user }) => {
     }
     return elements;
   }
-
   const viewCompany = (
     <CompanyModal
       isOpen={isCompanyModalOpen}
       onClose={onCompanyModalClose}
       currCompany={currCompany}
       profileData={profileData}
+      setProfileData={setProfileData}
       userPermission="view"
       handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
     />
@@ -304,298 +263,107 @@ const ProfileDetails = ({ user }) => {
   return (
     <>
       {!loaded ? (
-        <VStack alignSelf="center" spacing={8} pt={8}>
-          <CircularProgress
-            size="50px"
-            thickness="8px"
-            isIndeterminate
-            color="#3C2E26"
-          />
-          <Text fontSize="2xl">Loading</Text>
-        </VStack>
+        <LoginPage loaded={!loaded} />
       ) : (
         profileData &&
-        profileData.userName && profileData.userWallet && (
+        profileData.userName &&
+        profileData.userWallet && (
           <>
-            <UserPermissionsProvider
-              fetchPermission={fetchPermission(
-                profileData.userName,
-                loggedInUserAddress ? loggedInUserAddress : null
-              )}
+            <HeaderNav whichPage="profil" />
+            <Container
+              maxW="100%"
+              p={0}
+              marginTop={"0 !important"}
+              backgroundColor={"#0A1313"}
             >
-              <Box
-                w="full"
-                borderWidth="1px"
-                borderRadius="lg"
-                overflow="hidden"
+              <UserPermissionsProvider
+                fetchPermission={fetchPermission(
+                  profileData.userName,
+                  loggedInUserAddress ? loggedInUserAddress : null
+                )}
               >
-                <Img
-                  objectFit="cover"
-                  width="100%"
-                  height="200px"
-                  overflow="hidden"
-                  src="https://i.pinimg.com/originals/92/4e/c3/924ec3d75761aa0e5b84e4031f718de6.jpg"
-                  alt="aesthetic brown"
-                />
-              </Box>
-              <HStack w="full" spacing={24}>
-                <VStack
-                  marginTop={0}
-                  paddingTop={0}
-                  align="flex-start"
-                  spacing={6}
-                >
-                  <Box alignSelf="flex-start" overflow="hidden">
-                    <Img
-                      borderRadius="full"
-                      width="500px"
-                      src="fox-pfp.png"
-                      alt="fox stock img"
-                    />
-                  </Box>
-                  <UserPermissionsRestricted to="edit">
-                    <IconButton
-                      onClick={onExpModalOpen}
-                      alignSelf="flex-end"
-                      variant="ghost"
-                      aria-label="Update experience"
-                      icon={
-                        <FontAwesomeIcon size="sm" icon={["fas", "edit"]} />
-                      }
-                    />
-                    <EditExperienceModal
-                      isOpen={isExpModalOpen}
-                      onClose={onExpModalClose}
-                      profileData={profileData}
-                      handleUpdatedExperiences={handleUpdatedProfile}
-                    />
-                  </UserPermissionsRestricted>
-                  {profileData.userName && (
-                    <Text fontSize="xl">
-                      @{profileData.userName}
-                    </Text>
-                  )}
-                  {profileData.email && (
-                    <Text fontSize="md">
-                      {profileData.email}
-                    </Text>
-                  )}
-                  <Box
-                    p={4}
-                    ml={8}
-                    borderWidth="1px"
-                    color="rgb(0, 0, 0)"
-                    borderRadius="lg"
-                    overflow="hidden"
-                    backgroundColor="rgb(222, 222, 222)"
-                  >
-                    {profileData &&
-                      profileData.funcExpertise && (
-                        <Text fontSize="md">
-                          {profileData.funcExpertise}
-                        </Text>
-                      )}
-                  </Box>
-                  <Box
-                    p={4}
-                    ml={8}
-                    borderWidth="1px"
-                    borderRadius="lg"
-                    overflow="hidden"
-                    color="rgb(0, 0, 0)"
-                    backgroundColor="rgb(222, 222, 222)"
-                  >
-                    {profileData &&
-                      profileData.industryExpertise && (
-                        <Text fontSize="md">
-                          {profileData.industryExpertise}
-                        </Text>
-                      )}
-                  </Box>
-                </VStack>
-                <Box
-                  alignSelf="flex-start"
+                <ProfileHeader userName={profileData.userName} />
+                <Flex
                   w="full"
-                  pt={16}
-                  pl={4}
-                  overflow="hidden"
+                  justifyContent={"space-around"}
+                  margin={"auto"}
+                  maxW={"1350px"}
                 >
-                  <Stack spacing={6}>
-                    <HStack>
-                      <Text fontSize="xl">
-                        {profileData.firstName + ' ' + profileData.lastName + ", " + profileData.accType}
-                      </Text>
-                      <FontAwesomeIcon size="lg" icon={["fas", "map-pin"]} />
-                      {profileData.businessLocation && (
-                        <Text fontSize="md">
-                          {profileData.businessLocation}
-                        </Text>
-                      )}
-                    </HStack>
-                    <Text fontSize="md">
-                      {profileData.currTitle}
-                    </Text>
-                    {profileData.bio && (
-                      <Text fontSize="md">
-                        {profileData.bio}
-                      </Text>
-                    )}
-                    ){/* social media URLs */}
-                    <HStack width={"6rem"} justifyContent={"space-between"}>
-                      {profileData.linkedIn && (
-                        <Link
-                          href={profileData.linkedIn}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          width={"fit-content"}
-                        >
-                          <Image
-                            src="LI-In-Bug.png"
-                            height={"2rem"}
-                            width={"auto"}
-                          />
-                        </Link>
-                      )}
-                      {profileData.twitter && (
-                        <Link
-                          href={profileData.twitter}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <Image
-                            src="2021_Twitter_logo - blue.png"
-                            height={"2rem"}
-                            width={"auto"}
-                          />
-                        </Link>
-                      )}
-                    </HStack>
-                    <VStack>
-                      <Box alignSelf="flex-start" w="full" overflow="hidden">
-                        <Text pb={8} fontSize="xl">
-                          Work Experience
-                        </Text>
-                        <HStack spacing={4}>{createWorkElements(5)}</HStack>
-                        <UserPermissionsRestricted
-                          to="edit"
-                          fallback={viewCompany}
-                        >
-                          <CompanyModal
-                            isOpen={isCompanyModalOpen}
-                            onClose={onCompanyModalClose}
-                            currCompany={currCompany}
-                            profileData={profileData}
-                            handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
-                          />
-                        </UserPermissionsRestricted>
-                      </Box>
-                      <Box alignSelf="flex-start" w="full" overflow="hidden">
-                        <Text pt={8} pb={4} fontSize="xl">
-                          Web3 Credentials
-                        </Text>
-                        {snapshotData ? (
-                          <>
-                            <HStack spacing={4}>
-                              {snapshotData.map((vote) => (
-                                <Img
-                                  style={{ cursor: "pointer" }}
-                                  key={vote.spaceID}
-                                  borderRadius="full"
-                                  width="100px"
-                                  src={vote.avatar}
-                                  alt="fox stock img"
-                                  onClick={() => {
-                                    setCurrentSnapshot(vote);
-                                    onSnapshotModalOpen();
-                                  }}
-                                />
-                              ))}
-                            </HStack>
-                            <SnapshotModal
-                              isOpen={isSnapshotModalOpen}
-                              onClose={onSnapshotModalClose}
-                              snapshotData={currentSnapshot}
-                            />
-                          </>
-                        ) : null}
-                      </Box>
+                  <ProfileSideBar
+                    onExpModalOpen={onExpModalOpen}
+                    isExpModalOpen={isExpModalOpen}
+                    onExpModalClose={onExpModalClose}
+                    profileData={profileData}
+                    setProfileData={setProfileData}
+                    handleUpdatedExperiences={handleUpdatedProfile}
+                    handleUpdatedProfile={handleUpdatedProfile}
+                  />
+                  <Box alignSelf="flex-start" w="full" overflow="hidden">
+                    {/* social media URLs */}
+                    <VStack pt={"60px"} pl={"12.5%"}>
+                      <ProfileSnapshots
+                        snapshotData={snapshotData}
+                        setCurrentSnapshot={setCurrentSnapshot}
+                        onSnapshotModalOpen={onSnapshotModalOpen}
+                        isSnapshotModalOpen={isSnapshotModalOpen}
+                        onSnapshotModalClose={onSnapshotModalClose}
+                        currentSnapshot={currentSnapshot}
+                      />
+                      <ProfileExperience
+                        createWorkElements={createWorkElements}
+                        viewCompany={viewCompany}
+                        isCompanyModalOpen={isCompanyModalOpen}
+                        onCompanyModalClose={onCompanyModalClose}
+                        currCompany={currCompany}
+                        profileData={profileData}
+                        setProfileData={setProfileData}
+                        handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
+                      />
                       {/* <Box alignSelf="flex-start" w="full" overflow='hidden'>
-                            <Text pt={8} pb={4} fontSize='xl'>Book a session with {profileData.content.identity.firstName}</Text>
+                            <Text pt={8} pb={4} fontSize='xl'>Book a session with {profileData.firstName}</Text>
                             <Button size='md' colorScheme='teal'>Book</Button>
                         </Box> */}
                     </VStack>
-                  </Stack>
-                </Box>
-                <Box
-                  marginTop={8}
-                  w="150px"
-                  alignSelf="flex-start"
-                  overflow="hidden"
-                >
-                  <UserPermissionsRestricted to="edit">
-                    <IconButton
-                      onClick={onProfileModalOpen}
-                      alignSelf="flex-end"
-                      variant="ghost"
-                      aria-label="Update experience"
-                      icon={
-                        <FontAwesomeIcon size="sm" icon={["fas", "edit"]} />
-                      }
-                    />
-                    <EditProfileModal
-                      isOpen={isProfileModalOpen}
-                      onClose={onProfileModalClose}
-                      profileData={profileData}
-                      handleUpdatedProfile={handleUpdatedProfile}
-                    />
-                  </UserPermissionsRestricted>
-                </Box>
-              </HStack>
-            </UserPermissionsProvider>
+                  </Box>
+                </Flex>
+              </UserPermissionsProvider>
+              <Box height={"80px"} borderTop={"1px solid #587070"}></Box>
+            </Container>
           </>
         )
       )}
     </>
   );
 };
-
-// Client-side data fetching for Clearbit's NameToDomain API (on page load)
-const GetCompany = (companyName) => {
-  const fetcher = (companyDomain: string, ...args: Parameters<typeof fetch>) =>
-    fetch(companyDomain).then((response) => response.json());
-  let paramsObj = { params: companyName.companyName };
-  let searchParams = new URLSearchParams(paramsObj);
-
-  // Create a stable key for SWR
-  searchParams.sort();
-  const qs = searchParams.toString();
-
-  const { data, error } = useSWR(`/api/cors?${qs}`, fetcher);
-  console.log("DATA: ", data);
-
+const GetCompany = (props) => {
   return (
     <>
-      {data && data.message && data.message.logo ? (
+      {props.company?.logo?.message?.logo ? (
         <Box
-          w="100px"
-          height="100px"
+          w="80px"
+          height="80px"
+          display="flex"
           borderRadius="full"
-          backgroundColor="rgb(222, 222, 222)"
+          alignItems="center"
+          justifyContent="center"
+          backgroundColor="rgb(222,222,222)"
           overflow="hidden"
           p={4}
-          key={`${data.message.name}--${companyName.currCompany}--box`}
+          key={`${props.companyName}--${props.currCompany}--box`}
         >
           <UserPermissionsRestricted to="view">
             <Img
-              backgroundColor="rgb(222, 222, 222)"
+              backgroundColor="rgb(222, 222, 0)"
+              backgroundImage={"twali-assets/bannerimage.png"}
+              bgSize={"contain"}
               style={{ cursor: "pointer" }}
-              key={`${data.message.name}--${companyName.currCompany}`}
+              key={`${props.companyName}--${props.currCompany}`}
               alignSelf="center"
-              src={data.message.logo}
-              alt="fox stock img"
+              src={props.company.logo.message.logo}
+              alt={props.companyName}
               onClick={() => {
-                companyName.setCurrCompany(companyName.currCompany);
-                companyName.onCompanyModalOpen();
+                props.setCurrCompany(props.currCompany);
+                props.onCompanyModalOpen();
               }}
             />
           </UserPermissionsRestricted>
@@ -603,33 +371,93 @@ const GetCompany = (companyName) => {
             <Img
               backgroundColor="rgb(222, 222, 222)"
               style={{ cursor: "pointer" }}
-              key={`${data.message.name}--${companyName.currCompany}`}
+              key={`${props.companyName}--${props.currCompany}`}
               alignSelf="center"
-              src={data.message.logo}
-              alt="fox stock img"
+              src={props.company.logo.message.logo}
+              alt={props.companyName}
               onMouseEnter={(e) => (e.currentTarget.src = "edit.svg")}
-              onMouseLeave={(e) => (e.currentTarget.src = data.message.logo)}
+              onMouseLeave={(e) =>
+                (e.currentTarget.src = props.company.logo.message.logo)
+              }
               onClick={() => {
-                companyName.setCurrCompany(companyName.currCompany);
-                companyName.onCompanyModalOpen();
+                props.setCurrCompany(props.currCompany);
+                props.onCompanyModalOpen();
               }}
             />
           </UserPermissionsRestricted>
         </Box>
-      ) : (
-        <Img
-          key={`${companyName.currCompany}--empty-company-exp`}
+      ) : props ? (
+        <Box
+          w="80px"
+          height="80px"
           borderRadius="full"
-          style={{ cursor: "pointer" }}
-          backgroundColor="lightgray"
-          width="100px"
-          src="add.svg"
-          alt="add img"
-          onClick={() => {
-            companyName.setCurrCompany(companyName.currCompany);
-            companyName.onCompanyModalOpen();
+          backgroundColor="rgb(222, 222, 222)"
+          bgGradient={
+            "linear-gradient(136.3deg, #0DD5D1 -3.88%, #9350B3 84.78%)"
+          }
+          overflow="hidden"
+          p={4}
+          key={`${props.companyName}--${props.currCompany}--box`}
+          onMouseEnter={(e) => {
+            let addImg = e.currentTarget.children[0] as HTMLElement;
+            let compLogo = e.currentTarget.children[1] as HTMLElement;
+            addImg.style.display = "flex";
+            compLogo.style.display = "none";
           }}
-        />
+          onMouseLeave={(e) => {
+            let addImg = e.currentTarget.children[0] as HTMLElement;
+            let compLogo = e.currentTarget.children[1] as HTMLElement;
+            addImg.style.display = "none";
+            compLogo.style.display = "flex";
+          }}
+          onClick={() => {
+            props.setCurrCompany(props.currCompany);
+            props.onCompanyModalOpen();
+          }}
+        >
+          <Img
+            backgroundColor="rgb(222, 222, 222)"
+            bgGradient={
+              "linear-gradient(136.3deg, #0DD5D1 -3.88%, #9350B3 84.78%)"
+            }
+            borderRadius="full"
+            style={{ cursor: "pointer" }}
+            key={`${props.companyName}--${props.currCompany}`}
+            alignSelf="center"
+            src="edit.svg"
+            alt="edit stock img"
+            display={"none"}
+          />
+          <Text
+            w={"full"}
+            h={"full"}
+            fontSize="4xl"
+            fontWeight="400"
+            display={"flex"}
+            color={"#F9FFF2"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            fontFamily={"GrandSlang"}
+          >
+            {props.companyName[0].toUpperCase()}
+          </Text>
+        </Box>
+      ) : (
+        <>
+          <Img
+            key={`${props.currCompany}--empty-company-exp`}
+            borderRadius="full"
+            style={{ cursor: "pointer" }}
+            backgroundColor="transparent"
+            width="80px"
+            src="twali-assets/plusicon.png"
+            alt="add img"
+            onClick={() => {
+              props.setCurrCompany(props.currCompany);
+              props.onCompanyModalOpen();
+            }}
+          />
+        </>
       )}
     </>
   );

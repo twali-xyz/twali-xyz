@@ -1,4 +1,5 @@
 import { Permission } from "./PermissionTypes";
+import { countriesConstants } from "./countriesConstants";
 
 // Function that simulates fetching a permission from remote server
 export const fetchPermission =
@@ -29,3 +30,14 @@ export const fetchPermission =
     }
     console.log("PERMISSION DATA:", userData);
   };
+
+// Function that retrieves a list of countries options for a dropdown
+export const listOfCountries = () => {
+  let list = [];
+  for (let i = 0; i < countriesConstants.length; i++) {
+    list.push(
+      <option key={`${i}--countryOption`}>{countriesConstants[i]}</option>
+    );
+  }
+  return list;
+};

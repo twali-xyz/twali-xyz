@@ -79,5 +79,5 @@ npx serverless
 Please run Prettier to format your files:
 
 ```
-npx prettier --write .
+npx prettier --ignore-path .gitignore --write .
 ```

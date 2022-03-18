@@ -1,8 +1,11 @@
-module.exports = function(...args) {
-  let original = require('./next.config.original.1646673798635.js');
+module.exports = function (...args) {
+  let original = require("./next.config.original.1646673798635.js");
   const finalConfig = {};
-  const target = { target: 'serverless' };
-  if (typeof original === 'function' && original.constructor.name === 'AsyncFunction') {
+  const target = { target: "serverless" };
+  if (
+    typeof original === "function" &&
+    original.constructor.name === "AsyncFunction"
+  ) {
     // AsyncFunctions will become promises
     original = original(...args);
   }
@@ -12,11 +15,11 @@ module.exports = function(...args) {
     return original
       .then((originalConfig) => Object.assign(finalConfig, originalConfig))
       .then((config) => Object.assign(config, target));
-  } else if (typeof original === 'function') {
+  } else if (typeof original === "function") {
     Object.assign(finalConfig, original(...args));
-  } else if (typeof original === 'object') {
+  } else if (typeof original === "object") {
     Object.assign(finalConfig, original);
   }
   Object.assign(finalConfig, target);
   return finalConfig;
-}
+};
