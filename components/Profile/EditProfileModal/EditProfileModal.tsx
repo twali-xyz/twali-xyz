@@ -55,7 +55,7 @@ const EditExperienceModal = (props) => {
     if (address) {
       setIsSubmitted(true);
 
-      // TODO: Need to run a update profile call here
+      // Update user data with the new changes
       if (userData.userWallet && userData.userName && userData.firstName && userData.lastName && userData.currTitle) {
         let experienceAttributes = {
           userName: userData.userName,
@@ -70,7 +70,7 @@ const EditExperienceModal = (props) => {
         };
         console.log(userData);
         updateUserProfile(userData.userWallet, experienceAttributes);
-        props.handleUpdatedExperiences(userData, false); // TODO: check if we need the false
+        props.handleUpdatedExperiences(userData, false);
         props.onClose();
         window.location.reload();
         setIsSubmitted(false);

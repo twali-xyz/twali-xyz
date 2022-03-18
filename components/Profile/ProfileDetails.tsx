@@ -77,14 +77,10 @@ const ProfileDetails = ({ user }) => {
   useEffect(() => {
     async function readProfile() {
       const address = await connect(); // first address in the array
-      console.log("useEffect", address);
 
       try {
         // does not require signing to get user's public data
         if (user && user.userWallet) {
-          // user.companyInfo = user.companyInfo; // TODO: TEST IF NEEDED
-          console.log('user set', user);
-
           setUserData(user);
           setLoaded(true);
           setupSnapshotQueries(user.userWallet);

@@ -40,7 +40,7 @@ const EditExperienceModal = (props) => {
     if (address) {
       setIsSubmitted(true);
       console.log('User data', userData);
-      // TODO: Need to run a update profile call here
+      // Update user data with the new changes
       if (userData.userWallet && userData.userName && userData.functionalExpertise && userData.industryExpertise) {
         let expertiseAttributes = {
           userName: userData.userName,

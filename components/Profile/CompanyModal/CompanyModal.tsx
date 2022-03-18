@@ -290,12 +290,8 @@ const CompanyModal = (props) => {
           <VStack spacing={6} padding={10}>
             {companyInfo ? (
               <>
-                {companyInfo.companyName ? ( // TODO: We can display a company logo here
+                {companyInfo.companyName ? (
                   <>
-                    {/* <CompanyInfoData
-                companyName={companyInfo.companyName}
-                isDisabled={setDisabled}
-              /> */}
                     <Heading>{companyInfo.companyName}</Heading>
                   </>
                 ) : null}
