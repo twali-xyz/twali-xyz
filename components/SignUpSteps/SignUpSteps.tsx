@@ -314,7 +314,7 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
               </Select>
             </FormControl>
             <MultiSelect
-              name={"funcExpertise"}
+              name={"functionalExpertise"}
               formLabel={"Functional expertise"}
               handleChange={handleChange}
               defaultValues={[]}
@@ -365,7 +365,7 @@ const SignUpSteps = () => {
     businessLocation: "",
     currTitle: "",
     currLocation: "",
-    funcExpertise: [],
+    functionalExpertise: [],
     industryExpertise: [],
     companyInfo: [],
   });
@@ -407,8 +407,8 @@ const SignUpSteps = () => {
       errors.currTitle = "Current title is required";
     }
 
-    // if (!values.funcExpertise) {
-    //   errors.funcExpertise = 'Functional expertise is required';
+    // if (!values.functionalExpertise) {
+    //   errors.functionalExpertise = 'Functional expertise is required';
     // }
 
     // if (!values.industryExpertise) {
@@ -425,7 +425,7 @@ const SignUpSteps = () => {
       evt.target.name.length - 1
     );
     if (
-      strippedEventName === "funcExpertise" ||
+      strippedEventName === "functionalExpertise" ||
       strippedEventName === "industryExpertise"
     ) {
       // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly

@@ -9,7 +9,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
-import EditProfileModal from "./EditProfileModal/EditProfileModal";
+import EditExpertiseModal from "./EditExpertiseModal/EditExpertiseModal";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import EditExperienceModal from "./EditExperienceModal/EditExperienceModal";
 import { ProfileSocialMedia } from "./ProfileSocialMedia";
@@ -178,7 +178,7 @@ export function ProfileSideBar({
                 />
               </Button>
 
-              <EditProfileModal
+              <EditExpertiseModal
                 isOpen={isProfileModalOpen}
                 onClose={onProfileModalClose}
                 profileData={profileData}
@@ -196,9 +196,9 @@ export function ProfileSideBar({
           >
             {profileData &&
               profileData &&
-              profileData.funcExpertise &&
-              typeof profileData?.funcExpertise === "object" &&
-              profileData?.funcExpertise.map((expertise, idx) => {
+              profileData.functionalExpertise &&
+              typeof profileData?.functionalExpertise === "object" &&
+              profileData?.functionalExpertise.map((expertise, idx) => {
                 if (expertise)
                   return (
                     <Box

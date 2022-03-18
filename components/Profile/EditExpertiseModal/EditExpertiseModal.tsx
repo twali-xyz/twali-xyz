@@ -26,7 +26,7 @@ const EditExperienceModal = (props) => {
   const [fileUploaded, setFileUploaded] = useState();
   const [profileData, setProfileData] = useState(props.profileData);
   const [values, setValues] = useState({
-    funcExpertise: props.profileData.funcExpertise,
+    functionalExpertise: props.profileData.functionalExpertise,
     industryExpertise: props.profileData.industryExpertise,
   });
   const [userData, setUserData] = useState<UserData>({
@@ -45,14 +45,14 @@ const EditExperienceModal = (props) => {
     businessLocation: "",
     currTitle: "",
     currLocation: "",
-    funcExpertise: [],
+    functionalExpertise: [],
     industryExpertise: [],
     companyInfo: [],
   });
 
   const [errors, setErrors] = useState({
     industryExpertise: null,
-    funcExpertise: null,
+    functionalExpertise: null,
   });
 
   async function updateExperiences() {
@@ -80,8 +80,8 @@ const EditExperienceModal = (props) => {
   const validate = (values) => {
     let errors: any = {};
 
-    if (values.funcExpertise === "") {
-      errors.funcExpertise = "Functional expertise is required";
+    if (values.functionalExpertise === "") {
+      errors.functionalExpertise = "Functional expertise is required";
     }
 
     if (values.industryExpertise === "") {
@@ -97,7 +97,7 @@ const EditExperienceModal = (props) => {
       evt.target.name.length - 1
     );
     if (
-      strippedEventName === "funcExpertise" ||
+      strippedEventName === "functionalExpertise" ||
       strippedEventName === "industryExpertise"
     ) {
       // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
@@ -126,11 +126,12 @@ const EditExperienceModal = (props) => {
             <form style={{ alignSelf: "center" }}>
               <MultiSelect
                 formLabel={"So...what would you say you do?"}
-                name={"funcExpertise"}
+                name={"functionalExpertise"}
                 handleChange={handleChange}
                 options={functionalExpertiseList}
                 defaultValues={
-                  values.funcExpertise || props.profileData.funcExpertise
+                  values.functionalExpertise ||
+                  props.profileData.functionalExpertise
                 }
                 maxSelections={3}
               />

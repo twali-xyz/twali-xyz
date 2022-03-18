@@ -79,7 +79,7 @@ module.exports = {
       businessLocation,
       currTitle,
       currLocation,
-      funcExpertise,
+      functionalExpertise,
       industryExpertise,
       companyInfo,
     } = userData;
@@ -103,7 +103,7 @@ module.exports = {
           businessLocation: businessLocation,
           currTitle: currTitle,
           currLocation: currLocation ? currLocation : null,
-          funcExpertise: funcExpertise ? funcExpertise : null,
+          functionalExpertise: functionalExpertise ? functionalExpertise : null,
           industryExpertise: industryExpertise ? industryExpertise : null,
           companyInfo: companyInfo ? companyInfo : null,
         },

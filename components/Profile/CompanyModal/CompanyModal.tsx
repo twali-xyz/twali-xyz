@@ -179,7 +179,7 @@ const CompanyModal = (props) => {
       setCompanyEnd(evt.target.value);
     }
 
-    if (evt.target.name == "funcExpertise") {
+    if (evt.target.name == "functionalExpertise") {
       setCompanyFunction(evt.target.value);
     }
 
@@ -456,7 +456,7 @@ const CompanyModal = (props) => {
                       defaultValue={companyInfo.companyFunc}
                       errorBorderColor="red.300"
                       placeholder="Select functional expertise"
-                      name="funcExpertise"
+                      name="functionalExpertise"
                       onChange={handleChange}
                     >
                       {functionalExpertiseList.map((item, idx) => {

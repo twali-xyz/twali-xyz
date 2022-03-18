@@ -55,7 +55,7 @@ const EditExperienceModal = (props) => {
     businessLocation: "",
     currTitle: "",
     currLocation: "",
-    funcExpertise: [],
+    functionalExpertise: [],
     industryExpertise: [],
     companyInfo: [],
   });
@@ -130,8 +130,8 @@ const EditExperienceModal = (props) => {
       errors.email = "Email address is invalid";
     }
 
-    if (values.funcExpertise === "") {
-      errors.funcExpertise = "Functional expertise is required";
+    if (values.functionalExpertise === "") {
+      errors.functionalExpertise = "Functional expertise is required";
     }
 
     if (values.industryExpertise === "") {
@@ -148,7 +148,7 @@ const EditExperienceModal = (props) => {
       evt.target.name.length - 1
     );
     if (
-      strippedEventName === "funcExpertise" ||
+      strippedEventName === "functionalExpertise" ||
       strippedEventName === "industryExpertise"
     ) {
       // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
