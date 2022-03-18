@@ -18,12 +18,10 @@ import { functionalExpertiseList } from "../../../utils/functionalExpertiseConst
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
 import { setEventArray } from "../helpers/setEventArray";
 import { UserData } from "../../../utils/interfaces";
-import FileUpload from "../../FileUpload/FileUpload";
 
 const EditExperienceModal = (props) => {
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [fileUploaded, setFileUploaded] = useState();
   const [profileData, setProfileData] = useState(props.profileData);
   const [values, setValues] = useState({
     functionalExpertise: props.profileData.functionalExpertise,
@@ -61,10 +59,6 @@ const EditExperienceModal = (props) => {
 
     if (address) {
       setIsSubmitted(true);
-
-      if (fileUploaded) {
-        console.log(fileUploaded);
-      }
 
       // TODO: Need to run a update profile call here
       if (profileData.firstName && profileData.lastName && profileData.email) {
