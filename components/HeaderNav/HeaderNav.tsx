@@ -1,235 +1,52 @@
 import React, { useState } from "react";
-import {
-  Flex,
-  Box,
-  Heading,
-  HStack,
-  Button,
-  CircularProgress,
-  Text,
-} from "@chakra-ui/react";
-import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import Web3 from "web3";
-import Web3Modal from "web3modal";
-import WalletConnectProvider from "@walletconnect/web3-provider";
-
-export interface UserData {
-  userName: string;
-  userWallet: string;
-  accType: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  bio?: string;
-  twitter?: string;
-  linkedIn?: string;
-  website?: string;
-  businessName: string;
-  businessType: string;
-  businessLocation: string;
-  currTitle: string;
-  currLocation?: string;
-  funcExpertise: string;
-  industryExpertise: string;
-  companyInfo?: CompanyInfo[];
-}
-
-export interface CompanyInfo {
-  companyName: string;
-  companyTitle: string;
-  companyImg: any;
-  companyStart: Date;
-  companyEnd: Date;
-  companyFunc: string;
-  companyIndustry: string;
-}
-
-const HamburgerItem = ({ children, isLast, to = "/" }) => {
-  return (
-    <Button
-      variant="ghost"
-      mb={{ base: isLast ? 0 : 8, sm: 0 }}
-      mr={{ base: 0, sm: isLast ? 0 : 8 }}
-      display="block"
-    >
-      <Link href={to}>{children}</Link>
-    </Button>
-  );
-};
+import { Flex, HStack, Text, Img } from "@chakra-ui/react";
 
 const HeaderNav = (props) => {
   const whichPage = props.whichPage;
-  const [show, setShow] = useState(false);
-  const toggleMenu = () => setShow(!show);
-  const [isSubmitted, setIsSubmitted] = React.useState(false);
-  const [loaded, setLoaded] = useState(false);
-  const router = useRouter();
 
-  const getUserByWallet = async (userWallet) => {
-    let lowerCaseWallet = userWallet.toLowerCase();
-    const res = await fetch(
-      `/api/users/wallet/${lowerCaseWallet}`
-    );
-
-    const data: any = await res.json();
-
-    console.log("RETRIEVE USER BY WALLET YO");
-    return data;
-  };
-
-  const handleWalletConnect = async () => {
-    const web3Modal = new Web3Modal({
-      disableInjectedProvider: false,
-      network: "rinkeby",
-      cacheProvider: false,
-      providerOptions: {
-        walletconnect: {
-          package: WalletConnectProvider,
-          options: {
-            rpc: {
-              1: "https://eth-rinkeby.alchemyapi.io/v2/QtLM8rW9nB6DobDu8KQx-7fYMS2rBlky",
-            },
-          },
-        },
-      },
-    });
-    const provider = await web3Modal.connect();
-    const web3 = new Web3(provider);
-    const accounts = await web3.eth.getAccounts();
-    const currAccount = accounts[0];
-    console.log(currAccount);
-
-    setIsSubmitted(true);
-    try {
-      let userData: UserData = await getUserByWallet(currAccount);
-      console.log(userData);
-
-      if (
-        userData &&
-        userData.userName &&
-        userData.userWallet
-      ) {
-        router.push(`/${userData.userName}`);
-        setIsSubmitted(false);
-      } else {
-        console.log("No profile, pls create one...");
-        router.push("/steps");
-      }
-    } catch (err) {
-      console.log("error: ", err);
-      router.push("/steps");
-      setLoaded(true);
-    }
-  };
-
-  if (whichPage === "index") {
-    return (
-      <Flex
-        h={10}
-        mb={8}
-        p={10}
-        as="nav"
-        align="center"
-        justify="space-between"
-        wrap="wrap"
-        w="100%"
-      >
-        <HStack spacing={10} alignItems="flex-start">
-          <Heading w="300px">Twali 👁‍🗨</Heading>
-        </HStack>
-        <Box
-          display={{ base: "block", md: "block" }}
-          flexBasis={{ base: "100%", md: "auto" }}
+  return (
+    <Flex
+      height={"80px"}
+      p={4}
+      px={8}
+      as="nav"
+      align="center"
+      justify="space-between"
+      wrap="wrap"
+      w="100%"
+      backgroundColor={whichPage === "profile" ? "#0A1313" : "transparent"}
+    >
+      <Img
+        width={"144px"}
+        height={"auto"}
+        src="/twali-assets/navbar_logo.png"
+      />
+      <HStack alignItems="center" w="130px" height={"32px"}>
+        <Flex
+          ml="2"
+          mt="1"
+          width={"100%"}
+          height={"100%"}
+          border={"1px solid #F9FFF2"}
+          alignItems={"center"}
+          justifyItems={"center"}
+          borderRadius={32}
         >
-          <Button
-            mb={{ base: 8, sm: 0 }}
-            mr={{ base: 0, sm: 8 }}
-            display="block"
-            onClick={handleWalletConnect}
-            colorScheme="teal"
+          <Text
+            color="white"
+            fontSize={"14px"}
+            margin={"auto"}
+            alignSelf={"center"}
+            fontWeight={"700"}
+            letterSpacing={"0.06em"}
+            textTransform={"uppercase"}
           >
-            Connect Wallet{" "}
-            {isSubmitted ? (
-              <CircularProgress
-                size="22px"
-                thickness="4px"
-                isIndeterminate
-                color="#3C2E26"
-              />
-            ) : null}
-          </Button>
-        </Box>
-      </Flex>
-    );
-  } else if (whichPage === "sign-up" || whichPage === "steps") {
-    return (
-      <Flex
-        h={10}
-        mb={8}
-        p={10}
-        as="nav"
-        align="left"
-        justify="space-between"
-        wrap="wrap"
-        w="100%"
-      >
-        <HStack alignItems="flex-start">
-          <Heading as="h4" size="md" w="300px">
-            Twali 👁‍🗨
-          </Heading>
-        </HStack>
-        <HStack alignItems="flex-end">
-          <Box ml="2" mt="1" w="150px" backgroundColor="teal" borderRadius={16}>
-            <Text pl={6} color="white" size="xs">
-              0xP0...Z0p4
-            </Text>
-          </Box>
-        </HStack>
-      </Flex>
-    );
-  } else {
-    return (
-      <Flex
-        h={10}
-        mb={8}
-        p={10}
-        as="nav"
-        align="center"
-        justify="space-between"
-        wrap="wrap"
-        w="100%"
-      >
-        <HStack spacing={10} alignItems="flex-start">
-          <Heading w="300px">Twali 👁‍🗨</Heading>
-        </HStack>
-
-        <Box display={{ base: "block", md: "none" }} onClick={toggleMenu}>
-          {show ? <CloseIcon /> : <HamburgerIcon />}
-        </Box>
-
-        <Box
-          display={{ base: show ? "block" : "none", md: "block" }}
-          flexBasis={{ base: "100%", md: "auto" }}
-        >
-          <Flex
-            align="center"
-            justify={["center", "space-between", "flex-end", "flex-end"]}
-            direction={["column", "row", "row", "row"]}
-            pt={[4, 4, 0, 0]}
-          >
-            <HamburgerItem isLast={false} to="/directory">
-              Directory
-            </HamburgerItem>
-            <HamburgerItem isLast={false} to="/profile">
-              Profile
-            </HamburgerItem>
-          </Flex>
-        </Box>
-      </Flex>
-    );
-  }
+            0xb794f...
+          </Text>
+        </Flex>
+      </HStack>
+    </Flex>
+  );
 };
 
 export default HeaderNav;

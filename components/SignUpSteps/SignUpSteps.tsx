@@ -1,6 +1,9 @@
+import { MultiSelect } from "../Profile/Components/MultiSelect";
 import { useState } from "react";
 import { Step, Steps, useSteps } from "chakra-ui-steps";
 import { connect } from "../../utils/walletUtils";
+import { listOfCountries } from "../../utils/profileUtils";
+
 import {
   Heading,
   FormControl,
@@ -20,37 +23,10 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-export interface UserData {
-  userName: string;
-  userWallet: string;
-  accType: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  bio?: string;
-  twitter?: string;
-  linkedIn?: string;
-  website?: string;
-  businessName: string;
-  businessType: string;
-  businessLocation: string;
-  currTitle: string;
-  currLocation?: string;
-  funcExpertise: string;
-  industryExpertise: string;
-  companyInfo?: CompanyInfo[];
-}
-
-export interface CompanyInfo {
-  companyName: string;
-  companyTitle: string;
-  companyImg: any;
-  companyStart: Date;
-  companyEnd: Date;
-  companyFunc: string;
-  companyIndustry: string;
-}
+import { functionalExpertiseList } from "../../utils/functionalExpertiseConstants";
+import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
+import { setEventArray } from "../Profile/helpers/setEventArray";
+import { UserData } from "../../utils/interfaces";
 
 const userProfileStep = ({ handleChange, values, errors }) => {
   return (
@@ -278,9 +254,7 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
                 name="businessLocation"
                 onChange={handleChange}
               >
-                <option>United States</option>
-                <option>Canada</option>
-                <option>India</option>
+                {listOfCountries()}
               </Select>
               {/* {errors.businessLocation && (
                           <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.businessType}</Text>
@@ -336,121 +310,25 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
                 name="currLocation"
                 onChange={handleChange}
               >
-                <option>United States</option>
-                <option>Canada</option>
-                <option>India</option>
+                {listOfCountries()}
               </Select>
             </FormControl>
-            <FormControl p={4} id="functional-expertise" isRequired>
-              <FormLabel>Functional expertise</FormLabel>
-              <Select
-                placeholder="Select functional expertise"
-                name="funcExpertise"
-                onChange={handleChange}
-              >
-                <option>Accounting</option>
-                <option>Creative</option>
-                <option>Audit</option>
-                <option>Board & Advisory</option>
-                <option>Corporate Development</option>
-                <option>Comp & Benefits</option>
-                <option>Compliance</option>
-                <option>Management Consulting</option>
-                <option>Data & Analytics</option>
-                <option>Product Design</option>
-                <option>Digital</option>
-                <option>Engineering</option>
-                <option>Entrepreneurship</option>
-                <option>Finance</option>
-                <option>General Management</option>
-                <option>Human Resources</option>
-                <option>IT Infrastructure</option>
-                <option>Innovation</option>
-                <option>Investor</option>
-                <option>Legal</option>
-                <option>Marketing</option>
-                <option>Media & Comms</option>
-                <option>Merchandising</option>
-                <option>Security</option>
-                <option>Operations</option>
-                <option>Portfolio Operations</option>
-                <option>Procurement</option>
-                <option>Product Management</option>
-                <option>Investor Relations</option>
-                <option>Regulatory</option>
-                <option>Research</option>
-                <option>Risk</option>
-                <option>Strategy</option>
-                <option>Technology</option>
-                <option>Transformation</option>
-                <option>Sales & Customer</option>
-                <option>Data Science</option>
-                <option>Talent Acquisition</option>
-                <option>Tax</option>
-                <option>Cybersecurity</option>
-                <option>Investment Banking</option>
-                <option>Supply Chain</option>
-              </Select>
-              {/* {errors.funcExpertise && (
-                          <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.funcExpertise}</Text>
-                        )} */}
-            </FormControl>
-            <FormControl p={4} id="industry-expertise" isRequired>
-              <FormLabel>Industry expertise</FormLabel>
-              <Select
-                placeholder="Select industry expertise"
-                name="industryExpertise"
-                onChange={handleChange}
-              >
-                <option>Accounting</option>
-                <option>Angel Investment</option>
-                <option>Asset Management</option>
-                <option>Auto Insurance</option>
-                <option>Banking</option>
-                <option>Bitcoin</option>
-                <option>Commercial Insurance</option>
-                <option>Commercial Lending</option>
-                <option>Credit</option>
-                <option>Credit Bureau</option>
-                <option>Credit Cards</option>
-                <option>Crowdfunding</option>
-                <option>Cryptocurrency</option>
-                <option>Debit Cards</option>
-                <option>Debt Collections</option>
-                <option>Finance</option>
-                <option>Financial Exchanges</option>
-                <option>Financial Services</option>
-                <option>FinTech</option>
-                <option>Fraud Detection</option>
-                <option>Funding Platform</option>
-                <option>Gift Card</option>
-                <option>Health Insurance</option>
-                <option>Hedge Funds</option>
-                <option>Impact Investing</option>
-                <option>Incubators</option>
-                <option>Insurance</option>
-                <option>InsurTech</option>
-                <option>Leasing</option>
-                <option>Lending</option>
-                <option>Life Insurance</option>
-                <option>Micro Lending</option>
-                <option>Mobile Payments</option>
-                <option>Payments</option>
-                <option>Personal Finance</option>
-                <option>Prediction Markets</option>
-                <option>Property Insurance</option>
-                <option>Real Estate Investment</option>
-                <option>Stock Exchanges</option>
-                <option>Trading Platform</option>
-                <option>Transaction Processing</option>
-                <option>Venture Capital</option>
-                <option>Virtual Currency</option>
-                <option>Wealth Management</option>
-              </Select>
-              {/* {errors.industryExpertise && (
-                          <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.industryExpertise}</Text>
-                        )} */}
-            </FormControl>
+            <MultiSelect
+              name={"functionalExpertise"}
+              formLabel={"Functional expertise"}
+              handleChange={handleChange}
+              defaultValues={[]}
+              options={functionalExpertiseList}
+              maxSelections={3}
+            />
+            <MultiSelect
+              name={"industryExpertise"}
+              formLabel={"Industry expertise"}
+              handleChange={handleChange}
+              defaultValues={[]}
+              options={industryExpertiseList}
+              maxSelections={3}
+            />
           </Box>
         </Box>
       </Box>
@@ -463,7 +341,10 @@ const SignUpSteps = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isAccTypeSelection, setIsAccTypeSelection] = useState(true);
   const [isAccTypeSelected, setIsAccTypeSelected] = useState(false);
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState({
+    functExpertise: [],
+    industryExpertise: [],
+  });
   const [errors, setErrors] = useState({});
   const [accType, setAccType] = useState("");
   const [btnActive, setBtnActive] = useState(0);
@@ -484,11 +365,10 @@ const SignUpSteps = () => {
     businessLocation: "",
     currTitle: "",
     currLocation: "",
-    funcExpertise: "",
-    industryExpertise: "",
+    functionalExpertise: [],
+    industryExpertise: [],
     companyInfo: [],
   });
-
 
   const validate = (values) => {
     let errors: any = {};
@@ -527,8 +407,8 @@ const SignUpSteps = () => {
       errors.currTitle = "Current title is required";
     }
 
-    // if (!values.funcExpertise) {
-    //   errors.funcExpertise = 'Functional expertise is required';
+    // if (!values.functionalExpertise) {
+    //   errors.functionalExpertise = 'Functional expertise is required';
     // }
 
     // if (!values.industryExpertise) {
@@ -540,13 +420,27 @@ const SignUpSteps = () => {
 
   const handleChange = (evt) => {
     evt.persist();
-    setValues((values) => ({ ...values, [evt.target.name]: evt.target.value }));
-    setErrors(validate(values));
-    const value = evt.target.value;
-    setUserData({
-      ...userData,
-      [evt.target.name]: value,
-    });
+    let strippedEventName = evt.target.name.substring(
+      0,
+      evt.target.name.length - 1
+    );
+    if (
+      strippedEventName === "functionalExpertise" ||
+      strippedEventName === "industryExpertise"
+    ) {
+      // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
+      setEventArray({ evt, setValues, values, userData, setUserData });
+    } else {
+      setValues((values) => ({
+        ...values,
+        [evt.target.name]: evt.target.value,
+      }));
+      const value = evt.target.value;
+      setUserData({
+        ...userData,
+        [evt.target.name]: value,
+      });
+    }
   };
 
   const steps = [
@@ -565,10 +459,11 @@ const SignUpSteps = () => {
   ];
 
   const createNewUser = async (address) => {
+    console.log(userData);
     userData.userWallet = address;
     // check if user doesnt already exsist with current address
     userData.accType = accType;
-    await fetch('/api/users/createUser', {
+    await fetch("/api/users/createUser", {
       method: "POST",
       body: JSON.stringify({ userData }),
     });
@@ -583,10 +478,7 @@ const SignUpSteps = () => {
     if (address) {
       setIsSubmitted(true);
       await createNewUser(address); // creating user in DynamoDB
-      if (
-        userData.userName &&
-        userData.userWallet
-      ) {
+      if (userData.userName && userData.userWallet) {
         router.push(`/${userData.userName}`); // coming from dynamodb
         setIsSubmitted(false);
       } else {
@@ -614,7 +506,7 @@ const SignUpSteps = () => {
           <Button
             size="sm"
             pl={40}
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/login")}
             colorScheme="gray"
             variant="link"
           >
@@ -783,7 +675,7 @@ const SignUpSteps = () => {
             {steps.map(({ label, content }) => (
               <Step label={label} key={label}>
                 {activeStep < 0 ? (
-                  router.push("/")
+                  router.push("/login")
                 ) : (
                   <Button
                     pl={264}

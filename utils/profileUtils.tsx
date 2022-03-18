@@ -1,9 +1,5 @@
 import { Permission } from "./PermissionTypes";
-// import AWS from "aws-sdk";
-// import { DynamoDB } from "@aws-sdk/client-dynamodb";
-// import { 
-//   // marshall, 
-//   unmarshall } from "@aws-sdk/util-dynamodb";
+import { countriesConstants } from "./countriesConstants";
 
 // Function that simulates fetching a permission from remote server
 export const fetchPermission =
@@ -35,23 +31,13 @@ export const fetchPermission =
     console.log("PERMISSION DATA:", userData);
   };
 
-// export const convertFromDB = async (companyInfo) => {
-
-// // let clientParams = {
-// //   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-// //   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-// //   region: "us-east-1",
-// // }
-
-// // const client = new DynamoDB(clientParams);
-
-
-//   let converterOptions = {
-//     convertEmptyValues: true,
-//     wrapNumbers: true,
-//   }
-//   // const formattedData =  AWS.DynamoDB.Converter.output(companyInfo, converterOptions);
-//   const formattedData2 = unmarshall(companyInfo, converterOptions);
-//   console.log(formattedData2);
-//   return formattedData2;
-// }
+// Function that retrieves a list of countries options for a dropdown
+export const listOfCountries = () => {
+  let list = [];
+  for (let i = 0; i < countriesConstants.length; i++) {
+    list.push(
+      <option key={`${i}--countryOption`}>{countriesConstants[i]}</option>
+    );
+  }
+  return list;
+};

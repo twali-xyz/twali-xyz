@@ -1,7 +1,6 @@
 const { v4 } = require("uuid");
 const TableName = process.env.TABLE_NAME;
 const AWS = require("aws-sdk");
-// const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 
 const getDynamoDBClient = () => {
 
@@ -20,43 +19,41 @@ const getDynamoDBClient = () => {
     // });
     // };
   
-
   const options = {
     convertEmptyValues: true,
     region: dynamoDBRegion,
   };
 
   const client = process.env.LOCAL_DYNAMO_DB_ENDPOINT
-    ? new AWS.DynamoDB.DocumentClient(
-      // ...options,
+    ? new AWS.DynamoDB.DocumentClient()
+    : // ...options,
       // process.env.LOCAL_DYNAMO_DB_ENDPOINT
-    )
-    : new AWS.DynamoDB.DocumentClient(options);
+      new AWS.DynamoDB.DocumentClient(options);
 
   return client;
 };
 
 module.exports = {
-    /**
-  * @desc Gets a users nonce from database that is generated upon user creation to authenticate user that is accessing database.
-  * @param {String} userWallet is the primary key to allow look up on database to access metadata to items belonging to user.
-  * 
-  * 
-  **/
- getUserAuth: async(userWallet) => {
-  const dbUser = await getDynamoDBClient()
-  .get({
-      TableName,
-      Key: {
-        "userWallet": userWallet,
-      },
-      ProjectionExpression: "UserNonce"
-  })
-  .promise()
-  .then(data => data.Items)
-  .catch(err => console.log(err))
-  return dbUser;
-},
+  /**
+   * @desc Gets a users nonce from database that is generated upon user creation to authenticate user that is accessing database.
+   * @param {String} userWallet is the primary key to allow look up on database to access metadata to items belonging to user.
+   *
+   *
+   **/
+  getUserAuth: async (userWallet) => {
+    const dbUser = await getDynamoDBClient()
+      .get({
+        TableName,
+        Key: {
+          userWallet: userWallet,
+        },
+        ProjectionExpression: "UserNonce",
+      })
+      .promise()
+      .then((data) => data.Items)
+      .catch((err) => console.log(err));
+    return dbUser;
+  },
 
   /**
    * @desc Creates a user profile with the `userName` being set as the primary key in the database.
@@ -65,6 +62,7 @@ module.exports = {
    * @example See docs about including additonal attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#put-property
    **/
   createUser: async (userData) => {
+    console.log(userData);
     const {
       userName,
       userWallet,
@@ -81,7 +79,7 @@ module.exports = {
       businessLocation,
       currTitle,
       currLocation,
-      funcExpertise,
+      functionalExpertise,
       industryExpertise,
       companyInfo,
     } = userData;
@@ -106,7 +104,7 @@ module.exports = {
           businessLocation: businessLocation,
           currTitle: currTitle,
           currLocation: currLocation ? currLocation : null,
-          funcExpertise: funcExpertise ? funcExpertise : null,
+          functionalExpertise: functionalExpertise ? functionalExpertise : null,
           industryExpertise: industryExpertise ? industryExpertise : null,
           companyInfo: companyInfo ? companyInfo: null,
         },

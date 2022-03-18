@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Box,
   HStack,
@@ -24,48 +24,20 @@ import {
 import useSWR from "swr";
 import { connect } from "../../../utils/walletUtils";
 import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
-// import { convertFromDB } from '../../../utils/profileUtils';
-
-export interface UserData {
-  userName: string;
-  userWallet: string;
-  accType: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  bio?: string;
-  twitter?: string;
-  linkedIn?: string;
-  website?: string;
-  businessName: string;
-  businessType: string;
-  businessLocation: string;
-  currTitle: string;
-  currLocation?: string;
-  funcExpertise: string;
-  industryExpertise: string;
-  companyInfo?: CompanyInfo[];
-}
-
-export interface CompanyInfo {
-  companyName: string;
-  companyTitle: string;
-  companyImg: any;
-  companyStart: Date;
-  companyEnd: Date;
-  companyFunc: string;
-  companyIndustry: string;
-}
+import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
+import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
 
 const CompanyModal = (props) => {
   const finalRef = useRef();
+  const [count, setCount] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [companyName, setCompanyName] = useState("");
-  const [companyTitle, setCompanyTitle] = useState("");
+  const [companyName, setCompanyName] = useState();
+  const [companyTitle, setCompanyTitle] = useState();
   const [companyStart, setCompanyStart] = useState();
   const [companyEnd, setCompanyEnd] = useState();
-  const [companyFunc, setCompanyFunc] = useState();
+  const [companyFunction, setCompanyFunction] = useState();
   const [companyIndustry, setCompanyIndustry] = useState();
+  const [tempLogo, setTempLogo] = useState<any>();
   const [shouldFetch, setShouldFetch] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [profileData, setProfileData] = useState(props.profileData);
@@ -74,7 +46,7 @@ const CompanyModal = (props) => {
     companyTitle: "",
     companyStart: "",
     companyEnd: "",
-    companyFunc: "",
+    companyFunction: "",
     companyIndustry: "",
   }, 
   {
@@ -111,6 +83,38 @@ const CompanyModal = (props) => {
   },
 ];
 
+  // on open, set the values to the current company
+  useEffect(() => {
+    if (!props.isOpen) return;
+    setCompanyName(
+      props.profileData?.content?.identity?.companyInfo[props.currCompany]
+        ?.companyName
+    );
+    setCompanyTitle(
+      props.profileData?.content?.identity?.companyInfo[props.currCompany]
+        ?.companyTitle
+    );
+    setCompanyStart(
+      props.profileData?.content?.identity?.companyInfo[props.currCompany]
+        ?.companyStart
+    );
+    setCompanyEnd(
+      props.profileData?.content?.identity?.companyInfo[props.currCompany]
+        ?.companyEnd
+    );
+    setCompanyFunction(
+      props.profileData?.content?.identity?.companyInfo[props.currCompany]
+        ?.companyFunc
+    );
+    setCompanyIndustry(
+      props.profileData?.content?.identity?.companyInfo[props.currCompany]
+        ?.companyExpertise
+    );
+    setTempLogo(
+      props.profileData?.content?.identity?.companyInfo[props.currCompany]?.logo
+    );
+  }, [props.isOpen]);
+
   const companyInfo =
     props.profileData.companyInfo &&
     props.profileData.companyInfo[props.currCompany]
@@ -125,7 +129,7 @@ const CompanyModal = (props) => {
     companyTitle: null,
     companyStart: null,
     companyEnd: null,
-    companyFunc: null,
+    companyFunction: null,
     companyIndustry: null,
   });
 
@@ -138,10 +142,10 @@ const CompanyModal = (props) => {
       companyInfo && companyInfo.companyStart ? companyInfo.companyStart : "",
     companyEnd:
       companyInfo && companyInfo.companyEnd ? companyInfo.companyEnd : "",
-    companyFunc:
+    companyFunction:
       companyInfo && companyInfo.companyFunc ? companyInfo.companyFunc : "",
     companyIndustry:
-      companyInfo && companyInfo.companyIndustry
+      companyInfo && companyInfo.industryExpertise
         ? companyInfo.companyIndustry
         : "",
   });
@@ -182,9 +186,9 @@ const CompanyModal = (props) => {
         console.log('Updated profile datA ON COMPANY MODAL: ', profileData);
 
         updateUserCompanyData(profileData.userWallet, companyAttributes);
-        props.handleUpdatedCompanyInfo(profileData);
+        props.handleUpdatedCompanyInfo(props.profileData, false); // TODO: check if this works or profileData itself works
         props.onClose();
-        window.location.reload();
+        setShouldFetch(false);
         setIsSubmitted(false);
       } else {
         console.log("No profile, pls create one...");
@@ -214,7 +218,7 @@ const CompanyModal = (props) => {
     if (evt.target.name == "companyName") {
       setCompanyName(evt.target.value);
       setShouldFetch(true);
-    } else {
+    } else if (evt.target.name !== "companyName") {
       setShouldFetch(false);
     }
 
@@ -230,8 +234,8 @@ const CompanyModal = (props) => {
       setCompanyEnd(evt.target.value);
     }
 
-    if (evt.target.name == "funcExpertise") {
-      setCompanyFunc(evt.target.value);
+    if (evt.target.name == "functionalExpertise") {
+      setCompanyFunction(evt.target.value);
     }
 
     if (evt.target.name == "industryExpertise") {
@@ -315,10 +319,10 @@ const CompanyModal = (props) => {
                 {companyInfo.companyFunc && companyInfo.companyIndustry ? (
                   <HStack spacing={4}>
                     {[companyInfo.companyFunc, companyInfo.companyIndustry].map(
-                      (name) => (
+                      (name, idx) => (
                         <Tag
                           size={"md"}
-                          key={`sm--${name}`}
+                          key={`sm--${name}-${idx}`}
                           variant="solid"
                           colorScheme="teal"
                         >
@@ -338,6 +342,7 @@ const CompanyModal = (props) => {
             mr={3}
             onClick={() => {
               props.onClose();
+              setShouldFetch(false);
             }}
           >
             Close
@@ -352,7 +357,10 @@ const CompanyModal = (props) => {
       <Modal
         finalFocusRef={finalRef}
         isOpen={props.isOpen}
-        onClose={props.onClose}
+        onClose={() => {
+          props.onClose();
+          setShouldFetch(false);
+        }}
         key={`companymodal--${props.currCompany}`}
       >
         <ModalOverlay />
@@ -364,13 +372,51 @@ const CompanyModal = (props) => {
               {companyInfo ? (
                 <form style={{ alignSelf: "center" }}>
                   <FormControl p={2} id="company-name">
+                    {shouldFetch ? (
+                      <>
+                        <CompanyInfoData
+                          companyInfo={companyInfo}
+                          companyName={companyName}
+                          isDisabled={setDisabled}
+                          tempLogo={tempLogo}
+                          setTempLogo={setTempLogo}
+                          shouldFetch={shouldFetch}
+                        />
+                      </>
+                    ) : tempLogo?.message?.logo ? (
+                      <>
+                        <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+                          <Img
+                            height="30px"
+                            src={tempLogo?.message?.logo}
+                            alt={tempLogo?.message?.domain}
+                          />
+                        </Box>
+                      </>
+                    ) : !tempLogo && companyInfo.logo?.message?.logo ? (
+                      <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+                        <Img
+                          height="30px"
+                          src={companyInfo.logo?.message?.logo}
+                          alt={companyInfo.logo?.message?.domain + "here"}
+                        />
+                      </Box>
+                    ) : (companyName || tempLogo) &&
+                      shouldFetch &&
+                      companyInfo.companyName ? (
+                      <>
+                        <LogoFallBack companyName={companyInfo.companyName} />
+                      </>
+                    ) : !shouldFetch && !tempLogo && companyInfo.companyName ? (
+                      <>
+                        <LogoFallBack companyName={companyInfo.companyName} />
+                      </>
+                    ) : !shouldFetch && tempLogo && companyName ? (
+                      <>
+                        <LogoFallBack companyName={companyName} />
+                      </>
+                    ) : null}
                     <FormLabel>Company name</FormLabel>
-                    {shouldFetch && (
-                      <CompanyInfoData
-                        companyName={companyName}
-                        isDisabled={setDisabled}
-                      />
-                    )}
                     <Input
                       required
                       isInvalid={
@@ -450,6 +496,12 @@ const CompanyModal = (props) => {
                           {errors.companyEnd}
                         </Text>
                       )}
+                    {errors.companyName &&
+                      (!companyInfo.companyName || !values.companyName) && (
+                        <Text fontSize="xs" fontWeight="400" color="red.500">
+                          {errors.companyName}
+                        </Text>
+                      )}
                   </FormControl>
                   <FormControl p={2} id="company-func">
                     <FormLabel>Functional expertise</FormLabel>
@@ -461,48 +513,9 @@ const CompanyModal = (props) => {
                       name="companyFunc"
                       onChange={handleChange}
                     >
-                      <option>Accounting</option>
-                      <option>Creative</option>
-                      <option>Audit</option>
-                      <option>Board & Advisory</option>
-                      <option>Corporate Development</option>
-                      <option>Comp & Benefits</option>
-                      <option>Compliance</option>
-                      <option>Management Consulting</option>
-                      <option>Data & Analytics</option>
-                      <option>Product Design</option>
-                      <option>Digital</option>
-                      <option>Engineering</option>
-                      <option>Entrepreneurship</option>
-                      <option>Finance</option>
-                      <option>General Management</option>
-                      <option>Human Resources</option>
-                      <option>IT Infrastructure</option>
-                      <option>Innovation</option>
-                      <option>Investor</option>
-                      <option>Legal</option>
-                      <option>Marketing</option>
-                      <option>Media & Comms</option>
-                      <option>Merchandising</option>
-                      <option>Security</option>
-                      <option>Operations</option>
-                      <option>Portfolio Operations</option>
-                      <option>Procurement</option>
-                      <option>Product Management</option>
-                      <option>Investor Relations</option>
-                      <option>Regulatory</option>
-                      <option>Research</option>
-                      <option>Risk</option>
-                      <option>Strategy</option>
-                      <option>Technology</option>
-                      <option>Transformation</option>
-                      <option>Sales & Customer</option>
-                      <option>Data Science</option>
-                      <option>Talent Acquisition</option>
-                      <option>Tax</option>
-                      <option>Cybersecurity</option>
-                      <option>Investment Banking</option>
-                      <option>Supply Chain</option>
+                      {functionalExpertiseList.map((item, idx) => {
+                        return <option key={`&{item}--${idx}`}>{item}</option>;
+                      })}
                     </Select>
                   </FormControl>
                   <FormControl p={2} id="company-industry">
@@ -515,63 +528,28 @@ const CompanyModal = (props) => {
                       name="companyIndustry"
                       onChange={handleChange}
                     >
-                      <option>Accounting</option>
-                      <option>Angel Investment</option>
-                      <option>Asset Management</option>
-                      <option>Auto Insurance</option>
-                      <option>Banking</option>
-                      <option>Bitcoin</option>
-                      <option>Commercial Insurance</option>
-                      <option>Commercial Lending</option>
-                      <option>Credit</option>
-                      <option>Credit Bureau</option>
-                      <option>Credit Cards</option>
-                      <option>Crowdfunding</option>
-                      <option>Cryptocurrency</option>
-                      <option>Debit Cards</option>
-                      <option>Debt Collections</option>
-                      <option>Finance</option>
-                      <option>Financial Exchanges</option>
-                      <option>Financial Services</option>
-                      <option>FinTech</option>
-                      <option>Fraud Detection</option>
-                      <option>Funding Platform</option>
-                      <option>Gift Card</option>
-                      <option>Health Insurance</option>
-                      <option>Hedge Funds</option>
-                      <option>Impact Investing</option>
-                      <option>Incubators</option>
-                      <option>Insurance</option>
-                      <option>InsurTech</option>
-                      <option>Leasing</option>
-                      <option>Lending</option>
-                      <option>Life Insurance</option>
-                      <option>Micro Lending</option>
-                      <option>Mobile Payments</option>
-                      <option>Payments</option>
-                      <option>Personal Finance</option>
-                      <option>Prediction Markets</option>
-                      <option>Property Insurance</option>
-                      <option>Real Estate Investment</option>
-                      <option>Stock Exchanges</option>
-                      <option>Trading Platform</option>
-                      <option>Transaction Processing</option>
-                      <option>Venture Capital</option>
-                      <option>Virtual Currency</option>
-                      <option>Wealth Management</option>
+                      {industryExpertiseList.map((item, idx) => {
+                        return <option key={`&{item}--${idx}`}>{item}</option>;
+                      })}
                     </Select>
                   </FormControl>
                 </form>
               ) : null}
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="blue" mr={3} onClick={props.onClose}>
+              <Button
+                colorScheme="blue"
+                mr={3}
+                onClick={() => {
+                  props.onClose();
+                  setShouldFetch(false);
+                }}
+              >
                 Close
               </Button>
               <Button
                 isDisabled={isDisabled}
                 onClick={() => {
-                  setShouldFetch(false);
                   updateCompanyInfo();
                 }}
                 variant="ghost"
@@ -596,42 +574,102 @@ const CompanyModal = (props) => {
 
 // Client-side data fetching for Clearbit's NameToDomain API (on company modal load)
 function CompanyInfoData(props) {
-  console.log(props);
-  const fetcher = (companyDomain: string, ...args: Parameters<typeof fetch>) =>
-    fetch(companyDomain).then((response) => response.json());
+  //
+  // only fetch if event comes from 'company name' field
+  //
+  if (props.shouldFetch) {
+    const fetcher = (
+      companyDomain: string,
+      ...args: Parameters<typeof fetch>
+    ) => fetch(companyDomain).then((response) => response.json());
 
-  let paramsObj = { params: props.companyName };
-  let searchParams = new URLSearchParams(paramsObj);
+    let paramsObj = { params: props.companyName };
+    let searchParams = new URLSearchParams(paramsObj);
 
-  // Create a stable key for SWR
-  searchParams.sort();
-  const qs = searchParams.toString();
+    // Create a stable key for SWR
+    searchParams.sort();
+    const qs = searchParams.toString();
 
-  const { data } = useSWR(`/api/cors?${qs}`, fetcher);
-  console.log("DATA: ", data);
-  if (!data) {
-    props.isDisabled(true);
-  } else {
-    props.isDisabled(false);
+    const { data } = useSWR(`/api/cors?${qs}`, fetcher);
+    if (!data) {
+      props.isDisabled(false);
+      props.setTempLogo(true);
+    } else {
+      props.isDisabled(false);
+      props.setTempLogo(data);
+    }
+
+    return (
+      // return when shouldFetch == true && logo data is found
+      <>
+        {data && data?.message && data?.message?.logo ? (
+          <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+            <Img
+              height="30px"
+              src={data.message.logo}
+              alt={data.message.domain}
+            />
+          </Box>
+        ) : props.companyName ? (
+          // return when shouldFetch returns no data
+          <>
+            <LogoFallBack companyName={props.companyName} />
+          </>
+        ) : null}
+      </>
+    );
   }
 
+  // the return value if shouldFetch  == false, uses cached logo if available otherwise falls back to first letter of company name
   return (
     <>
-      {data && data.message && data.message.logo ? (
+      {props.tempLogo &&
+      props.tempLogo?.message &&
+      props.tempLogo?.message?.logo ? (
         <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
           <Img
             height="30px"
-            src={data.message.logo}
-            alt={data.message.domain}
+            src={props.tempLogo.message.logo}
+            alt={props.tempLogo.message.domain}
           />
         </Box>
       ) : (
-        <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
-          <Text fontSize="xs" fontWeight="400" color="red.500">
-            Company logo is unavailable or name is incorrect.
+        props.companyName !== "" && (
+          <>
+            <LogoFallBack companyName={props.companyName} />
+          </>
+        )
+      )}
+    </>
+  );
+}
+
+export function LogoFallBack(props) {
+  return (
+    <>
+      <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+        <Box
+          w={"1.75rem"}
+          h={"1.75rem"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          bgGradient="linear-gradient(to right, #d1913c, #ffd194)"
+          borderRadius={"50%"}
+        >
+          <Text
+            w={"full"}
+            h={"full"}
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            fontSize="xl"
+            fontWeight="800"
+            color="blue.700"
+          >
+            {props.companyName[0]?.toUpperCase()}
           </Text>
         </Box>
-      )}
+      </Box>
     </>
   );
 }
