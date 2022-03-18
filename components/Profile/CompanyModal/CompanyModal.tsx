@@ -177,8 +177,7 @@ const CompanyModal = (props) => {
           userName: userData.userName,
           currCompany: props.currCompany,
         };
-        console.log('Updated profile datA ON COMPANY MODAL: ', userData);
-
+        
         updateUserCompanyData(userData.userWallet, companyAttributes);
         props.handleUpdatedCompanyInfo(props.userData, false);
         props.onClose();

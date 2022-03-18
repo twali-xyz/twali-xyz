@@ -58,12 +58,10 @@ const LoginPage = (props) => {
     const web3 = new Web3(provider);
     const accounts = await web3.eth.getAccounts();
     const currAccount = accounts[0];
-    console.log(currAccount);
 
     setIsSubmitted(true);
     try {
       let userData: UserData = await getUserByWallet(currAccount);
-      console.log(userData);
 
       if (userData && userData.userName && userData.userWallet) {
         router.push(`/${userData.userName}`);

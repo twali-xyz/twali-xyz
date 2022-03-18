@@ -40,7 +40,6 @@ export function setEventArray({
   ];
 
   const eventValues = values[strippedEventName];
-  console.log('event values', eventValues);
   let eventArray = [];
   for (let i = 0; i <= eventValues?.length; i++) {
     if (i === eventIndex - 1) {
@@ -49,20 +48,15 @@ export function setEventArray({
       eventArray.push(eventValues[i]);
     }
   }
-  console.log('EVENT ARRAY', eventArray);
+
   setValues((values) => ({
     ...values,
     [strippedEventName]: eventArray,
   }));
-  console.log(values);
-  console.log(evt.target.name);
-  const value = evt.target.value;
 
   setUserData({
     ...userData,
     functionalExpertise: values.functionalExpertise,
     industryExpertise: values.industryExpertise
   });
-
-  console.log(userData);
 }

@@ -68,7 +68,7 @@ const EditExperienceModal = (props) => {
           twitter: userData.twitter ? userData.twitter: null,
           email: userData.email ? userData.email: null
         };
-        console.log(userData);
+
         updateUserProfile(userData.userWallet, experienceAttributes);
         props.handleUpdatedExperiences(userData, false);
         props.onClose();
@@ -161,7 +161,6 @@ const EditExperienceModal = (props) => {
       });
     }
   };
-  console.log(props);
 
   return (
     <>

@@ -39,7 +39,7 @@ const EditExperienceModal = (props) => {
 
     if (address) {
       setIsSubmitted(true);
-      console.log('User data', userData);
+
       // Update user data with the new changes
       if (userData.userWallet && userData.userName && userData.functionalExpertise && userData.industryExpertise) {
         let expertiseAttributes = {
@@ -47,7 +47,7 @@ const EditExperienceModal = (props) => {
           functionalExpertise: userData.functionalExpertise,
           industryExpertise: userData.industryExpertise
         };
-        console.log(userData);
+
         updateUserExpertise(userData.userWallet, expertiseAttributes);
         props.handleUpdatedExperiences(userData, false);
         props.onClose();
@@ -100,7 +100,6 @@ const EditExperienceModal = (props) => {
       }));
     }
   };
-  console.log(props);
 
   return (
     <>

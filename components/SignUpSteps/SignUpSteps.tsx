@@ -459,7 +459,6 @@ const SignUpSteps = () => {
   ];
 
   const createNewUser = async (address) => {
-    console.log(userData);
     userData.userWallet = address;
     // check if user doesnt already exsist with current address
     userData.accType = accType;
