@@ -184,6 +184,7 @@ const CompanyModal = (props) => {
         updateUserCompanyData(profileData.userWallet, companyAttributes);
         props.handleUpdatedCompanyInfo(profileData);
         props.onClose();
+        window.location.reload();
         setIsSubmitted(false);
       } else {
         console.log("No profile, pls create one...");
