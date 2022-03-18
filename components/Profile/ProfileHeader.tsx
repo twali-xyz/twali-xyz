@@ -12,7 +12,7 @@ export function ProfileHeader({ userName }) {
       justifyContent={"center"}
       overflow="hidden"
       bgRepeat={"no-repeat"}
-      backgroundImage={`url(${bannerImage.src})`}
+      backgroundImage={"twali-assets/bannerimage.png"}
     >
       <Button
         height={"160px"}

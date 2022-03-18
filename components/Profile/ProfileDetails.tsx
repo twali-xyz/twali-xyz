@@ -269,7 +269,7 @@ const ProfileDetails = ({ user }) => {
         profileData.userName &&
         profileData.userWallet && (
           <>
-            <HeaderNav whichPage="profile" />
+            <HeaderNav whichPage="profil" />
             <Container
               maxW="100%"
               p={0}
