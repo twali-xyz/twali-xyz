@@ -56,7 +56,6 @@ export function setEventArray({
 
   setUserData({
     ...userData,
-    functionalExpertise: values.functionalExpertise,
-    industryExpertise: values.industryExpertise
+    [strippedEventName]: values[strippedEventName],
   });
 }
