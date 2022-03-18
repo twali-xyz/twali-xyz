@@ -16,7 +16,7 @@ import {
   CircularProgress,
 } from "@chakra-ui/react";
 import { connect } from "../../../utils/walletUtils";
-import { convertFromDB } from '../../../utils/profileUtils';
+// import { convertFromDB } from '../../../utils/profileUtils';
 
 export interface UserData {
   userName: string;
@@ -71,27 +71,18 @@ const EditExperienceModal = (props) => {
 
       // TODO: Need to run a update profile call here
       if (profileData.userWallet && profileData.userName && profileData.email && profileData.funcExpertise && profileData.industryExpertise) {
-        let userData = await getUser(profileData.userName);
-
-        // Unmarshalling company data from dynamodb and saving it to the current userData state
-        const formattedData = await convertFromDB(userData.companyInfo);
-        userData.companyInfo = formattedData;
-
         let experienceAttributes = {
           userName: profileData.userName,
           email: profileData.email,
           funcExpertise: profileData.funcExpertise,
           industryExpertise: profileData.industryExpertise
         };
-        userData.email = profileData.email;
-        userData.funcExpertise = profileData.funcExpertise;
-        userData.industryExpertise = profileData.industryExpertise;
-        
         console.log(profileData);
         updateUserExperience(profileData.userWallet, experienceAttributes);
-        console.log('Experience userData:', userData);
-        props.handleUpdatedExperiences(userData);
+        console.log('Experience userData:', profileData);
+        props.handleUpdatedExperiences(profileData);
         props.onClose();
+        window.location.reload();
         setIsSubmitted(false);
       } else {
         console.log("No profile, pls create one...");

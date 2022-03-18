@@ -24,7 +24,9 @@ import CompanyModal from "./CompanyModal/CompanyModal";
 import useSWR from "swr";
 import UserPermissionsProvider from "../UserPermissionsProvider/UserPermissionsProvider";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
-import { fetchPermission, convertFromDB } from "../../utils/profileUtils";
+import { fetchPermission, 
+  // convertFromDB 
+} from "../../utils/profileUtils";
 
 
 export interface UserData {
@@ -94,7 +96,7 @@ const ProfileDetails = ({ user }) => {
   const [currentSnapshot, setCurrentSnapshot] = useState();
   const [loggedInUserAddress, setLoggedInUserAddress] = useState("");
   const [currCompany, setCurrCompany] = useState(0);
-  // console.log(user);
+  console.log(user);
 
   async function readProfile() {
     const address = await connect(); // first address in the array
@@ -121,8 +123,8 @@ const ProfileDetails = ({ user }) => {
         // does not require signing to get user's public data
         if (user && user.userWallet) {
           // Unmarshalling company data from dynamodb and saving it to the current user state
-          const formattedData = await convertFromDB(user.companyInfo);
-          user.companyInfo = formattedData;
+          // const formattedData = await convertFromDB(user.companyInfo);
+          user.companyInfo = user.companyInfo;
           console.log('user set', user);
 
           setProfileData(user);

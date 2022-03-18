@@ -24,7 +24,7 @@ import {
 import useSWR from "swr";
 import { connect } from "../../../utils/walletUtils";
 import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
-import { convertFromDB } from '../../../utils/profileUtils';
+// import { convertFromDB } from '../../../utils/profileUtils';
 
 export interface UserData {
   userName: string;
@@ -172,24 +172,17 @@ const CompanyModal = (props) => {
       setIsSubmitted(true);
 
       if (profileData.userWallet && profileData.userName && companyData) {
-        console.log(props.currCompany);
-        let userData = await getUser(profileData.userName);
-
-        // Unmarshalling company data from dynamodb and saving it to the current userData state
-        const formattedData = await convertFromDB(userData.companyInfo)
-        
-        userData.companyInfo = formattedData;
-        userData.companyInfo[props.currCompany] = companyData;
+        profileData.companyInfo[props.currCompany] = companyData;
 
         let companyAttributes = {
-          companyData: userData.companyInfo,
+          companyData: profileData.companyInfo,
           userName: profileData.userName,
           currCompany: props.currCompany,
         };
-        console.log('Updated profile datA ON COMPANY MODAL: ', userData);
+        console.log('Updated profile datA ON COMPANY MODAL: ', profileData);
 
         updateUserCompanyData(profileData.userWallet, companyAttributes);
-        props.handleUpdatedCompanyInfo(userData);
+        props.handleUpdatedCompanyInfo(profileData);
         props.onClose();
         setIsSubmitted(false);
       } else {
@@ -206,19 +199,6 @@ const CompanyModal = (props) => {
     });
     console.log("USER Company data UPDATED BRUH");
   };
-
-  const getUser = async (userName) => {
-    const res = await fetch(
-      `/api/users/${userName}`
-    );
-
-    const data: any = await res.json();
-
-    console.log("RETRIEVE USER BY username YO");
-    return data;
-  };
-
-
 
   const handleChange = (evt) => {
     evt.persist();

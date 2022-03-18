@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { connect } from "../../../utils/walletUtils";
 import FileUpload from "../../FileUpload/FileUpload";
-import { convertFromDB } from '../../../utils/profileUtils';
+// import { convertFromDB } from '../../../utils/profileUtils';
 
 export interface UserData {
   userName: string;
@@ -84,12 +84,6 @@ const EditProfileModal = (props) => {
 
       // TODO: Need to run a update profile call here
       if (profileData.userWallet && profileData.userName && profileData.firstName && profileData.lastName && profileData.currTitle) {
-        let userData = await getUser(profileData.userName);
-        
-        // Unmarshalling company data from dynamodb and saving it to the current userData state
-        const formattedData = await convertFromDB(userData.companyInfo);
-        userData.companyInfo = formattedData;
-
         let experienceAttributes = {
           userName: profileData.userName,
           firstName: profileData.firstName,
@@ -99,19 +93,11 @@ const EditProfileModal = (props) => {
           linkedIn: profileData.linkedIn ? profileData.linkedIn: null,
           twitter: profileData.twitter ? profileData.twitter: null,
         };
-        userData.userName = profileData.userName;
-        userData.firstName = profileData.firstName;
-        userData.lastName = profileData.lastName;
-        userData.currTitle = profileData.currTitle;
-        userData.bio = profileData.bio ? profileData.bio: null;
-        userData.linkedIn = profileData.linkedIn ? profileData.linkedIn: null;
-        userData.twitter = profileData.twitter ? profileData.twitter: null;
         console.log(profileData);
         updateUserProfile(profileData.userWallet, experienceAttributes);
-        // setProfileData({ ...userData });
-
-        props.handleUpdatedProfile(userData);
+        props.handleUpdatedProfile(profileData);
         props.onClose();
+        window.location.reload();
         setIsSubmitted(false);
       } else {
         console.log("No profile, pls create one...");

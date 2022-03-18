@@ -1,6 +1,7 @@
 const { v4 } = require("uuid");
 const TableName = process.env.TABLE_NAME;
 const AWS = require("aws-sdk");
+// const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 
 const getDynamoDBClient = () => {
 
@@ -87,6 +88,7 @@ module.exports = {
     // Initialize a null array for Company Data and convert it to dynamodb record
     let companyInfo = [null, null, null, null, null];
     let companyData = AWS.DynamoDB.Converter.input(companyInfo, true);
+    // let companyData = marshall(companyInfo, true);
 
     await getDynamoDBClient()
       .put({
@@ -136,9 +138,17 @@ module.exports = {
         },
       })
       .promise()
-      .then((data) => data.Items[0])
+      .then(function convertToJSON2(data) {
+        console.log('convertToJSON2', data);
+        let formattedData = AWS.DynamoDB.Converter.output(data.Items[0].companyInfo);
+        console.log('formattedData', formattedData);
+        let final = data;
+        final.Items[0].companyInfo = formattedData;
+        console.log('FINAL ITEMS', final.Items[0]);
+        return final.Items[0];
+      })
       .catch(console.error);
-    return dbUser;
+      return dbUser;
   },
 
   /**
@@ -160,9 +170,16 @@ module.exports = {
         },
       })
       .promise()
-      .then((data) => data.Items[0])
-      .catch(console.error);
-
+      .then(function convertToJSON2(data) {
+        console.log('convertToJSON2', data);
+        let formattedData = AWS.DynamoDB.Converter.output(data.Items[0].companyInfo);
+        console.log('formattedData', formattedData);
+        let final = data;
+        final.Items[0].companyInfo = formattedData;
+        console.log('FINAL ITEMS', final.Items[0]);
+        return final.Items[0];
+      })
+      .catch(console.error);      
     return dbUser;
   },
 
@@ -298,9 +315,19 @@ module.exports = {
         TableName,
       })
       .promise()
-      .then((data) => data.Items)
-      .catch(console.error);
+      .then(function convertToJSON2(data) {
+        console.log('convertToJSON2', data);
 
+        let final = [];
+        data.Items.forEach(item => {
+          let formattedData = AWS.DynamoDB.Converter.output(item.companyInfo);
+          item.companyInfo = formattedData;
+          final.push(item);
+        })
+        console.log('final', final);
+        return final;
+      })
+      .catch(console.error); 
     return allUsers;
   },
 };
