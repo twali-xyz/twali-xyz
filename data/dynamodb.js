@@ -1,9 +1,8 @@
 const { v4 } = require("uuid");
 const TableName = process.env.TABLE_NAME;
-const AWS = require("aws-sdk");
 
 const getDynamoDBClient = () => {
-
+  const AWS = require("aws-sdk");
   const edgeRegion = process.env.CURRENT_AWS_REGION || "us-east-1";
   const dynamoDBRegion = edgeRegion.startsWith("us")
     ? "us-east-1"

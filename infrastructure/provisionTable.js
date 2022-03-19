@@ -15,7 +15,7 @@ let dynamodb = new AWS.DynamoDB();
  *
  * **/
 let params = {
-  TableName: "nagma_staging_user_profile_test",
+  TableName: "dev_staging_user_profile_test",
   KeySchema: [
     { AttributeName: "userWallet", KeyType: "HASH" }, // Partition Key
     { AttributeName: "userName", KeyType: "RANGE" }, // Sort Ket
@@ -62,7 +62,7 @@ let params = {
     console.log("Created table in us-east-1");
 
     const createGlobalTableParams = {
-      GlobalTableName: "nagma_staging_user_profile_test",
+      GlobalTableName: "dev_staging_user_profile_test",
       ReplicationGroup: [
         {
           RegionName: "us-east-1",
