@@ -30,14 +30,17 @@ import { UserData } from "../../utils/interfaces";
 
 const userProfileStep = ({ handleChange, values, errors }) => {
   return (
-    <form style={{ alignSelf: "center" }}>
+    <form style={{ alignSelf: "start" }}>
       <Box
         h="100%"
         w="xl"
-        borderWidth="1px"
-        borderRadius="lg"
+        border="1px solid #587070"
+        borderRadius="16px"
         overflow="hidden"
         cursor="pointer"
+        backgroundColor={"#041A19E5"}
+        fontFamily={"PP Telegraf"}
+        boxShadow={"8px 16px 24px 0px #062B2A8F"}
       >
         <Box p="4">
           <Box
@@ -56,6 +59,8 @@ const userProfileStep = ({ handleChange, values, errors }) => {
                   errorBorderColor="red.300"
                   placeholder="First name"
                   name="firstName"
+                  fontFamily={"PP Telegraf light"}
+                  _placeholder={{ color: "#98B2B2" }}
                   value={values.firstName || ""}
                   onChange={handleChange}
                 />
@@ -73,6 +78,8 @@ const userProfileStep = ({ handleChange, values, errors }) => {
                   errorBorderColor="red.300"
                   placeholder="Last name"
                   name="lastName"
+                  fontFamily={"PP Telegraf light"}
+                  _placeholder={{ color: "#98B2B2" }}
                   value={values.lastName || ""}
                   onChange={handleChange}
                 />
@@ -91,6 +98,8 @@ const userProfileStep = ({ handleChange, values, errors }) => {
                 errorBorderColor="red.300"
                 placeholder="User name"
                 name="userName"
+                fontFamily={"PP Telegraf light"}
+                _placeholder={{ color: "#98B2B2" }}
                 value={values.userName || ""}
                 onChange={handleChange}
               />
@@ -108,6 +117,8 @@ const userProfileStep = ({ handleChange, values, errors }) => {
                 errorBorderColor="red.300"
                 placeholder="Email"
                 name="email"
+                fontFamily={"PP Telegraf light"}
+                _placeholder={{ color: "#98B2B2" }}
                 value={values.email || ""}
                 onChange={handleChange}
               />
@@ -121,7 +132,9 @@ const userProfileStep = ({ handleChange, values, errors }) => {
               <FormControl p={2} id="twitter">
                 <FormLabel>Twitter URL</FormLabel>
                 <Input
-                  placeholder="Twitter url"
+                  placeholder="Twitter"
+                  _placeholder={{ color: "#98B2B2" }}
+                  fontFamily={"PP Telegraf Light"}
                   name="twitter"
                   onChange={handleChange}
                 />
@@ -129,7 +142,9 @@ const userProfileStep = ({ handleChange, values, errors }) => {
               <FormControl p={2} id="linkedin">
                 <FormLabel>LinkedIn URL</FormLabel>
                 <Input
-                  placeholder="LinkedIn url"
+                  placeholder="LinkedIn"
+                  _placeholder={{ color: "#98B2B2" }}
+                  fontFamily={"PP Telegraf Light"}
                   name="linkedIn"
                   onChange={handleChange}
                 />
@@ -137,7 +152,7 @@ const userProfileStep = ({ handleChange, values, errors }) => {
             </HStack>
             <FormControl p={2} pb={8} id="website">
               <Box display="flex" justifyContent="space-between">
-                <FormLabel>Website</FormLabel>
+                <FormLabel>Your Website URL</FormLabel>
                 <Tooltip
                   placement="auto-start"
                   hasArrow
@@ -149,7 +164,9 @@ const userProfileStep = ({ handleChange, values, errors }) => {
                 </Tooltip>
               </Box>
               <Input
-                placeholder="Website"
+                placeholder="Website URL"
+                _placeholder={{ color: "#98B2B2" }}
+                fontFamily={"PP Telegraf Light"}
                 name="website"
                 onChange={handleChange}
               />
@@ -163,7 +180,7 @@ const userProfileStep = ({ handleChange, values, errors }) => {
 
 const merchantProfileStep = ({ handleChange, values, errors }) => {
   return (
-    <form style={{ alignSelf: "center" }}>
+    <form style={{ alignSelf: "start" }}>
       <Box
         h="100%"
         w="xl"
@@ -198,6 +215,8 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
                 required
                 isInvalid={errors.businessName}
                 errorBorderColor="red.300"
+                fontFamily={"PP Telegraf light"}
+                _placeholder={{ color: "#98B2B2" }}
                 value={values.businessName || ""}
                 placeholder="Business legal name"
                 name="businessName"
@@ -269,7 +288,7 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
 
 const professionalProfileStep = ({ handleChange, values, errors }) => {
   return (
-    <form style={{ alignSelf: "center" }}>
+    <form style={{ alignSelf: "start" }}>
       <Box
         h="100%"
         w="xl"
@@ -291,6 +310,8 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
               <Input
                 isInvalid={errors.currTitle}
                 errorBorderColor="red.300"
+                fontFamily={"PP Telegraf light"}
+                _placeholder={{ color: "#98B2B2" }}
                 value={values.currTitle || ""}
                 required
                 placeholder="Current title"
@@ -659,62 +680,79 @@ const SignUpSteps = () => {
           <Button
             disabled={!isAccTypeSelected}
             alignSelf="center"
+            backgroundColor={"#C7F83C"}
             w="xl"
             onClick={(evt) => {
               setIsAccTypeSelection(false);
             }}
-            colorScheme="teal"
           >
             Continue
           </Button>
         </>
       ) : (
         <>
-          <Heading alignSelf="center">Setting up your user profile</Heading>
+          <Heading
+            fontSize={"72px"}
+            lineHeight={"88px"}
+            marginTop={"24px"}
+            marginBottom={"-8px"}
+            alignSelf="flex-start"
+            fontFamily={"Scope Light"}
+            fontWeight={"400"}
+          >
+            Set up my Twali
+          </Heading>
           <Steps activeStep={activeStep} colorScheme="teal">
             {steps.map(({ label, content }) => (
               <Step label={label} key={label}>
-                {activeStep < 0 ? (
-                  router.push("/login")
-                ) : (
-                  <Button
-                    pl={264}
-                    alignSelf="left"
-                    onClick={() => {
-                      prevStep();
-                    }}
-                    colorScheme="gray"
-                    variant="link"
-                  >
-                    Back
-                  </Button>
-                )}
                 {content}
               </Step>
             ))}
           </Steps>
-          <Button
-            w="md"
-            alignSelf="center"
-            onClick={() => {
-              if (activeStep > 2) {
-                updateAccType();
-              } else {
-                nextStep();
-              }
-            }}
-            colorScheme="teal"
-          >
-            Continue{" "}
-            {isSubmitted ? (
-              <CircularProgress
-                size="22px"
-                thickness="4px"
-                isIndeterminate
-                color="#3C2E26"
-              />
-            ) : null}
-          </Button>{" "}
+          <HStack>
+            <Button
+              w="sm"
+              alignSelf="left"
+              onClick={() => {
+                activeStep <= 0 ? router.push("/login") : prevStep();
+              }}
+              backgroundColor={"transparent"}
+              border={"1px solid #C7F83C"}
+              height={"40px"}
+              borderRadius={"32px"}
+              alignItems={"center"}
+              textTransform={"uppercase"}
+              justifyContent={"center"}
+              variant="link"
+            >
+              go back
+            </Button>
+            <Button
+              w="sm"
+              alignSelf="center"
+              color={"#0A1313"}
+              borderRadius={"32px"}
+              textTransform={"uppercase"}
+              backgroundColor={"#C7F83C"}
+              onClick={() => {
+                if (activeStep > 2) {
+                  updateAccType();
+                } else {
+                  nextStep();
+                }
+              }}
+            >
+              continue
+              {isSubmitted ? (
+                <CircularProgress
+                  size="22px"
+                  thickness="4px"
+                  isIndeterminate
+                  color="#3C2E26"
+                />
+              ) : null}
+            </Button>{" "}
+          </HStack>
         </>
       )}
     </>
