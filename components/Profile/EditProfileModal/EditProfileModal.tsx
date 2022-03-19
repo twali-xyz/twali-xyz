@@ -21,7 +21,7 @@ import { setEventArray } from "../helpers/setEventArray";
 import { listOfCountries } from "../../../utils/profileUtils";
 import { UserData } from "../../../utils/interfaces";
 
-const EditExperienceModal = (props) => {
+const EditProfileModal = (props) => {
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [userData, setUserData] = useState<UserData>(props.userData);
@@ -56,17 +56,23 @@ const EditExperienceModal = (props) => {
       setIsSubmitted(true);
 
       // Update user data with the new changes
-      if (userData.userWallet && userData.userName && userData.firstName && userData.lastName && userData.currTitle) {
+      if (
+        userData.userWallet &&
+        userData.userName &&
+        userData.firstName &&
+        userData.lastName &&
+        userData.currTitle
+      ) {
         let experienceAttributes = {
           userName: userData.userName,
           firstName: userData.firstName,
           lastName: userData.lastName,
           currTitle: userData.currTitle,
-          currLocation: userData.currLocation ? userData.currLocation: null,
-          bio: userData.bio ? userData.bio: null,
-          linkedIn: userData.linkedIn ? userData.linkedIn: null,
-          twitter: userData.twitter ? userData.twitter: null,
-          email: userData.email ? userData.email: null
+          currLocation: userData.currLocation ? userData.currLocation : null,
+          bio: userData.bio ? userData.bio : null,
+          linkedIn: userData.linkedIn ? userData.linkedIn : null,
+          twitter: userData.twitter ? userData.twitter : null,
+          email: userData.email ? userData.email : null,
         };
 
         updateUserProfile(userData.userWallet, experienceAttributes);
@@ -81,7 +87,7 @@ const EditExperienceModal = (props) => {
   }
 
   const updateUserProfile = async (userWallet, attributes) => {
-    let userData = { userWallet, attributes}
+    let userData = { userWallet, attributes };
     await fetch(`/api/users/updateUser?updateUser=profile`, {
       method: "PUT",
       body: JSON.stringify({ userData }),
@@ -357,4 +363,4 @@ const EditExperienceModal = (props) => {
   );
 };
 
-export default EditExperienceModal;
+export default EditProfileModal;
