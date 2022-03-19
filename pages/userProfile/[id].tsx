@@ -5,7 +5,6 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 
 const userProfile = () => {
   const { query } = useRouter();
-  // console.log(query.id);
   const { data, error } = useSWR(`/api/users/${query.id}`, fetcher);
 
   if (error) return <div>An error has occurred</div>;

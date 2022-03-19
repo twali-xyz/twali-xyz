@@ -9,8 +9,8 @@ export function ProfileExperience({
   isCompanyModalOpen,
   onCompanyModalClose,
   currCompany,
-  profileData,
-  setProfileData,
+  userData,
+  setUserData,
   handleUpdatedCompanyInfo,
 }) {
   return (
@@ -33,8 +33,8 @@ export function ProfileExperience({
           isOpen={isCompanyModalOpen}
           onClose={onCompanyModalClose}
           currCompany={currCompany}
-          profileData={profileData}
-          setProfileData={setProfileData}
+          userData={userData}
+          setUserData={setUserData}
           handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
         />
       </UserPermissionsRestricted>

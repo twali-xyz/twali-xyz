@@ -342,7 +342,7 @@ const SignUpSteps = () => {
   const [isAccTypeSelection, setIsAccTypeSelection] = useState(true);
   const [isAccTypeSelected, setIsAccTypeSelected] = useState(false);
   const [values, setValues] = useState({
-    functExpertise: [],
+    functionalExpertise: [],
     industryExpertise: [],
   });
   const [errors, setErrors] = useState({});
@@ -459,7 +459,6 @@ const SignUpSteps = () => {
   ];
 
   const createNewUser = async (address) => {
-    console.log(userData);
     userData.userWallet = address;
     // check if user doesnt already exsist with current address
     userData.accType = accType;

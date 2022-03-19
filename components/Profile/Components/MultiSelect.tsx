@@ -41,6 +41,7 @@ export function MultiSelect({
           {defaultValues ? (
             (defaultValues[i - 1] || i === 1 || count >= i) && (
               <Selector
+                key={`${i}--selector`}
                 splitLabel={splitLabel}
                 handleChange={handleChange}
                 options={options}
@@ -52,6 +53,7 @@ export function MultiSelect({
             )
           ) : (
             <Selector
+              key={`${i}--selector`}
               splitLabel={splitLabel}
               handleChange={handleChange}
               options={options}
