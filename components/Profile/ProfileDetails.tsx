@@ -17,7 +17,6 @@ import { useRouter } from "next/router";
 import { connect } from "../../utils/walletUtils";
 import { request, gql } from "graphql-request";
 import CompanyModal from "./CompanyModal/CompanyModal";
-import useSWR from "swr";
 import UserPermissionsProvider from "../UserPermissionsProvider/UserPermissionsProvider";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import { fetchPermission } from "../../utils/profileUtils";
@@ -35,7 +34,7 @@ const ProfileDetails = ({ user }) => {
     return <LoginPage loaded={router.isFallback} />;
   }
 
-  const [profileData, setProfileData] = useState<UserData>();
+  const [userData, setUserData] = useState<UserData>();
 
   const {
     isOpen: isExpModalOpen,
@@ -57,16 +56,14 @@ const ProfileDetails = ({ user }) => {
   const [currentSnapshot, setCurrentSnapshot] = useState();
   const [loggedInUserAddress, setLoggedInUserAddress] = useState("");
   const [currCompany, setCurrCompany] = useState(0);
-  // console.log(user);
 
   async function readProfile() {
     const address = await connect(); // first address in the array
-    console.log("outside useEffect", address);
 
     try {
       // does not require signing to get user's public data
       if (user) {
-        setProfileData(user);
+        setUserData(user);
       }
 
       setLoaded(true);
@@ -78,13 +75,11 @@ const ProfileDetails = ({ user }) => {
   useEffect(() => {
     async function readProfile() {
       const address = await connect(); // first address in the array
-      console.log("useEffect", address);
 
       try {
         // does not require signing to get user's public data
         if (user && user.userWallet) {
-          console.log("user set", user);
-          setProfileData(user);
+          setUserData(user);
           setLoaded(true);
           setupSnapshotQueries(user.userWallet);
         }
@@ -199,29 +194,29 @@ const ProfileDetails = ({ user }) => {
     readProfile();
   }, []);
 
-  const handleUpdatedProfile = (profileData) => {
-    setProfileData({ ...profileData });
+  const handleUpdatedProfile = (userData) => {
+    setUserData({ ...userData });
     readProfile();
   };
 
-  const handleUpdatedCompanyInfo = (profileData) => {
-    setProfileData({ ...profileData });
+  const handleUpdatedCompanyInfo = (userData) => {
+    setUserData({ ...userData });
     readProfile();
   };
   function createWorkElements(number) {
     var elements = [];
-    let totalLen = profileData.companyInfo ? profileData.companyInfo.length : 0;
+    let totalLen = userData.companyInfo ? userData.companyInfo.length : 0;
     for (let i = 0; i < number; i++) {
       if (
-        profileData.companyInfo &&
-        i < totalLen &&
-        profileData.companyInfo[i].companyName
+        userData.companyInfo &&
+        i < totalLen && userData.companyInfo[i] &&
+        userData.companyInfo[i].companyName
       ) {
         elements.push(
           <GetCompany
             key={`${i}--company-info`}
-            company={profileData.companyInfo[i]}
-            companyName={profileData.companyInfo[i].companyName}
+            company={userData.companyInfo[i]}
+            companyName={userData.companyInfo[i].companyName}
             currCompany={i}
             setCurrCompany={setCurrCompany}
             onCompanyModalOpen={onCompanyModalOpen}
@@ -229,7 +224,7 @@ const ProfileDetails = ({ user }) => {
         );
       } else {
         elements.push(
-          <UserPermissionsRestricted to="edit" key={`${i}--empty-company-exp`}>
+          <UserPermissionsRestricted to="edit" key={`${i}--empty-company-usr-permission`}>
             <Img
               borderRadius="full"
               style={{ cursor: "pointer" }}
@@ -253,10 +248,10 @@ const ProfileDetails = ({ user }) => {
       isOpen={isCompanyModalOpen}
       onClose={onCompanyModalClose}
       currCompany={currCompany}
-      profileData={profileData}
-      setProfileData={setProfileData}
+      userData={userData}
+      setUserData={setUserData}
       userPermission="view"
-      handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
+      handleUpdatedCompanyInfo={setUserData}
     />
   );
 
@@ -265,9 +260,9 @@ const ProfileDetails = ({ user }) => {
       {!loaded ? (
         <LoginPage loaded={!loaded} />
       ) : (
-        profileData &&
-        profileData.userName &&
-        profileData.userWallet && (
+        userData &&
+        userData.userName &&
+        userData.userWallet && (
           <>
             <HeaderNav whichPage="profil" />
             <Container
@@ -278,11 +273,11 @@ const ProfileDetails = ({ user }) => {
             >
               <UserPermissionsProvider
                 fetchPermission={fetchPermission(
-                  profileData.userName,
+                  userData.userName,
                   loggedInUserAddress ? loggedInUserAddress : null
                 )}
               >
-                <ProfileHeader userName={profileData.userName} />
+                <ProfileHeader userName={userData.userName} />
                 <Flex
                   w="full"
                   justifyContent={"space-around"}
@@ -293,8 +288,8 @@ const ProfileDetails = ({ user }) => {
                     onExpModalOpen={onExpModalOpen}
                     isExpModalOpen={isExpModalOpen}
                     onExpModalClose={onExpModalClose}
-                    profileData={profileData}
-                    setProfileData={setProfileData}
+                    userData={userData}
+                    setUserData={setUserData}
                     handleUpdatedExperiences={handleUpdatedProfile}
                     handleUpdatedProfile={handleUpdatedProfile}
                   />
@@ -315,14 +310,10 @@ const ProfileDetails = ({ user }) => {
                         isCompanyModalOpen={isCompanyModalOpen}
                         onCompanyModalClose={onCompanyModalClose}
                         currCompany={currCompany}
-                        profileData={profileData}
-                        setProfileData={setProfileData}
+                        userData={userData}
+                        setUserData={setUserData}
                         handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
                       />
-                      {/* <Box alignSelf="flex-start" w="full" overflow='hidden'>
-                            <Text pt={8} pb={4} fontSize='xl'>Book a session with {profileData.firstName}</Text>
-                            <Button size='md' colorScheme='teal'>Book</Button>
-                        </Box> */}
                     </VStack>
                   </Box>
                 </Flex>

@@ -40,53 +40,83 @@ const CompanyModal = (props) => {
   const [tempLogo, setTempLogo] = useState<any>();
   const [shouldFetch, setShouldFetch] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [profileData, setProfileData] = useState(props.profileData);
-  const emptyCompanyInfo = {
+  const [userData, setUserData] = useState(props.userData);
+  const emptyCompanyInfo = [{
     companyName: "",
     companyTitle: "",
     companyStart: "",
     companyEnd: "",
     companyFunction: "",
     companyIndustry: "",
-  };
+  }, 
+  {
+    companyName: "",
+    companyTitle: "",
+    companyStart: "",
+    companyEnd: "",
+    companyFunc: "",
+    companyIndustry: "",
+  },
+  {
+    companyName: "",
+    companyTitle: "",
+    companyStart: "",
+    companyEnd: "",
+    companyFunc: "",
+    companyIndustry: "",
+  },
+  {
+    companyName: "",
+    companyTitle: "",
+    companyStart: "",
+    companyEnd: "",
+    companyFunc: "",
+    companyIndustry: "",
+  },
+  {
+    companyName: "",
+    companyTitle: "",
+    companyStart: "",
+    companyEnd: "",
+    companyFunc: "",
+    companyIndustry: "",
+  },
+];
 
   // on open, set the values to the current company
   useEffect(() => {
     if (!props.isOpen) return;
     setCompanyName(
-      props.profileData?.content?.identity?.companyInfo[props.currCompany]
-        ?.companyName
+      props.userData?.companyInfo[props.currCompany]?.companyName
     );
     setCompanyTitle(
-      props.profileData?.content?.identity?.companyInfo[props.currCompany]
-        ?.companyTitle
+      props.userData?.companyInfo[props.currCompany]?.companyTitle
     );
     setCompanyStart(
-      props.profileData?.content?.identity?.companyInfo[props.currCompany]
-        ?.companyStart
+      props.userData?.companyInfo[props.currCompany]?.companyStart
     );
     setCompanyEnd(
-      props.profileData?.content?.identity?.companyInfo[props.currCompany]
-        ?.companyEnd
+      props.userData?.companyInfo[props.currCompany]?.companyEnd
     );
     setCompanyFunction(
-      props.profileData?.content?.identity?.companyInfo[props.currCompany]
-        ?.companyFunc
+      props.userData?.companyInfo[props.currCompany]?.companyFunc
     );
     setCompanyIndustry(
-      props.profileData?.content?.identity?.companyInfo[props.currCompany]
-        ?.companyExpertise
+      props.userData?.companyInfo[props.currCompany]?.companyExpertise
     );
     setTempLogo(
-      props.profileData?.content?.identity?.companyInfo[props.currCompany]?.logo
+      props.userData?.companyInfo[props.currCompany]?.logo
     );
   }, [props.isOpen]);
 
   const companyInfo =
-    props.profileData.companyInfo &&
-    props.profileData.companyInfo[props.currCompany]
-      ? props.profileData.companyInfo[props.currCompany]
-      : emptyCompanyInfo;
+    props.userData.companyInfo &&
+    props.userData.companyInfo[props.currCompany]
+      ? props.userData.companyInfo[props.currCompany]
+      : emptyCompanyInfo[props.currCompany];
+  
+
+  const [companyData, setCompanyData] = useState(companyInfo);
 
   const [errors, setErrors] = useState({
     companyName: null,
@@ -139,25 +169,43 @@ const CompanyModal = (props) => {
     if (address) {
       setIsSubmitted(true);
 
-      // TODO: Need to run a update profile call here
-      if (profileData.firstName && profileData.lastName && profileData.email) {
-        setIsSubmitted(false);
-        props.handleUpdatedCompanyInfo(props.profileData, false);
-        props.onClose();
+      if (userData.userWallet && userData.userName && companyData) {
+        userData.companyInfo[props.currCompany] = companyData;
 
+        let companyAttributes = {
+          companyData: userData.companyInfo,
+          userName: userData.userName,
+          currCompany: props.currCompany,
+        };
+        
+        updateUserCompanyData(userData.userWallet, companyAttributes);
+        props.handleUpdatedCompanyInfo(props.userData, false);
+        props.onClose();
         setShouldFetch(false);
+        setIsSubmitted(false);
       } else {
         console.log("No profile, pls create one...");
       }
     }
   }
 
+  const updateUserCompanyData = async (userWallet, attributes) => {
+    let userData = { userWallet, attributes}
+    await fetch(`/api/users/updateUser?updateUser=company`, {
+      method: "PUT",
+      body: JSON.stringify({ userData }),
+    });
+    console.log("USER Company data UPDATED BRUH");
+  };
+
   const handleChange = (evt) => {
     evt.persist();
     setValues((values) => ({ ...values, [evt.target.name]: evt.target.value }));
     setErrors(validate(values));
-    setProfileData({
-      ...profileData,
+
+    setCompanyData({
+      ...companyData,
+      [evt.target.name]: evt.target.value
     });
 
     if (evt.target.name == "companyName") {
@@ -186,7 +234,6 @@ const CompanyModal = (props) => {
     if (evt.target.name == "industryExpertise") {
       setCompanyIndustry(evt.target.value);
     }
-    console.log("Updated profile datA ON COMPANY MODAL: ", profileData);
   };
 
   const validate = (values) => {
@@ -242,12 +289,8 @@ const CompanyModal = (props) => {
           <VStack spacing={6} padding={10}>
             {companyInfo ? (
               <>
-                {companyInfo.companyName ? ( // TODO: We can display a company logo here
+                {companyInfo.companyName ? (
                   <>
-                    {/* <CompanyInfoData
-                companyName={companyInfo.companyName}
-                isDisabled={setDisabled}
-              /> */}
                     <Heading>{companyInfo.companyName}</Heading>
                   </>
                 ) : null}

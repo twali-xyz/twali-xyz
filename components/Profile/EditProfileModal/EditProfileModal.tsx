@@ -24,41 +24,19 @@ import { UserData } from "../../../utils/interfaces";
 const EditExperienceModal = (props) => {
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [profileData, setProfileData] = useState(props.profileData);
-
-  const [accType, setAccType] = useState(props.profileData.accType);
-  const [identity, setIdentity] = useState(props.profileData);
+  const [userData, setUserData] = useState<UserData>(props.userData);
   const [values, setValues] = useState({
-    firstName: props.profileData.firstName,
-    lastName: props.profileData.lastName,
-    currTitle: props.profileData.currTitle,
-    currLocation: props.profileData.currLocation,
-    bio: props.profileData.bio,
-    linkedIn: props.profileData.linkedIn,
-    twitter: props.profileData.twitter,
-    userName: props.profileData.userName,
-    email: props.profileData.email,
+    firstName: props.userData.firstName,
+    lastName: props.userData.lastName,
+    currTitle: props.userData.currTitle,
+    currLocation: props.userData.currLocation,
+    bio: props.userData.bio,
+    linkedIn: props.userData.linkedIn,
+    twitter: props.userData.twitter,
+    userName: props.userData.userName,
+    email: props.userData.email,
   });
-  const [userData, setUserData] = useState<UserData>({
-    userName: "",
-    userWallet: "",
-    accType: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    bio: "",
-    twitter: "",
-    linkedIn: "",
-    website: "",
-    businessName: "",
-    businessType: "",
-    businessLocation: "",
-    currTitle: "",
-    currLocation: "",
-    functionalExpertise: [],
-    industryExpertise: [],
-    companyInfo: [],
-  });
+
   const [errors, setErrors] = useState({
     firstName: null,
     lastName: null,
@@ -77,16 +55,39 @@ const EditExperienceModal = (props) => {
     if (address) {
       setIsSubmitted(true);
 
-      // TODO: Need to run a update profile call here
-      if (profileData.firstName && profileData.lastName && profileData.email) {
-        setIsSubmitted(false);
-        props.handleUpdatedExperiences(profileData, false);
+      // Update user data with the new changes
+      if (userData.userWallet && userData.userName && userData.firstName && userData.lastName && userData.currTitle) {
+        let experienceAttributes = {
+          userName: userData.userName,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          currTitle: userData.currTitle,
+          currLocation: userData.currLocation ? userData.currLocation: null,
+          bio: userData.bio ? userData.bio: null,
+          linkedIn: userData.linkedIn ? userData.linkedIn: null,
+          twitter: userData.twitter ? userData.twitter: null,
+          email: userData.email ? userData.email: null
+        };
+
+        updateUserProfile(userData.userWallet, experienceAttributes);
+        props.handleUpdatedExperiences(userData, false);
         props.onClose();
+        window.location.reload();
+        setIsSubmitted(false);
       } else {
         console.log("No profile, pls create one...");
       }
     }
   }
+
+  const updateUserProfile = async (userWallet, attributes) => {
+    let userData = { userWallet, attributes}
+    await fetch(`/api/users/updateUser?updateUser=profile`, {
+      method: "PUT",
+      body: JSON.stringify({ userData }),
+    });
+    console.log("USER profile UPDATED BRUH");
+  };
 
   const validate = (values) => {
     let errors: any = {};
@@ -154,17 +155,12 @@ const EditExperienceModal = (props) => {
       // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
       setEventArray({ evt, values, setValues, userData, setUserData });
     } else {
-      setProfileData((values) => ({
-        ...values,
-        [evt.target.name]: value,
-      }));
       setUserData({
         ...userData,
         [evt.target.name]: value,
       });
     }
   };
-  console.log(props);
 
   return (
     <>
@@ -185,7 +181,7 @@ const EditExperienceModal = (props) => {
                   required
                   isInvalid={
                     errors.userName &&
-                    (!props.profileData.userName || !values.userName)
+                    (!props.userData.userName || !values.userName)
                   }
                   errorBorderColor="red.300"
                   placeholder="Display name"
@@ -194,7 +190,7 @@ const EditExperienceModal = (props) => {
                   onChange={handleChange}
                 />
                 {errors.userName &&
-                  (!props.profileData.userName || !values.userName) && (
+                  (!props.userData.userName || !values.userName) && (
                     <Text fontSize="xs" fontWeight="400" color="red.500">
                       {errors.userName}
                     </Text>
@@ -222,16 +218,16 @@ const EditExperienceModal = (props) => {
                   required
                   isInvalid={
                     errors.firstName &&
-                    (!props.profileData.firstName || !values.firstName)
+                    (!props.userData.firstName || !values.firstName)
                   }
                   errorBorderColor="red.300"
                   placeholder="First name"
                   name="firstName"
-                  defaultValue={identity.firstName || ""}
+                  defaultValue={props.userData.firstName || ""}
                   onChange={handleChange}
                 />
                 {errors.firstName &&
-                  (!props.profileData.firstName || !values.firstName) && (
+                  (!props.userData.firstName || !values.firstName) && (
                     <Text fontSize="xs" fontWeight="400" color="red.500">
                       {errors.firstName}
                     </Text>
@@ -243,16 +239,16 @@ const EditExperienceModal = (props) => {
                   required
                   isInvalid={
                     errors.lastName &&
-                    (!props.profileData.lastName || !values.lastName)
+                    (!props.userData.lastName || !values.lastName)
                   }
                   errorBorderColor="red.300"
                   placeholder="Last name"
                   name="lastName"
-                  defaultValue={identity.lastName || ""}
+                  defaultValue={props.userData.lastName || ""}
                   onChange={handleChange}
                 />
                 {errors.lastName &&
-                  (!props.profileData.lastName || !values.lastName) && (
+                  (!props.userData.lastName || !values.lastName) && (
                     <Text fontSize="xs" fontWeight="400" color="red.500">
                       {errors.lastName}
                     </Text>
@@ -263,7 +259,7 @@ const EditExperienceModal = (props) => {
                 <Input
                   required
                   isInvalid={
-                    errors.email && props.profileData.email === values.email
+                    errors.email && props.userData.email === values.email
                   }
                   errorBorderColor="red.300"
                   placeholder="Email"
@@ -271,7 +267,7 @@ const EditExperienceModal = (props) => {
                   defaultValue={values.email || ""}
                   onChange={handleChange}
                 />
-                {errors.email && props.profileData.email !== values.email && (
+                {errors.email && props.userData.email !== values.email && (
                   <Text fontSize="xs" fontWeight="400" color="red.500">
                     {errors.email}
                   </Text>
@@ -281,7 +277,7 @@ const EditExperienceModal = (props) => {
               <FormControl p={2} id="currLocation" isRequired>
                 <FormLabel>Where do you call home?</FormLabel>
                 <Select
-                  defaultValue={identity.currLocation || ""}
+                  defaultValue={props.userData.currLocation || ""}
                   placeholder="Select current location"
                   name="currLocation"
                   onChange={handleChange}
@@ -294,7 +290,7 @@ const EditExperienceModal = (props) => {
                 <Textarea
                   isInvalid={errors.bio}
                   errorBorderColor="red.300"
-                  defaultValue={identity.bio || ""}
+                  defaultValue={props.userData.bio || ""}
                   name="bio"
                   maxLength={280}
                   onChange={handleChange}
@@ -312,7 +308,7 @@ const EditExperienceModal = (props) => {
                   isInvalid={errors.linkedIn}
                   errorBorderColor="red.300"
                   name="linkedIn"
-                  defaultValue={identity.linkedIn || ""}
+                  defaultValue={props.userData.linkedIn || ""}
                   onChange={handleChange}
                 />
                 {errors.linkedIn && (
@@ -327,7 +323,7 @@ const EditExperienceModal = (props) => {
                   isInvalid={errors.twitter}
                   errorBorderColor="red.300"
                   name="twitter"
-                  defaultValue={identity.twitter || ""}
+                  defaultValue={props.userData.twitter || ""}
                   onChange={handleChange}
                 />
                 {errors.twitter && (

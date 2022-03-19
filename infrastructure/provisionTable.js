@@ -5,7 +5,7 @@ require("dotenv").config();
 // Only used in local development
 AWS.config.update({
   region: "us-east-1",
-  endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT,
+  // endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT,
 });
 
 let dynamodb = new AWS.DynamoDB();
@@ -62,7 +62,7 @@ let params = {
     console.log("Created table in us-east-1");
 
     const createGlobalTableParams = {
-      GlobalTableName: "prestaging_user_profile_test",
+      GlobalTableName: "dev_staging_user_profile_test",
       ReplicationGroup: [
         {
           RegionName: "us-east-1",
