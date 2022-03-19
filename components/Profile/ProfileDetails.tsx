@@ -209,7 +209,8 @@ const ProfileDetails = ({ user }) => {
     for (let i = 0; i < number; i++) {
       if (
         userData.companyInfo &&
-        i < totalLen && userData.companyInfo[i] &&
+        i < totalLen &&
+        userData.companyInfo[i] &&
         userData.companyInfo[i].companyName
       ) {
         elements.push(
@@ -224,7 +225,10 @@ const ProfileDetails = ({ user }) => {
         );
       } else {
         elements.push(
-          <UserPermissionsRestricted to="edit" key={`${i}--empty-company-usr-permission`}>
+          <UserPermissionsRestricted
+            to="edit"
+            key={`${i}--empty-company-usr-permission`}
+          >
             <Img
               borderRadius="full"
               style={{ cursor: "pointer" }}
@@ -251,7 +255,7 @@ const ProfileDetails = ({ user }) => {
       userData={userData}
       setUserData={setUserData}
       userPermission="view"
-      handleUpdatedCompanyInfo={setUserData}
+      handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
     />
   );
 
