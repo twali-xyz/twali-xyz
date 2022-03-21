@@ -29,6 +29,17 @@ img {
 .body-animation > svg {
   min-width: 100% !important;
 }
+div[aria-current="step"] > span {
+  color: #c7f83c;
+}
+div[aria-current="step"]:first-of-type {
+  border: 1px solid #c7f83c;
+  border-radius: 50%;
+}
+.chakra-steps > div:first-of-type > div > div > span {
+  position: relative;
+  left: 1px;
+}
 
 @font-face {
   font-family: "GrandSlang Italic";

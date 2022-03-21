@@ -327,7 +327,7 @@ const userProfileStep = ({ handleChange, values, errors }) => {
 };
 
 const merchantProfileStep = ({ handleChange, values, errors }) => {
-  const [selected, setSelected] = useState("");
+  const [incorporated, setIncorporated] = useState(false);
 
   return (
     <form style={{ alignSelf: "start" }}>
@@ -349,56 +349,7 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
             lineHeight="tight"
             isTruncated
           >
-            <FormControl p={4} id="business-name" isRequired>
-              <HStack display="flex" justifyContent="space-between">
-                <FormLabel
-                  marginBottom={1}
-                  pos={"relative"}
-                  fontFamily={"PP Telegraf"}
-                  fontSize={"16px"}
-                  fontStyle={"normal"}
-                  fontWeight={"400"}
-                  lineHeight={"24p"}
-                  letterSpacing={"0.02em"}
-                  textAlign={"left"}
-                >
-                  Business legal name
-                </FormLabel>
-                <Tooltip
-                  placement="auto-start"
-                  hasArrow
-                  label="If you are a sole proprietor, partnership, or single-member LLC, your 'Business Name' may be registered as your personal name or your business’s DBA.
-                  If you are an LLC, corporation, or non-profit, Twali requires that the 'Business Name' be in the company’s legal business name or DBA"
-                >
-                  <Box pos="relative">
-                    <FontAwesomeIcon icon={"info-circle"} />
-                  </Box>
-                </Tooltip>
-              </HStack>
-              <Input
-                px={4}
-                fontSize="16px"
-                borderColor={"#587070"}
-                height={"40px"}
-                borderRadius={"4px"}
-                marginBottom={"12px"}
-                required
-                isInvalid={errors.businessName}
-                errorBorderColor="red.300"
-                fontFamily={"PP Telegraf light"}
-                _placeholder={{ color: "#98B2B2" }}
-                value={values.businessName || ""}
-                placeholder="Business legal name"
-                name="businessName"
-                onChange={handleChange}
-              />
-              {errors.businessName && (
-                <Text fontSize="xs" fontWeight="400" color="red.500">
-                  {errors.businessName}
-                </Text>
-              )}
-            </FormControl>
-            <FormControl p={4} id="business-type" isRequired>
+            <FormControl p={2} id="business-type" isRequired>
               <HStack justifyContent="space-between">
                 <FormLabel
                   marginBottom={1}
@@ -438,6 +389,7 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
                 onChange={handleChange}
                 color={values.businessType ? "#F9FFF2" : "#98B2B2"}
               >
+                <option>I'm not incorporated!</option>
                 <option>Sole proprietorship</option>
                 <option>Partnership</option>
                 <option>Corporation</option>
@@ -449,7 +401,58 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
                           <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.businessType}</Text>
                         )} */}
             </FormControl>
-            <FormControl p={4} id="business-location" isRequired>
+            <FormControl p={2} id="business-name" isRequired>
+              <HStack display="flex" justifyContent="space-between">
+                <FormLabel
+                  marginBottom={1}
+                  pos={"relative"}
+                  fontFamily={"PP Telegraf"}
+                  fontSize={"16px"}
+                  fontStyle={"normal"}
+                  fontWeight={"400"}
+                  lineHeight={"24p"}
+                  letterSpacing={"0.02em"}
+                  textAlign={"left"}
+                >
+                  Business legal name
+                </FormLabel>
+                <Tooltip
+                  placement="auto-start"
+                  hasArrow
+                  label="If you are a sole proprietor, partnership, or single-member LLC, your 'Business Name' may be registered as your personal name or your business’s DBA.
+                  If you are an LLC, corporation, or non-profit, Twali requires that the 'Business Name' be in the company’s legal business name or DBA"
+                >
+                  <Box pos="relative">
+                    <FontAwesomeIcon icon={"info-circle"} />
+                  </Box>
+                </Tooltip>
+              </HStack>
+              <Input
+                disabled={values.businessType === "I'm not incorporated!"}
+                px={4}
+                fontSize="16px"
+                borderColor={"#587070"}
+                height={"40px"}
+                borderRadius={"4px"}
+                marginBottom={"12px"}
+                required
+                isInvalid={errors.businessName}
+                errorBorderColor="red.300"
+                fontFamily={"PP Telegraf light"}
+                _placeholder={{ color: "#98B2B2" }}
+                value={values.businessName || ""}
+                placeholder="Business legal name"
+                name="businessName"
+                onChange={handleChange}
+              />
+              {errors.businessName && (
+                <Text fontSize="xs" fontWeight="400" color="red.500">
+                  {errors.businessName}
+                </Text>
+              )}
+            </FormControl>
+
+            <FormControl p={2} id="business-location" isRequired>
               <FormLabel
                 marginBottom={1}
                 pos={"relative"}
@@ -469,6 +472,7 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
                 placeholder="Select business location"
                 name="businessLocation"
                 onChange={handleChange}
+                disabled={values.businessType === "I'm not incorporated!"}
               >
                 {listOfCountries()}
               </Select>
@@ -504,7 +508,7 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
             lineHeight="tight"
             isTruncated
           >
-            <FormControl p={4} id="current-company-title" isRequired>
+            <FormControl p={2} id="current-company-title" isRequired>
               <FormLabel
                 marginBottom={1}
                 pos={"relative"}
@@ -541,7 +545,7 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
                 </Text>
               )}
             </FormControl>
-            <FormControl p={4} id="current-location">
+            <FormControl p={2} id="current-location">
               <FormLabel
                 marginBottom={1}
                 pos={"relative"}
@@ -556,9 +560,10 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
                 Current location
               </FormLabel>
               <Select
-                color="#98B2B2"
+                color="#F9FFF2"
                 fontFamily={"PP Telegraf Light"}
                 placeholder="Select current location"
+                _placeholder={{ color: "#98B2B2 !important" }}
                 name="currLocation"
                 onChange={handleChange}
               >
@@ -932,7 +937,7 @@ const SignUpSteps = () => {
           >
             Set up my Twali
           </Heading>
-          <Steps activeStep={activeStep} colorScheme="teal">
+          <Steps activeStep={activeStep}>
             {steps.map(({ label, content }) => (
               <Step label={label} key={label}>
                 {content}

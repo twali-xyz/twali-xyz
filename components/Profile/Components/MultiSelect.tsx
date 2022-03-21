@@ -72,7 +72,7 @@ export function MultiSelect({
 
   return (
     <>
-      <FormControl p={4} id={`${splitLabel[0]}-${splitLabel[1]}`} isRequired>
+      <FormControl p={2} id={`${splitLabel[0]}-${splitLabel[1]}`} isRequired>
         <FormLabel
           pos={"relative"}
           left={"1px"}
@@ -130,7 +130,8 @@ function Selector({ splitLabel, handleChange, options, idx, defaultValue }) {
       defaultValue={defaultValue}
       errorBorderColor="red.300"
       fontFamily={"PP Telegraf light"}
-      color="#98B2B2"
+      color="white"
+      _placeholder={{ color: "#98B2B2" }}
     >
       {options?.map((option, idx) => {
         return <option key={`${option}--option-${idx}`}>{option}</option>;
