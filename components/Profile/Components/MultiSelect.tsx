@@ -1,4 +1,12 @@
-import { Button, FormControl, FormLabel, Select } from "@chakra-ui/react";
+import {
+  Button,
+  FormControl,
+  FormLabel,
+  HStack,
+  Img,
+  Select,
+  Text,
+} from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 
@@ -9,6 +17,7 @@ export function MultiSelect({
   options,
   defaultValues,
   maxSelections,
+  ...props
 }) {
   // maxDisplayIndex tracks the index of the last element in the array that contains data
   const [maxDisplayIndex, setMaxDisplayIndex] = useState(0);
@@ -38,20 +47,7 @@ export function MultiSelect({
     for (let i = 1; i <= count; i++) {
       const element = (
         <>
-          {defaultValues ? (
-            (defaultValues[i - 1] || i === 1 || count >= i) && (
-              <Selector
-                key={`${i}--selector`}
-                splitLabel={splitLabel}
-                handleChange={handleChange}
-                options={options}
-                idx={i}
-                defaultValue={
-                  defaultValues?.length ? defaultValues[i - 1] : null
-                }
-              />
-            )
-          ) : (
+          {defaultValues && (defaultValues[i - 1] || i === 1 || count >= i) && (
             <Selector
               key={`${i}--selector`}
               splitLabel={splitLabel}
@@ -77,11 +73,45 @@ export function MultiSelect({
   return (
     <>
       <FormControl p={4} id={`${splitLabel[0]}-${splitLabel[1]}`} isRequired>
-        <FormLabel>{formLabel}</FormLabel>
+        <FormLabel
+          pos={"relative"}
+          left={"1px"}
+          fontFamily={"PP Telegraf"}
+          fontSize={"16px"}
+          fontStyle={"normal"}
+          fontWeight={"400"}
+          lineHeight={"24p"}
+          letterSpacing={"0.02em"}
+          textAlign={"left"}
+        >
+          {formLabel}
+        </FormLabel>
         {createSelectors()}
         {count !== maxSelections ? (
-          <Button marginTop={"10px"} onClick={handleAddSelector}>
-            <FontAwesomeIcon icon={"plus-circle"}></FontAwesomeIcon>
+          <Button
+            backgroundColor={"transparent"}
+            marginTop={"16px"}
+            onClick={handleAddSelector}
+            paddingLeft={"0"}
+          >
+            <HStack>
+              <Img
+                borderRadius="full"
+                backgroundColor="transparent"
+                width="32px"
+                src="twali-assets/plusicon.png"
+                alt="add img"
+              />
+              <Text
+                fontFamily={"PP Telegraf Light"}
+                fontWeight={"400"}
+                color={"#C7F83C"}
+                fontSize={"16px"}
+                lineHeight={"24px"}
+              >
+                Add expertise
+              </Text>
+            </HStack>
           </Button>
         ) : null}
       </FormControl>
@@ -98,6 +128,9 @@ function Selector({ splitLabel, handleChange, options, idx, defaultValue }) {
       name={`${splitLabel[0]}${splitLabel[1] + idx}`}
       onChange={handleChange}
       defaultValue={defaultValue}
+      errorBorderColor="red.300"
+      fontFamily={"PP Telegraf light"}
+      color="#98B2B2"
     >
       {options?.map((option, idx) => {
         return <option key={`${option}--option-${idx}`}>{option}</option>;

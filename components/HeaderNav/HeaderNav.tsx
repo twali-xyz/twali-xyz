@@ -3,7 +3,7 @@ import { Flex, HStack, Text, Img } from "@chakra-ui/react";
 
 const HeaderNav = (props) => {
   const whichPage = props.whichPage;
-
+  const userWallet = props.userWallet;
   return (
     <Flex
       height={"80px"}
@@ -40,8 +40,9 @@ const HeaderNav = (props) => {
             fontWeight={"700"}
             letterSpacing={"0.06em"}
             textTransform={"uppercase"}
+            isTruncated
           >
-            0xb794f...
+            {userWallet}
           </Text>
         </Flex>
       </HStack>

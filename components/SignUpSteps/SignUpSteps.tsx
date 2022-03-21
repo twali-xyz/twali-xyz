@@ -32,8 +32,10 @@ const userProfileStep = ({ handleChange, values, errors }) => {
   return (
     <form style={{ alignSelf: "start" }}>
       <Box
-        h="100%"
-        w="xl"
+        maxWidth={"496px"}
+        mx={0}
+        my={2}
+        h={"532px"}
         border="1px solid #587070"
         borderRadius="16px"
         overflow="hidden"
@@ -51,9 +53,27 @@ const userProfileStep = ({ handleChange, values, errors }) => {
             isTruncated
           >
             <HStack spacing={2}>
-              <FormControl p={2} id="first-name" isRequired>
-                <FormLabel>First name</FormLabel>
+              <FormControl p={2} mx={1} id="first-name" isRequired>
+                <FormLabel
+                  marginBottom={1}
+                  pos={"relative"}
+                  fontFamily={"PP Telegraf"}
+                  fontSize={"16px"}
+                  fontStyle={"normal"}
+                  fontWeight={"400"}
+                  lineHeight={"24p"}
+                  letterSpacing={"0.02em"}
+                  textAlign={"left"}
+                >
+                  First name
+                </FormLabel>
                 <Input
+                  px={2}
+                  fontSize="16px"
+                  borderColor={"#587070"}
+                  height={"40px"}
+                  borderRadius={"4px"}
+                  marginBottom={"12px"}
                   required
                   isInvalid={errors.firstName}
                   errorBorderColor="red.300"
@@ -70,9 +90,27 @@ const userProfileStep = ({ handleChange, values, errors }) => {
                   </Text>
                 )}
               </FormControl>
-              <FormControl p={2} id="last-name" isRequired>
-                <FormLabel>Last name</FormLabel>
+              <FormControl p={2} mx={1} id="last-name" isRequired>
+                <FormLabel
+                  marginBottom={1}
+                  pos={"relative"}
+                  fontFamily={"PP Telegraf"}
+                  fontSize={"16px"}
+                  fontStyle={"normal"}
+                  fontWeight={"400"}
+                  lineHeight={"24p"}
+                  letterSpacing={"0.02em"}
+                  textAlign={"left"}
+                >
+                  Last name
+                </FormLabel>
                 <Input
+                  px={2}
+                  fontSize="16px"
+                  borderColor={"#587070"}
+                  height={"40px"}
+                  borderRadius={"4px"}
+                  marginBottom={"12px"}
                   required
                   isInvalid={errors.lastName}
                   errorBorderColor="red.300"
@@ -90,13 +128,31 @@ const userProfileStep = ({ handleChange, values, errors }) => {
                 )}
               </FormControl>
             </HStack>
-            <FormControl p={2} id="display-name" isRequired>
-              <FormLabel>User name</FormLabel>
+            <FormControl p={2} mx={1} id="display-name" isRequired>
+              <FormLabel
+                marginBottom={1}
+                pos={"relative"}
+                fontFamily={"PP Telegraf"}
+                fontSize={"16px"}
+                fontStyle={"normal"}
+                fontWeight={"400"}
+                lineHeight={"24p"}
+                letterSpacing={"0.02em"}
+                textAlign={"left"}
+              >
+                Display name
+              </FormLabel>
               <Input
+                px={2}
+                fontSize="16px"
+                borderColor={"#587070"}
+                height={"40px"}
+                borderRadius={"4px"}
+                marginBottom={"12px"}
                 required
                 isInvalid={errors.userName}
                 errorBorderColor="red.300"
-                placeholder="User name"
+                placeholder="choose your unique name"
                 name="userName"
                 fontFamily={"PP Telegraf light"}
                 _placeholder={{ color: "#98B2B2" }}
@@ -109,9 +165,48 @@ const userProfileStep = ({ handleChange, values, errors }) => {
                 </Text>
               )}
             </FormControl>
-            <FormControl p={2} id="email" isRequired>
-              <FormLabel>Email</FormLabel>
+            <FormControl p={2} mx={1} id="email" isRequired>
+              <HStack
+                alignItems={"baseline"}
+                justifyContent={"space-between"}
+                marginBottom={0}
+              >
+                <FormLabel
+                  marginBottom={1}
+                  pos={"relative"}
+                  fontFamily={"PP Telegraf"}
+                  fontSize={"16px"}
+                  fontStyle={"normal"}
+                  fontWeight={"400"}
+                  lineHeight={"24p"}
+                  letterSpacing={"0.02em"}
+                  textAlign={"left"}
+                >
+                  Email
+                </FormLabel>
+
+                <FormLabel
+                  marginBottom={1} //styleName: Body/body12;
+                  fontFamily={"PP Telegraf Light"}
+                  fontSize={"12px"}
+                  fontStyle={"normal"}
+                  fontWeight={"300"}
+                  lineHeight={"16px"}
+                  letterSpacing={"0em"}
+                  textAlign={"left"}
+                  color={"#0DD5D1"}
+                  requiredIndicator={null}
+                >
+                  your email won’t be shared with others
+                </FormLabel>
+              </HStack>
               <Input
+                px={2}
+                fontSize="16px"
+                borderColor={"#587070"}
+                height={"40px"}
+                borderRadius={"4px"}
+                marginBottom={"12px"}
                 required
                 isInvalid={errors.email}
                 errorBorderColor="red.300"
@@ -129,9 +224,27 @@ const userProfileStep = ({ handleChange, values, errors }) => {
               )}
             </FormControl>
             <HStack spacing={2}>
-              <FormControl p={2} id="twitter">
-                <FormLabel>Twitter URL</FormLabel>
+              <FormControl p={2} mx={1} id="twitter">
+                <FormLabel
+                  marginBottom={1}
+                  pos={"relative"}
+                  fontFamily={"PP Telegraf"}
+                  fontSize={"16px"}
+                  fontStyle={"normal"}
+                  fontWeight={"400"}
+                  lineHeight={"24p"}
+                  letterSpacing={"0.02em"}
+                  textAlign={"left"}
+                >
+                  Twitter URL
+                </FormLabel>
                 <Input
+                  px={2}
+                  fontSize="16px"
+                  borderColor={"#587070"}
+                  height={"40px"}
+                  borderRadius={"4px"}
+                  marginBottom={"12px"}
                   placeholder="Twitter"
                   _placeholder={{ color: "#98B2B2" }}
                   fontFamily={"PP Telegraf Light"}
@@ -139,9 +252,27 @@ const userProfileStep = ({ handleChange, values, errors }) => {
                   onChange={handleChange}
                 />
               </FormControl>
-              <FormControl p={2} id="linkedin">
-                <FormLabel>LinkedIn URL</FormLabel>
+              <FormControl p={2} mx={1} id="linkedin">
+                <FormLabel
+                  marginBottom={1}
+                  pos={"relative"}
+                  fontFamily={"PP Telegraf"}
+                  fontSize={"16px"}
+                  fontStyle={"normal"}
+                  fontWeight={"400"}
+                  lineHeight={"24p"}
+                  letterSpacing={"0.02em"}
+                  textAlign={"left"}
+                >
+                  LinkedIn URL
+                </FormLabel>
                 <Input
+                  px={2}
+                  fontSize="16px"
+                  borderColor={"#587070"}
+                  height={"40px"}
+                  borderRadius={"4px"}
+                  marginBottom={"12px"}
                   placeholder="LinkedIn"
                   _placeholder={{ color: "#98B2B2" }}
                   fontFamily={"PP Telegraf Light"}
@@ -150,9 +281,21 @@ const userProfileStep = ({ handleChange, values, errors }) => {
                 />
               </FormControl>
             </HStack>
-            <FormControl p={2} pb={8} id="website">
+            <FormControl pt={2} pb={3} px={2} id="website">
               <Box display="flex" justifyContent="space-between">
-                <FormLabel>Your Website URL</FormLabel>
+                <FormLabel
+                  marginBottom={1}
+                  pos={"relative"}
+                  fontFamily={"PP Telegraf"}
+                  fontSize={"16px"}
+                  fontStyle={"normal"}
+                  fontWeight={"400"}
+                  lineHeight={"24p"}
+                  letterSpacing={"0.02em"}
+                  textAlign={"left"}
+                >
+                  Your Website URL
+                </FormLabel>
                 <Tooltip
                   placement="auto-start"
                   hasArrow
@@ -164,6 +307,11 @@ const userProfileStep = ({ handleChange, values, errors }) => {
                 </Tooltip>
               </Box>
               <Input
+                px={2}
+                fontSize="16px"
+                borderColor={"#587070"}
+                height={"40px"}
+                borderRadius={"4px"}
                 placeholder="Website URL"
                 _placeholder={{ color: "#98B2B2" }}
                 fontFamily={"PP Telegraf Light"}
@@ -179,15 +327,19 @@ const userProfileStep = ({ handleChange, values, errors }) => {
 };
 
 const merchantProfileStep = ({ handleChange, values, errors }) => {
+  const [selected, setSelected] = useState("");
+
   return (
     <form style={{ alignSelf: "start" }}>
       <Box
+        maxWidth={"496px"}
         h="100%"
         w="xl"
         borderWidth="1px"
         borderRadius="lg"
         overflow="hidden"
         cursor="pointer"
+        backgroundColor={"#041A19E5"}
       >
         <Box p="4">
           <Box
@@ -199,7 +351,19 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
           >
             <FormControl p={4} id="business-name" isRequired>
               <HStack display="flex" justifyContent="space-between">
-                <FormLabel>Business legal name</FormLabel>
+                <FormLabel
+                  marginBottom={1}
+                  pos={"relative"}
+                  fontFamily={"PP Telegraf"}
+                  fontSize={"16px"}
+                  fontStyle={"normal"}
+                  fontWeight={"400"}
+                  lineHeight={"24p"}
+                  letterSpacing={"0.02em"}
+                  textAlign={"left"}
+                >
+                  Business legal name
+                </FormLabel>
                 <Tooltip
                   placement="auto-start"
                   hasArrow
@@ -212,6 +376,12 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
                 </Tooltip>
               </HStack>
               <Input
+                px={4}
+                fontSize="16px"
+                borderColor={"#587070"}
+                height={"40px"}
+                borderRadius={"4px"}
+                marginBottom={"12px"}
                 required
                 isInvalid={errors.businessName}
                 errorBorderColor="red.300"
@@ -227,13 +397,22 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
                   {errors.businessName}
                 </Text>
               )}
-              <FormHelperText>
-                If you don't have a business name, please use your legal name
-              </FormHelperText>
             </FormControl>
             <FormControl p={4} id="business-type" isRequired>
               <HStack justifyContent="space-between">
-                <FormLabel>Business type</FormLabel>
+                <FormLabel
+                  marginBottom={1}
+                  pos={"relative"}
+                  fontFamily={"PP Telegraf"}
+                  fontSize={"16px"}
+                  fontStyle={"normal"}
+                  fontWeight={"400"}
+                  lineHeight={"24p"}
+                  letterSpacing={"0.02em"}
+                  textAlign={"left"}
+                >
+                  Business type
+                </FormLabel>
                 <Link
                   href="https://www.sba.gov/business-guide/launch-your-business/choose-business-structure"
                   target={"_blank"}
@@ -251,9 +430,13 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
                 </Link>
               </HStack>
               <Select
+                errorBorderColor="red.300"
+                fontFamily={"PP Telegraf Light"}
                 placeholder="Select business type"
+                iconColor={"#F9FFF2"}
                 name="businessType"
                 onChange={handleChange}
+                color={values.businessType ? "#F9FFF2" : "#98B2B2"}
               >
                 <option>Sole proprietorship</option>
                 <option>Partnership</option>
@@ -267,8 +450,22 @@ const merchantProfileStep = ({ handleChange, values, errors }) => {
                         )} */}
             </FormControl>
             <FormControl p={4} id="business-location" isRequired>
-              <FormLabel>Business location</FormLabel>
+              <FormLabel
+                marginBottom={1}
+                pos={"relative"}
+                fontFamily={"PP Telegraf"}
+                fontSize={"16px"}
+                fontStyle={"normal"}
+                fontWeight={"400"}
+                lineHeight={"24p"}
+                letterSpacing={"0.02em"}
+                textAlign={"left"}
+              >
+                Business location
+              </FormLabel>
               <Select
+                fontFamily={"PP Telegraf Light"}
+                color={values.businessLocation ? "#F9FFF2" : "#98B2B2"}
                 placeholder="Select business location"
                 name="businessLocation"
                 onChange={handleChange}
@@ -290,12 +487,14 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
   return (
     <form style={{ alignSelf: "start" }}>
       <Box
+        maxWidth={"496px"}
         h="100%"
         w="xl"
         borderWidth="1px"
         borderRadius="lg"
         overflow="hidden"
         cursor="pointer"
+        backgroundColor={"#041A19E5"}
       >
         <Box p="4">
           <Box
@@ -306,8 +505,26 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
             isTruncated
           >
             <FormControl p={4} id="current-company-title" isRequired>
-              <FormLabel>Current title</FormLabel>
+              <FormLabel
+                marginBottom={1}
+                pos={"relative"}
+                fontFamily={"PP Telegraf"}
+                fontSize={"16px"}
+                fontStyle={"normal"}
+                fontWeight={"400"}
+                lineHeight={"24p"}
+                letterSpacing={"0.02em"}
+                textAlign={"left"}
+              >
+                Current title
+              </FormLabel>
               <Input
+                px={2}
+                fontSize="16px"
+                borderColor={"#587070"}
+                height={"40px"}
+                borderRadius={"4px"}
+                marginBottom={"12px"}
                 isInvalid={errors.currTitle}
                 errorBorderColor="red.300"
                 fontFamily={"PP Telegraf light"}
@@ -325,8 +542,22 @@ const professionalProfileStep = ({ handleChange, values, errors }) => {
               )}
             </FormControl>
             <FormControl p={4} id="current-location">
-              <FormLabel>Current location</FormLabel>
+              <FormLabel
+                marginBottom={1}
+                pos={"relative"}
+                fontFamily={"PP Telegraf"}
+                fontSize={"16px"}
+                fontStyle={"normal"}
+                fontWeight={"400"}
+                lineHeight={"24p"}
+                letterSpacing={"0.02em"}
+                textAlign={"left"}
+              >
+                Current location
+              </FormLabel>
               <Select
+                color="#98B2B2"
+                fontFamily={"PP Telegraf Light"}
                 placeholder="Select current location"
                 name="currLocation"
                 onChange={handleChange}
@@ -708,7 +939,7 @@ const SignUpSteps = () => {
               </Step>
             ))}
           </Steps>
-          <HStack>
+          <HStack width={"100%"} justifyContent={"center"}>
             <Button
               w="sm"
               alignSelf="left"
@@ -734,7 +965,7 @@ const SignUpSteps = () => {
               textTransform={"uppercase"}
               backgroundColor={"#C7F83C"}
               onClick={() => {
-                if (activeStep > 2) {
+                if (activeStep > 1) {
                   updateAccType();
                 } else {
                   nextStep();

@@ -8,8 +8,7 @@ const Steps = () => {
     <>
       <Container
         width="100%"
-        height="1024px"
-        minH={"100vh"}
+        minHeight="100vh"
         maxW={"100%"}
         pos={"relative"}
         bgSize={"cover"}
