@@ -255,7 +255,7 @@ const ProfileDetails = ({ user }) => {
       userData={userData}
       setUserData={setUserData}
       userPermission="view"
-      handleUpdatedCompanyInfo={setUserData}
+      handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
     />
   );
 

@@ -41,63 +41,60 @@ const CompanyModal = (props) => {
   const [shouldFetch, setShouldFetch] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [userData, setUserData] = useState(props.userData);
-  const emptyCompanyInfo = [{
-    companyName: "",
-    companyTitle: "",
-    companyStart: "",
-    companyEnd: "",
-    companyFunction: "",
-    companyIndustry: "",
-  }, 
-  {
-    companyName: "",
-    companyTitle: "",
-    companyStart: "",
-    companyEnd: "",
-    companyFunc: "",
-    companyIndustry: "",
-  },
-  {
-    companyName: "",
-    companyTitle: "",
-    companyStart: "",
-    companyEnd: "",
-    companyFunc: "",
-    companyIndustry: "",
-  },
-  {
-    companyName: "",
-    companyTitle: "",
-    companyStart: "",
-    companyEnd: "",
-    companyFunc: "",
-    companyIndustry: "",
-  },
-  {
-    companyName: "",
-    companyTitle: "",
-    companyStart: "",
-    companyEnd: "",
-    companyFunc: "",
-    companyIndustry: "",
-  },
-];
+  const emptyCompanyInfo = [
+    {
+      companyName: "",
+      companyTitle: "",
+      companyStart: "",
+      companyEnd: "",
+      companyFunc: "",
+      companyIndustry: "",
+    },
+    {
+      companyName: "",
+      companyTitle: "",
+      companyStart: "",
+      companyEnd: "",
+      companyFunc: "",
+      companyIndustry: "",
+    },
+    {
+      companyName: "",
+      companyTitle: "",
+      companyStart: "",
+      companyEnd: "",
+      companyFunc: "",
+      companyIndustry: "",
+    },
+    {
+      companyName: "",
+      companyTitle: "",
+      companyStart: "",
+      companyEnd: "",
+      companyFunc: "",
+      companyIndustry: "",
+    },
+    {
+      companyName: "",
+      companyTitle: "",
+      companyStart: "",
+      companyEnd: "",
+      companyFunc: "",
+      companyIndustry: "",
+    },
+  ];
 
   // on open, set the values to the current company
   useEffect(() => {
     if (!props.isOpen) return;
-    setCompanyName(
-      props.userData?.companyInfo[props.currCompany]?.companyName
-    );
+    setCompanyName(props.userData?.companyInfo[props.currCompany]?.companyName);
     setCompanyTitle(
       props.userData?.companyInfo[props.currCompany]?.companyTitle
     );
     setCompanyStart(
       props.userData?.companyInfo[props.currCompany]?.companyStart
     );
-    setCompanyEnd(
-      props.userData?.companyInfo[props.currCompany]?.companyEnd
-    );
+    setCompanyEnd(props.userData?.companyInfo[props.currCompany]?.companyEnd);
     setCompanyFunction(
       props.userData?.companyInfo[props.currCompany]?.companyFunc
     );
@@ -105,16 +102,17 @@ const CompanyModal = (props) => {
       props.userData?.companyInfo[props.currCompany]?.companyExpertise
     );
     setTempLogo(
-      props.userData?.companyInfo[props.currCompany]?.logo
+      props.userData?.companyInfo[props.currCompany].companyName
+        ? props.userData?.companyInfo[props.currCompany]?.logo
+        : false
     );
+    console.log(props.userData?.companyInfo[props.currCompany].companyName);
   }, [props.isOpen]);
 
   const companyInfo =
-    props.userData.companyInfo &&
-    props.userData.companyInfo[props.currCompany]
+    props.userData.companyInfo && props.userData.companyInfo[props.currCompany]
       ? props.userData.companyInfo[props.currCompany]
       : emptyCompanyInfo[props.currCompany];
-  
 
   const [companyData, setCompanyData] = useState(companyInfo);
 
@@ -177,7 +175,7 @@ const CompanyModal = (props) => {
           userName: userData.userName,
           currCompany: props.currCompany,
         };
-        
+        companyAttributes.companyData[props.currCompany].logo = tempLogo;
         updateUserCompanyData(userData.userWallet, companyAttributes);
         props.handleUpdatedCompanyInfo(props.userData, false);
         props.onClose();
@@ -190,7 +188,7 @@ const CompanyModal = (props) => {
   }
 
   const updateUserCompanyData = async (userWallet, attributes) => {
-    let userData = { userWallet, attributes}
+    let userData = { userWallet, attributes };
     await fetch(`/api/users/updateUser?updateUser=company`, {
       method: "PUT",
       body: JSON.stringify({ userData }),
@@ -205,7 +203,7 @@ const CompanyModal = (props) => {
 
     setCompanyData({
       ...companyData,
-      [evt.target.name]: evt.target.value
+      [evt.target.name]: evt.target.value,
     });
 
     if (evt.target.name == "companyName") {

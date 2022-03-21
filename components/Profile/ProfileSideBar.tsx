@@ -27,6 +27,7 @@ export function ProfileSideBar({
     onOpen: onProfileModalOpen,
     onClose: onProfileModalClose,
   } = useDisclosure();
+
   return (
     <VStack
       marginTop={0}
@@ -126,10 +127,7 @@ export function ProfileSideBar({
           {userData.bio}
         </Text>
       </Box>
-      <ProfileSocialMedia
-        userData={userData}
-        marginTop={"24px !important"}
-      />
+      <ProfileSocialMedia userData={userData} marginTop={"24px !important"} />
       <Flex
         p={6}
         mx={"auto"}

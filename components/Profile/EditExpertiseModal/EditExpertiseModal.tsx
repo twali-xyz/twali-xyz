@@ -19,7 +19,7 @@ import { industryExpertiseList } from "../../../utils/industryExpertiseConstants
 import { setEventArray } from "../helpers/setEventArray";
 import { UserData } from "../../../utils/interfaces";
 
-const EditExperienceModal = (props) => {
+const EditExpertiseModal = (props) => {
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [userData, setUserData] = useState<UserData>(props.userData);
@@ -41,17 +41,28 @@ const EditExperienceModal = (props) => {
       setIsSubmitted(true);
 
       // Update user data with the new changes
-      if (userData.userWallet && userData.userName && userData.functionalExpertise && userData.industryExpertise) {
+      if (
+        userData.userWallet &&
+        userData.userName &&
+        values.functionalExpertise &&
+        values.industryExpertise
+      ) {
         let expertiseAttributes = {
           userName: userData.userName,
-          functionalExpertise: userData.functionalExpertise,
-          industryExpertise: userData.industryExpertise
+          functionalExpertise: values.functionalExpertise,
+          industryExpertise: values.industryExpertise,
         };
 
         updateUserExpertise(userData.userWallet, expertiseAttributes);
         props.handleUpdatedExperiences(userData, false);
         props.onClose();
         window.location.reload();
+        setUserData({
+          ...userData,
+          functionalExpertise: values.functionalExpertise,
+          industryExpertise: values.industryExpertise,
+        });
+
         setIsSubmitted(false);
       } else {
         console.log("No profile, pls create one...");
@@ -60,7 +71,7 @@ const EditExperienceModal = (props) => {
   }
 
   const updateUserExpertise = async (userWallet, attributes) => {
-    let userData = { userWallet, attributes}
+    let userData = { userWallet, attributes };
     await fetch(`/api/users/updateUser?updateUser=expertise`, {
       method: "PUT",
       body: JSON.stringify({ userData }),
@@ -131,8 +142,7 @@ const EditExperienceModal = (props) => {
                 handleChange={handleChange}
                 options={industryExpertiseList}
                 defaultValues={
-                  values.industryExpertise ||
-                  props.userData.industryExpertise
+                  values.industryExpertise || props.userData.industryExpertise
                 }
                 maxSelections={3}
               />
@@ -161,4 +171,4 @@ const EditExperienceModal = (props) => {
   );
 };
 
-export default EditExperienceModal;
+export default EditExpertiseModal;
