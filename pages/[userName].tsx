@@ -11,6 +11,7 @@ const fetcher = (...args: Parameters<typeof fetch>) =>
 const ProfilePage = () => {
   const router = useRouter();
   const currentUserName = router.query;
+  console.log('Router query: ', router.query);
   let userData;
   if (currentUserName.userName !== "undefined") {
     const { data, error } = useSWR(

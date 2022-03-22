@@ -52,31 +52,55 @@ const ProfileDetails = ({ user }) => {
     onClose: onCompanyModalClose,
   } = useDisclosure();
   const [loaded, setLoaded] = useState(false);
+  const [isConnectWalletBtn, setIsConnectWalletBtn] = useState(false);
   const [snapshotData, setSnapshotData] = useState<any>();
   const [currentSnapshot, setCurrentSnapshot] = useState();
   const [loggedInUserAddress, setLoggedInUserAddress] = useState("");
   const [currCompany, setCurrCompany] = useState(0);
 
   async function readProfile() {
-    const address = await connect(); // first address in the array
-
     try {
-      // does not require signing to get user's public data
-      if (user) {
-        setUserData(user);
+      if (router.query?.view != 'public') {
+          // does not require signing to get user's public data
+          const address = await connect(); // first address in the array
+
+          if (address) {
+            setLoggedInUserAddress(address);
+          }
+      } else {
+        setIsConnectWalletBtn(true);
       }
 
-      setLoaded(true);
+      // does not require signing to get user's public data
+      if (user && user.userWallet) {
+        setIsConnectWalletBtn(false);
+        setUserData(user);
+        setLoaded(true);
+      }
+
     } catch (err) {
       console.log("error: ", err);
       setLoaded(false);
     }
   }
+
+  useEffect( () => {
+    setIsConnectWalletBtn(isConnectWalletBtn);
+}, [isConnectWalletBtn]); 
+
   useEffect(() => {
     async function readProfile() {
-      const address = await connect(); // first address in the array
-
       try {
+        if (router.query?.view != 'public') {
+          // does not require signing to get user's public data
+          const address = await connect(); // first address in the array
+
+          if (address) {
+            setLoggedInUserAddress(address);
+          }
+      } else {
+        setIsConnectWalletBtn(true);
+      }
         // does not require signing to get user's public data
         if (user && user.userWallet) {
           setUserData(user);
@@ -84,9 +108,6 @@ const ProfileDetails = ({ user }) => {
           setupSnapshotQueries(user.userWallet);
         }
 
-        if (address) {
-          setLoggedInUserAddress(address);
-        }
       } catch (err) {
         console.log("error: ", err);
         setLoaded(false);
@@ -206,6 +227,8 @@ const ProfileDetails = ({ user }) => {
   function createWorkElements(number) {
     var elements = [];
     let totalLen = userData.companyInfo ? userData.companyInfo.length : 0;
+    console.log(userData.companyInfo);
+    console.log(totalLen);
     for (let i = 0; i < number; i++) {
       if (
         userData.companyInfo &&
@@ -245,6 +268,7 @@ const ProfileDetails = ({ user }) => {
         );
       }
     }
+    console.log('ELEMENTS: ', elements);
     return elements;
   }
   const viewCompany = (
@@ -268,7 +292,7 @@ const ProfileDetails = ({ user }) => {
         userData.userName &&
         userData.userWallet && (
           <>
-            <HeaderNav whichPage="profil" />
+            <HeaderNav whichPage="profile" isConnectWalletBtn={isConnectWalletBtn} userPage={userData}/>
             <Container
               maxW="100%"
               p={0}
@@ -348,8 +372,8 @@ const GetCompany = (props) => {
         >
           <UserPermissionsRestricted to="view">
             <Img
-              backgroundColor="rgb(222, 222, 0)"
-              backgroundImage={"twali-assets/bannerimage.png"}
+              // backgroundColor="rgb(222, 222, 0)"
+              // backgroundImage={"twali-assets/bannerimage.png"}
               bgSize={"contain"}
               style={{ cursor: "pointer" }}
               key={`${props.companyName}--${props.currCompany}`}

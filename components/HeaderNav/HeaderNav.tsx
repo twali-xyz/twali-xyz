@@ -1,8 +1,86 @@
 import React, { useState } from "react";
-import { Flex, HStack, Text, Img } from "@chakra-ui/react";
+import { Button, CircularProgress, Flex, HStack, Text, Img } from "@chakra-ui/react";
+import Web3 from "web3";
+import Web3Modal from "web3modal";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import { useRouter } from "next/router";
+import { UserData } from "../../utils/interfaces";
 
 const HeaderNav = (props) => {
   const whichPage = props.whichPage;
+  const isConnectWalletBtn = props.isConnectWalletBtn;
+  const userPage = props.userPage;
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const router = useRouter();
+
+  const getUserByWallet = async (userWallet) => {
+    let lowerCaseWallet = userWallet.toLowerCase();
+    const res = await fetch(`/api/users/wallet/${lowerCaseWallet}`);
+
+    const data: any = await res.json();
+
+    console.log("RETRIEVE USER BY WALLET YO");
+    return data;
+  };
+  const handleWalletConnect = async () => {
+    try {
+    const web3Modal = new Web3Modal({
+      disableInjectedProvider: false,
+      network: "rinkeby",
+      cacheProvider: false,
+      providerOptions: {
+        walletconnect: {
+          package: WalletConnectProvider,
+          options: {
+            rpc: {
+              1: "https://eth-rinkeby.alchemyapi.io/v2/QtLM8rW9nB6DobDu8KQx-7fYMS2rBlky",
+            },
+          },
+        },
+      },
+    });
+    web3Modal.clearCachedProvider();
+    console.log('WEB3MODAL: ', web3Modal);
+    const provider = await web3Modal.connect();
+    const web3 = new Web3(provider);
+    const accounts = await web3.eth.getAccounts();
+    const currAccount = accounts[0];
+
+    setIsSubmitted(true);
+      let userData: UserData = await getUserByWallet(currAccount);
+      console.log(userData);
+      if (userData && userData.userName && userData.userWallet) {
+        // if (userPage && userPage.userName) {
+        //   router.push({
+        //     pathname: '/[userName]',
+        //     query: { userName: `${userPage.userName}`}
+        //   })
+        // } else {
+        //   router.push({
+        //     pathname: '/[userName]',
+        //     query: { userName: `${userData.userName}`}
+        //   })
+        console.log(router.query);
+        if (router.query?.view == 'public' && userPage && userPage.userName) {
+          router.push(`/${userPage.userName}`);
+        } else if (router.query?.view == 'public' && userData && userData.userName) {
+          router.push(`/${userData.userName}`);
+        } else {
+          router.reload(); // reloads the profile page upon login
+        }
+        
+        setIsSubmitted(false);
+      } else {
+        console.log("No profile, pls create one...");
+        router.push("/steps");
+      }
+    } catch (err) {
+      console.log("error: ", err);
+      router.push("/steps");
+      setLoaded(true);
+    }
+  };
 
   return (
     <Flex
@@ -21,18 +99,39 @@ const HeaderNav = (props) => {
         height={"auto"}
         src="/twali-assets/navbar_logo.png"
       />
-      <HStack alignItems="center" w="130px" height={"32px"}>
-        <Flex
-          ml="2"
-          mt="1"
-          width={"100%"}
-          height={"100%"}
-          border={"1px solid #F9FFF2"}
-          alignItems={"center"}
-          justifyItems={"center"}
-          borderRadius={32}
-        >
-          <Text
+      <HStack alignItems="center" w="180px" height={"32px"}>
+          { whichPage === "profile" && isConnectWalletBtn ? (
+             <Button
+             paddingLeft={4}
+             paddingRight={4}
+             width={180}
+             height={"52px"}
+             color={"#062B2A"}
+             backgroundColor={"#C7F83C"}
+             onClick={handleWalletConnect}
+           >
+             Connect Wallet{" "}
+             {isSubmitted ? (
+               <CircularProgress
+                 size="22px"
+                 thickness="4px"
+                 isIndeterminate
+                 color="#3C2E26"
+               />
+             ) : null}
+           </Button>
+          ): (
+            <Flex
+            ml="2"
+            mt="1"
+            width={"100%"}
+            height={"100%"}
+            border={"1px solid #F9FFF2"}
+            alignItems={"center"}
+            justifyItems={"center"}
+            borderRadius={32}
+          >
+            <Text
             color="white"
             fontSize={"14px"}
             margin={"auto"}
@@ -44,6 +143,7 @@ const HeaderNav = (props) => {
             0xb794f...
           </Text>
         </Flex>
+        )}
       </HStack>
     </Flex>
   );

@@ -13,6 +13,7 @@ export async function connect() {
   }
 
   await ethereum.request({ method: "eth_requestAccounts" }).then((accounts) => {
+    console.log(accounts);
     if (accounts.length !== 0) {
       account = accounts[0];
       console.log("Found an authorized account: ", account);

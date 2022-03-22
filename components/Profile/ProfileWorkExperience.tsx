@@ -13,6 +13,16 @@ export function ProfileExperience({
   setUserData,
   handleUpdatedCompanyInfo,
 }) {
+  let workElements = createWorkElements(6);
+  let viewElements = [];
+
+  // Selecting only the elements that should be visible in 'view' mode
+  workElements.forEach( element => {
+    if (element.props.to != 'edit') {
+      viewElements.push(element); // work elements that will be displayed in view mode
+    }
+  });
+
   return (
     <Box w="full" overflow="hidden">
       <Text
@@ -25,9 +35,11 @@ export function ProfileExperience({
       >
         Work Experience
       </Text>
-      <HStack justifyContent={"space-between"} maxW={"640px"}>
-        {createWorkElements(6)}
-      </HStack>
+      <UserPermissionsRestricted to="edit" fallback={viewWorkElements(viewElements)}>
+        <HStack justifyContent={"space-between"} maxW={"640px"}>
+          {workElements}
+        </HStack>
+      </UserPermissionsRestricted>
       <UserPermissionsRestricted to="edit" fallback={viewCompany}>
         <CompanyModal
           isOpen={isCompanyModalOpen}
@@ -41,3 +53,11 @@ export function ProfileExperience({
     </Box>
   );
 }
+
+const viewWorkElements = (viewElements) => {
+  return (
+    <HStack spacing={4} maxW={"640px"}>
+      {viewElements}
+    </HStack>
+  );
+} 
