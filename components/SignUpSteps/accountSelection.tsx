@@ -18,7 +18,7 @@ export function AccountSelection({
       maxW={"100%"}
       width={"100%"}
       height={"100%"}
-      flexDir={"row"}
+      flexDir={["column", "column", "row"]}
       alignItems={"center"}
       minWidth={"100vw"}
       minHeight={"100vh"}
@@ -26,8 +26,8 @@ export function AccountSelection({
       <VStack
         m={0}
         p={0}
-        width={"50%"}
-        minH={"100vh"}
+        width={["100%", "100%", "50%"]}
+        minH={["90vh", "75vh", "100vh"]}
         height={"100%"}
         color={"black"}
         justifyContent={"center "}
@@ -96,8 +96,8 @@ export function AccountSelection({
       <VStack
         m={0}
         p={0}
-        width={"50%"}
-        minH={"100vh"}
+        width={["100%", "100%", "50%"]}
+        minH={["90vh", "75vh", "100vh"]}
         height={"100%"}
         justifyContent={"center "}
         backgroundSize={"cover"}
