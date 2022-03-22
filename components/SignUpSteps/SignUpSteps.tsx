@@ -105,6 +105,8 @@ const SignUpSteps = () => {
 
   const handleChange = (evt) => {
     evt.persist();
+    console.log(evt);
+
     let strippedEventName = evt.target.name.substring(
       0,
       evt.target.name.length - 1

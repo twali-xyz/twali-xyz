@@ -128,7 +128,7 @@ function Selector({ splitLabel, handleChange, options, idx, defaultValue }) {
       placeholder={`Select ${splitLabel[0]} ${splitLabel[1]}`}
       name={`${splitLabel[0]}${splitLabel[1] + idx}`}
       onChange={(e) => {
-        handleChange;
+        handleChange(e);
         if (e.target.value) {
           setColor("#F9FFF2");
         } else {
@@ -138,7 +138,7 @@ function Selector({ splitLabel, handleChange, options, idx, defaultValue }) {
       defaultValue={defaultValue}
       errorBorderColor="red.300"
       fontFamily={"PP Telegraf light"}
-      color={color}
+      color={defaultValue ? "#F9FFF2" : "#98B2B2"}
       _placeholder={{ color: "#98B2B2" }}
     >
       {options?.map((option, idx) => {
