@@ -14,6 +14,7 @@ const HeaderNav = (props) => {
       justify="space-between"
       wrap="wrap"
       w="100%"
+      pos={props.step == 0 ? "absolute" : "relative"}
       backgroundColor={whichPage === "profile" ? "#0A1313" : "transparent"}
     >
       <Img

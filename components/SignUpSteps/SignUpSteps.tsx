@@ -1,597 +1,24 @@
-import { MultiSelect } from "../Profile/Components/MultiSelect";
+import { AccountSelection } from "./accountSelection";
 import { useState } from "react";
 import { Step, Steps, useSteps } from "chakra-ui-steps";
 import { connect } from "../../utils/walletUtils";
-import { listOfCountries } from "../../utils/profileUtils";
-
+import background from "../../public/twali-assets/backgroundscreen.png";
 import {
   Heading,
-  FormControl,
-  Input,
-  Box,
   Button,
-  FormLabel,
-  Select,
   HStack,
-  VStack,
   CircularProgress,
-  Text,
-  FormHelperText,
-  Tooltip,
-  Img,
-  Link,
+  Container,
+  Flex,
+  VStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { functionalExpertiseList } from "../../utils/functionalExpertiseConstants";
-import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
 import { setEventArray } from "../Profile/helpers/setEventArray";
 import { UserData } from "../../utils/interfaces";
-
-const userProfileStep = ({ handleChange, values, errors }) => {
-  return (
-    <form style={{ alignSelf: "start" }}>
-      <Box
-        maxWidth={"496px"}
-        mx={0}
-        my={2}
-        h={"532px"}
-        border="1px solid #587070"
-        borderRadius="16px"
-        overflow="hidden"
-        cursor="pointer"
-        backgroundColor={"#041A19E5"}
-        fontFamily={"PP Telegraf"}
-        boxShadow={"8px 16px 24px 0px #062B2A8F"}
-      >
-        <Box p="4">
-          <Box
-            mt="1"
-            fontWeight="semibold"
-            as="h4"
-            lineHeight="tight"
-            isTruncated
-          >
-            <HStack spacing={2}>
-              <FormControl p={2} mx={1} id="first-name" isRequired>
-                <FormLabel
-                  marginBottom={1}
-                  pos={"relative"}
-                  fontFamily={"PP Telegraf"}
-                  fontSize={"16px"}
-                  fontStyle={"normal"}
-                  fontWeight={"400"}
-                  lineHeight={"24p"}
-                  letterSpacing={"0.02em"}
-                  textAlign={"left"}
-                >
-                  First name
-                </FormLabel>
-                <Input
-                  px={2}
-                  fontSize="16px"
-                  borderColor={"#587070"}
-                  height={"40px"}
-                  borderRadius={"4px"}
-                  marginBottom={"12px"}
-                  required
-                  isInvalid={errors.firstName}
-                  errorBorderColor="red.300"
-                  placeholder="First name"
-                  name="firstName"
-                  fontFamily={"PP Telegraf light"}
-                  _placeholder={{ color: "#98B2B2" }}
-                  value={values.firstName || ""}
-                  onChange={handleChange}
-                />
-                {errors.firstName && (
-                  <Text fontSize="xs" fontWeight="400" color="red.500">
-                    {errors.firstName}
-                  </Text>
-                )}
-              </FormControl>
-              <FormControl p={2} mx={1} id="last-name" isRequired>
-                <FormLabel
-                  marginBottom={1}
-                  pos={"relative"}
-                  fontFamily={"PP Telegraf"}
-                  fontSize={"16px"}
-                  fontStyle={"normal"}
-                  fontWeight={"400"}
-                  lineHeight={"24p"}
-                  letterSpacing={"0.02em"}
-                  textAlign={"left"}
-                >
-                  Last name
-                </FormLabel>
-                <Input
-                  px={2}
-                  fontSize="16px"
-                  borderColor={"#587070"}
-                  height={"40px"}
-                  borderRadius={"4px"}
-                  marginBottom={"12px"}
-                  required
-                  isInvalid={errors.lastName}
-                  errorBorderColor="red.300"
-                  placeholder="Last name"
-                  name="lastName"
-                  fontFamily={"PP Telegraf light"}
-                  _placeholder={{ color: "#98B2B2" }}
-                  value={values.lastName || ""}
-                  onChange={handleChange}
-                />
-                {errors.lastName && (
-                  <Text fontSize="xs" fontWeight="400" color="red.500">
-                    {errors.lastName}
-                  </Text>
-                )}
-              </FormControl>
-            </HStack>
-            <FormControl p={2} mx={1} id="display-name" isRequired>
-              <FormLabel
-                marginBottom={1}
-                pos={"relative"}
-                fontFamily={"PP Telegraf"}
-                fontSize={"16px"}
-                fontStyle={"normal"}
-                fontWeight={"400"}
-                lineHeight={"24p"}
-                letterSpacing={"0.02em"}
-                textAlign={"left"}
-              >
-                Display name
-              </FormLabel>
-              <Input
-                px={2}
-                fontSize="16px"
-                borderColor={"#587070"}
-                height={"40px"}
-                borderRadius={"4px"}
-                marginBottom={"12px"}
-                required
-                isInvalid={errors.userName}
-                errorBorderColor="red.300"
-                placeholder="choose your unique name"
-                name="userName"
-                fontFamily={"PP Telegraf light"}
-                _placeholder={{ color: "#98B2B2" }}
-                value={values.userName || ""}
-                onChange={handleChange}
-              />
-              {errors.userName && (
-                <Text fontSize="xs" fontWeight="400" color="red.500">
-                  {errors.userName}
-                </Text>
-              )}
-            </FormControl>
-            <FormControl p={2} mx={1} id="email" isRequired>
-              <HStack
-                alignItems={"baseline"}
-                justifyContent={"space-between"}
-                marginBottom={0}
-              >
-                <FormLabel
-                  marginBottom={1}
-                  pos={"relative"}
-                  fontFamily={"PP Telegraf"}
-                  fontSize={"16px"}
-                  fontStyle={"normal"}
-                  fontWeight={"400"}
-                  lineHeight={"24p"}
-                  letterSpacing={"0.02em"}
-                  textAlign={"left"}
-                >
-                  Email
-                </FormLabel>
-
-                <FormLabel
-                  marginBottom={1} //styleName: Body/body12;
-                  fontFamily={"PP Telegraf Light"}
-                  fontSize={"12px"}
-                  fontStyle={"normal"}
-                  fontWeight={"300"}
-                  lineHeight={"16px"}
-                  letterSpacing={"0em"}
-                  textAlign={"left"}
-                  color={"#0DD5D1"}
-                  requiredIndicator={null}
-                >
-                  your email won’t be shared with others
-                </FormLabel>
-              </HStack>
-              <Input
-                px={2}
-                fontSize="16px"
-                borderColor={"#587070"}
-                height={"40px"}
-                borderRadius={"4px"}
-                marginBottom={"12px"}
-                required
-                isInvalid={errors.email}
-                errorBorderColor="red.300"
-                placeholder="Email"
-                name="email"
-                fontFamily={"PP Telegraf light"}
-                _placeholder={{ color: "#98B2B2" }}
-                value={values.email || ""}
-                onChange={handleChange}
-              />
-              {errors.email && (
-                <Text fontSize="xs" fontWeight="400" color="red.500">
-                  {errors.email}
-                </Text>
-              )}
-            </FormControl>
-            <HStack spacing={2}>
-              <FormControl p={2} mx={1} id="twitter">
-                <FormLabel
-                  marginBottom={1}
-                  pos={"relative"}
-                  fontFamily={"PP Telegraf"}
-                  fontSize={"16px"}
-                  fontStyle={"normal"}
-                  fontWeight={"400"}
-                  lineHeight={"24p"}
-                  letterSpacing={"0.02em"}
-                  textAlign={"left"}
-                >
-                  Twitter URL
-                </FormLabel>
-                <Input
-                  px={2}
-                  fontSize="16px"
-                  borderColor={"#587070"}
-                  height={"40px"}
-                  borderRadius={"4px"}
-                  marginBottom={"12px"}
-                  placeholder="Twitter"
-                  _placeholder={{ color: "#98B2B2" }}
-                  fontFamily={"PP Telegraf Light"}
-                  name="twitter"
-                  onChange={handleChange}
-                />
-              </FormControl>
-              <FormControl p={2} mx={1} id="linkedin">
-                <FormLabel
-                  marginBottom={1}
-                  pos={"relative"}
-                  fontFamily={"PP Telegraf"}
-                  fontSize={"16px"}
-                  fontStyle={"normal"}
-                  fontWeight={"400"}
-                  lineHeight={"24p"}
-                  letterSpacing={"0.02em"}
-                  textAlign={"left"}
-                >
-                  LinkedIn URL
-                </FormLabel>
-                <Input
-                  px={2}
-                  fontSize="16px"
-                  borderColor={"#587070"}
-                  height={"40px"}
-                  borderRadius={"4px"}
-                  marginBottom={"12px"}
-                  placeholder="LinkedIn"
-                  _placeholder={{ color: "#98B2B2" }}
-                  fontFamily={"PP Telegraf Light"}
-                  name="linkedIn"
-                  onChange={handleChange}
-                />
-              </FormControl>
-            </HStack>
-            <FormControl pt={2} pb={3} px={2} id="website">
-              <Box display="flex" justifyContent="space-between">
-                <FormLabel
-                  marginBottom={1}
-                  pos={"relative"}
-                  fontFamily={"PP Telegraf"}
-                  fontSize={"16px"}
-                  fontStyle={"normal"}
-                  fontWeight={"400"}
-                  lineHeight={"24p"}
-                  letterSpacing={"0.02em"}
-                  textAlign={"left"}
-                >
-                  Your Website URL
-                </FormLabel>
-                <Tooltip
-                  placement="auto-start"
-                  hasArrow
-                  label="Add a personal or business website here"
-                >
-                  <Box pos="relative">
-                    <FontAwesomeIcon icon={"info-circle"} />
-                  </Box>
-                </Tooltip>
-              </Box>
-              <Input
-                px={2}
-                fontSize="16px"
-                borderColor={"#587070"}
-                height={"40px"}
-                borderRadius={"4px"}
-                placeholder="Website URL"
-                _placeholder={{ color: "#98B2B2" }}
-                fontFamily={"PP Telegraf Light"}
-                name="website"
-                onChange={handleChange}
-              />
-            </FormControl>
-          </Box>
-        </Box>
-      </Box>
-    </form>
-  );
-};
-
-const merchantProfileStep = ({ handleChange, values, errors }) => {
-  const [incorporated, setIncorporated] = useState(false);
-
-  return (
-    <form style={{ alignSelf: "start" }}>
-      <Box
-        maxWidth={"496px"}
-        h="100%"
-        w="xl"
-        borderWidth="1px"
-        borderRadius="lg"
-        overflow="hidden"
-        cursor="pointer"
-        backgroundColor={"#041A19E5"}
-      >
-        <Box p="4">
-          <Box
-            mt="1"
-            fontWeight="semibold"
-            as="h4"
-            lineHeight="tight"
-            isTruncated
-          >
-            <FormControl p={2} id="business-type" isRequired>
-              <HStack justifyContent="space-between">
-                <FormLabel
-                  marginBottom={1}
-                  pos={"relative"}
-                  fontFamily={"PP Telegraf"}
-                  fontSize={"16px"}
-                  fontStyle={"normal"}
-                  fontWeight={"400"}
-                  lineHeight={"24p"}
-                  letterSpacing={"0.02em"}
-                  textAlign={"left"}
-                >
-                  Business type
-                </FormLabel>
-                <Link
-                  href="https://www.sba.gov/business-guide/launch-your-business/choose-business-structure"
-                  target={"_blank"}
-                  rel="noopener noreferrer"
-                >
-                  <Tooltip
-                    placement="auto-start"
-                    hasArrow
-                    label="Click to learn more "
-                  >
-                    <Box pos="relative">
-                      <FontAwesomeIcon icon={"info-circle"} />
-                    </Box>
-                  </Tooltip>
-                </Link>
-              </HStack>
-              <Select
-                errorBorderColor="red.300"
-                fontFamily={"PP Telegraf Light"}
-                placeholder="Select business type"
-                iconColor={"#F9FFF2"}
-                name="businessType"
-                onChange={handleChange}
-                color={values.businessType ? "#F9FFF2" : "#98B2B2"}
-              >
-                <option>I'm not incorporated!</option>
-                <option>Sole proprietorship</option>
-                <option>Partnership</option>
-                <option>Corporation</option>
-                <option>Single-member LLC</option>
-                <option>LLC</option>
-                <option>Non-profit</option>
-              </Select>
-              {/* {errors.businessType && (
-                          <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.businessType}</Text>
-                        )} */}
-            </FormControl>
-            <FormControl p={2} id="business-name" isRequired>
-              <HStack display="flex" justifyContent="space-between">
-                <FormLabel
-                  marginBottom={1}
-                  pos={"relative"}
-                  fontFamily={"PP Telegraf"}
-                  fontSize={"16px"}
-                  fontStyle={"normal"}
-                  fontWeight={"400"}
-                  lineHeight={"24p"}
-                  letterSpacing={"0.02em"}
-                  textAlign={"left"}
-                >
-                  Business legal name
-                </FormLabel>
-                <Tooltip
-                  placement="auto-start"
-                  hasArrow
-                  label="If you are a sole proprietor, partnership, or single-member LLC, your 'Business Name' may be registered as your personal name or your business’s DBA.
-                  If you are an LLC, corporation, or non-profit, Twali requires that the 'Business Name' be in the company’s legal business name or DBA"
-                >
-                  <Box pos="relative">
-                    <FontAwesomeIcon icon={"info-circle"} />
-                  </Box>
-                </Tooltip>
-              </HStack>
-              <Input
-                disabled={values.businessType === "I'm not incorporated!"}
-                px={4}
-                fontSize="16px"
-                borderColor={"#587070"}
-                height={"40px"}
-                borderRadius={"4px"}
-                marginBottom={"12px"}
-                required
-                isInvalid={errors.businessName}
-                errorBorderColor="red.300"
-                fontFamily={"PP Telegraf light"}
-                _placeholder={{ color: "#98B2B2" }}
-                value={values.businessName || ""}
-                placeholder="Business legal name"
-                name="businessName"
-                onChange={handleChange}
-              />
-              {errors.businessName && (
-                <Text fontSize="xs" fontWeight="400" color="red.500">
-                  {errors.businessName}
-                </Text>
-              )}
-            </FormControl>
-
-            <FormControl p={2} id="business-location" isRequired>
-              <FormLabel
-                marginBottom={1}
-                pos={"relative"}
-                fontFamily={"PP Telegraf"}
-                fontSize={"16px"}
-                fontStyle={"normal"}
-                fontWeight={"400"}
-                lineHeight={"24p"}
-                letterSpacing={"0.02em"}
-                textAlign={"left"}
-              >
-                Business location
-              </FormLabel>
-              <Select
-                fontFamily={"PP Telegraf Light"}
-                color={values.businessLocation ? "#F9FFF2" : "#98B2B2"}
-                placeholder="Select business location"
-                name="businessLocation"
-                onChange={handleChange}
-                disabled={values.businessType === "I'm not incorporated!"}
-              >
-                {listOfCountries()}
-              </Select>
-              {/* {errors.businessLocation && (
-                          <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.businessType}</Text>
-                        )} */}
-            </FormControl>
-          </Box>
-        </Box>
-      </Box>
-    </form>
-  );
-};
-
-const professionalProfileStep = ({ handleChange, values, errors }) => {
-  return (
-    <form style={{ alignSelf: "start" }}>
-      <Box
-        maxWidth={"496px"}
-        h="100%"
-        w="xl"
-        borderWidth="1px"
-        borderRadius="lg"
-        overflow="hidden"
-        cursor="pointer"
-        backgroundColor={"#041A19E5"}
-      >
-        <Box p="4">
-          <Box
-            mt="1"
-            fontWeight="semibold"
-            as="h4"
-            lineHeight="tight"
-            isTruncated
-          >
-            <FormControl p={2} id="current-company-title" isRequired>
-              <FormLabel
-                marginBottom={1}
-                pos={"relative"}
-                fontFamily={"PP Telegraf"}
-                fontSize={"16px"}
-                fontStyle={"normal"}
-                fontWeight={"400"}
-                lineHeight={"24p"}
-                letterSpacing={"0.02em"}
-                textAlign={"left"}
-              >
-                Current title
-              </FormLabel>
-              <Input
-                px={2}
-                fontSize="16px"
-                borderColor={"#587070"}
-                height={"40px"}
-                borderRadius={"4px"}
-                marginBottom={"12px"}
-                isInvalid={errors.currTitle}
-                errorBorderColor="red.300"
-                fontFamily={"PP Telegraf light"}
-                _placeholder={{ color: "#98B2B2" }}
-                value={values.currTitle || ""}
-                required
-                placeholder="Current title"
-                name="currTitle"
-                onChange={handleChange}
-              />
-              {errors.currTitle && (
-                <Text fontSize="xs" fontWeight="400" color="red.500">
-                  {errors.currTitle}
-                </Text>
-              )}
-            </FormControl>
-            <FormControl p={2} id="current-location">
-              <FormLabel
-                marginBottom={1}
-                pos={"relative"}
-                fontFamily={"PP Telegraf"}
-                fontSize={"16px"}
-                fontStyle={"normal"}
-                fontWeight={"400"}
-                lineHeight={"24p"}
-                letterSpacing={"0.02em"}
-                textAlign={"left"}
-              >
-                Current location
-              </FormLabel>
-              <Select
-                color="#F9FFF2"
-                fontFamily={"PP Telegraf Light"}
-                placeholder="Select current location"
-                _placeholder={{ color: "#98B2B2 !important" }}
-                name="currLocation"
-                onChange={handleChange}
-              >
-                {listOfCountries()}
-              </Select>
-            </FormControl>
-            <MultiSelect
-              name={"functionalExpertise"}
-              formLabel={"Functional expertise"}
-              handleChange={handleChange}
-              defaultValues={[]}
-              options={functionalExpertiseList}
-              maxSelections={3}
-            />
-            <MultiSelect
-              name={"industryExpertise"}
-              formLabel={"Industry expertise"}
-              handleChange={handleChange}
-              defaultValues={[]}
-              options={industryExpertiseList}
-              maxSelections={3}
-            />
-          </Box>
-        </Box>
-      </Box>
-    </form>
-  );
-};
+import { userProfileStep } from "./userProfileStep";
+import { merchantProfileStep } from "./merchantProfileStep";
+import { professionalProfileStep } from "./professionalProfileStep";
+import HeaderNav from "../HeaderNav/HeaderNav";
 
 const SignUpSteps = () => {
   const router = useRouter();
@@ -752,244 +179,109 @@ const SignUpSteps = () => {
     setAccType(accType);
     setIsAccTypeSelected(true);
   };
-
+  const [accSelectionComplete, setAccSelectionComplete] = useState(false);
   // Either displaying the account type selection
   // Or the steps component based on user selection
   return (
     <>
-      {isAccTypeSelection ? (
-        <>
-          <Button
-            size="sm"
-            pl={40}
-            onClick={() => router.push("/login")}
-            colorScheme="gray"
-            variant="link"
-          >
-            Back
-          </Button>
-          <Heading alignSelf="center">Sign Up</Heading>
-
-          <VStack alignSelf="center" spacing={8}>
-            <Text
-              alignSelf="center"
-              color="rgb(255, 255, 255)"
-              fontWeight="semibold"
-              fontSize="sm"
-              p={0}
-              m={0}
-            >
-              How would you like to use Twali?
-            </Text>
-            <HStack>
-              <Box
-                display="flex"
-                flexDirection="column"
-                justifyContent="space-between"
-                w="sm"
-                h="200px"
-                borderWidth="1px"
-                borderRadius="lg"
-                borderColor={btnActive == 1 ? "gray.200" : "gray.500"}
-                overflow="hidden"
-                cursor="pointer"
-                onClick={() => {
-                  setBtnActive(1);
-                  selectUserAccType("Expert");
-                }}
-              >
-                <Box p="4">
-                  <Box
-                    mt="1"
-                    fontWeight="semibold"
-                    as="h4"
-                    lineHeight="tight"
-                    isTruncated
-                  >
-                    As an expert 🔑
-                  </Box>
-
-                  <Box>
-                    <Box as="span" color="gray.500" fontSize="sm">
-                      I want to provide my knowledge and expertise
-                    </Box>
-                  </Box>
-                </Box>
-                <Box
-                  display="flex"
-                  justifyContent="flex-end"
-                  w="100%"
-                  padding="1rem"
-                >
-                  <Box
-                    w="2rem"
-                    h="2rem"
-                    backgroundColor="white"
-                    borderRadius="50%"
-                    position="relative"
-                  >
-                    {btnActive == 1 ? (
-                      <Img
-                        backgroundColor="rgb(222, 222, 222)"
-                        w="2rem"
-                        borderRadius="50%"
-                        style={{ cursor: "pointer" }}
-                        alignSelf="center"
-                        src="check-mark.png"
-                        alt="check mark"
-                      />
-                    ) : (
-                      <Box
-                        w="2rem"
-                        h="2rem"
-                        backgroundColor="gray.200"
-                        borderRadius="50%"
-                        boxShadow="inset 0 0px 5px 0 rgba(0,0,0,.8)"
-                      ></Box>
-                    )}
-                  </Box>
-                </Box>
-              </Box>
-              <Box
-                display="flex"
-                flexDirection="column"
-                justifyContent="space-between"
-                w="sm"
-                h="200px"
-                borderWidth="1px"
-                borderRadius="lg"
-                borderColor={btnActive == 2 ? "gray.200" : "gray.500"}
-                overflow="hidden"
-                cursor="pointer"
-                onClick={() => {
-                  setBtnActive(2);
-                  selectUserAccType("Builder");
-                }}
-              >
-                <Box p="4">
-                  <Box
-                    mt="1"
-                    fontWeight="semibold"
-                    as="h4"
-                    lineHeight="tight"
-                    isTruncated
-                  >
-                    As a builder 🛠
-                  </Box>
-
-                  <Box>
-                    <Box as="span" color="gray.500" fontSize="sm">
-                      I want to build a project
-                    </Box>
-                  </Box>
-                </Box>
-                <Box
-                  display="flex"
-                  justifyContent="flex-end"
-                  w="100%"
-                  padding="1rem"
-                >
-                  {btnActive == 2 ? (
-                    <Img
-                      backgroundColor="rgb(222, 222, 222)"
-                      w="2rem"
-                      borderRadius="50%"
-                      style={{ cursor: "pointer" }}
-                      alignSelf="center"
-                      src="check-mark.png"
-                      alt="check mark"
-                    />
-                  ) : (
-                    <Box
-                      w="2rem"
-                      h="2rem"
-                      backgroundColor="gray.200"
-                      borderRadius="50%"
-                      boxShadow="inset 0 0px 5px 0 rgba(0,0,0,.8)"
-                    ></Box>
-                  )}
-                </Box>
-              </Box>
-            </HStack>
-          </VStack>
-          <Button
-            disabled={!isAccTypeSelected}
-            alignSelf="center"
-            backgroundColor={"#C7F83C"}
-            w="xl"
-            onClick={(evt) => {
-              setIsAccTypeSelection(false);
-            }}
-          >
-            Continue
-          </Button>
-        </>
-      ) : (
-        <>
-          <Heading
-            fontSize={"72px"}
-            lineHeight={"88px"}
-            marginTop={"24px"}
-            marginBottom={"-8px"}
-            alignSelf="flex-start"
-            fontFamily={"Scope Light"}
-            fontWeight={"400"}
-          >
-            Set up my Twali
-          </Heading>
-          <Steps activeStep={activeStep}>
-            {steps.map(({ label, content }) => (
-              <Step label={label} key={label}>
-                {content}
-              </Step>
-            ))}
-          </Steps>
-          <HStack width={"100%"} justifyContent={"center"}>
-            <Button
-              w="sm"
-              alignSelf="left"
-              onClick={() => {
-                activeStep <= 0 ? router.push("/login") : prevStep();
-              }}
-              backgroundColor={"transparent"}
-              border={"1px solid #C7F83C"}
-              height={"40px"}
-              borderRadius={"32px"}
-              alignItems={"center"}
-              textTransform={"uppercase"}
-              justifyContent={"center"}
-              variant="link"
-            >
-              go back
-            </Button>
-            <Button
-              w="sm"
-              alignSelf="center"
-              color={"#0A1313"}
-              borderRadius={"32px"}
-              textTransform={"uppercase"}
-              backgroundColor={"#C7F83C"}
-              onClick={() => {
-                if (activeStep > 1) {
-                  updateAccType();
-                } else {
-                  nextStep();
-                }
-              }}
-            >
-              continue
-              {isSubmitted ? (
-                <CircularProgress
-                  size="22px"
-                  thickness="4px"
-                  isIndeterminate
-                  color="#3C2E26"
+      <Container
+        width="100%"
+        minHeight="100vh"
+        maxW={"100%"}
+        pos={"relative"}
+        bgSize={"cover"}
+        bgPosition={"center"}
+        bgImg={`url(${background.src})`}
+        px={0}
+      >
+        <HeaderNav whichPage="steps" step={accSelectionComplete} />
+        <Container
+          maxW="container.xl"
+          pb={!accSelectionComplete ? "inherit" : 8}
+          px={0}
+          m={accSelectionComplete ? "inherit" : 0}
+        >
+          <Flex h="full">
+            <VStack w="full" h="full" spacing={8} alignItems="flex-start">
+              {isAccTypeSelection ? (
+                <AccountSelection
+                  btnActive={btnActive}
+                  setBtnActive={setBtnActive}
+                  selectUserAccType={selectUserAccType}
+                  isAccTypeSelected={isAccTypeSelected}
+                  setIsAccTypeSelection={setIsAccTypeSelection}
+                  setAccSelectionComplete={setAccSelectionComplete}
                 />
-              ) : null}
-            </Button>{" "}
-          </HStack>
-        </>
-      )}
+              ) : (
+                <>
+                  <Heading
+                    fontSize={"72px"}
+                    lineHeight={"88px"}
+                    marginTop={"24px"}
+                    marginBottom={"-8px"}
+                    alignSelf="flex-start"
+                    fontFamily={"Scope Light"}
+                    fontWeight={"400"}
+                  >
+                    Set up my Twali
+                  </Heading>
+                  <Steps activeStep={activeStep}>
+                    {steps.map(({ label, content }) => (
+                      <Step label={label} key={label}>
+                        {content}
+                      </Step>
+                    ))}
+                  </Steps>
+                  <HStack width={"100%"} justifyContent={"center"}>
+                    <Button
+                      w="sm"
+                      alignSelf="left"
+                      onClick={() => {
+                        activeStep <= 0 ? router.push("/login") : prevStep();
+                      }}
+                      backgroundColor={"transparent"}
+                      border={"1px solid #C7F83C"}
+                      height={"40px"}
+                      borderRadius={"32px"}
+                      alignItems={"center"}
+                      textTransform={"uppercase"}
+                      justifyContent={"center"}
+                      variant="link"
+                    >
+                      go back
+                    </Button>
+                    <Button
+                      w="sm"
+                      alignSelf="center"
+                      color={"#0A1313"}
+                      borderRadius={"32px"}
+                      textTransform={"uppercase"}
+                      backgroundColor={"#C7F83C"}
+                      onClick={() => {
+                        if (activeStep > 1) {
+                          updateAccType();
+                        } else {
+                          nextStep();
+                        }
+                      }}
+                    >
+                      continue
+                      {isSubmitted ? (
+                        <CircularProgress
+                          size="22px"
+                          thickness="4px"
+                          isIndeterminate
+                          color="#3C2E26"
+                        />
+                      ) : null}
+                    </Button>{" "}
+                  </HStack>
+                </>
+              )}
+            </VStack>
+          </Flex>
+        </Container>
+      </Container>
     </>
   );
 };
