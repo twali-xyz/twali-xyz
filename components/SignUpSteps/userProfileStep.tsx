@@ -5,9 +5,7 @@ import {
   FormLabel,
   HStack,
   Text,
-  Tooltip,
 } from "@chakra-ui/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const userProfileStep = ({ handleChange, values, errors }) => {
   return (
