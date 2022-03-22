@@ -25,6 +25,7 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
         overflow="hidden"
         cursor="pointer"
         backgroundColor={"#041A19E5"}
+        marginBottom={"180px"}
       >
         <Box p="4">
           <Box
@@ -53,16 +54,21 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
                   href="https://www.sba.gov/business-guide/launch-your-business/choose-business-structure"
                   target={"_blank"}
                   rel="noopener noreferrer"
+                  _hover={{ textDecoration: "none" }}
                 >
-                  <Tooltip
-                    placement="auto-start"
-                    hasArrow
-                    label="Click to learn more "
+                  <Text
+                    marginBottom={1} //styleName: Body/body12;
+                    fontFamily={"PP Telegraf Light"}
+                    fontSize={"12px"}
+                    fontStyle={"normal"}
+                    fontWeight={"300"}
+                    lineHeight={"16px"}
+                    letterSpacing={"0em"}
+                    textAlign={"left"}
+                    color={"#0DD5D1"}
                   >
-                    <Box pos="relative">
-                      <FontAwesomeIcon icon={"info-circle"} />
-                    </Box>
-                  </Tooltip>
+                    click to learn more
+                  </Text>
                 </Link>
               </HStack>
               <Select
@@ -99,16 +105,30 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
                   letterSpacing={"0.02em"}
                   textAlign={"left"}
                 >
-                  Business legal name
+                  Business name
                 </FormLabel>
                 <Tooltip
+                  backgroundColor={"#F9FFF2"}
+                  color={"#0A1313"}
                   placement="auto-start"
                   hasArrow
                   label="If you are a sole proprietor, partnership, or single-member LLC, your 'Business Name' may be registered as your personal name or your business’s DBA.
                   If you are an LLC, corporation, or non-profit, Twali requires that the 'Business Name' be in the company’s legal business name or DBA"
                 >
                   <Box pos="relative">
-                    <FontAwesomeIcon icon={"info-circle"} />
+                    <Text
+                      marginBottom={1} //styleName: Body/body12;
+                      fontFamily={"PP Telegraf Light"}
+                      fontSize={"12px"}
+                      fontStyle={"normal"}
+                      fontWeight={"300"}
+                      lineHeight={"16px"}
+                      letterSpacing={"0em"}
+                      textAlign={"left"}
+                      color={"#0DD5D1"}
+                    >
+                      What is my business type?
+                    </Text>
                   </Box>
                 </Tooltip>
               </HStack>
@@ -126,7 +146,7 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
                 fontFamily={"PP Telegraf light"}
                 _placeholder={{ color: "#98B2B2" }}
                 value={values.businessName || ""}
-                placeholder="Business legal name"
+                placeholder="Business name"
                 name="businessName"
                 onChange={handleChange}
               />

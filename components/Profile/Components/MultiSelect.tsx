@@ -120,17 +120,26 @@ export function MultiSelect({
 }
 
 function Selector({ splitLabel, handleChange, options, idx, defaultValue }) {
+  const [color, setColor] = useState("#98B2B2");
   return (
     <Select
       key={`${splitLabel[0]}-${idx}`}
       marginTop={"8px"}
       placeholder={`Select ${splitLabel[0]} ${splitLabel[1]}`}
       name={`${splitLabel[0]}${splitLabel[1] + idx}`}
-      onChange={handleChange}
+      onChange={(e) => {
+        handleChange;
+        console.log(e.target.value);
+        if (e.target.value) {
+          setColor("#F9FFF2");
+        } else {
+          setColor("#98B2B2");
+        }
+      }}
       defaultValue={defaultValue}
       errorBorderColor="red.300"
       fontFamily={"PP Telegraf light"}
-      color="white"
+      color={color}
       _placeholder={{ color: "#98B2B2" }}
     >
       {options?.map((option, idx) => {

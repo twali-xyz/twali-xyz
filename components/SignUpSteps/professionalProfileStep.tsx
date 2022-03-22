@@ -84,10 +84,10 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
                 Current location
               </FormLabel>
               <Select
-                color="#F9FFF2"
                 fontFamily={"PP Telegraf Light"}
                 placeholder="Select current location"
                 _placeholder={{ color: "#98B2B2 !important" }}
+                color={values.currLocation ? "#F9FFF2" : "#98B2B2"}
                 name="currLocation"
                 onChange={handleChange}
               >

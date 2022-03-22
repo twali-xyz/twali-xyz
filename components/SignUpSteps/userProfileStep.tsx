@@ -175,10 +175,10 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                   lineHeight={"16px"}
                   letterSpacing={"0em"}
                   textAlign={"left"}
-                  color={"#0DD5D1"}
+                  color={"#98B2B2"}
                   requiredIndicator={null}
                 >
-                  your email won’t be shared with others
+                  your email won&apos;t be shared with others
                 </FormLabel>
               </HStack>
               <Input
@@ -263,29 +263,42 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
               </FormControl>
             </HStack>
             <FormControl pt={2} pb={3} px={2} id="website">
-              <Box display="flex" justifyContent="space-between">
-                <FormLabel
-                  marginBottom={1}
-                  pos={"relative"}
-                  fontFamily={"PP Telegraf"}
-                  fontSize={"16px"}
-                  fontStyle={"normal"}
-                  fontWeight={"400"}
-                  lineHeight={"24p"}
-                  letterSpacing={"0.02em"}
-                  textAlign={"left"}
+              <Box display="flex" justifyContent="space-between" width={"100%"}>
+                <HStack
+                  alignItems={"baseline"}
+                  justifyContent={"space-between"}
+                  marginBottom={0}
+                  width={"100%"}
                 >
-                  Your Website URL
-                </FormLabel>
-                <Tooltip
-                  placement="auto-start"
-                  hasArrow
-                  label="Add a personal or business website here"
-                >
-                  <Box pos="relative">
-                    <FontAwesomeIcon icon={"info-circle"} />
-                  </Box>
-                </Tooltip>
+                  <FormLabel
+                    marginBottom={1}
+                    pos={"relative"}
+                    fontFamily={"PP Telegraf"}
+                    fontSize={"16px"}
+                    fontStyle={"normal"}
+                    fontWeight={"400"}
+                    lineHeight={"24p"}
+                    letterSpacing={"0.02em"}
+                    textAlign={"left"}
+                  >
+                    Website URL
+                  </FormLabel>
+
+                  <FormLabel
+                    marginBottom={1} //styleName: Body/body12;
+                    fontFamily={"PP Telegraf Light"}
+                    fontSize={"12px"}
+                    fontStyle={"normal"}
+                    fontWeight={"300"}
+                    lineHeight={"16px"}
+                    letterSpacing={"0em"}
+                    textAlign={"left"}
+                    color={"#98B2B2"}
+                    requiredIndicator={null}
+                  >
+                    Add a personal or business website here
+                  </FormLabel>
+                </HStack>
               </Box>
               <Input
                 px={2}

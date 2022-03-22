@@ -41,6 +41,15 @@ div[aria-current="step"]:first-of-type {
   left: 1px;
 }
 
+span[role="presentation"] {
+  color: #f9fff2;
+}
+input:focus,
+select:focus {
+  border-color: #c7f83c !important;
+  box-shadow: none !important;
+}
+
 @font-face {
   font-family: "GrandSlang Italic";
   src: url("../public/fonts/GrandSlang-Italic.eot");
