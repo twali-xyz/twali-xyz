@@ -33,8 +33,7 @@ export function ProfileSnapshots({
         letterSpacing={"wide"}
         fontFamily={"PP Telegraf Light"}
       >
-        How to earn badges content. this is how its done so go get it done haha
-        nice ok got it.
+        The badges you earn participating in web3 will appear below
       </Text>
       {snapshotData ? (
         <>

@@ -2,11 +2,11 @@ import "../styles/global.css";
 import { AppProps } from "next/app";
 import * as React from "react";
 import { ChakraProvider, extendTheme, ThemeConfig } from "@chakra-ui/react";
-import { StepsStyleConfig as Steps } from "chakra-ui-steps";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { mode } from "@chakra-ui/theme-tools";
+import { customSteps } from "../styles/customStepsTheme";
 
 library.add(fab, fas);
 
@@ -17,7 +17,16 @@ const config: ThemeConfig = {
 
 const theme = extendTheme({
   config,
+
   styles: {
+    color: {
+      textPrimary: "#F9FFF2",
+      textSubtle: "#98B2B2",
+      textBold: "#C7F83C",
+    },
+    backgroundColor: {
+      actionBold: "#C7F83C",
+    },
     global: (props) => ({
       body: {
         bg: mode("white", "rgb(30, 30, 30)")(props),
@@ -25,8 +34,9 @@ const theme = extendTheme({
       },
     }),
   },
+
   components: {
-    Steps,
+    Steps: customSteps,
   },
 });
 

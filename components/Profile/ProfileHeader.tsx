@@ -53,6 +53,7 @@ export function ProfileHeader({ userName }) {
         textTransform={"uppercase"}
         pos={"relative"}
         top={"16px"}
+        visibility={"hidden"}
       >
         available to work
       </Text>

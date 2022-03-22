@@ -86,7 +86,7 @@ const CompanyModal = (props) => {
 
   // on open, set the values to the current company
   useEffect(() => {
-    if (!props.isOpen) return;
+    if (!props.isOpen || !props.userData?.companyInfo) return;
     setCompanyName(props.userData?.companyInfo[props.currCompany]?.companyName);
     setCompanyTitle(
       props.userData?.companyInfo[props.currCompany]?.companyTitle
@@ -102,11 +102,11 @@ const CompanyModal = (props) => {
       props.userData?.companyInfo[props.currCompany]?.companyExpertise
     );
     setTempLogo(
-      props.userData?.companyInfo[props.currCompany].companyName
+      props.userData?.companyInfo[props.currCompany]?.companyName
         ? props.userData?.companyInfo[props.currCompany]?.logo
         : false
     );
-    console.log(props.userData?.companyInfo[props.currCompany].companyName);
+    console.log(props.userData?.companyInfo[props.currCompany]?.companyName);
   }, [props.isOpen]);
 
   const companyInfo =
