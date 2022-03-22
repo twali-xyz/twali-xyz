@@ -3,10 +3,10 @@ var AWS = require("aws-sdk");
 require("dotenv").config();
 
 // Only used in local development
-AWS.config.update({
-  region: "us-east-1",
-  // endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT,
-});
+// AWS.config.update({
+//   region: "us-east-1",
+//   // endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT,
+// });
 
 let dynamodb = new AWS.DynamoDB();
 
