@@ -1,4 +1,4 @@
-import { Text, VStack, Button, Flex } from "@chakra-ui/react";
+import { Text, VStack, Button, Flex, Link } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
 
@@ -105,7 +105,7 @@ export function AccountSelection({
         cursor="pointer"
         onClick={() => {
           setBtnActive(2);
-          selectUserAccType("Builder");
+          selectUserAccType("Client");
         }}
         backgroundImage={
           btnActive == 2
@@ -127,7 +127,7 @@ export function AccountSelection({
           color={btnActive == 2 ? "#0A1313" : "#C7F83C"}
           backgroundColor={btnActive == 2 ? "#C7F83C" : "#0A1313"}
         >
-          builder
+          client
         </Text>
         <Text
           pos={"relative"}
@@ -140,25 +140,27 @@ export function AccountSelection({
           I want to build a project
         </Text>
 
-        <Button
-          disabled={!isAccTypeSelected}
-          alignSelf="center"
-          backgroundColor={"#C7F83C"}
-          color={"#0A1313"}
-          w="220px"
-          h={"40px"}
-          pos={"relative"}
-          top={"200px"}
-          borderRadius={"32px"}
-          padding={"16px, 24px, 13px, 24px"}
-          onClick={(evt) => {
-            setIsAccTypeSelection(false);
-            setAccSelectionComplete(true);
-          }}
-          visibility={btnActive == 2 ? "unset" : "hidden"}
+        <Link
+          _hover={{ textDecoration: "none" }}
+          textDecoration={"none"}
+          href="mailto:degen@twali.xyz"
         >
-          Continue
-        </Button>
+          <Button
+            disabled={!isAccTypeSelected}
+            alignSelf="center"
+            backgroundColor={"#C7F83C"}
+            color={"#0A1313"}
+            w="220px"
+            h={"40px"}
+            pos={"relative"}
+            top={"200px"}
+            borderRadius={"32px"}
+            padding={"16px, 24px, 13px, 24px"}
+            visibility={btnActive == 2 ? "unset" : "hidden"}
+          >
+            Continue
+          </Button>
+        </Link>
       </VStack>
     </Flex>
   );
