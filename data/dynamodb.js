@@ -10,14 +10,14 @@ const getDynamoDBClient = () => {
 
   // Only needed with local development.
   // if (process.env.LOCAL_DYNAMO_DB_ENDPOINT) {
-    // AWS.config.update({
-    //   accessKeyId: 'xxxx',
-    //   secretAccessKey: 'xxxx',
-    //   region: "us-east-1",
-    //   endpoint: "http://localhost:8000",
-    // });
-    // };
-  
+ AWS.config.update({
+  //     accessKeyId: "xxxx",
+  //     secretAccessKey: "xxxx",
+     region: "us-east-1",
+  //     endpoint: "http://localhost:8000",
+  });
+  // }
+
   const options = {
     convertEmptyValues: true,
     region: dynamoDBRegion,
@@ -105,7 +105,7 @@ module.exports = {
           currLocation: currLocation ? currLocation : null,
           functionalExpertise: functionalExpertise,
           industryExpertise: industryExpertise,
-          companyInfo: companyInfo ? companyInfo: null,
+          companyInfo: companyInfo ? companyInfo : null,
         },
         // ConditionExpression: attribute_not_exists(userWallet)
       })
@@ -133,7 +133,7 @@ module.exports = {
       .promise()
       .then((data) => data.Items[0])
       .catch(console.error);
-      return dbUser;
+    return dbUser;
   },
 
   /**
@@ -157,7 +157,7 @@ module.exports = {
       .promise()
       .then((data) => data.Items[0])
       .catch(console.error);
-      return dbUser;
+    return dbUser;
   },
 
   /**
@@ -167,59 +167,61 @@ module.exports = {
    * @example See docs about editing existing attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#update-property
    */
   updateUserExpertise: async (userWallet, attributes) => {
-    console.log('UPDATE USER EXP DYNAMO');
+    console.log("UPDATE USER EXP DYNAMO");
     console.log(userWallet);
     console.log(attributes);
-    let {
-      userName,
-      functionalExpertise,
-      industryExpertise,
-    } = attributes;
+    let { userName, functionalExpertise, industryExpertise } = attributes;
     console.log(attributes);
-  await getDynamoDBClient().update({
-      TableName,
-      Key: {
-        userWallet: userWallet,
-        userName: userName,
-      },
-      UpdateExpression: "SET functionalExpertise = :functionalExpertise, industryExpertise = :industryExpertise",
-      // ConditionExpression: "",
-      ExpressionAttributeValues: {
-        ":functionalExpertise": functionalExpertise,
-        ":industryExpertise": industryExpertise,
-      },
-    }).promise()
-    .then(data => console.log(data)).catch(console.error);
-  }, 
-    /**
-   * @desc Edits an existing users item's attributes, or adds a new item to the table if it does not already exist.
-   * @param {object} - function takes an object as a the parameter with primary and attributes. Object will need to the primary key and any attributes that are being updated or created.
-   * @dev New items can be added to a user and does need to be predefined in the table. Any values in 'UpdateExpression' need to be defined will values within 'ExpressionAttributeValues'.
-   * @example See docs about editing existing attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#update-property
-   */
-     updateUserProfile: async (userWallet, attributes) => {
-      console.log('UPDATE USER PROF DYNAMO');
-      console.log(userWallet);
-      console.log(attributes);
-      let {
-        userName,
-        firstName,
-        lastName,
-        currTitle,
-        currLocation,
-        bio,
-        linkedIn,
-        twitter,
-        email
-      } = attributes;
-  
-    await getDynamoDBClient().update({
+    await getDynamoDBClient()
+      .update({
         TableName,
         Key: {
           userWallet: userWallet,
           userName: userName,
         },
-        UpdateExpression: "SET firstName = :firstName, lastName = :lastName, currTitle = :currTitle, currLocation = :currLocation, bio = :bio, linkedIn = :linkedIn, twitter = :twitter, email = :email",
+        UpdateExpression:
+          "SET functionalExpertise = :functionalExpertise, industryExpertise = :industryExpertise",
+        // ConditionExpression: "",
+        ExpressionAttributeValues: {
+          ":functionalExpertise": functionalExpertise,
+          ":industryExpertise": industryExpertise,
+        },
+      })
+      .promise()
+      .then((data) => console.log(data))
+      .catch(console.error);
+  },
+  /**
+   * @desc Edits an existing users item's attributes, or adds a new item to the table if it does not already exist.
+   * @param {object} - function takes an object as a the parameter with primary and attributes. Object will need to the primary key and any attributes that are being updated or created.
+   * @dev New items can be added to a user and does need to be predefined in the table. Any values in 'UpdateExpression' need to be defined will values within 'ExpressionAttributeValues'.
+   * @example See docs about editing existing attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#update-property
+   */
+  updateUserProfile: async (userWallet, attributes) => {
+    console.log("UPDATE USER PROF DYNAMO");
+    console.log(userWallet);
+    console.log(attributes);
+    let {
+      userName,
+      firstName,
+      lastName,
+      currTitle,
+      currLocation,
+      bio,
+      linkedIn,
+      twitter,
+      email,
+    } = attributes;
+
+    await getDynamoDBClient()
+      .update({
+        TableName,
+        Key: {
+          userWallet: userWallet,
+          userName: userName,
+        },
+        UpdateExpression:
+          "SET firstName = :firstName, lastName = :lastName, currTitle = :currTitle, currLocation = :currLocation, bio = :bio, linkedIn = :linkedIn, twitter = :twitter, email = :email",
         // ConditionExpression: "",
         ExpressionAttributeValues: {
           ":firstName": firstName,
@@ -231,46 +233,46 @@ module.exports = {
           ":twitter": twitter,
           ":email": email,
         },
-      }).promise()
-      .then(data => console.log(data)).catch(console.error);
-    }, 
+      })
+      .promise()
+      .then((data) => console.log(data))
+      .catch(console.error);
+  },
   /**
    * @desc Edits an existing users item's attributes, or adds a new item to the table if it does not already exist.
    * @param {object} - function takes an object as a the parameter with primary and attributes. Object will need to the primary key and any attributes that are being updated or created.
    * @dev New items can be added to a user and does need to be predefined in the table. Any values in 'UpdateExpression' need to be defined will values within 'ExpressionAttributeValues'.
    * @example See docs about editing existing attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#update-property
    */
-    updateUserCompanyData: async (userWallet, attributes) => {
-      console.log('UPDATE USER COMPANY DATA DYNAMO');
+  updateUserCompanyData: async (userWallet, attributes) => {
+    console.log("UPDATE USER COMPANY DATA DYNAMO");
 
-      let {
-        companyData,
-        userName,
-      } = attributes;
-  
-      let companyInfo = companyData; // to use companyInfo as the new array obj in the front-end
+    let { companyData, userName } = attributes;
 
-      console.log('COMPANY INFO', companyInfo);
-      const getParams = (updatedCompanyData) => {
-        const params = {
-          TableName,
-          Key: {
-            userWallet: userWallet,
-            userName: userName,
-          },
-          UpdateExpression: 'SET companyInfo = :updatedData',
-           ExpressionAttributeValues: {
-                ":updatedData": updatedCompanyData,
-            },
-            ReturnValues:"UPDATED_NEW"
-        };
-        return params;
-        }
+    let companyInfo = companyData; // to use companyInfo as the new array obj in the front-end
+
+    console.log("COMPANY INFO", companyInfo);
+    const getParams = (updatedCompanyData) => {
+      const params = {
+        TableName,
+        Key: {
+          userWallet: userWallet,
+          userName: userName,
+        },
+        UpdateExpression: "SET companyInfo = :updatedData",
+        ExpressionAttributeValues: {
+          ":updatedData": updatedCompanyData,
+        },
+        ReturnValues: "UPDATED_NEW",
+      };
+      return params;
+    };
 
     // Updating the companyInfo array
     let params = getParams(companyInfo);
-  
-    await getDynamoDBClient().update({
+
+    await getDynamoDBClient()
+      .update({
         TableName: params.TableName,
         Key: {
           userWallet: userWallet,
@@ -278,9 +280,11 @@ module.exports = {
         },
         UpdateExpression: params.UpdateExpression,
         ExpressionAttributeValues: params.ExpressionAttributeValues,
-        ReturnValues:"ALL_NEW"
-      }).promise().catch(console.error);
-    }, 
+        ReturnValues: "ALL_NEW",
+      })
+      .promise()
+      .catch(console.error);
+  },
   /**
    * @desc Directly access a list of users in the table by scanning the table with `TableName`
    * @dev This can be altered to included any additional attributes with 'ProjectionExpression'.
@@ -293,8 +297,8 @@ module.exports = {
         TableName,
       })
       .promise()
-      .then(data => data.Items)
-      .catch(console.error); 
-      return allUsers;
+      .then((data) => data.Items)
+      .catch(console.error);
+    return allUsers;
   },
 };

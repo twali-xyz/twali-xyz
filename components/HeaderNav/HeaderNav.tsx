@@ -10,6 +10,7 @@ const HeaderNav = (props) => {
   const whichPage = props.whichPage;
   const isConnectWalletBtn = props.isConnectWalletBtn;
   const userPage = props.userPage;
+  const userWallet = props.userWallet;
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const router = useRouter();
@@ -82,6 +83,7 @@ const HeaderNav = (props) => {
       justify="space-between"
       wrap="wrap"
       w="100%"
+      pos={props.step == 0 ? "absolute" : "relative"}
       backgroundColor={whichPage === "profile" ? "#0A1313" : "transparent"}
     >
       <Img
@@ -110,7 +112,7 @@ const HeaderNav = (props) => {
                />
              ) : null}
            </Button>
-          ): (
+          ): userWallet && (
             <Flex
             ml="2"
             mt="1"
@@ -122,17 +124,18 @@ const HeaderNav = (props) => {
             borderRadius={32}
           >
             <Text
-            color="white"
-            fontSize={"14px"}
-            margin={"auto"}
-            alignSelf={"center"}
-            fontWeight={"700"}
-            letterSpacing={"0.06em"}
-            textTransform={"uppercase"}
-          >
-            0xb794f...
-          </Text>
-        </Flex>
+              color="white"
+              fontSize={"14px"}
+              margin={"auto"}
+              alignSelf={"center"}
+              fontWeight={"700"}
+              letterSpacing={"0.06em"}
+              textTransform={"uppercase"}
+              isTruncated
+            >
+              {userWallet}
+            </Text>
+          </Flex>
         )}
       </HStack>
     </Flex>

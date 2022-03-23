@@ -126,24 +126,28 @@ const EditExpertiseModal = (props) => {
           <ModalBody>
             <form style={{ alignSelf: "center" }}>
               <MultiSelect
-                formLabel={"So...what would you say you do?"}
                 name={"functionalExpertise"}
+                formLabel={"Functional expertise"}
                 handleChange={handleChange}
                 options={functionalExpertiseList}
+                maxSelections={3}
                 defaultValues={
                   values.functionalExpertise ||
-                  props.userData.functionalExpertise
+                  props.userData.functionalExpertise ||
+                  []
                 }
-                maxSelections={3}
               />
+
               <MultiSelect
-                formLabel={"Where would you say you work?"}
                 name={"industryExpertise"}
+                formLabel={"Industry expertise"}
                 handleChange={handleChange}
-                options={industryExpertiseList}
                 defaultValues={
-                  values.industryExpertise || props.userData.industryExpertise
+                  values.industryExpertise ||
+                  props.userData.industryExpertise ||
+                  []
                 }
+                options={industryExpertiseList}
                 maxSelections={3}
               />
             </form>

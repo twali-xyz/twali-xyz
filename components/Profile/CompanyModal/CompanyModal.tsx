@@ -86,7 +86,7 @@ const CompanyModal = (props) => {
 
   // on open, set the values to the current company
   useEffect(() => {
-    if (!props.isOpen) return;
+    if (!props.isOpen || !props.userData?.companyInfo) return;
     setCompanyName(props.userData?.companyInfo[props.currCompany]?.companyName);
     setCompanyTitle(
       props.userData?.companyInfo[props.currCompany]?.companyTitle
