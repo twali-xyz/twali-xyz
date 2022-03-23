@@ -82,6 +82,14 @@ const CompanyModal = (props) => {
       companyFunc: "",
       companyIndustry: "",
     },
+    {
+      companyName: "",
+      companyTitle: "",
+      companyStart: "",
+      companyEnd: "",
+      companyFunc: "",
+      companyIndustry: "",
+    },
   ];
 
   // on open, set the values to the current company
