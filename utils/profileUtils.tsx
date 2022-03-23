@@ -23,10 +23,8 @@ export const fetchPermission =
           userName: currentUserName,
           permissions: ["edit"],
         };
-        console.log("PERMISSION DATA:", user.permissions.includes(permission));
         return user.permissions.includes(permission);
       } else {
-        console.log("PERMISSION DATA:", user.permissions.includes(permission));
         return user.permissions.includes(permission);
       }
     }
