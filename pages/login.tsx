@@ -16,6 +16,7 @@ import Web3 from "web3";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { UserData } from "../utils/interfaces";
+import { getUserByWallet } from '../utils/walletUtils';
 
 const LoginPage = (props) => {
   useEffect(() => {
@@ -28,17 +29,7 @@ const LoginPage = (props) => {
   const [loaded, setLoaded] = useState(false);
   const router = useRouter();
 
-  const getUserByWallet = async (userWallet) => {
-    let lowerCaseWallet = userWallet.toLowerCase();
-    const res = await fetch(`/api/users/wallet/${lowerCaseWallet}`);
-
-    const data: any = await res.json();
-
-    console.log("RETRIEVE USER BY WALLET YO");
-    return data;
-  };
-
-  const handleWalletConnect = async () => {
+  const handleWalletConnectOnLogin = async () => {
     const web3Modal = new Web3Modal({
       disableInjectedProvider: false,
       network: "rinkeby",
@@ -141,7 +132,7 @@ const LoginPage = (props) => {
               height={"52px"}
               color={"#062B2A"}
               backgroundColor={"#C7F83C"}
-              onClick={handleWalletConnect}
+              onClick={handleWalletConnectOnLogin}
             >
               Connect Wallet{" "}
               {isSubmitted ? (
