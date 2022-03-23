@@ -57,6 +57,11 @@ const EditExpertiseModal = (props) => {
         props.handleUpdatedExperiences(userData, false);
         props.onClose();
         window.location.reload();
+        setValues({
+          ...userData,
+          functionalExpertise: values.functionalExpertise,
+          industryExpertise: values.industryExpertise,
+        });
         setUserData({
           ...userData,
           functionalExpertise: values.functionalExpertise,
@@ -109,6 +114,11 @@ const EditExpertiseModal = (props) => {
         ...values,
         [evt.target.name]: evt.target.value,
       }));
+      setUserData({
+        ...userData,
+        functionalExpertise: values.functionalExpertise,
+        industryExpertise: values.industryExpertise,
+      });
     }
   };
 
