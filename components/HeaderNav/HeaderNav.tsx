@@ -41,7 +41,6 @@ const HeaderNav = (props) => {
       },
     });
     web3Modal.clearCachedProvider();
-    console.log('WEB3MODAL: ', web3Modal);
     const provider = await web3Modal.connect();
     const web3 = new Web3(provider);
     const accounts = await web3.eth.getAccounts();
@@ -51,21 +50,12 @@ const HeaderNav = (props) => {
       let userData: UserData = await getUserByWallet(currAccount);
       console.log(userData);
       if (userData && userData.userName && userData.userWallet) {
-        // if (userPage && userPage.userName) {
-        //   router.push({
-        //     pathname: '/[userName]',
-        //     query: { userName: `${userPage.userName}`}
-        //   })
-        // } else {
-        //   router.push({
-        //     pathname: '/[userName]',
-        //     query: { userName: `${userData.userName}`}
-        //   })
-        console.log(router.query);
         if (router.query?.view == 'public' && userPage && userPage.userName) {
-          router.push(`/${userPage.userName}`);
+          await router.push(`/${userPage.userName}`);
+          router.reload(); // reloads the profile page after changing the shallow route
         } else if (router.query?.view == 'public' && userData && userData.userName) {
-          router.push(`/${userData.userName}`);
+          await router.push(`/${userData.userName}`);
+          router.reload(); // reloads the profile page after changing the shallow route
         } else {
           router.reload(); // reloads the profile page upon login
         }

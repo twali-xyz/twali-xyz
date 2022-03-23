@@ -28,7 +28,6 @@ import { functionalExpertiseList } from "../../../utils/functionalExpertiseConst
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
 
 const CompanyModal = (props) => {
-  console.log(props.userData);
   const finalRef = useRef();
   const [count, setCount] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);

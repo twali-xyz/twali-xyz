@@ -84,6 +84,7 @@ const ProfileDetails = ({ user }) => {
     }
   }
 
+  // Display or hide the connect wallet btn depending on a state change
   useEffect( () => {
     setIsConnectWalletBtn(isConnectWalletBtn);
 }, [isConnectWalletBtn]); 
@@ -227,8 +228,6 @@ const ProfileDetails = ({ user }) => {
   function createWorkElements(number) {
     var elements = [];
     let totalLen = userData.companyInfo ? userData.companyInfo.length : 0;
-    console.log(userData.companyInfo);
-    console.log(totalLen);
     for (let i = 0; i < number; i++) {
       if (
         userData.companyInfo &&
@@ -268,7 +267,6 @@ const ProfileDetails = ({ user }) => {
         );
       }
     }
-    console.log('ELEMENTS: ', elements);
     return elements;
   }
   const viewCompany = (
