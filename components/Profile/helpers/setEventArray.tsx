@@ -56,6 +56,6 @@ export function setEventArray({
 
   setUserData({
     ...userData,
-    [strippedEventName]: values[strippedEventName],
+    [strippedEventName]: eventArray,
   });
 }
