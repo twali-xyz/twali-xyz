@@ -110,11 +110,10 @@ const CompanyModal = (props) => {
       props.userData?.companyInfo[props.currCompany]?.companyExpertise
     );
     setTempLogo(
-      props.userData?.companyInfo[props.currCompany]?.companyName
+      props.userData?.companyInfo[props.currCompany]?.logo
         ? props.userData?.companyInfo[props.currCompany]?.logo
         : false
     );
-    console.log(props.userData?.companyInfo[props.currCompany]?.companyName);
   }, [props.isOpen]);
 
   const companyInfo =

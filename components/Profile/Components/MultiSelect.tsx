@@ -128,8 +128,6 @@ function Selector({ splitLabel, handleChange, options, idx, defaultValue }) {
       placeholder={`Select ${splitLabel[0]} ${splitLabel[1]}`}
       name={`${splitLabel[0]}${splitLabel[1] + idx}`}
       onChange={(e) => {
-        console.log(!!e.target.value);
-
         handleChange(e);
         if (e.target.value) {
           setColor("#F9FFF2");
