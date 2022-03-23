@@ -202,22 +202,7 @@ const EditProfileModal = (props) => {
                     </Text>
                   )}
               </FormControl>
-              {/* <FormControl p={2}>
-                isInvalid={!!errors.file_}
-                <FormLabel>{"Update profile picture"}</FormLabel>
 
-                {/* <FileUpload
-                handleFile={handleFile}
-                >
-                    <Button>
-                    Upload
-                    </Button>
-                </FileUpload> */}
-
-              {/* <FormErrorMessage>
-                    {errors.file_ && errors?.file_.message}
-                </FormErrorMessage> */}
-              {/* </FormControl> */}
               <FormControl p={2} id="first-name" isRequired>
                 <FormLabel>First name</FormLabel>
                 <Input
@@ -259,6 +244,43 @@ const EditProfileModal = (props) => {
                       {errors.lastName}
                     </Text>
                   )}
+              </FormControl>
+              <FormControl p={2} id="current-company-title" isRequired>
+                <FormLabel
+                  marginBottom={1}
+                  pos={"relative"}
+                  fontFamily={"PP Telegraf"}
+                  fontSize={"16px"}
+                  fontStyle={"normal"}
+                  fontWeight={"400"}
+                  lineHeight={"24p"}
+                  letterSpacing={"0.02em"}
+                  textAlign={"left"}
+                >
+                  Current title
+                </FormLabel>
+                <Input
+                  px={2}
+                  fontSize="16px"
+                  borderColor={"#587070"}
+                  height={"40px"}
+                  borderRadius={"4px"}
+                  marginBottom={"12px"}
+                  isInvalid={errors.currTitle}
+                  errorBorderColor="red.300"
+                  fontFamily={"PP Telegraf light"}
+                  _placeholder={{ color: "#98B2B2" }}
+                  defaultValue={values.currTitle || ""}
+                  required
+                  placeholder="Current title"
+                  name="currTitle"
+                  onChange={handleChange}
+                />
+                {errors.currTitle && (
+                  <Text fontSize="xs" fontWeight="400" color="red.500">
+                    {errors.currTitle}
+                  </Text>
+                )}
               </FormControl>
               <FormControl p={2} id="email" isRequired>
                 <FormLabel>Email</FormLabel>

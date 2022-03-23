@@ -23,7 +23,7 @@ export function ProfileSocialMedia({ userData, ...props }) {
           href={userData.twitter}
           target="_blank"
           rel="noopener noreferrer"
-          marginLeft={"16px !important"}
+          marginLeft={userData.linkedIn ? "16px !important" : "initial"}
         >
           <Image
             src="twali-assets/twitterLogo.png"
