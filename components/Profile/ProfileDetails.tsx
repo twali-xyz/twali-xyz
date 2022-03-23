@@ -290,7 +290,7 @@ const ProfileDetails = ({ user }) => {
         userData.userName &&
         userData.userWallet && (
           <>
-            <HeaderNav whichPage="profile" isConnectWalletBtn={isConnectWalletBtn} userPage={userData}/>
+            <HeaderNav whichPage="profile" isConnectWalletBtn={isConnectWalletBtn} userPage={userData} userWallet={loggedInUserAddress}/>
             <Container
               maxW="100%"
               p={0}

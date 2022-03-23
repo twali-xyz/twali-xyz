@@ -30,8 +30,8 @@ const HeaderNav = (props) => {
         height={"auto"}
         src="/twali-assets/navbar_logo.png"
       />
-      <HStack alignItems="center" w="180px" height={"32px"}>
-          { whichPage === "profile" && isConnectWalletBtn ? (
+          { isConnectWalletBtn ? (
+          <HStack alignItems="center" w="180px" height={"32px"}>
              <Button
              paddingLeft={4}
              paddingRight={4}
@@ -51,10 +51,13 @@ const HeaderNav = (props) => {
                />
              ) : null}
            </Button>
+           </HStack>
           ): userWallet && (
+            <HStack alignItems="center" w="130px" height={"32px"}>
             <Flex
             ml="2"
             mt="1"
+            pl={2}
             width={"100%"}
             height={"100%"}
             border={"1px solid #F9FFF2"}
@@ -75,8 +78,8 @@ const HeaderNav = (props) => {
               {userWallet}
             </Text>
           </Flex>
+          </HStack>
         )}
-      </HStack>
     </Flex>
   );
 };
