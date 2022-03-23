@@ -143,7 +143,12 @@ export function AccountSelection({
         <Link
           _hover={{ textDecoration: "none" }}
           textDecoration={"none"}
-          href="mailto:degen@twali.xyz"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="mailto:degen@twali.xyz?subject=Twali client application"
+          onClick={() => {
+            router.push("/");
+          }}
         >
           <Button
             disabled={!isAccTypeSelected}
