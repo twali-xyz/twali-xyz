@@ -6,3 +6,4 @@ twali-xyz-staging:
     build:
       env:
         TABLE_NAME: "dev_staging_user_profile_test"
+    cloundFront: E3PNKWOM3RVQQ8

@@ -1,14 +1,14 @@
 {
-  "id": "E2STEHUQ1Q30LE",
-  "arn": "arn:aws:cloudfront::517934542124:distribution/E2STEHUQ1Q30LE",
-  "url": "https://ddmaacpflxy4o.cloudfront.net",
+  "id": "E3PNKWOM3RVQQ8",
+  "arn": "arn:aws:cloudfront::517934542124:distribution/E3PNKWOM3RVQQ8",
+  "url": "https://doipf23pj2ww6.cloudfront.net",
   "region": "us-east-1",
   "enabled": true,
   "comment": "",
   "priceClass": "PriceClass_All",
   "origins": [
     {
-      "url": "http://s08rvxm-lhoaazk.s3.us-east-1.amazonaws.com",
+      "url": "http://uz6gq9s-3enzxa8.s3.us-east-1.amazonaws.com",
       "private": true,
       "pathPatterns": {
         "_next/static/*": {
@@ -53,7 +53,7 @@
             "queryString": true
           },
           "lambda@edge": {
-            "origin-request": "arn:aws:lambda:us-east-1:517934542124:function:s08rvxm-cotqgos:28"
+            "origin-request": "arn:aws:lambda:us-east-1:517934542124:function:uz6gq9s-b8z3qm:1"
           }
         },
         "_next/data/*": {
@@ -73,8 +73,8 @@
             "queryString": true
           },
           "lambda@edge": {
-            "origin-request": "arn:aws:lambda:us-east-1:517934542124:function:s08rvxm-xmxzdx:28",
-            "origin-response": "arn:aws:lambda:us-east-1:517934542124:function:s08rvxm-xmxzdx:28"
+            "origin-request": "arn:aws:lambda:us-east-1:517934542124:function:uz6gq9s-tfaxn8m:1",
+            "origin-response": "arn:aws:lambda:us-east-1:517934542124:function:uz6gq9s-tfaxn8m:1"
           }
         }
       }
@@ -103,8 +103,8 @@
       "PATCH"
     ],
     "lambda@edge": {
-      "origin-request": "arn:aws:lambda:us-east-1:517934542124:function:s08rvxm-xmxzdx:28",
-      "origin-response": "arn:aws:lambda:us-east-1:517934542124:function:s08rvxm-xmxzdx:28"
+      "origin-request": "arn:aws:lambda:us-east-1:517934542124:function:uz6gq9s-tfaxn8m:1",
+      "origin-response": "arn:aws:lambda:us-east-1:517934542124:function:uz6gq9s-tfaxn8m:1"
     },
     "compress": true
   }
