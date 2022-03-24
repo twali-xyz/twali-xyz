@@ -43,7 +43,7 @@ export function ProfileSnapshots({
             fontSize="16px"
             color={"#98B2B2"}
             mt={4}
-            mb={8}
+            mb={4}
             lineHeight={"24px"}
             letterSpacing={"wide"}
             fontFamily={"PP Telegraf Light"}
@@ -54,10 +54,14 @@ export function ProfileSnapshots({
       </UserPermissionsRestricted>
       {snapshotData ? (
         <>
-          <HStack spacing={4}>
+          <HStack spacing={4} maxW={"640px"} display={"flex"} flexWrap={"wrap"}>
             {!!snapshotData?.length ? (
-              snapshotData?.map((vote) => (
+              snapshotData?.map((vote, idx) => (
                 <Img
+                  marginLeft={[
+                    "0 !important",
+                    idx === 0 || idx > 6 ? "0px" : "32px !important",
+                  ]}
                   style={{
                     cursor: "pointer",
                   }}
