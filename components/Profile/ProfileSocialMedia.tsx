@@ -12,7 +12,9 @@ export function ProfileSocialMedia({ userData, ...props }) {
           href={
             splitLinkedIn[2]
               ? `https://${splitLinkedIn[1] + splitLinkedIn[2]}`
-              : `https://${splitLinkedIn[0] + splitLinkedIn[1]}`
+              : splitLinkedIn[1]
+              ? `https://${splitLinkedIn[0] + splitLinkedIn[1]}`
+              : `${splitLinkedIn[0]}`
           }
           target="_blank"
           rel="noopener noreferrer"
@@ -30,7 +32,9 @@ export function ProfileSocialMedia({ userData, ...props }) {
           href={
             splitTwitter[2]
               ? `https://${splitTwitter[1] + splitTwitter[2]}`
-              : `https://${splitTwitter[0] + splitTwitter[1]}`
+              : splitTwitter[1]
+              ? `https://${splitTwitter[0] + splitTwitter[1]}`
+              : `${splitTwitter[0]}`
           }
           target="_blank"
           rel="noopener noreferrer"
