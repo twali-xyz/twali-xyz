@@ -137,7 +137,7 @@ const EditExpertiseModal = (props) => {
             <form style={{ alignSelf: "center" }}>
               <MultiSelect
                 name={"functionalExpertise"}
-                formLabel={"Functional expertise"}
+                formLabel={"Superpowers"}
                 handleChange={handleChange}
                 options={functionalExpertiseList}
                 maxSelections={3}

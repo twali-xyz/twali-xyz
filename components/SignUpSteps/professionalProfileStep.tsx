@@ -96,7 +96,7 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
             </FormControl>
             <MultiSelect
               name={"functionalExpertise"}
-              formLabel={"Functional expertise"}
+              formLabel={"What's your superpower? (select max 3)"}
               handleChange={handleChange}
               defaultValues={[]}
               options={functionalExpertiseList}
@@ -104,7 +104,7 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
             />
             <MultiSelect
               name={"industryExpertise"}
-              formLabel={"Industry expertise"}
+              formLabel={"Industry expertise (select max 3)"}
               handleChange={handleChange}
               defaultValues={[]}
               options={industryExpertiseList}

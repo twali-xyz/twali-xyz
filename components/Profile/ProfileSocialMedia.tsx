@@ -2,8 +2,8 @@ import { HStack, Link, Image } from "@chakra-ui/react";
 import React from "react";
 
 export function ProfileSocialMedia({ userData, ...props }) {
-  const splitTwitter = userData.twitter.split(/(twitter\.com\/)/);
-  const splitLinkedIn = userData.linkedIn.split(/(linkedin\.com\/)/);
+  const splitTwitter = userData.twitter?.split(/(twitter\.com\/)/);
+  const splitLinkedIn = userData.linkedIn?.split(/(linkedin\.com\/)/);
 
   return (
     <HStack width={"6rem"} {...props}>
