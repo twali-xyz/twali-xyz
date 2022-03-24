@@ -25,9 +25,7 @@ export function ProfileExperience({
       >
         Work Experience
       </Text>
-      <HStack justifyContent={"space-between"} maxW={"640px"}>
-        {createWorkElements(6)}
-      </HStack>
+      <HStack maxW={"640px"}>{createWorkElements(6)}</HStack>
       <UserPermissionsRestricted to="edit" fallback={viewCompany}>
         <CompanyModal
           isOpen={isCompanyModalOpen}

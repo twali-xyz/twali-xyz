@@ -2,6 +2,7 @@ import { Box, Img, Text } from "@chakra-ui/react";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 
 export const GetCompany = (props) => {
+  console.log(props.currCompany < 0);
   return (
     <>
       {props.company?.logo?.message?.logo ? (
@@ -15,6 +16,7 @@ export const GetCompany = (props) => {
           backgroundColor="rgb(222,222,222)"
           overflow="hidden"
           p={4}
+          marginLeft={props.currCompany === 0 ? "0px" : "32px !important"}
           key={`${props.companyName}--${props.currCompany}--box`}
         >
           <UserPermissionsRestricted to="view">
@@ -52,12 +54,17 @@ export const GetCompany = (props) => {
             />
           </UserPermissionsRestricted>
         </Box>
-      ) : props ? (
+      ) : (
         <Box
           w="80px"
           height="80px"
           borderRadius="full"
           backgroundColor="rgb(222, 222, 222)"
+          marginLeft={
+            props.currCompany === 0 || !props.currCompany
+              ? "0px"
+              : "32px !important"
+          }
           bgGradient={
             "linear-gradient(136.3deg, #0DD5D1 -3.88%, #9350B3 84.78%)"
           }
@@ -108,22 +115,6 @@ export const GetCompany = (props) => {
             {props.companyName[0].toUpperCase()}
           </Text>
         </Box>
-      ) : (
-        <>
-          <Img
-            key={`${props.currCompany}--empty-company-exp`}
-            borderRadius="full"
-            style={{ cursor: "pointer" }}
-            backgroundColor="transparent"
-            width="80px"
-            src="twali-assets/plusicon.png"
-            alt="add img"
-            onClick={() => {
-              props.setCurrCompany(props.currCompany);
-              props.onCompanyModalOpen();
-            }}
-          />
-        </>
       )}
     </>
   );
