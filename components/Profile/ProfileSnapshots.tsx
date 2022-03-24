@@ -1,4 +1,4 @@
-import { Box, Text, HStack, Img } from "@chakra-ui/react";
+import { Box, Text, HStack, Img, Tooltip } from "@chakra-ui/react";
 import React from "react";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import SnapshotModal from "./SnapshotModal/SnapshotModal";
@@ -43,7 +43,7 @@ export function ProfileSnapshots({
             fontSize="16px"
             color={"#98B2B2"}
             mt={4}
-            mb={4}
+            mb={8}
             lineHeight={"24px"}
             letterSpacing={"wide"}
             fontFamily={"PP Telegraf Light"}
@@ -77,14 +77,37 @@ export function ProfileSnapshots({
                 />
               ))
             ) : (
-              <Img
-                borderRadius="full"
-                style={{ cursor: "pointer" }}
-                backgroundColor="transparent"
-                width="80px"
-                src="twali-assets/questionmark.png"
-                alt="add img"
-              />
+              <>
+                <UserPermissionsRestricted to="view">
+                  <Tooltip
+                    margin={0}
+                    backgroundColor={"#F9FFF2"}
+                    color={"#0A1313"}
+                    label={
+                      "Badges earned participating in web3 will appear here"
+                    }
+                  >
+                    <Img
+                      borderRadius="full"
+                      style={{ cursor: "pointer" }}
+                      backgroundColor="transparent"
+                      width="80px"
+                      src="twali-assets/questionmark.png"
+                      alt="add img"
+                    />
+                  </Tooltip>
+                </UserPermissionsRestricted>
+                <UserPermissionsRestricted to="edit">
+                  <Img
+                    borderRadius="full"
+                    style={{ cursor: "pointer" }}
+                    backgroundColor="transparent"
+                    width="80px"
+                    src="twali-assets/questionmark.png"
+                    alt="add img"
+                  />
+                </UserPermissionsRestricted>
+              </>
             )}
           </HStack>
           <SnapshotModal
