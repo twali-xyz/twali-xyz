@@ -15,7 +15,7 @@ export const GetCompany = (props) => {
           justifyContent="center"
           backgroundColor="rgb(222,222,222)"
           overflow="hidden"
-          p={4}
+          p={0}
           marginLeft={props.currCompany === 0 ? "0px" : "32px !important"}
           key={`${props.companyName}--${props.currCompany}--box`}
         >
@@ -69,7 +69,7 @@ export const GetCompany = (props) => {
             "linear-gradient(136.3deg, #0DD5D1 -3.88%, #9350B3 84.78%)"
           }
           overflow="hidden"
-          p={4}
+          p={0}
           key={`${props.companyName}--${props.currCompany}--box`}
           onMouseEnter={(e) => {
             let addImg = e.currentTarget.children[0] as HTMLElement;
