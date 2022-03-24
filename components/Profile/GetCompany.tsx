@@ -21,8 +21,8 @@ export const GetCompany = (props) => {
         >
           <UserPermissionsRestricted to="view">
             <Img
-              backgroundColor="rgb(222, 222, 0)"
-              backgroundImage={"twali-assets/bannerimage.png"}
+              // backgroundColor="rgb(222, 222, 0)"
+              // backgroundImage={"twali-assets/bannerimage.png"}
               bgSize={"contain"}
               style={{ cursor: "pointer" }}
               key={`${props.companyName}--${props.currCompany}`}

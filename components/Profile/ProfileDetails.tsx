@@ -52,31 +52,56 @@ const ProfileDetails = ({ user }) => {
     onClose: onCompanyModalClose,
   } = useDisclosure();
   const [loaded, setLoaded] = useState(false);
+  const [isConnectWalletBtn, setIsConnectWalletBtn] = useState(false);
   const [snapshotData, setSnapshotData] = useState<any>();
   const [currentSnapshot, setCurrentSnapshot] = useState();
   const [loggedInUserAddress, setLoggedInUserAddress] = useState("");
   const [currCompany, setCurrCompany] = useState(0);
 
   async function readProfile() {
-    const address = await connect(); // first address in the array
-
     try {
-      // does not require signing to get user's public data
-      if (user) {
-        setUserData(user);
+      if (router.query?.view != 'public') {
+          // does not require signing to get user's public data
+          const address = await connect(); // first address in the array
+
+          if (address) {
+            setLoggedInUserAddress(address);
+          }
+      } else {
+        setIsConnectWalletBtn(true);
       }
 
-      setLoaded(true);
+      // does not require signing to get user's public data
+      if (user && user.userWallet) {
+        setIsConnectWalletBtn(false);
+        setUserData(user);
+        setLoaded(true);
+      }
+
     } catch (err) {
       console.log("error: ", err);
       setLoaded(false);
     }
   }
+
+  // Display or hide the connect wallet btn depending on a state change
+  useEffect( () => {
+    setIsConnectWalletBtn(isConnectWalletBtn);
+}, [isConnectWalletBtn]); 
+
   useEffect(() => {
     async function readProfile() {
-      const address = await connect(); // first address in the array
-
       try {
+        if (router.query?.view != 'public') {
+          // does not require signing to get user's public data
+          const address = await connect(); // first address in the array
+
+          if (address) {
+            setLoggedInUserAddress(address);
+          }
+      } else {
+        setIsConnectWalletBtn(true);
+      }
         // does not require signing to get user's public data
         if (user && user.userWallet) {
           setUserData(user);
@@ -84,9 +109,6 @@ const ProfileDetails = ({ user }) => {
           setupSnapshotQueries(user.userWallet);
         }
 
-        if (address) {
-          setLoggedInUserAddress(address);
-        }
       } catch (err) {
         console.log("error: ", err);
         setLoaded(false);
@@ -269,7 +291,7 @@ const ProfileDetails = ({ user }) => {
         userData.userName &&
         userData.userWallet && (
           <>
-            <HeaderNav whichPage="profile" />
+            <HeaderNav whichPage="profile" isConnectWalletBtn={isConnectWalletBtn} userPage={userData} userWallet={loggedInUserAddress}/>
             <Container
               maxW="100%"
               p={0}

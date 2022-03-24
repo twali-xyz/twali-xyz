@@ -138,7 +138,7 @@ function Selector({ splitLabel, handleChange, options, idx, defaultValue }) {
       defaultValue={defaultValue}
       errorBorderColor="red.300"
       fontFamily={"PP Telegraf light"}
-      color={defaultValue ? "#F9FFF2" : "#98B2B2"}
+      color={defaultValue ? "#F9FFF2" : color}
       _placeholder={{ color: "#98B2B2" }}
     >
       {options?.map((option, idx) => {

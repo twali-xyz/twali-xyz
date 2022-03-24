@@ -110,6 +110,7 @@ const SignUpSteps = () => {
       0,
       evt.target.name.length - 1
     );
+
     if (
       strippedEventName === "functionalExpertise" ||
       strippedEventName === "industryExpertise"
@@ -117,11 +118,11 @@ const SignUpSteps = () => {
       // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
       setEventArray({ evt, setValues, values, userData, setUserData });
     } else {
+      const value = evt.target.value;
       setValues((values) => ({
         ...values,
-        [evt.target.name]: evt.target.value,
+        [evt.target.name]: value,
       }));
-      const value = evt.target.value;
       setUserData({
         ...userData,
         [evt.target.name]: value,

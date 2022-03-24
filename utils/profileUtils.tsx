@@ -28,7 +28,6 @@ export const fetchPermission =
         return user.permissions.includes(permission);
       }
     }
-    console.log("PERMISSION DATA:", userData);
   };
 
 // Function that retrieves a list of countries options for a dropdown
