@@ -17,8 +17,8 @@ export function ProfileExperience({
   let viewElements = [];
 
   // Selecting only the elements that should be visible in 'view' mode
-  workElements.forEach( element => {
-    if (element.props.to != 'edit') {
+  workElements.forEach((element) => {
+    if (element.props.to != "edit") {
       viewElements.push(element); // work elements that will be displayed in view mode
     }
   });
@@ -35,10 +35,11 @@ export function ProfileExperience({
       >
         Work Experience
       </Text>
-      <UserPermissionsRestricted to="edit" fallback={viewWorkElements(viewElements)}>
-        <HStack justifyContent={"space-between"} maxW={"640px"}>
-          {workElements}
-        </HStack>
+      <UserPermissionsRestricted
+        to="edit"
+        fallback={viewWorkElements(viewElements)}
+      >
+        <HStack maxW={"640px"}>{workElements}</HStack>
       </UserPermissionsRestricted>
       <UserPermissionsRestricted to="edit" fallback={viewCompany}>
         <CompanyModal
@@ -60,4 +61,4 @@ const viewWorkElements = (viewElements) => {
       {viewElements}
     </HStack>
   );
-} 
+};
