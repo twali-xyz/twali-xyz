@@ -2,7 +2,6 @@ import { Box, Img, Text } from "@chakra-ui/react";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 
 export const GetCompany = (props) => {
-  console.log(props.currCompany < 0);
   return (
     <>
       {props.company?.logo?.message?.logo ? (
