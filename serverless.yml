@@ -7,3 +7,4 @@ twali-xyz-staging:
       env:
         TABLE_NAME: "dev_staging_user_profile_test"
     cloundFront: E3PNKWOM3RVQQ8
+    bucketName: uz6gq9s-3enzxa8
