@@ -31,97 +31,33 @@ const CompanyModal = (props) => {
   const finalRef = useRef();
   const [count, setCount] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [companyName, setCompanyName] = useState();
-  const [companyTitle, setCompanyTitle] = useState();
-  const [companyStart, setCompanyStart] = useState();
-  const [companyEnd, setCompanyEnd] = useState();
-  const [companyFunction, setCompanyFunction] = useState();
-  const [companyIndustry, setCompanyIndustry] = useState();
-  const [tempLogo, setTempLogo] = useState<any>();
   const [shouldFetch, setShouldFetch] = useState(false);
+  const [tempCompany, setTempCompany] = useState<any>({});
+  const [logo, setlogo] = useState<any>();
   const [isDisabled, setIsDisabled] = useState(false);
   const [userData, setUserData] = useState(props.userData);
-  const emptyCompanyInfo = [
-    {
-      companyName: "",
-      companyTitle: "",
-      companyStart: "",
-      companyEnd: "",
-      companyFunc: "",
-      companyIndustry: "",
-    },
-    {
-      companyName: "",
-      companyTitle: "",
-      companyStart: "",
-      companyEnd: "",
-      companyFunc: "",
-      companyIndustry: "",
-    },
-    {
-      companyName: "",
-      companyTitle: "",
-      companyStart: "",
-      companyEnd: "",
-      companyFunc: "",
-      companyIndustry: "",
-    },
-    {
-      companyName: "",
-      companyTitle: "",
-      companyStart: "",
-      companyEnd: "",
-      companyFunc: "",
-      companyIndustry: "",
-    },
-    {
-      companyName: "",
-      companyTitle: "",
-      companyStart: "",
-      companyEnd: "",
-      companyFunc: "",
-      companyIndustry: "",
-    },
-    {
-      companyName: "",
-      companyTitle: "",
-      companyStart: "",
-      companyEnd: "",
-      companyFunc: "",
-      companyIndustry: "",
-    },
-  ];
+  const emptyCompanyInfo = {
+    companyName: "",
+    companyTitle: "",
+    companyStart: "",
+    companyEnd: "",
+    companyFunc: "",
+    companyIndustry: "",
+    companyLogo: false,
+  };
 
-  // on open, set the values to the current company
+  const [companyData, setCompanyData] = useState<any>();
+
   useEffect(() => {
-    if (!props.isOpen || !props.userData?.companyInfo) return;
-    setCompanyName(props.userData?.companyInfo[props.currCompany]?.companyName);
-    setCompanyTitle(
-      props.userData?.companyInfo[props.currCompany]?.companyTitle
+    setCompanyData(
+      props.userData.companyInfo &&
+        props.userData.companyInfo[props.currCompany]
+        ? props.userData.companyInfo[props.currCompany]
+        : emptyCompanyInfo
     );
-    setCompanyStart(
-      props.userData?.companyInfo[props.currCompany]?.companyStart
-    );
-    setCompanyEnd(props.userData?.companyInfo[props.currCompany]?.companyEnd);
-    setCompanyFunction(
-      props.userData?.companyInfo[props.currCompany]?.companyFunc
-    );
-    setCompanyIndustry(
-      props.userData?.companyInfo[props.currCompany]?.companyExpertise
-    );
-    setTempLogo(
-      props.userData?.companyInfo[props.currCompany]?.logo
-        ? props.userData?.companyInfo[props.currCompany]?.logo
-        : false
-    );
+    setlogo(props.userData?.companyInfo[props.currCompany].logo);
+    return () => {};
   }, [props.isOpen]);
-
-  const companyInfo =
-    props.userData.companyInfo && props.userData.companyInfo[props.currCompany]
-      ? props.userData.companyInfo[props.currCompany]
-      : emptyCompanyInfo[props.currCompany];
-
-  const [companyData, setCompanyData] = useState(companyInfo);
 
   const [errors, setErrors] = useState({
     companyName: null,
@@ -130,23 +66,6 @@ const CompanyModal = (props) => {
     companyEnd: null,
     companyFunction: null,
     companyIndustry: null,
-  });
-
-  const [values, setValues] = useState({
-    companyName:
-      companyInfo && companyInfo.companyName ? companyInfo.companyName : "",
-    companyTitle:
-      companyInfo && companyInfo.companyTitle ? companyInfo.companyTitle : "",
-    companyStart:
-      companyInfo && companyInfo.companyStart ? companyInfo.companyStart : "",
-    companyEnd:
-      companyInfo && companyInfo.companyEnd ? companyInfo.companyEnd : "",
-    companyFunction:
-      companyInfo && companyInfo.companyFunc ? companyInfo.companyFunc : "",
-    companyIndustry:
-      companyInfo && companyInfo.industryExpertise
-        ? companyInfo.companyIndustry
-        : "",
   });
 
   const convertDates = (start, end) => {
@@ -161,10 +80,10 @@ const CompanyModal = (props) => {
   };
 
   let companyDateRange;
-  if (companyInfo && companyInfo.companyStart && companyInfo.companyEnd) {
+  if (companyData && companyData.companyStart && companyData.companyEnd) {
     companyDateRange = convertDates(
-      companyInfo.companyStart,
-      companyInfo.companyEnd
+      companyData.companyStart,
+      companyData.companyEnd
     );
   }
 
@@ -176,16 +95,20 @@ const CompanyModal = (props) => {
 
       if (userData.userWallet && userData.userName && companyData) {
         userData.companyInfo[props.currCompany] = companyData;
+        console.log(companyData);
 
         let companyAttributes = {
           companyData: userData.companyInfo,
           userName: userData.userName,
           currCompany: props.currCompany,
         };
-        companyAttributes.companyData[props.currCompany].logo = tempLogo;
+        companyAttributes.companyData[props.currCompany].logo = logo;
         updateUserCompanyData(userData.userWallet, companyAttributes);
         props.handleUpdatedCompanyInfo(props.userData, false);
         props.onClose();
+        setlogo(false);
+        window.location.reload();
+        setTempCompany(emptyCompanyInfo);
         setShouldFetch(false);
         setIsSubmitted(false);
       } else {
@@ -205,77 +128,55 @@ const CompanyModal = (props) => {
 
   const handleChange = (evt) => {
     evt.persist();
-    setValues((values) => ({ ...values, [evt.target.name]: evt.target.value }));
-    setErrors(validate(values));
 
-    setCompanyData({
+    setCompanyData({ ...companyData, [evt.target.name]: evt.target.value });
+    setTempCompany({
       ...companyData,
       [evt.target.name]: evt.target.value,
     });
-
     if (evt.target.name == "companyName") {
-      setCompanyName(evt.target.value);
       setShouldFetch(true);
-    } else if (evt.target.name !== "companyName") {
-      setShouldFetch(false);
-    }
-
-    if (evt.target.name == "companyTitle") {
-      setCompanyTitle(evt.target.value);
-    }
-
-    if (evt.target.name == "companyStart") {
-      setCompanyStart(evt.target.value);
-    }
-
-    if (evt.target.name == "companyEnd") {
-      setCompanyEnd(evt.target.value);
-    }
-
-    if (evt.target.name == "functionalExpertise") {
-      setCompanyFunction(evt.target.value);
-    }
-
-    if (evt.target.name == "industryExpertise") {
-      setCompanyIndustry(evt.target.value);
     }
   };
 
-  const validate = (values) => {
+  const validate = (tempCompany) => {
     let errors: any = {};
 
-    if (!values.companyName) {
+    if (!tempCompany.companyName) {
       errors.companyName = "Company name is required";
     }
 
-    if (!values.companyTitle) {
+    if (!tempCompany.companyTitle) {
       errors.companyTitle = "Job title is required";
     }
 
     var datePattern =
       /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
 
-    if (!values.companyStart) {
+    if (!tempCompany.companyStart) {
       errors.companyStart = "Start date (DD-MM-YYYY) is required";
     }
 
-    if (values.companyStart && !datePattern.test(values.companyStart)) {
+    if (
+      tempCompany.companyStart &&
+      !datePattern.test(tempCompany.companyStart)
+    ) {
       errors.companyStart = "Start date (DD-MM-YYYY) is incorrect";
     }
 
-    if (!values.companyEnd) {
+    if (!tempCompany.companyEnd) {
       errors.companyEnd = "End date (DD-MM-YYYY) is required";
     }
 
-    if (values.companyEnd && !datePattern.test(values.companyEnd)) {
+    if (tempCompany.companyEnd && !datePattern.test(tempCompany.companyEnd)) {
       errors.companyEnd = "End date (DD-MM-YYYY) is incorrect";
     }
 
-    if (values.companyFunc === "") {
+    if (tempCompany.companyFunc === "") {
       errors.companyFunc = "Functional expertise is required";
     }
 
-    if (values.companyIndustry === "") {
+    if (tempCompany.companyIndustry === "") {
       errors.companyIndustry = "Industry expertise is required";
     }
 
@@ -292,27 +193,27 @@ const CompanyModal = (props) => {
         <ModalCloseButton />
         <ModalBody>
           <VStack spacing={6} padding={10}>
-            {companyInfo ? (
+            {companyData ? (
               <>
-                {companyInfo.companyName ? (
+                {companyData.companyName ? (
                   <>
-                    <Heading>{companyInfo.companyName}</Heading>
+                    <Heading>{companyData.companyName}</Heading>
                   </>
                 ) : null}
 
-                {companyInfo.companyTitle ? (
-                  <Text fontSize="2xl">{companyInfo.companyTitle}</Text>
+                {companyData.companyTitle ? (
+                  <Text fontSize="2xl">{companyData.companyTitle}</Text>
                 ) : null}
 
-                {companyInfo.companyStart && companyInfo.companyEnd ? (
+                {companyData.companyStart && companyData.companyEnd ? (
                   <Text fontSize="md" color="gray.500">
                     {companyDateRange}
                   </Text>
                 ) : null}
 
-                {companyInfo.companyFunc && companyInfo.companyIndustry ? (
+                {companyData.companyFunc && companyData.companyIndustry ? (
                   <HStack spacing={4}>
-                    {[companyInfo.companyFunc, companyInfo.companyIndustry].map(
+                    {[companyData.companyFunc, companyData.companyIndustry].map(
                       (name, idx) => (
                         <Tag
                           size={"md"}
@@ -337,6 +238,8 @@ const CompanyModal = (props) => {
             onClick={() => {
               props.onClose();
               setShouldFetch(false);
+              setlogo(false);
+              setTempCompany(emptyCompanyInfo);
             }}
           >
             Close
@@ -353,7 +256,10 @@ const CompanyModal = (props) => {
         isOpen={props.isOpen}
         onClose={() => {
           props.onClose();
+          setlogo(false);
+
           setShouldFetch(false);
+          setTempCompany(emptyCompanyInfo);
         }}
         key={`companymodal--${props.currCompany}`}
       >
@@ -363,51 +269,50 @@ const CompanyModal = (props) => {
             <ModalHeader>Update your work experience</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              {companyInfo ? (
+              {companyData ? (
                 <form style={{ alignSelf: "center" }}>
                   <FormControl p={2} id="company-name">
                     {shouldFetch ? (
                       <>
                         <CompanyInfoData
-                          companyInfo={companyInfo}
-                          companyName={companyName}
+                          companyName={companyData.companyName}
                           isDisabled={setDisabled}
-                          tempLogo={tempLogo}
-                          setTempLogo={setTempLogo}
+                          logo={logo}
+                          setlogo={setlogo}
                           shouldFetch={shouldFetch}
                         />
                       </>
-                    ) : tempLogo?.message?.logo ? (
+                    ) : logo?.message?.logo ? (
                       <>
                         <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
                           <Img
                             height="30px"
-                            src={tempLogo?.message?.logo}
-                            alt={tempLogo?.message?.domain}
+                            src={logo?.message?.logo}
+                            alt={logo?.message?.domain}
                           />
                         </Box>
                       </>
-                    ) : !tempLogo && companyInfo.logo?.message?.logo ? (
+                    ) : !logo && companyData.logo?.message?.logo ? (
                       <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
                         <Img
                           height="30px"
-                          src={companyInfo.logo?.message?.logo}
-                          alt={companyInfo.logo?.message?.domain + "here"}
+                          src={companyData.logo?.message?.logo}
+                          alt={companyData.logo?.message?.domain}
                         />
                       </Box>
-                    ) : (companyName || tempLogo) &&
+                    ) : (companyData.companyName || logo) &&
                       shouldFetch &&
-                      companyInfo.companyName ? (
+                      companyData.companyName ? (
                       <>
-                        <LogoFallBack companyName={companyInfo.companyName} />
+                        <LogoFallBack companyName={companyData.companyName} />
                       </>
-                    ) : !shouldFetch && !tempLogo && companyInfo.companyName ? (
+                    ) : !shouldFetch && !logo && companyData.companyName ? (
                       <>
-                        <LogoFallBack companyName={companyInfo.companyName} />
+                        <LogoFallBack companyName={companyData.companyName} />
                       </>
-                    ) : !shouldFetch && tempLogo && companyName ? (
+                    ) : !shouldFetch && logo && companyData.companyName ? (
                       <>
-                        <LogoFallBack companyName={companyName} />
+                        <LogoFallBack companyName={companyData.companyName} />
                       </>
                     ) : null}
                     <FormLabel>Company name</FormLabel>
@@ -415,16 +320,17 @@ const CompanyModal = (props) => {
                       required
                       isInvalid={
                         errors.companyName &&
-                        (!companyInfo.companyName || !values.companyName)
+                        (!companyData.companyName || !tempCompany.companyName)
                       }
                       errorBorderColor="red.300"
                       placeholder="Company name"
                       name="companyName"
-                      defaultValue={companyInfo.companyName || ""}
+                      defaultValue={companyData.companyName || ""}
                       onChange={handleChange}
                     />
                     {errors.companyName &&
-                      (!companyInfo.companyName || !values.companyName) && (
+                      (!companyData.companyName ||
+                        !tempCompany.companyName) && (
                         <Text fontSize="xs" fontWeight="400" color="red.500">
                           {errors.companyName}
                         </Text>
@@ -436,16 +342,17 @@ const CompanyModal = (props) => {
                       required
                       isInvalid={
                         errors.companyTitle &&
-                        (!companyInfo.companyTitle || !values.companyTitle)
+                        (!companyData.companyTitle || !tempCompany.companyTitle)
                       }
                       errorBorderColor="red.300"
                       placeholder="Job title"
                       name="companyTitle"
-                      defaultValue={companyInfo.companyTitle || ""}
+                      defaultValue={companyData.companyTitle || ""}
                       onChange={handleChange}
                     />
                     {errors.companyTitle &&
-                      (!companyInfo.companyTitle || !values.companyTitle) && (
+                      (!companyData.companyTitle ||
+                        !tempCompany.companyTitle) && (
                         <Text fontSize="xs" fontWeight="400" color="red.500">
                           {errors.companyTitle}
                         </Text>
@@ -457,15 +364,16 @@ const CompanyModal = (props) => {
                       required
                       isInvalid={
                         errors.companyStart &&
-                        (!companyInfo.companyStart || !values.companyStart)
+                        (!companyData.companyStart || !tempCompany.companyStart)
                       }
                       errorBorderColor="red.300"
                       name="companyStart"
-                      defaultValue={companyInfo.companyStart || ""}
+                      defaultValue={companyData.companyStart || ""}
                       onChange={handleChange}
                     />
                     {errors.companyStart &&
-                      (!companyInfo.companyStart || !values.companyStart) && (
+                      (!companyData.companyStart ||
+                        !tempCompany.companyStart) && (
                         <Text fontSize="xs" fontWeight="400" color="red.500">
                           {errors.companyStart}
                         </Text>
@@ -477,21 +385,22 @@ const CompanyModal = (props) => {
                       required
                       isInvalid={
                         errors.companyEnd &&
-                        (!companyInfo.companyEnd || !values.companyEnd)
+                        (!companyData.companyEnd || !tempCompany.companyEnd)
                       }
                       errorBorderColor="red.300"
                       name="companyEnd"
-                      defaultValue={companyInfo.companyEnd || ""}
+                      defaultValue={companyData.companyEnd || ""}
                       onChange={handleChange}
                     />
                     {errors.companyEnd &&
-                      (!companyInfo.companyEnd || !values.companyEnd) && (
+                      (!companyData.companyEnd || !tempCompany.companyEnd) && (
                         <Text fontSize="xs" fontWeight="400" color="red.500">
                           {errors.companyEnd}
                         </Text>
                       )}
                     {errors.companyName &&
-                      (!companyInfo.companyName || !values.companyName) && (
+                      (!companyData.companyName ||
+                        !tempCompany.companyName) && (
                         <Text fontSize="xs" fontWeight="400" color="red.500">
                           {errors.companyName}
                         </Text>
@@ -501,7 +410,7 @@ const CompanyModal = (props) => {
                     <FormLabel>Functional expertise</FormLabel>
                     <Select
                       required
-                      defaultValue={companyInfo.companyFunc}
+                      defaultValue={companyData.companyFunc}
                       errorBorderColor="red.300"
                       placeholder="Select functional expertise"
                       name="companyFunc"
@@ -516,7 +425,7 @@ const CompanyModal = (props) => {
                     <FormLabel>Industry</FormLabel>
                     <Select
                       required
-                      defaultValue={companyInfo.companyIndustry}
+                      defaultValue={companyData.companyIndustry}
                       errorBorderColor="red.300"
                       placeholder="Select industry expertise"
                       name="companyIndustry"
@@ -537,6 +446,8 @@ const CompanyModal = (props) => {
                 onClick={() => {
                   props.onClose();
                   setShouldFetch(false);
+                  setlogo(false);
+                  setTempCompany(emptyCompanyInfo);
                 }}
               >
                 Close
@@ -587,10 +498,10 @@ function CompanyInfoData(props) {
     const { data } = useSWR(`/api/cors?${qs}`, fetcher);
     if (!data) {
       props.isDisabled(false);
-      props.setTempLogo(true);
+      props.setlogo(props.logo || true);
     } else {
       props.isDisabled(false);
-      props.setTempLogo(data);
+      props.setlogo(data);
     }
 
     return (
@@ -617,14 +528,12 @@ function CompanyInfoData(props) {
   // the return value if shouldFetch  == false, uses cached logo if available otherwise falls back to first letter of company name
   return (
     <>
-      {props.tempLogo &&
-      props.tempLogo?.message &&
-      props.tempLogo?.message?.logo ? (
+      {props.logo && props.logo?.message && props.logo?.message?.logo ? (
         <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
           <Img
             height="30px"
-            src={props.tempLogo.message.logo}
-            alt={props.tempLogo.message.domain}
+            src={props.logo.message.logo}
+            alt={props.logo.message.domain}
           />
         </Box>
       ) : (

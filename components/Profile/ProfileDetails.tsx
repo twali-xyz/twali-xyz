@@ -23,6 +23,7 @@ import LoginPage from "../../pages/login";
 import HeaderNav from "../HeaderNav/HeaderNav";
 import { UserData } from "../../utils/interfaces";
 import { GetCompany } from "./GetCompany";
+import CompModal from "./CompanyModal/CompanyModal";
 
 const ProfileDetails = ({ user }) => {
   // Fallback for getStaticPaths, when fallback: true
@@ -60,13 +61,13 @@ const ProfileDetails = ({ user }) => {
 
   async function readProfile() {
     try {
-      if (router.query?.view != 'public') {
-          // does not require signing to get user's public data
-          const address = await connect(); // first address in the array
+      if (router.query?.view != "public") {
+        // does not require signing to get user's public data
+        const address = await connect(); // first address in the array
 
-          if (address) {
-            setLoggedInUserAddress(address);
-          }
+        if (address) {
+          setLoggedInUserAddress(address);
+        }
       } else {
         setIsConnectWalletBtn(true);
       }
@@ -77,7 +78,6 @@ const ProfileDetails = ({ user }) => {
         setUserData(user);
         setLoaded(true);
       }
-
     } catch (err) {
       console.log("error: ", err);
       setLoaded(false);
@@ -85,30 +85,29 @@ const ProfileDetails = ({ user }) => {
   }
 
   // Display or hide the connect wallet btn depending on a state change
-  useEffect( () => {
+  useEffect(() => {
     setIsConnectWalletBtn(isConnectWalletBtn);
-}, [isConnectWalletBtn]); 
+  }, [isConnectWalletBtn]);
 
   useEffect(() => {
     async function readProfile() {
       try {
-        if (router.query?.view != 'public') {
+        if (router.query?.view != "public") {
           // does not require signing to get user's public data
           const address = await connect(); // first address in the array
 
           if (address) {
             setLoggedInUserAddress(address);
           }
-      } else {
-        setIsConnectWalletBtn(true);
-      }
+        } else {
+          setIsConnectWalletBtn(true);
+        }
         // does not require signing to get user's public data
         if (user && user.userWallet) {
           setUserData(user);
           setLoaded(true);
           setupSnapshotQueries(user.userWallet);
         }
-
       } catch (err) {
         console.log("error: ", err);
         setLoaded(false);
@@ -291,7 +290,12 @@ const ProfileDetails = ({ user }) => {
         userData.userName &&
         userData.userWallet && (
           <>
-            <HeaderNav whichPage="profile" isConnectWalletBtn={isConnectWalletBtn} userPage={userData} userWallet={loggedInUserAddress}/>
+            <HeaderNav
+              whichPage="profile"
+              isConnectWalletBtn={isConnectWalletBtn}
+              userPage={userData}
+              userWallet={loggedInUserAddress}
+            />
             <Container
               maxW="100%"
               p={0}
