@@ -7,7 +7,6 @@ import {
   Select,
   Text,
 } from "@chakra-ui/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 
 export function MultiSelect({
@@ -45,20 +44,17 @@ export function MultiSelect({
   function createSelectors() {
     let selectors = [];
     for (let i = 1; i <= count; i++) {
-      const element = (
-        <>
-          {defaultValues && (defaultValues[i - 1] || i === 1 || count >= i) && (
-            <Selector
-              key={`${i}--selector`}
-              splitLabel={splitLabel}
-              handleChange={handleChange}
-              options={options}
-              idx={i}
-              defaultValue={defaultValues?.length ? defaultValues[i - 1] : null}
-            />
-          )}
-        </>
-      );
+      const element = defaultValues &&
+        (defaultValues[i - 1] || i === 1 || count >= i) && (
+          <Selector
+            key={`${i}--selector`}
+            splitLabel={splitLabel}
+            handleChange={handleChange}
+            options={options}
+            idx={i}
+            defaultValue={defaultValues?.length ? defaultValues[i - 1] : null}
+          />
+        );
       selectors.push(element);
     }
     return selectors;
@@ -71,51 +67,49 @@ export function MultiSelect({
   }
 
   return (
-    <>
-      <FormControl p={2} id={`${splitLabel[0]}-${splitLabel[1]}`} isRequired>
-        <FormLabel
-          pos={"relative"}
-          left={"1px"}
-          fontFamily={"PP Telegraf"}
-          fontSize={"16px"}
-          fontStyle={"normal"}
-          fontWeight={"400"}
-          lineHeight={"24p"}
-          letterSpacing={"0.02em"}
-          textAlign={"left"}
+    <FormControl p={2} id={`${splitLabel[0]}-${splitLabel[1]}`} isRequired>
+      <FormLabel
+        pos={"relative"}
+        left={"1px"}
+        fontFamily={"PP Telegraf"}
+        fontSize={"16px"}
+        fontStyle={"normal"}
+        fontWeight={"400"}
+        lineHeight={"24p"}
+        letterSpacing={"0.02em"}
+        textAlign={"left"}
+      >
+        {formLabel}
+      </FormLabel>
+      {createSelectors()}
+      {count !== maxSelections ? (
+        <Button
+          backgroundColor={"transparent"}
+          marginTop={"16px"}
+          onClick={handleAddSelector}
+          paddingLeft={"0"}
         >
-          {formLabel}
-        </FormLabel>
-        {createSelectors()}
-        {count !== maxSelections ? (
-          <Button
-            backgroundColor={"transparent"}
-            marginTop={"16px"}
-            onClick={handleAddSelector}
-            paddingLeft={"0"}
-          >
-            <HStack>
-              <Img
-                borderRadius="full"
-                backgroundColor="transparent"
-                width="32px"
-                src="twali-assets/plusicon.png"
-                alt="add img"
-              />
-              <Text
-                fontFamily={"PP Telegraf Light"}
-                fontWeight={"400"}
-                color={"#C7F83C"}
-                fontSize={"16px"}
-                lineHeight={"24px"}
-              >
-                Add expertise
-              </Text>
-            </HStack>
-          </Button>
-        ) : null}
-      </FormControl>
-    </>
+          <HStack>
+            <Img
+              borderRadius="full"
+              backgroundColor="transparent"
+              width="32px"
+              src="twali-assets/plusicon.png"
+              alt="add img"
+            />
+            <Text
+              fontFamily={"PP Telegraf Light"}
+              fontWeight={"400"}
+              color={"#C7F83C"}
+              fontSize={"16px"}
+              lineHeight={"24px"}
+            >
+              Add expertise
+            </Text>
+          </HStack>
+        </Button>
+      ) : null}
+    </FormControl>
   );
 }
 
