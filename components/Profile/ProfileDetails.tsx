@@ -1,4 +1,4 @@
-import { ProfileSnapshots } from "./ProfileSnapshots";
+import { ProfileBadges } from "./ProfileBadges";
 import { ProfileExperience } from "./ProfileWorkExperience";
 import { ProfileSideBar } from "./ProfileSideBar";
 import { ProfileHeader } from "./ProfileHeader";
@@ -42,9 +42,9 @@ const ProfileDetails = ({ user }) => {
     onClose: onExpModalClose,
   } = useDisclosure();
   const {
-    isOpen: isSnapshotModalOpen,
-    onOpen: onSnapshotModalOpen,
-    onClose: onSnapshotModalClose,
+    isOpen: isBadgesModalOpen,
+    onOpen: onBadgesModalOpen,
+    onClose: onBadgesModalClose,
   } = useDisclosure();
   const {
     isOpen: isCompanyModalOpen,
@@ -54,7 +54,8 @@ const ProfileDetails = ({ user }) => {
   const [loaded, setLoaded] = useState(false);
   const [isConnectWalletBtn, setIsConnectWalletBtn] = useState(false);
   const [snapshotData, setSnapshotData] = useState<any>();
-  const [currentSnapshot, setCurrentSnapshot] = useState();
+  const [poapsData, setPOAPsData] = useState<any>();
+  const [currentBadge, setCurrentBadge] = useState();
   const [loggedInUserAddress, setLoggedInUserAddress] = useState("");
   const [currCompany, setCurrCompany] = useState(0);
 
@@ -107,6 +108,7 @@ const ProfileDetails = ({ user }) => {
           setUserData(user);
           setLoaded(true);
           setupSnapshotQueries(user.userWallet);
+          setupPOAPs(user.userWallet);
         }
 
       } catch (err) {
@@ -145,6 +147,15 @@ const ProfileDetails = ({ user }) => {
           getVoterSnapshotQueries(data, address);
         }
       );
+    }
+
+    function setupPOAPs(address) {
+      fetch(`http://api.poap.xyz/actions/scan/${address}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log('POAPS', data);
+        setPOAPsData(data);
+      })
     }
 
     async function getVoterSnapshotQueries(data, address) {
@@ -323,14 +334,16 @@ const ProfileDetails = ({ user }) => {
                   <Box alignSelf="flex-start" w="full" overflow="hidden">
                     {/* social media URLs */}
                     <VStack pt={"60px"} pl={"12.5%"}>
-                      <ProfileSnapshots
+                      <ProfileBadges
+                        poapsData={poapsData}
                         snapshotData={snapshotData}
-                        setCurrentSnapshot={setCurrentSnapshot}
-                        onSnapshotModalOpen={onSnapshotModalOpen}
-                        isSnapshotModalOpen={isSnapshotModalOpen}
-                        onSnapshotModalClose={onSnapshotModalClose}
-                        currentSnapshot={currentSnapshot}
+                        setCurrentBadge={setCurrentBadge}
+                        onBadgesModalOpen={onBadgesModalOpen}
+                        isBadgesModalOpen={isBadgesModalOpen}
+                        onBadgesModalClose={onBadgesModalClose}
+                        currentBadge={currentBadge}
                       />
+                      
                       <ProfileExperience
                         createWorkElements={createWorkElements}
                         viewCompany={viewCompany}
