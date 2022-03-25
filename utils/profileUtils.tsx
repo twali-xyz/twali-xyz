@@ -17,7 +17,6 @@ export const fetchPermission =
     if (!cache[permission]) {
       const data = await fetch(`/api/users/${currentUserName}`);
       userData = await data.json();
-      console.log(userData);
       cache[permission] = userData;
     } else {
       userData = cache[permission];
