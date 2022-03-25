@@ -181,7 +181,7 @@ const EditProfileModal = (props) => {
           <ModalCloseButton />
           <ModalBody>
             <form style={{ alignSelf: "center" }}>
-              <FormControl p={2} id="display-name" isRequired>
+              {/* <FormControl p={2} id="display-name" isRequired>
                 <FormLabel>User name</FormLabel>
                 <Input
                   required
@@ -201,7 +201,7 @@ const EditProfileModal = (props) => {
                       {errors.userName}
                     </Text>
                   )}
-              </FormControl>
+              </FormControl> */}
 
               <FormControl p={2} id="first-name" isRequired>
                 <FormLabel>First name</FormLabel>
