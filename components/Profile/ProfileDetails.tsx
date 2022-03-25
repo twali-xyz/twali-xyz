@@ -252,6 +252,7 @@ const ProfileDetails = ({ user }) => {
             key={`${i}--empty-company-usr-permission`}
           >
             <Img
+              marginLeft={i === 0 ? "0px" : "32px !important"}
               borderRadius="full"
               style={{ cursor: "pointer" }}
               backgroundColor="transparent"

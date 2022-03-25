@@ -16,7 +16,7 @@ import Web3 from "web3";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { UserData } from "../utils/interfaces";
-import { getUserByWallet } from '../utils/walletUtils';
+import { getUserByWallet } from "../utils/walletUtils";
 
 const LoginPage = (props) => {
   useEffect(() => {
@@ -104,9 +104,9 @@ const LoginPage = (props) => {
         >
           <Text
             alignSelf={"center"}
-            fontFamily={"Scope Light"}
-            fontSize={"16px"}
-            lineHeight={"24px"}
+            fontFamily={"GrandSlang"}
+            fontSize={"40px"}
+            lineHeight={"56px"}
             letterSpacing={"wide"}
           >
             welcome to
@@ -127,7 +127,7 @@ const LoginPage = (props) => {
             />
           ) : (
             <Button
-              marginTop={"89px !important"}
+              marginTop={"96px !important"}
               width={"207px"}
               height={"52px"}
               color={"#062B2A"}
