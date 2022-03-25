@@ -150,7 +150,7 @@ const ProfileDetails = ({ user }) => {
     }
 
     function setupPOAPs(address) {
-      fetch(`http://api.poap.xyz/actions/scan/${address}`)
+      fetch(`https://api.poap.xyz/actions/scan/${address}`)
       .then((res) => res.json())
       .then((data) => {
         setPOAPsData(data);
