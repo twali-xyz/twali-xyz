@@ -2,19 +2,19 @@ import { HStack, Link, Image } from "@chakra-ui/react";
 import React from "react";
 
 export function ProfileSocialMedia({ userData, ...props }) {
-  const splitTwitter = userData.twitter?.split(/(twitter\.com\/)/);
-  const splitLinkedIn = userData.linkedIn?.split(/(linkedin\.com\/)/);
+  const splitTwitter = userData.twitter?.toLowerCase().split(/(twitter\.com)/);
+  const splitLinkedIn = userData.linkedIn
+    ?.toLowerCase()
+    .split(/(linkedin\.com)/);
 
   return (
     <HStack width={"6rem"} {...props}>
       {userData.linkedIn && (
         <Link
           href={
-            splitLinkedIn[2]
-              ? `https://${splitLinkedIn[1] + splitLinkedIn[2]}`
-              : splitLinkedIn[1]
-              ? `https://${splitLinkedIn[0] + splitLinkedIn[1]}`
-              : `${splitLinkedIn[0]}`
+            `https://linkedin.com${splitLinkedIn[2]}` ||
+            `https://linkedin.com${splitLinkedIn[1]}` ||
+            `${splitLinkedIn[0]}`
           }
           target="_blank"
           rel="noopener noreferrer"
@@ -30,11 +30,9 @@ export function ProfileSocialMedia({ userData, ...props }) {
       {userData.twitter && (
         <Link
           href={
-            splitTwitter[2]
-              ? `https://${splitTwitter[1] + splitTwitter[2]}`
-              : splitTwitter[1]
-              ? `https://${splitTwitter[0] + splitTwitter[1]}`
-              : `${splitTwitter[0]}`
+            `https://twitter.com${splitTwitter[2]}` ||
+            `https://twitter.com${splitTwitter[1]}` ||
+            `${splitTwitter[0]}`
           }
           target="_blank"
           rel="noopener noreferrer"
