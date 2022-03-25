@@ -27,8 +27,6 @@ export function ProfileBadges({
       badges.push(vote);
     })
   }
-
-  console.log('BADGES', badges);
   
   return (
     <Box
@@ -80,7 +78,6 @@ export function ProfileBadges({
               {badges?.map((badge, idx) => (
                 
                 <>
-                {console.log(idx)}
                 {badge.type == 'snapshot' ? (
                   <Img
                   marginLeft={[
@@ -123,7 +120,6 @@ export function ProfileBadges({
                   src={badge.event.image_url}
                   alt={`poap${badge.tokenId}`}
                   onClick={() => {
-                    console.log(badge);
                     setCurrentBadge(badge);
                     onBadgesModalOpen();
                   }}

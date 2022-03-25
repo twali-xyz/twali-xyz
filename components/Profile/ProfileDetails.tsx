@@ -153,7 +153,6 @@ const ProfileDetails = ({ user }) => {
       fetch(`http://api.poap.xyz/actions/scan/${address}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log('POAPS', data);
         setPOAPsData(data);
       })
     }
