@@ -1,20 +1,18 @@
 import { Button, Img, Input } from "@chakra-ui/react";
 import React, { useRef, useState } from "react";
 
-export default function ProfileImageUpload() {
-  const [selectedFile, setSelectedFile] = useState({
-    name: "",
-    type: "",
-    size: "",
-    lastModifiedDate: undefined,
-  });
+export default function ProfileImageUpload(props) {
+  const userName = props.userName;
+  const [selectedFile, setSelectedFile] = useState();
   const [isSelected, setIsSelected] = useState(false);
   const reference = useRef(null);
 
   const changeHandler = (event) => {
-    setSelectedFile(event.target.files[0]);
+    let finalFile = event.target.files[0];
+    // finalFile.userName = userName;
+    setSelectedFile(finalFile);
     setIsSelected(true);
-    console.log(event.target.files[0]);
+    console.log(finalFile);
   };
 
   const handleOpen = () => {
@@ -22,7 +20,37 @@ export default function ProfileImageUpload() {
       reference.current.click();
     }
   };
-  const handleSubmission = () => {};
+  const handleSubmission = (evt) => {
+    evt.preventDefault();
+    console.log(selectedFile);
+    if (selectedFile) {
+      uploadImage(selectedFile);
+    }
+  };
+
+  const uploadImage = async (file) => {
+    const filename = encodeURIComponent(file.name);
+    console.log(filename);
+    // const res = await fetch(`/api/users/postImage?file=${filename}`);
+    // const { url, fields } = await res.json();
+    // console.log(fields);
+    const formData: any = new FormData();
+    file.filename = filename;
+    formData.append('file', file);
+
+    const upload = await fetch(`/api/users/postImage`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (upload.ok) {
+      console.log('Uploaded successfully!');
+    } else {
+      console.error('Upload failed.');
+    }
+
+    console.log("IMAGE UPLOADED");
+  };
 
   return (
     <>
@@ -55,7 +83,7 @@ export default function ProfileImageUpload() {
         />
       </Button>
       {isSelected && (
-        <Button onClick={handleSubmission}>save profile pic</Button>
+        <Button onClick={(evt) => handleSubmission(evt)}>save profile pic</Button>
       )}
     </>
   );

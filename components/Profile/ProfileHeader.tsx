@@ -15,7 +15,7 @@ export function ProfileHeader({ userName }) {
       bgRepeat={"no-repeat"}
       backgroundImage={"twali-assets/bannerimage.png"}
     >
-      <ProfileImageUpload />
+      <ProfileImageUpload userName={userName} />
 
       {userName && (
         <Text
