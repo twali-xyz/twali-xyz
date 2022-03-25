@@ -90,7 +90,8 @@ module.exports = {
           userName: userName,
           userWallet: userWallet,
           accType: accType,
-          uuid: v4(), // unique ID associated with each user account // create nonce a user creation
+          uuid: v4(), // unique ID associated with each user account 
+          createdAt: Date.now(),
           firstName: firstName,
           lastName: lastName,
           email: email,
@@ -107,7 +108,7 @@ module.exports = {
           industryExpertise: industryExpertise,
           companyInfo: companyInfo ? companyInfo : null,
         },
-        // ConditionExpression: attribute_not_exists(userWallet)
+        // ConditionExpression: attribute_not_exists({userName})
       })
       .promise();
   },
