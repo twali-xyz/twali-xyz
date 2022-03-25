@@ -192,7 +192,7 @@ const EditProfileModal = (props) => {
                   errorBorderColor="red.300"
                   placeholder="Display name"
                   name="userName"
-                  defaultValue={values.userName || ""}
+                  defaultValue={userData.userName || ""}
                   onChange={handleChange}
                 />
                 {errors.userName &&
@@ -214,7 +214,7 @@ const EditProfileModal = (props) => {
                   errorBorderColor="red.300"
                   placeholder="First name"
                   name="firstName"
-                  defaultValue={props.userData.firstName || ""}
+                  defaultValue={userData.firstName || ""}
                   onChange={handleChange}
                 />
                 {errors.firstName &&
@@ -235,7 +235,7 @@ const EditProfileModal = (props) => {
                   errorBorderColor="red.300"
                   placeholder="Last name"
                   name="lastName"
-                  defaultValue={props.userData.lastName || ""}
+                  defaultValue={userData.lastName || ""}
                   onChange={handleChange}
                 />
                 {errors.lastName &&
@@ -292,7 +292,7 @@ const EditProfileModal = (props) => {
                   errorBorderColor="red.300"
                   placeholder="Email"
                   name="email"
-                  defaultValue={values.email || ""}
+                  defaultValue={userData.email || ""}
                   onChange={handleChange}
                 />
                 {errors.email && props.userData.email !== values.email && (
@@ -305,7 +305,7 @@ const EditProfileModal = (props) => {
               <FormControl p={2} id="currLocation" isRequired>
                 <FormLabel>Where do you call home?</FormLabel>
                 <Select
-                  defaultValue={props.userData.currLocation || ""}
+                  defaultValue={userData.currLocation || ""}
                   placeholder="Select current location"
                   name="currLocation"
                   onChange={handleChange}
@@ -318,7 +318,7 @@ const EditProfileModal = (props) => {
                 <Textarea
                   isInvalid={errors.bio}
                   errorBorderColor="red.300"
-                  defaultValue={props.userData.bio || ""}
+                  defaultValue={userData.bio || ""}
                   name="bio"
                   maxLength={280}
                   onChange={handleChange}
@@ -336,7 +336,7 @@ const EditProfileModal = (props) => {
                   isInvalid={errors.linkedIn}
                   errorBorderColor="red.300"
                   name="linkedIn"
-                  defaultValue={props.userData.linkedIn || ""}
+                  defaultValue={userData.linkedIn || ""}
                   onChange={handleChange}
                 />
                 {errors.linkedIn && (
@@ -351,7 +351,7 @@ const EditProfileModal = (props) => {
                   isInvalid={errors.twitter}
                   errorBorderColor="red.300"
                   name="twitter"
-                  defaultValue={props.userData.twitter || ""}
+                  defaultValue={userData.twitter || ""}
                   onChange={handleChange}
                 />
                 {errors.twitter && (

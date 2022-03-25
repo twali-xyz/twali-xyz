@@ -1,6 +1,8 @@
 import { Permission } from "./PermissionTypes";
 import { countriesConstants } from "./countriesConstants";
 
+const cache = {};
+
 // Function that simulates fetching a permission from remote server
 export const fetchPermission =
   (currentUserName, loggedInUserAddress) =>
@@ -12,21 +14,25 @@ export const fetchPermission =
     // permissions: ["view"] for restricted
 
     let userData;
-    if(currentUserName !== 'undefined'){
-      const data = await fetch(
-        `/api/users/${currentUserName}`
-      );
-  
-      const userData: any = await data.json();
-      if (userData && userData.userWallet === loggedInUserAddress) {
-        user = {
-          userName: currentUserName,
-          permissions: ["edit"],
-        };
-        return user.permissions.includes(permission);
-      } else {
-        return user.permissions.includes(permission);
-      }
+    if (!cache[permission]) {
+      const data = await fetch(`/api/users/${currentUserName}`);
+      userData = await data.json();
+      console.log(userData);
+      cache[permission] = userData;
+    } else {
+      userData = cache[permission];
+    }
+
+    if (userData && userData.userWallet === loggedInUserAddress) {
+      user = {
+        userName: currentUserName,
+        permissions: ["edit"],
+      };
+      cache[currentUserName] = userData;
+      return user.permissions.includes(permission);
+    } else {
+      cache[currentUserName] = userData;
+      return user.permissions.includes(permission);
     }
   };
 
