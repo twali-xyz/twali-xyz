@@ -55,7 +55,10 @@ const CompanyModal = (props) => {
         ? props.userData.companyInfo[props.currCompany]
         : emptyCompanyInfo
     );
-    setlogo(props.userData?.companyInfo[props.currCompany].logo);
+    {
+      props.userData?.companyInfo[props.currCompany] &&
+        setlogo(props.userData?.companyInfo[props.currCompany].logo);
+    }
     return () => {};
   }, [props.isOpen]);
 
@@ -107,10 +110,10 @@ const CompanyModal = (props) => {
         props.handleUpdatedCompanyInfo(props.userData, false);
         props.onClose();
         setlogo(false);
-        window.location.reload();
         setTempCompany(emptyCompanyInfo);
         setShouldFetch(false);
         setIsSubmitted(false);
+        window.location.reload();
       } else {
         console.log("No profile, pls create one...");
       }
@@ -479,6 +482,8 @@ const CompanyModal = (props) => {
 
 // Client-side data fetching for Clearbit's NameToDomain API (on company modal load)
 function CompanyInfoData(props) {
+  console.log(props);
+
   //
   // only fetch if event comes from 'company name' field
   //
@@ -498,7 +503,7 @@ function CompanyInfoData(props) {
     const { data } = useSWR(`/api/cors?${qs}`, fetcher);
     if (!data) {
       props.isDisabled(false);
-      props.setlogo(props.logo || true);
+      props.setlogo(true);
     } else {
       props.isDisabled(false);
       props.setlogo(data);
