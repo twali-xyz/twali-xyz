@@ -137,6 +137,7 @@ const CompanyModal = (props) => {
       ...companyData,
       [evt.target.name]: evt.target.value,
     });
+    setErrors(validate(tempCompany));
     if (evt.target.name == "companyName") {
       setShouldFetch(true);
     }
