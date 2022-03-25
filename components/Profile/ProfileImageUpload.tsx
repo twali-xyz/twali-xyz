@@ -38,18 +38,18 @@ export default function ProfileImageUpload(props) {
     file.filename = filename;
     formData.append('file', file);
 
-    const upload = await fetch(`/api/users/postImage`, {
+    await fetch(`/api/users/postImage`, {
       method: 'POST',
       body: formData,
     });
 
-    if (upload.ok) {
-      console.log('Uploaded successfully!');
-    } else {
-      console.error('Upload failed.');
-    }
+    // if (upload.ok) {
+    //   console.log('Uploaded successfully!');
+    // } else {
+    //   console.error('Upload failed.');
+    // }
 
-    console.log("IMAGE UPLOADED");
+    // console.log("IMAGE UPLOADED");
   };
 
   return (
