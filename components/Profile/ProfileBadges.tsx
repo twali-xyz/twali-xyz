@@ -72,7 +72,7 @@ export function ProfileBadges({
       </UserPermissionsRestricted>
       {badges ? (
         <>
-          <HStack spacing={4} maxW={"640px"} display={"flex"} flexWrap={"wrap"} justifyContent={"space-between"}>
+          <HStack spacing={4} maxW={"640px"} display={"flex"} flexWrap={"wrap"} justifyContent={[badges?.length < 6 ? "unset" : "space-between"]}>
             {!!badges?.length ? (
               <>
               {badges?.map((badge, idx) => (
