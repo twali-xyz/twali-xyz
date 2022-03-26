@@ -12,9 +12,7 @@ export const config = {
 
 aws.config.update({
   region: "us-east-1",
-  // endpoint: "http://localhost:8000",
 });
-
 
 const uploadImageHandler = nc<NextApiRequest, NextApiResponse>(); 
 uploadImageHandler.use(middleware);
@@ -29,25 +27,23 @@ uploadImageHandler.post(async (req: any, res) => {
 
   const fileStream = fs.createReadStream(file.path);
 
-            // Setting up S3 upload parameters
-            const params = {
-                Bucket: 'test-pfp-images',
-                Key: `images/${req.body.uuid[0]}/profileImage.jpg`, // File name you want to save as in S3
-                Body: fileStream
-            };
-            console.log('PARAMS:', params);
+  // Setting up S3 upload parameters
+  const params = {
+    Bucket: 'test-pfp-images',
+    Key: `images/${uuid}/profileImage.jpg`, // File name you want to save as in S3
+    Body: fileStream
+  };
         
-          let uploaded = s3.upload(params, function(err, data) {
-            console.log('FILE DATA: ', data);
-            if (err) {
-                throw err;
-            }
-            console.log(`File uploaded successfully. ${data.Location}`);
-        });
+  let uploaded = s3.upload(params, function(err, data) {
+    if (err) {
+      throw err;
+    }
+    console.log(`File uploaded successfully. ${data.Location}`);
+  });
 
-        if (uploaded) {
-          res.status(200).json('UPLOADED');
-        }
+  if (uploaded) {
+    res.status(200).json('UPLOADED');
+  }
 })
 
 export default uploadImageHandler;
