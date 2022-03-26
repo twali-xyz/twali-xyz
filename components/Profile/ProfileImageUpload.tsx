@@ -2,7 +2,7 @@ import { Button, Img, Input } from "@chakra-ui/react";
 import React, { useRef, useState } from "react";
 
 export default function ProfileImageUpload(props) {
-  const userName = props.userName;
+  const uuid = props.uuid;
   const [selectedFile, setSelectedFile] = useState();
   const [isSelected, setIsSelected] = useState(false);
   const reference = useRef(null);
@@ -34,6 +34,7 @@ export default function ProfileImageUpload(props) {
     const formData: any = new FormData();
     file.filename = filename;
     formData.append('file', file);
+    formData.append('uuid', uuid);
 
     await fetch(`/api/users/postImage`, {
       method: 'POST',
@@ -42,13 +43,12 @@ export default function ProfileImageUpload(props) {
   };
 
   const downloadImg = async () => {
-    await fetch(`/api/users/getImage`, {
+    await fetch(`/api/users/getImage?uuid=${uuid}`, {
       method: 'GET',
     }).then(res => res.json()).then(data => {
       console.log(data);
       setNewImg(data);
     });
-    // setNewImg(img);
   };
 
 
@@ -74,13 +74,6 @@ export default function ProfileImageUpload(props) {
         p={0}
         onClick={handleOpen}
       >
-        <Img
-          borderRadius="full"
-          width="160px"
-          height="160px"
-          src="fox-pfp.png"
-          alt="fox stock img"
-        />
 
         { newImg ? (
           <Img
@@ -88,9 +81,15 @@ export default function ProfileImageUpload(props) {
           width="160px"
           height="160px"
           src={`data:image/jpeg;base64,${newImg}`}
-          alt="fox stock img"
+          alt={`${newImg}`}
         />
-        ): null}
+        ): <Img
+        borderRadius="full"
+        width="160px"
+        height="160px"
+        src="fox-pfp.png"
+        alt="fox stock img"
+      />}
 
       </Button>
       {isSelected && (

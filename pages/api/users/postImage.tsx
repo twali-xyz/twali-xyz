@@ -19,21 +19,20 @@ aws.config.update({
 const uploadImageHandler = nc<NextApiRequest, NextApiResponse>(); 
 uploadImageHandler.use(middleware);
 uploadImageHandler.post(async (req: any, res) => {
-  console.log(req.body)
-  console.log(req.files.file[0]);
 
   const s3 = new aws.S3({
     region: "us-east-1",
   });
 
   let file = req.files.file[0];
-  console.log(file);
+  let uuid = req.body.uuid[0];
+
   const fileStream = fs.createReadStream(file.path);
 
             // Setting up S3 upload parameters
             const params = {
                 Bucket: 'test-pfp-images',
-                Key: `images/${file.originalFilename}`, // File name you want to save as in S3
+                Key: `images/${req.body.uuid[0]}/profileImage.jpg`, // File name you want to save as in S3
                 Body: fileStream
             };
             console.log('PARAMS:', params);

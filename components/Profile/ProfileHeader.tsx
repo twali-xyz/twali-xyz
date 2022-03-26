@@ -3,7 +3,7 @@ import React from "react";
 import ProfileImageUpload from "./ProfileImageUpload";
 import bannerImage from "/public/twali-assets/bannerimage.png";
 
-export function ProfileHeader({ userName }) {
+export function ProfileHeader({ userName, uuid }) {
   return (
     <VStack
       w="100%"
@@ -15,7 +15,7 @@ export function ProfileHeader({ userName }) {
       bgRepeat={"no-repeat"}
       backgroundImage={"twali-assets/bannerimage.png"}
     >
-      <ProfileImageUpload userName={userName} />
+      <ProfileImageUpload uuid={uuid} />
 
       {userName && (
         <Text

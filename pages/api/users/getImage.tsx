@@ -14,7 +14,6 @@ function encode(data) {
 
 const getAllUsersHandler: NextApiHandler = async (req, res) => {
   try {
-    
   const s3 = new aws.S3({
     region: "us-east-1",
     // httpOptions: {timeout: 3000}
@@ -22,7 +21,7 @@ const getAllUsersHandler: NextApiHandler = async (req, res) => {
             // Setting up S3 upload parameters
             const params = {
                 Bucket: 'test-pfp-images',
-                Key: `images/nagmacartoon.jpg`, // File name you want to save as in S3
+                Key: `images/${req.query.uuid}/profileImage.jpg`, // File name you want to save as in S3
             };
             // s3.getSignedUrl('getObject', params, function(err, url){
             //     // res.render('test/test', {header: 'TEST', url: url});
