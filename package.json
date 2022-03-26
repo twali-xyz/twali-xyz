@@ -39,6 +39,7 @@
     "date-fns": "^2.11.1",
     "dids": "^2.4.3",
     "ethers": "^5.5.1",
+    "formidable": "^2.0.1",
     "fs": "^0.0.1-security",
     "graphql": "^16.1.0",
     "graphql-request": "^3.7.0",
