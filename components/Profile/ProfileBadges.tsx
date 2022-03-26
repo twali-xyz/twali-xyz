@@ -11,23 +11,22 @@ export function ProfileBadges({
   onBadgesModalClose,
   currentBadge,
 }) {
-
   let badges = [];
 
   if (poapsData && poapsData.length > 0) {
-    poapsData.forEach(poap => {
-      poap.type = 'poap';
+    poapsData.forEach((poap) => {
+      poap.type = "poap";
       badges.push(poap);
-    })
+    });
   }
 
   if (snapshotData && snapshotData.length > 0) {
-    snapshotData.forEach(vote => {
-      vote.type = 'snapshot';
+    snapshotData.forEach((vote) => {
+      vote.type = "snapshot";
       badges.push(vote);
-    })
+    });
   }
-  
+
   return (
     <Box
       alignSelf="flex-start"
@@ -72,64 +71,68 @@ export function ProfileBadges({
       </UserPermissionsRestricted>
       {badges ? (
         <>
-          <HStack spacing={4} maxW={"640px"} display={"flex"} flexWrap={"wrap"} justifyContent={[badges?.length < 6 ? "unset" : "space-between"]}>
+          <HStack
+            spacing={4}
+            maxW={"640px"}
+            display={"flex"}
+            flexWrap={"wrap"}
+            justifyContent={[badges?.length < 6 ? "unset" : "space-between"]}
+          >
             {!!badges?.length ? (
               <>
-              {badges?.map((badge, idx) => (
-                
-                <>
-                {badge.type == 'snapshot' ? (
-                  <Img
-                  marginLeft={[
-                    "0 !important",
-                    idx === 0 || idx >= 6 ? "0px" : "32px !important",
-                  ]}
-                  marginBottom={[
-                    "0 !important",
-                    idx >= 6 ? "0px" : "32px !important",
-                  ]}
-                  style={{
-                    cursor: "pointer",
-                  }}
-                  key={badge.spaceID}
-                  borderRadius="full"
-                  width="80px"
-                  src={badge.avatar}
-                  alt={`snapshot${badge.spaceID}`}
-                  onClick={() => {
-                    setCurrentBadge(badge);
-                    onBadgesModalOpen();
-                  }}
-                />
-                ) : (badge.type == 'poap' ? (
-                  <Img
-                  marginLeft={[
-                    "0 !important",
-                    idx === 0 || idx >= 6 ? "0px" : "32px !important",
-                  ]}
-                  marginBottom={[
-                    "0 !important",
-                    idx >= 6 ? "0px" : "32px !important",
-                  ]}
-                  style={{
-                    cursor: "pointer",
-                  }}
-                  key={badge.tokenId}
-                  borderRadius="full"
-                  width="80px"
-                  src={badge.event.image_url}
-                  alt={`poap${badge.tokenId}`}
-                  onClick={() => {
-                    setCurrentBadge(badge);
-                    onBadgesModalOpen();
-                  }}
-                />
-                ): null)}
-                </>
-              ))}
+                {badges?.map((badge, idx) => (
+                  <>
+                    {badge.type == "snapshot" ? (
+                      <Img
+                        marginLeft={[
+                          "0 !important",
+                          idx === 0 || idx >= 6 ? "0px" : "32px !important",
+                        ]}
+                        marginBottom={[
+                          "0 !important",
+                          idx >= 6 ? "0px" : "32px !important",
+                        ]}
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        key={badge.spaceID}
+                        borderRadius="full"
+                        width="80px"
+                        src={badge.avatar}
+                        alt={`snapshot${badge.spaceID}`}
+                        onClick={() => {
+                          setCurrentBadge(badge);
+                          onBadgesModalOpen();
+                        }}
+                      />
+                    ) : badge.type == "poap" ? (
+                      <Img
+                        marginLeft={[
+                          "0 !important",
+                          idx === 0 || idx >= 6 ? "0px" : "32px !important",
+                        ]}
+                        marginBottom={[
+                          "0 !important",
+                          idx >= 6 ? "0px" : "32px !important",
+                        ]}
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        key={badge.tokenId}
+                        borderRadius="full"
+                        width="80px"
+                        src={badge.event.image_url}
+                        alt={`poap${badge.tokenId}`}
+                        onClick={() => {
+                          setCurrentBadge(badge);
+                          onBadgesModalOpen();
+                        }}
+                      />
+                    ) : null}
+                  </>
+                ))}
               </>
-              )
-             : (
+            ) : (
               <>
                 <UserPermissionsRestricted to="view">
                   <Tooltip

@@ -280,9 +280,14 @@ const CompanyModal = (props) => {
         key={`companymodal--${props.currCompany}`}
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent
+          backgroundColor={"#041A19"}
+          fontFamily={"PP Telegraf Light"}
+        >
           <UserPermissionsRestricted to="edit" fallback={companyModalView}>
-            <ModalHeader>Update your work experience</ModalHeader>
+            <ModalHeader fontSize={"18px"} lineHeight={"28px"} pb={0}>
+              Update your work experience
+            </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               {companyData ? (
@@ -300,18 +305,18 @@ const CompanyModal = (props) => {
                       </>
                     ) : logo?.message?.logo ? (
                       <>
-                        <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+                        <Box w="full" borderRadius="lg" overflow="hidden" p={2}>
                           <Img
-                            height="30px"
+                            height={"48px"}
                             src={logo?.message?.logo}
                             alt={logo?.message?.domain}
                           />
                         </Box>
                       </>
                     ) : !logo && companyData.logo?.message?.logo ? (
-                      <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+                      <Box w="full" borderRadius="lg" overflow="hidden" p={2}>
                         <Img
-                          height="30px"
+                          height={"48px"}
                           src={companyData.logo?.message?.logo}
                           alt={companyData.logo?.message?.domain}
                         />
@@ -457,25 +462,17 @@ const CompanyModal = (props) => {
             </ModalBody>
             <ModalFooter>
               <Button
-                colorScheme="blue"
-                mr={3}
-                onClick={() => {
-                  props.onClose();
-                  setShouldFetch(false);
-                  setlogo(false);
-                  setTempCompany(emptyCompanyInfo);
-                }}
-              >
-                Close
-              </Button>
-              <Button
                 isDisabled={isDisabled}
                 onClick={() => {
                   updateCompanyInfo();
                 }}
                 variant="ghost"
+                backgroundColor={"#C7F83C"}
+                color={"#0A1313"}
+                fontFamily={"PP Telegraf Bold"}
+                fontWeight={"700"}
               >
-                Save{" "}
+                Save
                 {isSubmitted ? (
                   <CircularProgress
                     size="22px"
@@ -526,9 +523,9 @@ function CompanyInfoData(props) {
       // return when shouldFetch == true && logo data is found
       <>
         {data && data?.message && data?.message?.logo ? (
-          <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+          <Box w="full" borderRadius="lg" overflow="hidden" p={2}>
             <Img
-              height="30px"
+              height={"48px"}
               src={data.message.logo}
               alt={data.message.domain}
             />
@@ -547,9 +544,9 @@ function CompanyInfoData(props) {
   return (
     <>
       {props.logo && props.logo?.message && props.logo?.message?.logo ? (
-        <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+        <Box w="full" borderRadius="lg" overflow="hidden" p={2}>
           <Img
-            height="30px"
+            height={"48px"}
             src={props.logo.message.logo}
             alt={props.logo.message.domain}
           />
@@ -568,7 +565,7 @@ function CompanyInfoData(props) {
 export function LogoFallBack(props) {
   return (
     <>
-      <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+      <Box w="full" borderRadius="lg" overflow="hidden" p={2}>
         <Box
           w={"1.75rem"}
           h={"1.75rem"}
@@ -584,6 +581,7 @@ export function LogoFallBack(props) {
             justifyContent={"center"}
             alignItems={"center"}
             fontSize="xl"
+            fontFamily={"GrandSlang"}
             fontWeight="800"
             color="blue.700"
           >
