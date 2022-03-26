@@ -6,10 +6,10 @@ export default function ProfileImageUpload(props) {
   const [selectedFile, setSelectedFile] = useState();
   const [isSelected, setIsSelected] = useState(false);
   const reference = useRef(null);
+  const [newImg, setNewImg] = useState('');
 
   const changeHandler = (event) => {
     let finalFile = event.target.files[0];
-    // finalFile.userName = userName;
     setSelectedFile(finalFile);
     setIsSelected(true);
     console.log(finalFile);
@@ -31,9 +31,6 @@ export default function ProfileImageUpload(props) {
   const uploadImage = async (file) => {
     const filename = encodeURIComponent(file.name);
     console.log(filename);
-    // const res = await fetch(`/api/users/postImage?file=${filename}`);
-    // const { url, fields } = await res.json();
-    // console.log(fields);
     const formData: any = new FormData();
     file.filename = filename;
     formData.append('file', file);
@@ -42,15 +39,18 @@ export default function ProfileImageUpload(props) {
       method: 'POST',
       body: formData,
     });
-
-    // if (upload.ok) {
-    //   console.log('Uploaded successfully!');
-    // } else {
-    //   console.error('Upload failed.');
-    // }
-
-    // console.log("IMAGE UPLOADED");
   };
+
+  const downloadImg = async () => {
+    await fetch(`/api/users/getImage`, {
+      method: 'GET',
+    }).then(res => res.json()).then(data => {
+      console.log(data);
+      setNewImg(data);
+    });
+    // setNewImg(img);
+  };
+
 
   return (
     <>
@@ -81,10 +81,22 @@ export default function ProfileImageUpload(props) {
           src="fox-pfp.png"
           alt="fox stock img"
         />
+
+        { newImg ? (
+          <Img
+          borderRadius="full"
+          width="160px"
+          height="160px"
+          src={`data:image/jpeg;base64,${newImg}`}
+          alt="fox stock img"
+        />
+        ): null}
+
       </Button>
       {isSelected && (
         <Button onClick={(evt) => handleSubmission(evt)}>save profile pic</Button>
       )}
+      <Button onClick={() => downloadImg()}>get image</Button>
     </>
   );
 }
