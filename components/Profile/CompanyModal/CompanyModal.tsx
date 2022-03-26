@@ -49,6 +49,10 @@ const CompanyModal = (props) => {
   const [companyData, setCompanyData] = useState<any>();
 
   useEffect(() => {
+    if (!props.isOpen) {
+      setlogo(false);
+      return;
+    }
     setCompanyData(
       props.userData.companyInfo &&
         props.userData.companyInfo[props.currCompany]
@@ -193,7 +197,10 @@ const CompanyModal = (props) => {
 
   const companyModalView = (
     <>
-      <ModalContent>
+      <ModalContent
+        backgroundColor={"#041A19"}
+        fontFamily={"PP Telegraf Light"}
+      >
         <ModalCloseButton />
         <ModalBody>
           <VStack spacing={6} padding={10}>
@@ -201,7 +208,9 @@ const CompanyModal = (props) => {
               <>
                 {companyData.companyName ? (
                   <>
-                    <Heading>{companyData.companyName}</Heading>
+                    <Heading fontWeight={"500"} textTransform={"capitalize"}>
+                      {companyData.companyName}
+                    </Heading>
                   </>
                 ) : null}
 
@@ -216,17 +225,34 @@ const CompanyModal = (props) => {
                 ) : null}
 
                 {companyData.companyFunc && companyData.companyIndustry ? (
-                  <HStack spacing={4}>
+                  <HStack
+                    spacing={4}
+                    display={"flex"}
+                    alignContent={"baseline"}
+                  >
                     {[companyData.companyFunc, companyData.companyIndustry].map(
                       (name, idx) => (
-                        <Tag
-                          size={"md"}
+                        <Box
                           key={`sm--${name}-${idx}`}
-                          variant="solid"
-                          colorScheme="teal"
+                          borderRadius={"32px"}
+                          backgroundImage={
+                            "linear-gradient(#0DD5D1 0%, #9350B3 100%)"
+                          }
+                          p={"1px"}
                         >
-                          {name}
-                        </Tag>
+                          <Text
+                            fontSize="14px"
+                            lineHeight={"24px"}
+                            fontFamily={"PP Telegraf"}
+                            alignSelf={"start"}
+                            backgroundColor={"#0A2625"}
+                            p={"4px 12px"}
+                            borderRadius={"32px"}
+                            whiteSpace={"nowrap"}
+                          >
+                            {name}
+                          </Text>
+                        </Box>
                       )
                     )}
                   </HStack>
@@ -235,20 +261,6 @@ const CompanyModal = (props) => {
             ) : null}
           </VStack>
         </ModalBody>
-        <ModalFooter>
-          <Button
-            colorScheme="blue"
-            mr={3}
-            onClick={() => {
-              props.onClose();
-              setShouldFetch(false);
-              setlogo(false);
-              setTempCompany(emptyCompanyInfo);
-            }}
-          >
-            Close
-          </Button>
-        </ModalFooter>
       </ModalContent>
     </>
   );
