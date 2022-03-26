@@ -1,15 +1,33 @@
 import { Box, Text, HStack, Img, Tooltip } from "@chakra-ui/react";
 import React from "react";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
-import SnapshotModal from "./SnapshotModal/SnapshotModal";
-export function ProfileSnapshots({
+import BadgesModal from "./BadgesModal/BadgesModal";
+export function ProfileBadges({
+  poapsData,
   snapshotData,
-  setCurrentSnapshot,
-  onSnapshotModalOpen,
-  isSnapshotModalOpen,
-  onSnapshotModalClose,
-  currentSnapshot,
+  setCurrentBadge,
+  onBadgesModalOpen,
+  isBadgesModalOpen,
+  onBadgesModalClose,
+  currentBadge,
 }) {
+
+  let badges = [];
+
+  if (poapsData && poapsData.length > 0) {
+    poapsData.forEach(poap => {
+      poap.type = 'poap';
+      badges.push(poap);
+    })
+  }
+
+  if (snapshotData && snapshotData.length > 0) {
+    snapshotData.forEach(vote => {
+      vote.type = 'snapshot';
+      badges.push(vote);
+    })
+  }
+  
   return (
     <Box
       alignSelf="flex-start"
@@ -34,11 +52,11 @@ export function ProfileSnapshots({
           lineHeight={"48px"}
           letterSpacing={"wide"}
           fontFamily={"GrandSlang"}
-          mb={!snapshotData?.length ? "unset" : 4}
+          mb={!badges?.length ? "unset" : 4}
         >
           Badges
         </Text>
-        {!snapshotData?.length && (
+        {!badges?.length && (
           <Text
             fontSize="16px"
             color={"#98B2B2"}
@@ -52,31 +70,66 @@ export function ProfileSnapshots({
           </Text>
         )}
       </UserPermissionsRestricted>
-      {snapshotData ? (
+      {badges ? (
         <>
-          <HStack spacing={4} maxW={"640px"} display={"flex"} flexWrap={"wrap"}>
-            {!!snapshotData?.length ? (
-              snapshotData?.map((vote, idx) => (
-                <Img
+          <HStack spacing={4} maxW={"640px"} display={"flex"} flexWrap={"wrap"} justifyContent={[badges?.length < 6 ? "unset" : "space-between"]}>
+            {!!badges?.length ? (
+              <>
+              {badges?.map((badge, idx) => (
+                
+                <>
+                {badge.type == 'snapshot' ? (
+                  <Img
                   marginLeft={[
                     "0 !important",
-                    idx === 0 || idx > 6 ? "0px" : "32px !important",
+                    idx === 0 || idx >= 6 ? "0px" : "32px !important",
+                  ]}
+                  marginBottom={[
+                    "0 !important",
+                    idx >= 6 ? "0px" : "32px !important",
                   ]}
                   style={{
                     cursor: "pointer",
                   }}
-                  key={vote.spaceID}
+                  key={badge.spaceID}
                   borderRadius="full"
                   width="80px"
-                  src={vote.avatar}
-                  alt={`snapshot${vote.spaceID}`}
+                  src={badge.avatar}
+                  alt={`snapshot${badge.spaceID}`}
                   onClick={() => {
-                    setCurrentSnapshot(vote);
-                    onSnapshotModalOpen();
+                    setCurrentBadge(badge);
+                    onBadgesModalOpen();
                   }}
                 />
-              ))
-            ) : (
+                ) : (badge.type == 'poap' ? (
+                  <Img
+                  marginLeft={[
+                    "0 !important",
+                    idx === 0 || idx >= 6 ? "0px" : "32px !important",
+                  ]}
+                  marginBottom={[
+                    "0 !important",
+                    idx >= 6 ? "0px" : "32px !important",
+                  ]}
+                  style={{
+                    cursor: "pointer",
+                  }}
+                  key={badge.tokenId}
+                  borderRadius="full"
+                  width="80px"
+                  src={badge.event.image_url}
+                  alt={`poap${badge.tokenId}`}
+                  onClick={() => {
+                    setCurrentBadge(badge);
+                    onBadgesModalOpen();
+                  }}
+                />
+                ): null)}
+                </>
+              ))}
+              </>
+              )
+             : (
               <>
                 <UserPermissionsRestricted to="view">
                   <Tooltip
@@ -110,10 +163,10 @@ export function ProfileSnapshots({
               </>
             )}
           </HStack>
-          <SnapshotModal
-            isOpen={isSnapshotModalOpen}
-            onClose={onSnapshotModalClose}
-            snapshotData={currentSnapshot}
+          <BadgesModal
+            badge={currentBadge}
+            isOpen={isBadgesModalOpen}
+            onClose={onBadgesModalClose}
           />
         </>
       ) : null}
