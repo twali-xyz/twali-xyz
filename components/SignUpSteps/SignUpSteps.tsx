@@ -53,6 +53,7 @@ const SignUpSteps = () => {
     functionalExpertise: [],
     industryExpertise: [],
     companyInfo: [],
+    uuid: "",
   });
 
   const validate = (values) => {

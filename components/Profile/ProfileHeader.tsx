@@ -1,8 +1,9 @@
 import { Button, Img, Text, VStack } from "@chakra-ui/react";
 import React from "react";
+import ProfileImageUpload from "./ProfileImageUpload";
 import bannerImage from "/public/twali-assets/bannerimage.png";
 
-export function ProfileHeader({ userName }) {
+export function ProfileHeader({ userName, uuid }) {
   return (
     <VStack
       w="100%"
@@ -14,24 +15,8 @@ export function ProfileHeader({ userName }) {
       bgRepeat={"no-repeat"}
       backgroundImage={"twali-assets/bannerimage.png"}
     >
-      <Button
-        height={"160px"}
-        width={"160px"}
-        alignSelf="center"
-        overflow="hidden"
-        pos={"relative"}
-        bottom={5}
-        marginBottom={0}
-        p={0}
-      >
-        <Img
-          borderRadius="full"
-          width="160px"
-          height="160px"
-          src="fox-pfp.png"
-          alt="fox stock img"
-        />
-      </Button>
+      <ProfileImageUpload uuid={uuid} />
+
       {userName && (
         <Text
           fontFamily={"GrandSlang"}
