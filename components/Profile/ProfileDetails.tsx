@@ -318,7 +318,7 @@ const ProfileDetails = ({ user }) => {
                   loggedInUserAddress ? loggedInUserAddress : null
                 )}
               >
-                <ProfileHeader userName={userData.userName} />
+                <ProfileHeader userName={userData.userName} uuid={userData.uuid}/>
                 <Flex
                   w="full"
                   justifyContent={"space-around"}

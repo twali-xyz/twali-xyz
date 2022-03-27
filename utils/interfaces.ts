@@ -17,6 +17,7 @@ export interface UserData {
   functionalExpertise?: [];
   industryExpertise?: [];
   companyInfo?: CompanyInfo[];
+  uuid: string;
 }
 export interface CompanyInfo {
   companyName: string;
