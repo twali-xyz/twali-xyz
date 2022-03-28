@@ -150,10 +150,10 @@ const ProfileDetails = ({ user }) => {
 
     function setupPOAPs(address) {
       fetch(`https://api.poap.xyz/actions/scan/${address}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setPOAPsData(data);
-      })
+        .then((res) => res.json())
+        .then((data) => {
+          setPOAPsData(data);
+        });
     }
 
     async function getVoterSnapshotQueries(data, address) {
@@ -318,7 +318,10 @@ const ProfileDetails = ({ user }) => {
                   loggedInUserAddress ? loggedInUserAddress : null
                 )}
               >
-                <ProfileHeader userName={userData.userName} uuid={userData.uuid}/>
+                <ProfileHeader
+                  userName={userData.userName}
+                  uuid={userData.uuid}
+                />
                 <Flex
                   w="full"
                   justifyContent={"space-around"}
@@ -346,7 +349,7 @@ const ProfileDetails = ({ user }) => {
                         onBadgesModalClose={onBadgesModalClose}
                         currentBadge={currentBadge}
                       />
-                      
+
                       <ProfileExperience
                         createWorkElements={createWorkElements}
                         viewCompany={viewCompany}

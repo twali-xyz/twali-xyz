@@ -11,10 +11,10 @@ const getDynamoDBClient = () => {
   // Only needed with local development.
   // if (process.env.LOCAL_DYNAMO_DB_ENDPOINT) {
   AWS.config.update({
-    //     accessKeyId: "xxxx",
-    //     secretAccessKey: "xxxx",
+    accessKeyId: "xxxx",
+    secretAccessKey: "xxxx",
     region: "us-east-1",
-    // endpoint: "http://localhost:8000",
+    endpoint: "http://localhost:8000",
   });
   // }
 
@@ -90,7 +90,7 @@ module.exports = {
           userName: userName,
           userWallet: userWallet,
           accType: accType,
-          uuid: v4(), // unique ID associated with each user account 
+          uuid: v4(), // unique ID associated with each user account
           createdAt: Date.now(),
           firstName: firstName,
           lastName: lastName,
@@ -108,7 +108,13 @@ module.exports = {
           industryExpertise: industryExpertise,
           companyInfo: companyInfo ? companyInfo : null,
         },
-        // ConditionExpression: attribute_not_exists({userName})
+        /**
+         * Set create user condition that no duplicate 'SK' -- userName can be created
+        */
+        //   ConditionExpression: "attribute_not_exists(#userName)",
+        //   ExpressionAttributeNames: {
+        //     "#userName": userName
+        // }
       })
       .promise();
   },
@@ -302,4 +308,28 @@ module.exports = {
       .catch(console.error);
     return allUsers;
   },
+
+
+  /**
+   * @desc Checks if userName does not exsit in db table
+  */
+ userNameIsValid: async (userName) => {
+   let exists = false;
+   const dbUserName = await getDynamoDBClient()
+   .query({
+    TableName,
+    IndexName: "wallet_name_index",
+        // ProjectionExpression: "userName",
+    KeyConditionExpression: "userName = :userName",
+    ExpressionAttributeValues: {
+      ":userName": userName,
+    },
+   }).promise();
+console.log(dbUserName.Items)
+   if(dbUserName.Items[0] !== undefined && dbUserName.Items[0] !== null){
+     exists = true;
+   }
+   console.log("does it exists", exists);
+   return exists;
+ }
 };

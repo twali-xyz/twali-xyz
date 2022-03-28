@@ -28,4 +28,3 @@ export interface CompanyInfo {
   companyFunc: string;
   companyIndustry: string;
 }
- 
