@@ -1,14 +1,6 @@
-import {
-  Button,
-  Img,
-  Input,
-  CircularProgress,
-  Text,
-  Alert,
-  AlertIcon,
-} from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
+import { Box, Button, Img, Input, CircularProgress, Text, Alert, AlertIcon } from "@chakra-ui/react";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 export default function ProfileImageUpload(props) {
@@ -98,7 +90,7 @@ export default function ProfileImageUpload(props) {
         setIsSubmitted(false);
         setIsSelected(false);
         window.location.reload();
-      }, 3000);
+      }, 5000);
     } else {
       console.log("error");
       setIsSubmitted(false);
@@ -115,17 +107,36 @@ export default function ProfileImageUpload(props) {
       });
   };
 
+  const viewProfileImg = (
+    <>
+    { newImg ? (
+      <Box 
+        height={"160px"}
+        width={"160px"}>
+          <Img
+            key={`${newImg}--view-profile-img`}
+            src={`data:image/jpeg;base64,${newImg}`}
+            alt={`${newImg}`}
+          />
+      </Box>
+    ): null}
+  </>
+  )
+
   return (
     <>
-      <UserPermissionsRestricted to="edit">
-        <Input
-          type="file"
-          name="profilePhoto"
-          visibility={"hidden"}
-          onChange={changeHandler}
-          ref={reference}
-        />
-
+    <UserPermissionsRestricted
+            to="edit"
+            key={`${timestamp}--usr-permission`}
+            fallback={viewProfileImg}
+          >
+      <Input
+        type="file"
+        name="profilePhoto"
+        visibility={"hidden"}
+        onChange={changeHandler}
+        ref={reference}
+      />
         <Button
           name="file"
           height={"160px"}
@@ -138,61 +149,45 @@ export default function ProfileImageUpload(props) {
           p={0}
           onClick={handleOpen}
         >
-          {newImg ? (
-            <Img
-              key={timestamp}
-              src={`data:image/jpeg;base64,${newImg}`}
-              alt={`${newImg}`}
-            />
-          ) : (
-            <Img
-              borderRadius="full"
-              width="80px"
-              height="80px"
-              src="twali-assets/plusicon.png"
-              alt="plus icon"
-            />
-          )}
-        </Button>
-
-        {selectedFile && selectedFile.name ? (
-          <Text
-            fontFamily={"PP Telegraf"}
-            fontSize="14px"
-            lineHeight={"24px"}
-            fontWeight={"400"}
-            pos={"relative"}
-          >
-            {selectedFile.name}
-          </Text>
-        ) : null}
-        {isFileTooBig ? (
-          <Alert width={500} status="error">
-            <AlertIcon />
-            <Text
-              fontFamily={"PP Telegraf"}
-              fontSize="14px"
-              lineHeight={"24px"}
-              fontWeight={"400"}
-              pos={"relative"}
-            >
-              Oops! Your image is too big. Please upload again! (less than 1MB)
-            </Text>
-          </Alert>
-        ) : null}
-        {isSelected && (
-          <Button onClick={(evt) => handleSubmission(evt)}>
-            save{" "}
-            {isSubmitted ? (
-              <CircularProgress
-                size="22px"
-                thickness="4px"
-                isIndeterminate
-                color="#3C2E26"
-              />
-            ) : null}
-          </Button>
-        )}
+        { newImg ? (
+          <Img
+          key={timestamp}
+          src={`data:image/jpeg;base64,${newImg}`}
+          alt={`${newImg}`}
+        />
+        ): <Img
+        borderRadius="full"
+        width="80px"
+        height="80px"
+        src="twali-assets/plusicon.png"
+        alt="plus icon"
+      />}
+      </Button>
+      {selectedFile && selectedFile.name ? <Text
+        fontFamily={"PP Telegraf"}
+        fontSize="14px"
+        lineHeight={"24px"}
+        fontWeight={"400"}
+        pos={"relative"}
+      >{selectedFile.name}</Text>: null}
+      {isFileTooBig ? <Alert width={500} status='error'>
+    <AlertIcon />
+    <Text
+        fontFamily={"PP Telegraf"}
+        fontSize="14px"
+        lineHeight={"24px"}
+        fontWeight={"400"}
+        pos={"relative"}
+      >Oops! Your image is too big. Please upload again! (less than 1MB)</Text>
+  </Alert>: null}
+      {isSelected && (
+        <Button onClick={(evt) => handleSubmission(evt)}>save {isSubmitted ? <CircularProgress
+        size="22px"
+        thickness="4px"
+        isIndeterminate
+        color="#3C2E26"
+      />: null}</Button>
+      )}
       </UserPermissionsRestricted>
     </>
   );
