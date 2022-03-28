@@ -1,17 +1,17 @@
-import nextConnect from 'next-connect'
-import multiparty from 'multiparty'
+import nextConnect from "next-connect";
+import multiparty from "multiparty";
 
-const middleware = nextConnect()
+const middleware = nextConnect();
 
 middleware.use(async (req, res, next) => {
-  const form = new multiparty.Form()
+  const form = new multiparty.Form();
 
   // Parse form data retrieved from front-end
   await form.parse(req, function (err, fields, files) {
-    req.body = fields
-    req.files = files
-    next()
-  })
-})
+    req.body = fields;
+    req.files = files;
+    next();
+  });
+});
 
-export default middleware
+export default middleware;

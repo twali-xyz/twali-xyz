@@ -1,7 +1,7 @@
 import { Box, Button, Img, Input, CircularProgress, Text, Alert, AlertIcon } from "@chakra-ui/react";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import React, { useEffect, useRef, useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 
 export default function ProfileImageUpload(props) {
   const uuid = props.uuid;
@@ -15,27 +15,29 @@ export default function ProfileImageUpload(props) {
   const [timestamp, setTimestamp] = useState(Date.now());
   const [isFileTooBig, setIsFileTooBig] = useState(false);
   const reference = useRef(null);
-  const [newImg, setNewImg] = useState('');
+  const [newImg, setNewImg] = useState("");
 
   const initializeImage = async () => {
     try {
       await fetch(`/api/users/getImage?uuid=${uuid}`, {
-        method: 'GET',
-      }).then(res => res.json()).then(data => {
-        setNewImg(data);
-      });
-    } catch(err) {
-      console.log('No previous image found');
+        method: "GET",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setNewImg(data);
+        });
+    } catch (err) {
+      console.log("No previous image found");
     }
-  }
+  };
 
-  useEffect( () => {
+  useEffect(() => {
     initializeImage();
-  }, [newImg == '']); 
+  }, [newImg == ""]);
 
   const changeHandler = (event) => {
     let finalFile = event.target.files[0];
-    const fileSize = Math.round((finalFile.size / 1024)); 
+    const fileSize = Math.round(finalFile.size / 1024);
     if (fileSize >= 1024) {
       setIsFileTooBig(true);
     } else {
@@ -63,42 +65,46 @@ export default function ProfileImageUpload(props) {
     const filename = encodeURIComponent(file.name);
     const formData: any = new FormData();
     file.filename = filename;
-    formData.append('file', file);
-    formData.append('uuid', uuid);
+    formData.append("file", file);
+    formData.append("uuid", uuid);
 
-    axios.request({
-      method: "post", 
-      url: "/api/users/postImage", 
-      data: formData, 
-      onUploadProgress: (p) => {
-        //console.log(p); 
-      }
-  }).then (data => {
-      setTimestamp(Date.now())
-      checkIfUploadIsCompleted(data);
-  })};
-  
+    axios
+      .request({
+        method: "post",
+        url: "/api/users/postImage",
+        data: formData,
+        onUploadProgress: (p) => {
+          //console.log(p);
+        },
+      })
+      .then((data) => {
+        setTimestamp(Date.now());
+        checkIfUploadIsCompleted(data);
+      });
+  };
 
   const checkIfUploadIsCompleted = (data) => {
     if (data) {
       downloadImg();
-      setTimeout(function() {
+      setTimeout(function () {
         setIsSubmitted(false);
         setIsSelected(false);
         window.location.reload();
       }, 5000);
     } else {
-      console.log('error');
+      console.log("error");
       setIsSubmitted(false);
     }
-  }
+  };
 
   const downloadImg = async () => {
     await fetch(`/api/users/getImage?uuid=${uuid}`, {
-      method: 'GET',
-    }).then(res => res.json()).then(data => {
-      setNewImg(data);
-    });
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setNewImg(data);
+      });
   };
 
   const viewProfileImg = (
@@ -131,20 +137,18 @@ export default function ProfileImageUpload(props) {
         onChange={changeHandler}
         ref={reference}
       />
-
-      <Button
-        name="file"
-        height={"160px"}
-        width={"160px"}
-        alignSelf="center"
-        overflow="hidden"
-        pos={"relative"}
-        bottom={5}
-        marginBottom={0}
-        p={0}
-        onClick={handleOpen}
-      >
-
+        <Button
+          name="file"
+          height={"160px"}
+          width={"160px"}
+          alignSelf="center"
+          overflow="hidden"
+          pos={"relative"}
+          bottom={5}
+          marginBottom={0}
+          p={0}
+          onClick={handleOpen}
+        >
         { newImg ? (
           <Img
           key={timestamp}

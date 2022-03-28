@@ -13,6 +13,7 @@ import EditExpertiseModal from "./EditExpertiseModal/EditExpertiseModal";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import EditProfileModal from "./EditProfileModal/EditProfileModal";
 import { ProfileSocialMedia } from "./ProfileSocialMedia";
+import { Chip } from "./Components/Chip";
 export function ProfileSideBar({
   onExpModalOpen,
   isExpModalOpen,
@@ -128,6 +129,7 @@ export function ProfileSideBar({
         </Text>
       </Box>
       <ProfileSocialMedia userData={userData} marginTop={"24px !important"} />
+
       <Flex
         p={6}
         mx={"auto"}
@@ -199,29 +201,12 @@ export function ProfileSideBar({
               userData?.functionalExpertise.map((expertise, idx) => {
                 if (expertise)
                   return (
-                    <Box
-                      key={idx}
-                      borderRadius={"32px"}
-                      backgroundImage={
-                        "linear-gradient(#0DD5D1 0%, #9350B3 100%)"
-                      }
+                    <Chip
+                      key={`chip--${expertise}-${idx}`}
+                      text={expertise}
                       marginRight={idx === 2 ? 0 : 4}
                       marginBottom={4}
-                      p={"1px"}
-                    >
-                      <Text
-                        fontSize="14px"
-                        lineHeight={"24px"}
-                        fontFamily={"PP Telegraf"}
-                        alignSelf={"start"}
-                        backgroundColor={"#0A2625"}
-                        p={"4px 12px"}
-                        borderRadius={"32px"}
-                        whiteSpace={"nowrap"}
-                      >
-                        {expertise}
-                      </Text>
-                    </Box>
+                    />
                   );
               })}
           </Flex>

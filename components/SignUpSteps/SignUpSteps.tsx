@@ -146,10 +146,23 @@ const SignUpSteps = () => {
     },
   ];
 
+  // const checkUserName = async (userName) => {
+  //   userData.userName = userName;
+
+  //   let available = await fetch(`/api/users/checkUserName`, {
+  //   method: "POST",
+  //   body: JSON.stringify(userData.userName)
+  //     }).then((res)=> res.json());
+  //   if (available == true){
+  //     throw new Error("Select new username")
+  //   }
+  // }
+
   const createNewUser = async (address) => {
     userData.userWallet = address;
     // check if user doesnt already exsist with current address
     userData.accType = accType;
+
     await fetch("/api/users/createUser", {
       method: "POST",
       body: JSON.stringify({ userData }),

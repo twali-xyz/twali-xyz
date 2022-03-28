@@ -11,8 +11,6 @@
 // import { IDX } from "@ceramicstudio/idx";
 // import { BasicProfile, ProfileData } from "../../../utils/interfaces";
 
-
-
 // // network node that we're interacting with, can be local/prod
 // // we're using a test network here
 // const endpoint = "https://ceramic-clay.3boxlabs.com";
@@ -41,7 +39,7 @@
 //       const accounts = await web3.eth.getAccounts();
 //       const currAccount = accounts[0];
 //       console.log("CURRACOUNT: " , currAccount);
-      
+
 //       const ceramic = new CeramicClient(endpoint);
 //       const idx = new IDX({ ceramic });
 //       setIsSubmitted(true);
@@ -52,34 +50,34 @@
 //           currAccount
 //         );
 //         await threeIdConnect.connect(ethProvider);
-  
+
 //         const did = new DID({
 //           provider: threeIdConnect.getDidProvider(),
 //           resolver: {
 //             ...ThreeIdResolver.getResolver(ceramic),
 //           },
 //         });
-  
+
 //         ceramic.setDID(did);
 //         await ceramic.did.authenticate();
-  
+
 //         // does not require signing to get user's public data
 //         const data: BasicProfile = await idx.get(
 //           "basicProfile",
 //           `${currAccount}@eip155:1`
 //         );
 //         console.log("data: ", data);
-  
+
 //         const profileData: ProfileData = await TileDocument.deterministic(
 //           ceramic,
 //           { family: "user-profile-data" },
 //           { anchor: false, publish: false }
 //         );
-  
+
 //         console.log("profileData: ", profileData.content);
 //         let identity = profileData;
 //         let profileAccType = profileData.content.accType;
-  
+
 //         if (data.name && identity.email && profileAccType) {
 //           setName(data.name);
 //           setEmail(identity.email);
@@ -101,7 +99,7 @@
 //             { family: "user-profile-data" },
 //             { anchor: false, publish: false }
 //           );
-  
+
 //           if (profile) {
 //             setProfileData(profile);
 //           }
@@ -113,5 +111,5 @@
 //     };
 
 //   }
-  
-  export {}
+
+export {};

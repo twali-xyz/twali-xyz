@@ -1,3 +1,4 @@
+import { Chip } from "./../Components/Chip";
 import { useEffect, useRef, useState } from "react";
 import {
   Box,
@@ -49,6 +50,10 @@ const CompanyModal = (props) => {
   const [companyData, setCompanyData] = useState<any>();
 
   useEffect(() => {
+    if (!props.isOpen) {
+      setlogo(false);
+      return;
+    }
     setCompanyData(
       props.userData.companyInfo &&
         props.userData.companyInfo[props.currCompany]
@@ -193,7 +198,10 @@ const CompanyModal = (props) => {
 
   const companyModalView = (
     <>
-      <ModalContent>
+      <ModalContent
+        backgroundColor={"#041A19"}
+        fontFamily={"PP Telegraf Light"}
+      >
         <ModalCloseButton />
         <ModalBody>
           <VStack spacing={6} padding={10}>
@@ -201,7 +209,9 @@ const CompanyModal = (props) => {
               <>
                 {companyData.companyName ? (
                   <>
-                    <Heading>{companyData.companyName}</Heading>
+                    <Heading fontWeight={"500"} textTransform={"capitalize"}>
+                      {companyData.companyName}
+                    </Heading>
                   </>
                 ) : null}
 
@@ -216,17 +226,19 @@ const CompanyModal = (props) => {
                 ) : null}
 
                 {companyData.companyFunc && companyData.companyIndustry ? (
-                  <HStack spacing={4}>
+                  <HStack
+                    spacing={4}
+                    display={"flex"}
+                    alignContent={"baseline"}
+                  >
                     {[companyData.companyFunc, companyData.companyIndustry].map(
                       (name, idx) => (
-                        <Tag
-                          size={"md"}
-                          key={`sm--${name}-${idx}`}
-                          variant="solid"
-                          colorScheme="teal"
-                        >
-                          {name}
-                        </Tag>
+                        <Chip
+                          key={`expertChip--${name}-${idx}`}
+                          text={name}
+                          name={name}
+                          idx={idx}
+                        />
                       )
                     )}
                   </HStack>
@@ -235,20 +247,6 @@ const CompanyModal = (props) => {
             ) : null}
           </VStack>
         </ModalBody>
-        <ModalFooter>
-          <Button
-            colorScheme="blue"
-            mr={3}
-            onClick={() => {
-              props.onClose();
-              setShouldFetch(false);
-              setlogo(false);
-              setTempCompany(emptyCompanyInfo);
-            }}
-          >
-            Close
-          </Button>
-        </ModalFooter>
       </ModalContent>
     </>
   );
@@ -268,11 +266,11 @@ const CompanyModal = (props) => {
         key={`companymodal--${props.currCompany}`}
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent backgroundColor={"#041A19"} fontFamily={"PP Telegraf"}>
           <UserPermissionsRestricted to="edit" fallback={companyModalView}>
-            <ModalHeader>Update your work experience</ModalHeader>
+            <ModalHeader pb={0}>Update your work experience</ModalHeader>
             <ModalCloseButton />
-            <ModalBody>
+            <ModalBody fontSize={"14px"} lineHeight={"24px"} fontWeight={"400"}>
               {companyData ? (
                 <form style={{ alignSelf: "center" }}>
                   <FormControl p={2} id="company-name">
@@ -288,18 +286,18 @@ const CompanyModal = (props) => {
                       </>
                     ) : logo?.message?.logo ? (
                       <>
-                        <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+                        <Box w="full" borderRadius="lg" overflow="hidden" p={2}>
                           <Img
-                            height="30px"
+                            height={"48px"}
                             src={logo?.message?.logo}
                             alt={logo?.message?.domain}
                           />
                         </Box>
                       </>
                     ) : !logo && companyData.logo?.message?.logo ? (
-                      <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+                      <Box w="full" borderRadius="lg" overflow="hidden" p={2}>
                         <Img
-                          height="30px"
+                          height={"48px"}
                           src={companyData.logo?.message?.logo}
                           alt={companyData.logo?.message?.domain}
                         />
@@ -319,8 +317,16 @@ const CompanyModal = (props) => {
                         <LogoFallBack companyName={companyData.companyName} />
                       </>
                     ) : null}
-                    <FormLabel>Company name</FormLabel>
+                    <FormLabel
+                      fontSize={"16px"}
+                      lineHeight={"24px"}
+                      fontWeight={"400"}
+                      fontFamily={"PP Telegraf"}
+                    >
+                      Company name
+                    </FormLabel>
                     <Input
+                      fontFamily={"PP Telegraf Light"}
                       required
                       isInvalid={
                         errors.companyName &&
@@ -341,8 +347,16 @@ const CompanyModal = (props) => {
                       )}
                   </FormControl>
                   <FormControl p={2} id="company-title">
-                    <FormLabel>Job title</FormLabel>
+                    <FormLabel
+                      fontSize={"16px"}
+                      lineHeight={"24px"}
+                      fontWeight={"400"}
+                      fontFamily={"PP Telegraf"}
+                    >
+                      Job title
+                    </FormLabel>
                     <Input
+                      fontFamily={"PP Telegraf Light"}
                       required
                       isInvalid={
                         errors.companyTitle &&
@@ -363,8 +377,16 @@ const CompanyModal = (props) => {
                       )}
                   </FormControl>
                   <FormControl p={2} id="company-start">
-                    <FormLabel>What was your start date?</FormLabel>
+                    <FormLabel
+                      fontSize={"16px"}
+                      lineHeight={"24px"}
+                      fontWeight={"400"}
+                      fontFamily={"PP Telegraf"}
+                    >
+                      What was your start date?
+                    </FormLabel>
                     <Input
+                      fontFamily={"PP Telegraf Light"}
                       required
                       isInvalid={
                         errors.companyStart &&
@@ -384,8 +406,16 @@ const CompanyModal = (props) => {
                       )}
                   </FormControl>
                   <FormControl p={2} id="company-end">
-                    <FormLabel>What was your end date?</FormLabel>
+                    <FormLabel
+                      fontSize={"16px"}
+                      lineHeight={"24px"}
+                      fontWeight={"400"}
+                      fontFamily={"PP Telegraf"}
+                    >
+                      What was your end date?
+                    </FormLabel>
                     <Input
+                      fontFamily={"PP Telegraf Light"}
                       required
                       isInvalid={
                         errors.companyEnd &&
@@ -411,9 +441,17 @@ const CompanyModal = (props) => {
                       )}
                   </FormControl>
                   <FormControl p={2} id="company-func">
-                    <FormLabel>Functional expertise</FormLabel>
+                    <FormLabel
+                      fontSize={"16px"}
+                      lineHeight={"24px"}
+                      fontWeight={"400"}
+                      fontFamily={"PP Telegraf"}
+                    >
+                      Functional expertise
+                    </FormLabel>
                     <Select
                       required
+                      fontFamily={"PP Telegraf Light"}
                       defaultValue={companyData.companyFunc}
                       errorBorderColor="red.300"
                       placeholder="Select functional expertise"
@@ -426,9 +464,17 @@ const CompanyModal = (props) => {
                     </Select>
                   </FormControl>
                   <FormControl p={2} id="company-industry">
-                    <FormLabel>Industry</FormLabel>
+                    <FormLabel
+                      fontSize={"16px"}
+                      lineHeight={"24px"}
+                      fontWeight={"400"}
+                      fontFamily={"PP Telegraf"}
+                    >
+                      Industry
+                    </FormLabel>
                     <Select
                       required
+                      fontFamily={"PP Telegraf Light"}
                       defaultValue={companyData.companyIndustry}
                       errorBorderColor="red.300"
                       placeholder="Select industry expertise"
@@ -445,25 +491,17 @@ const CompanyModal = (props) => {
             </ModalBody>
             <ModalFooter>
               <Button
-                colorScheme="blue"
-                mr={3}
-                onClick={() => {
-                  props.onClose();
-                  setShouldFetch(false);
-                  setlogo(false);
-                  setTempCompany(emptyCompanyInfo);
-                }}
-              >
-                Close
-              </Button>
-              <Button
                 isDisabled={isDisabled}
                 onClick={() => {
                   updateCompanyInfo();
                 }}
                 variant="ghost"
+                backgroundColor={"#C7F83C"}
+                color={"#0A1313"}
+                fontFamily={"PP Telegraf Bold"}
+                fontWeight={"700"}
               >
-                Save{" "}
+                Save
                 {isSubmitted ? (
                   <CircularProgress
                     size="22px"
@@ -514,9 +552,9 @@ function CompanyInfoData(props) {
       // return when shouldFetch == true && logo data is found
       <>
         {data && data?.message && data?.message?.logo ? (
-          <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+          <Box w="full" borderRadius="lg" overflow="hidden" p={2}>
             <Img
-              height="30px"
+              height={"48px"}
               src={data.message.logo}
               alt={data.message.domain}
             />
@@ -535,9 +573,9 @@ function CompanyInfoData(props) {
   return (
     <>
       {props.logo && props.logo?.message && props.logo?.message?.logo ? (
-        <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+        <Box w="full" borderRadius="lg" overflow="hidden" p={2}>
           <Img
-            height="30px"
+            height={"48px"}
             src={props.logo.message.logo}
             alt={props.logo.message.domain}
           />
@@ -556,7 +594,7 @@ function CompanyInfoData(props) {
 export function LogoFallBack(props) {
   return (
     <>
-      <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+      <Box w="full" borderRadius="lg" overflow="hidden" p={2}>
         <Box
           w={"1.75rem"}
           h={"1.75rem"}
@@ -572,6 +610,7 @@ export function LogoFallBack(props) {
             justifyContent={"center"}
             alignItems={"center"}
             fontSize="xl"
+            fontFamily={"GrandSlang"}
             fontWeight="800"
             color="blue.700"
           >
