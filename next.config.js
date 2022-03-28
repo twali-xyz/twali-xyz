@@ -1,6 +1,6 @@
 module.exports = {
   env: {
-    TABLE_NAME: "user_profile_test",
+    TABLE_NAME: "main_user_profiles_db",
   },
   webpack: (config) => {
     if (!process.env.BUNDLE_AWS_SDK) {
