@@ -1,4 +1,5 @@
-import { Button, Img, Input, CircularProgress, Text, Alert, AlertIcon } from "@chakra-ui/react";
+import { Box, Button, Img, Input, CircularProgress, Text, Alert, AlertIcon } from "@chakra-ui/react";
+import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import React, { useEffect, useRef, useState } from "react";
 import axios from 'axios';
 
@@ -85,7 +86,7 @@ export default function ProfileImageUpload(props) {
         setIsSubmitted(false);
         setIsSelected(false);
         window.location.reload();
-      }, 3000);
+      }, 5000);
     } else {
       console.log('error');
       setIsSubmitted(false);
@@ -100,9 +101,29 @@ export default function ProfileImageUpload(props) {
     });
   };
 
+  const viewProfileImg = (
+    <>
+    { newImg ? (
+      <Box 
+        height={"160px"}
+        width={"160px"}>
+          <Img
+            key={`${newImg}--view-profile-img`}
+            src={`data:image/jpeg;base64,${newImg}`}
+            alt={`${newImg}`}
+          />
+      </Box>
+    ): null}
+  </>
+  )
 
   return (
     <>
+    <UserPermissionsRestricted
+            to="edit"
+            key={`${timestamp}--usr-permission`}
+            fallback={viewProfileImg}
+          >
       <Input
         type="file"
         name="profilePhoto"
@@ -163,6 +184,7 @@ export default function ProfileImageUpload(props) {
         color="#3C2E26"
       />: null}</Button>
       )}
+      </UserPermissionsRestricted>
     </>
   );
 }
