@@ -180,13 +180,12 @@ const EditProfileModal = (props) => {
           backgroundColor={"#041A19"}
           fontFamily={"PP Telegraf Light"}
         >
-          <ModalHeader>Update your background expertise</ModalHeader>
+          <ModalHeader>Update your profile</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form style={{ alignSelf: "center" }}>
               {/* <FormControl p={2} id="display-name" isRequired>
-                <FormLabel>User name</FormLabel>
-                <Input
+ fontFamily={"PP Telegraf"}                <Input
                   required
                   isInvalid={
                     errors.userName &&
@@ -207,7 +206,13 @@ const EditProfileModal = (props) => {
               </FormControl> */}
 
               <FormControl p={2} id="first-name" isRequired>
-                <FormLabel>First name</FormLabel>
+                <FormLabel
+                  fontSize={"16px"}
+                  lineHeight={"24px"}
+                  fontFamily={"PP Telegraf"}
+                >
+                  First name
+                </FormLabel>
                 <Input
                   required
                   isInvalid={
@@ -228,7 +233,13 @@ const EditProfileModal = (props) => {
                   )}
               </FormControl>
               <FormControl p={2} id="last-name" isRequired>
-                <FormLabel>Last name</FormLabel>
+                <FormLabel
+                  fontSize={"16px"}
+                  lineHeight={"24px"}
+                  fontFamily={"PP Telegraf"}
+                >
+                  Last name
+                </FormLabel>
                 <Input
                   required
                   isInvalid={
@@ -249,7 +260,13 @@ const EditProfileModal = (props) => {
                   )}
               </FormControl>
               <FormControl p={2} id="current-company-title" isRequired>
-                <FormLabel>Current title</FormLabel>
+                <FormLabel
+                  fontSize={"16px"}
+                  lineHeight={"24px"}
+                  fontFamily={"PP Telegraf"}
+                >
+                  Current title
+                </FormLabel>
                 <Input
                   isInvalid={errors.currTitle}
                   errorBorderColor="red.300"
@@ -266,7 +283,13 @@ const EditProfileModal = (props) => {
                 )}
               </FormControl>
               <FormControl p={2} id="email" isRequired>
-                <FormLabel>Email</FormLabel>
+                <FormLabel
+                  fontSize={"16px"}
+                  lineHeight={"24px"}
+                  fontFamily={"PP Telegraf"}
+                >
+                  Email
+                </FormLabel>
                 <Input
                   required
                   isInvalid={
@@ -286,7 +309,13 @@ const EditProfileModal = (props) => {
               </FormControl>
 
               <FormControl p={2} id="currLocation" isRequired>
-                <FormLabel>Where do you call home?</FormLabel>
+                <FormLabel
+                  fontSize={"16px"}
+                  lineHeight={"24px"}
+                  fontFamily={"PP Telegraf"}
+                >
+                  Where do you call home?
+                </FormLabel>
                 <Select
                   defaultValue={userData.currLocation || ""}
                   placeholder="Select current location"
@@ -297,7 +326,13 @@ const EditProfileModal = (props) => {
                 </Select>
               </FormControl>
               <FormControl p={2} id="bio">
-                <FormLabel>Bio</FormLabel>
+                <FormLabel
+                  fontSize={"16px"}
+                  lineHeight={"24px"}
+                  fontFamily={"PP Telegraf"}
+                >
+                  Bio
+                </FormLabel>
                 <Textarea
                   isInvalid={errors.bio}
                   errorBorderColor="red.300"
@@ -314,7 +349,13 @@ const EditProfileModal = (props) => {
               </FormControl>
 
               <FormControl p={2} id="linkedIn">
-                <FormLabel>LinkedIn URL</FormLabel>
+                <FormLabel
+                  fontSize={"16px"}
+                  lineHeight={"24px"}
+                  fontFamily={"PP Telegraf"}
+                >
+                  LinkedIn URL
+                </FormLabel>
                 <Input
                   isInvalid={errors.linkedIn}
                   errorBorderColor="red.300"
@@ -329,7 +370,13 @@ const EditProfileModal = (props) => {
                 )}
               </FormControl>
               <FormControl p={2} id="twitter">
-                <FormLabel>Twitter URL</FormLabel>
+                <FormLabel
+                  fontSize={"16px"}
+                  lineHeight={"24px"}
+                  fontFamily={"PP Telegraf"}
+                >
+                  Twitter URL
+                </FormLabel>
                 <Input
                   isInvalid={errors.twitter}
                   errorBorderColor="red.300"
