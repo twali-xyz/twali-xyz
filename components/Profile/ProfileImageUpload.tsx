@@ -112,7 +112,15 @@ export default function ProfileImageUpload(props) {
     { newImg ? (
       <Box 
         height={"160px"}
-        width={"160px"}>
+        width={"160px"}
+        alignSelf="center"
+        overflow="hidden"
+        pos={"relative"}
+        bottom={5}
+        marginBottom={0}
+        p={0}
+        borderRadius="0.375rem"
+        >
           <Img
             key={`${newImg}--view-profile-img`}
             src={`data:image/jpeg;base64,${newImg}`}
