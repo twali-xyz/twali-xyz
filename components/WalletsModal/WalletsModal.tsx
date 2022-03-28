@@ -14,7 +14,10 @@ export default function WalletsModal(props) {
     <>
       <Modal onClose={props.onClose} size="sm" isOpen={props.isOpen}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent
+          backgroundColor={"#041A19"}
+          fontFamily={"PP Telegraf Light"}
+        >
           <ModalHeader alignSelf="center">Connect wallet</ModalHeader>
           <ModalBody>
             <HStack spacing={10} p={6}>

@@ -22,7 +22,10 @@ const BadgesModal = (props) => {
         onClose={props.onClose}
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent
+          backgroundColor={"#041A19"}
+          fontFamily={"PP Telegraf Light"}
+        >
           <ModalCloseButton />
           <ModalBody alignSelf="center">
             <VStack spacing={6} padding={10}>

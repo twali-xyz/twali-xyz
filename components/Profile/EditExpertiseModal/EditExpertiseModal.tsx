@@ -130,7 +130,10 @@ const EditExpertiseModal = (props) => {
         onClose={props.onClose}
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent
+          backgroundColor={"#041A19"}
+          fontFamily={"PP Telegraf Light"}
+        >
           <ModalHeader>Update your background expertise</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -164,10 +167,14 @@ const EditExpertiseModal = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={props.onClose}>
-              Close
-            </Button>
-            <Button variant="ghost" onClick={updateExperiences}>
+            <Button
+              variant="ghost"
+              backgroundColor={"#C7F83C"}
+              color={"#0A1313"}
+              fontFamily={"PP Telegraf Bold"}
+              fontWeight={"700"}
+              onClick={updateExperiences}
+            >
               Save{" "}
               {isSubmitted ? (
                 <CircularProgress
