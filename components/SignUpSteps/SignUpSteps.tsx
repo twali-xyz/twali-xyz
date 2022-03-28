@@ -162,7 +162,7 @@ const SignUpSteps = () => {
     userData.userWallet = address;
     // check if user doesnt already exsist with current address
     userData.accType = accType;
-    
+
     await fetch("/api/users/createUser", {
       method: "POST",
       body: JSON.stringify({ userData }),

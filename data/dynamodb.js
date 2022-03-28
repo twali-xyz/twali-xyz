@@ -11,10 +11,10 @@ const getDynamoDBClient = () => {
   // Only needed with local development.
   // if (process.env.LOCAL_DYNAMO_DB_ENDPOINT) {
   AWS.config.update({
-    accessKeyId: "xxxx",
-    secretAccessKey: "xxxx",
+    // accessKeyId: "xxxx",
+    // secretAccessKey: "xxxx",
     region: "us-east-1",
-    endpoint: "http://localhost:8000",
+    // endpoint: "http://localhost:8000",
   });
   // }
 
@@ -110,7 +110,7 @@ module.exports = {
         },
         /**
          * Set create user condition that no duplicate 'SK' -- userName can be created
-        */
+         */
         //   ConditionExpression: "attribute_not_exists(#userName)",
         //   ExpressionAttributeNames: {
         //     "#userName": userName
@@ -309,29 +309,29 @@ module.exports = {
     return allUsers;
   },
 
-
   /**
    * @desc Checks if userName does not exsit in db table by checking if a return object is returned from DB.
    * @dev Can implement a value check in the near future.
    * @returns Returns a boolean value
-  */
- userNameIsValid: async (userName) => {
-   let exists = false;
-   const dbUserName = await getDynamoDBClient()
-   .query({
-    TableName,
-    IndexName: "wallet_name_index",
+   */
+  userNameIsValid: async (userName) => {
+    let exists = false;
+    const dbUserName = await getDynamoDBClient()
+      .query({
+        TableName,
+        IndexName: "wallet_name_index",
         // ProjectionExpression: "userName",
-    KeyConditionExpression: "userName = :userName",
-    ExpressionAttributeValues: {
-      ":userName": userName,
-    },
-   }).promise();
-// console.log(dbUserName.Items)
-   if(dbUserName.Items[0] !== undefined && dbUserName.Items[0] !== null){
-     exists = true;
-   }
-   console.log("exists", exists);
-   return exists;
- }
+        KeyConditionExpression: "userName = :userName",
+        ExpressionAttributeValues: {
+          ":userName": userName,
+        },
+      })
+      .promise();
+    // console.log(dbUserName.Items)
+    if (dbUserName.Items[0] !== undefined && dbUserName.Items[0] !== null) {
+      exists = true;
+    }
+    console.log("exists", exists);
+    return exists;
+  },
 };
