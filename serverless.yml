@@ -5,6 +5,6 @@ twali-xyz-staging:
     roleArn: "arn:aws:iam::517934542124:role/isdq5cs-qxf7o2s"
     build:
       env:
-        TABLE_NAME: "dev_staging_user_profile_test"
+        TABLE_NAME: "main_user_profiles_db"
     cloudfront:
-      distributionId: EHZYCKLX3TYQ4
+      distributionId: E1N063HBIE24ZH

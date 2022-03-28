@@ -5,7 +5,7 @@ require("dotenv").config();
 // Only used in local development
 AWS.config.update({
   region: "us-east-1",
-    // endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT,
+  // endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT,
 });
 
 let dynamodb = new AWS.DynamoDB();
@@ -15,7 +15,7 @@ let dynamodb = new AWS.DynamoDB();
  *
  * **/
 let params = {
-  TableName: "dev_staging_user_profile_test",
+  TableName: "main_user_profiles_db",
   KeySchema: [
     { AttributeName: "userWallet", KeyType: "HASH" }, // Partition Key
     { AttributeName: "userName", KeyType: "RANGE" }, // Sort Ket
@@ -62,7 +62,7 @@ let params = {
     console.log("Created table in us-east-1");
 
     const createGlobalTableParams = {
-      GlobalTableName: "dev_staging_user_profile_test",
+      GlobalTableName: "main_user_profiles_db",
       ReplicationGroup: [
         {
           RegionName: "us-east-1",
