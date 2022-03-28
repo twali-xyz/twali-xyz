@@ -1,4 +1,5 @@
-import { useContext, useRef, useState } from "react";
+import { Chip } from "./../Components/Chip";
+import { useEffect, useRef, useState } from "react";
 import {
   Box,
   HStack,
@@ -23,50 +24,48 @@ import {
 } from "@chakra-ui/react";
 import useSWR from "swr";
 import { connect } from "../../../utils/walletUtils";
-
-import CeramicClient from "@ceramicnetwork/http-client";
-import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver";
-
-import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
-import { DID } from "dids";
-import { IDX } from "@ceramicstudio/idx";
-import { TileDocument } from "@ceramicnetwork/stream-tile";
 import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
-import { BasicProfile, ProfileData } from "../../../utils/interfaces";
-
-// 3box test nodes with read/write access on ceramic clay testnet
-// network node that we're interacting with, can be local/prod
-// we're using a test network here
-const endpoint = "https://ceramic-clay.3boxlabs.com";
+import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
+import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
 
 const CompanyModal = (props) => {
   const finalRef = useRef();
+  const [count, setCount] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [companyName, setCompanyName] = useState("");
-  const [companyTitle, setCompanyTitle] = useState("");
-  const [companyStart, setCompanyStart] = useState();
-  const [companyEnd, setCompanyEnd] = useState();
-  const [companyFunction, setCompanyFunction] = useState();
-  const [companyIndustry, setCompanyIndustry] = useState();
-  const [tempLogo, setTempLogo] = useState<any>();
   const [shouldFetch, setShouldFetch] = useState(false);
+  const [tempCompany, setTempCompany] = useState<any>({});
+  const [logo, setlogo] = useState<any>();
   const [isDisabled, setIsDisabled] = useState(false);
-  const [accType, setAccType] = useState(props.profileData.content.accType);
-  const [identity, setIdentity] = useState(props.profileData.content.identity);
+  const [userData, setUserData] = useState(props.userData);
   const emptyCompanyInfo = {
     companyName: "",
     companyTitle: "",
     companyStart: "",
     companyEnd: "",
-    companyFunction: "",
+    companyFunc: "",
     companyIndustry: "",
+    companyLogo: false,
   };
 
-  const companyInfo =
-    props.profileData.content.identity.companyInfo &&
-    props.profileData.content.identity.companyInfo[props.currCompany]
-      ? props.profileData.content.identity.companyInfo[props.currCompany]
-      : emptyCompanyInfo;
+  const [companyData, setCompanyData] = useState<any>();
+
+  useEffect(() => {
+    if (!props.isOpen) {
+      setlogo(false);
+      return;
+    }
+    setCompanyData(
+      props.userData.companyInfo &&
+        props.userData.companyInfo[props.currCompany]
+        ? props.userData.companyInfo[props.currCompany]
+        : emptyCompanyInfo
+    );
+    {
+      props.userData?.companyInfo[props.currCompany] &&
+        setlogo(props.userData?.companyInfo[props.currCompany].logo);
+    }
+    return () => {};
+  }, [props.isOpen]);
 
   const [errors, setErrors] = useState({
     companyName: null,
@@ -75,25 +74,6 @@ const CompanyModal = (props) => {
     companyEnd: null,
     companyFunction: null,
     companyIndustry: null,
-  });
-
-  const [values, setValues] = useState({
-    companyName:
-      companyInfo && companyInfo.companyName ? companyInfo.companyName : "",
-    companyTitle:
-      companyInfo && companyInfo.companyTitle ? companyInfo.companyTitle : "",
-    companyStart:
-      companyInfo && companyInfo.companyStart ? companyInfo.companyStart : "",
-    companyEnd:
-      companyInfo && companyInfo.companyEnd ? companyInfo.companyEnd : "",
-    companyFunction:
-      companyInfo && companyInfo.companyFunction
-        ? companyInfo.companyFunction
-        : "",
-    companyIndustry:
-      companyInfo && companyInfo.companyIndustry
-        ? companyInfo.companyIndustry
-        : "",
   });
 
   const convertDates = (start, end) => {
@@ -108,10 +88,10 @@ const CompanyModal = (props) => {
   };
 
   let companyDateRange;
-  if (companyInfo && companyInfo.companyStart && companyInfo.companyEnd) {
+  if (companyData && companyData.companyStart && companyData.companyEnd) {
     companyDateRange = convertDates(
-      companyInfo.companyStart,
-      companyInfo.companyEnd
+      companyData.companyStart,
+      companyData.companyEnd
     );
   }
 
@@ -119,144 +99,93 @@ const CompanyModal = (props) => {
     const address = await connect(); // first address in the array
 
     if (address) {
-      const ceramic = new CeramicClient(endpoint);
-      const threeIdConnect = new ThreeIdConnect();
-      const provider = new EthereumAuthProvider(window.ethereum, address);
-
       setIsSubmitted(true);
 
-      await threeIdConnect.connect(provider);
+      if (userData.userWallet && userData.userName && companyData) {
+        userData.companyInfo[props.currCompany] = companyData;
+        console.log(companyData);
 
-      const did = new DID({
-        provider: threeIdConnect.getDidProvider(),
-        resolver: {
-          ...ThreeIdResolver.getResolver(ceramic),
-        },
-      });
-
-      ceramic.setDID(did);
-      await ceramic.did.authenticate();
-
-      const idx = new IDX({ ceramic });
-
-      // does not require signing to get user's public data
-      const data: BasicProfile = await idx.get(
-        "basicProfile",
-        `${address}@eip155:1`
-      );
-
-      identity.companyInfo[props.currCompany] = {
-        companyName: companyName,
-        companyTitle: companyTitle,
-        companyStart: companyStart,
-        companyEnd: companyEnd,
-        companyFunc: companyFunction,
-        companyIndustry: companyIndustry,
-        logo: tempLogo,
-      };
-
-      await updateProfileData(ceramic, identity, accType);
-
-      console.log("Profile updated!");
-      if (identity.firstName && identity.lastName && identity.email) {
-        setIsSubmitted(false);
-        props.handleUpdatedCompanyInfo(props.profileData, false);
-        props.setProfileData(newProfileData);
+        let companyAttributes = {
+          companyData: userData.companyInfo,
+          userName: userData.userName,
+          currCompany: props.currCompany,
+        };
+        companyAttributes.companyData[props.currCompany].logo = logo;
+        updateUserCompanyData(userData.userWallet, companyAttributes);
+        props.handleUpdatedCompanyInfo(props.userData, false);
         props.onClose();
-        setTempLogo(false);
+        setlogo(false);
+        setTempCompany(emptyCompanyInfo);
         setShouldFetch(false);
+        setIsSubmitted(false);
+        window.location.reload();
       } else {
         console.log("No profile, pls create one...");
       }
     }
   }
 
-  // Updates a stream to store JSON data with ceramic
-  const updateProfileData = async (ceramic, identity, accType) => {
-    const profileData = await TileDocument.deterministic(ceramic, {
-      family: "user-profile-data",
+  const updateUserCompanyData = async (userWallet, attributes) => {
+    let userData = { userWallet, attributes };
+    await fetch(`/api/users/updateUser?updateUser=company`, {
+      method: "PUT",
+      body: JSON.stringify({ userData }),
     });
-
-    await profileData.update({ identity, accType });
+    console.log("USER Company data UPDATED BRUH");
   };
-  let newProfileData: ProfileData;
+
   const handleChange = (evt) => {
     evt.persist();
-    setValues((values) => ({ ...values, [evt.target.name]: evt.target.value }));
-    setErrors(validate(values));
-    setIdentity({
-      ...identity,
+
+    setCompanyData({ ...companyData, [evt.target.name]: evt.target.value });
+    setTempCompany({
+      ...companyData,
+      [evt.target.name]: evt.target.value,
     });
-    newProfileData = {
-      content: {
-        identity: identity,
-        accType: props.profileData.content.accType,
-      },
-    };
-    props.setProfileData(newProfileData);
+    setErrors(validate(tempCompany));
     if (evt.target.name == "companyName") {
-      setCompanyName(evt.target.value);
       setShouldFetch(true);
-    } else if (evt.target.name !== "companyName") {
-      setShouldFetch(false);
-    }
-
-    if (evt.target.name == "companyTitle") {
-      setCompanyTitle(evt.target.value);
-    }
-
-    if (evt.target.name == "companyStart") {
-      setCompanyStart(evt.target.value);
-    }
-
-    if (evt.target.name == "companyEnd") {
-      setCompanyEnd(evt.target.value);
-    }
-
-    if (evt.target.name == "funcExpertise") {
-      setCompanyFunction(evt.target.value);
-    }
-
-    if (evt.target.name == "industryExpertise") {
-      setCompanyIndustry(evt.target.value);
     }
   };
 
-  const validate = (values) => {
+  const validate = (tempCompany) => {
     let errors: any = {};
 
-    if (!values.companyName) {
+    if (!tempCompany.companyName) {
       errors.companyName = "Company name is required";
     }
 
-    if (!values.companyTitle) {
+    if (!tempCompany.companyTitle) {
       errors.companyTitle = "Job title is required";
     }
 
     var datePattern =
       /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
 
-    if (!values.companyStart) {
+    if (!tempCompany.companyStart) {
       errors.companyStart = "Start date (DD-MM-YYYY) is required";
     }
 
-    if (values.companyStart && !datePattern.test(values.companyStart)) {
+    if (
+      tempCompany.companyStart &&
+      !datePattern.test(tempCompany.companyStart)
+    ) {
       errors.companyStart = "Start date (DD-MM-YYYY) is incorrect";
     }
 
-    if (!values.companyEnd) {
+    if (!tempCompany.companyEnd) {
       errors.companyEnd = "End date (DD-MM-YYYY) is required";
     }
 
-    if (values.companyEnd && !datePattern.test(values.companyEnd)) {
+    if (tempCompany.companyEnd && !datePattern.test(tempCompany.companyEnd)) {
       errors.companyEnd = "End date (DD-MM-YYYY) is incorrect";
     }
 
-    if (values.companyFunc === "") {
+    if (tempCompany.companyFunc === "") {
       errors.companyFunc = "Functional expertise is required";
     }
 
-    if (values.companyIndustry === "") {
+    if (tempCompany.companyIndustry === "") {
       errors.companyIndustry = "Industry expertise is required";
     }
 
@@ -269,44 +198,47 @@ const CompanyModal = (props) => {
 
   const companyModalView = (
     <>
-      <ModalContent>
+      <ModalContent
+        backgroundColor={"#041A19"}
+        fontFamily={"PP Telegraf Light"}
+      >
         <ModalCloseButton />
         <ModalBody>
           <VStack spacing={6} padding={10}>
-            {companyInfo ? (
+            {companyData ? (
               <>
-                {companyInfo.companyName ? ( // TODO: We can display a company logo here
+                {companyData.companyName ? (
                   <>
-                    {/* <CompanyInfoData
-                companyName={companyInfo.companyName}
-                isDisabled={setDisabled}
-              /> */}
-                    <Heading>{companyInfo.companyName}</Heading>
+                    <Heading fontWeight={"500"} textTransform={"capitalize"}>
+                      {companyData.companyName}
+                    </Heading>
                   </>
                 ) : null}
 
-                {companyInfo.companyTitle ? (
-                  <Text fontSize="2xl">{companyInfo.companyTitle}</Text>
+                {companyData.companyTitle ? (
+                  <Text fontSize="2xl">{companyData.companyTitle}</Text>
                 ) : null}
 
-                {companyInfo.companyStart && companyInfo.companyEnd ? (
+                {companyData.companyStart && companyData.companyEnd ? (
                   <Text fontSize="md" color="gray.500">
                     {companyDateRange}
                   </Text>
                 ) : null}
 
-                {companyInfo.companyFunc && companyInfo.companyIndustry ? (
-                  <HStack spacing={4}>
-                    {[companyInfo.companyFunc, companyInfo.companyIndustry].map(
-                      (name) => (
-                        <Tag
-                          size={"md"}
-                          key={`sm--${name}`}
-                          variant="solid"
-                          colorScheme="teal"
-                        >
-                          {name}
-                        </Tag>
+                {companyData.companyFunc && companyData.companyIndustry ? (
+                  <HStack
+                    spacing={4}
+                    display={"flex"}
+                    alignContent={"baseline"}
+                  >
+                    {[companyData.companyFunc, companyData.companyIndustry].map(
+                      (name, idx) => (
+                        <Chip
+                          key={`expertChip--${name}-${idx}`}
+                          text={name}
+                          name={name}
+                          idx={idx}
+                        />
                       )
                     )}
                   </HStack>
@@ -315,19 +247,6 @@ const CompanyModal = (props) => {
             ) : null}
           </VStack>
         </ModalBody>
-        <ModalFooter>
-          <Button
-            colorScheme="blue"
-            mr={3}
-            onClick={() => {
-              setTempLogo(false);
-              props.onClose();
-              setShouldFetch(false);
-            }}
-          >
-            Close
-          </Button>
-        </ModalFooter>
       </ModalContent>
     </>
   );
@@ -338,260 +257,233 @@ const CompanyModal = (props) => {
         finalFocusRef={finalRef}
         isOpen={props.isOpen}
         onClose={() => {
-          setTempLogo(false);
           props.onClose();
+          setlogo(false);
+
           setShouldFetch(false);
+          setTempCompany(emptyCompanyInfo);
         }}
         key={`companymodal--${props.currCompany}`}
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent backgroundColor={"#041A19"} fontFamily={"PP Telegraf"}>
           <UserPermissionsRestricted to="edit" fallback={companyModalView}>
-            <ModalHeader>Update your work experience</ModalHeader>
+            <ModalHeader pb={0}>Update your work experience</ModalHeader>
             <ModalCloseButton />
-            <ModalBody>
-              {companyInfo ? (
+            <ModalBody fontSize={"14px"} lineHeight={"24px"} fontWeight={"400"}>
+              {companyData ? (
                 <form style={{ alignSelf: "center" }}>
                   <FormControl p={2} id="company-name">
                     {shouldFetch ? (
                       <>
                         <CompanyInfoData
-                          companyInfo={companyInfo}
-                          companyName={companyName}
+                          companyName={companyData.companyName}
                           isDisabled={setDisabled}
-                          tempLogo={tempLogo}
-                          setTempLogo={setTempLogo}
+                          logo={logo}
+                          setlogo={setlogo}
                           shouldFetch={shouldFetch}
                         />
                       </>
-                    ) : tempLogo?.message?.logo ? (
+                    ) : logo?.message?.logo ? (
                       <>
-                        <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+                        <Box w="full" borderRadius="lg" overflow="hidden" p={2}>
                           <Img
-                            height="30px"
-                            src={tempLogo?.message?.logo}
-                            alt={tempLogo?.message?.domain}
+                            height={"48px"}
+                            src={logo?.message?.logo}
+                            alt={logo?.message?.domain}
                           />
                         </Box>
                       </>
-                    ) : !tempLogo && companyInfo.logo?.message?.logo ? (
-                      <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+                    ) : !logo && companyData.logo?.message?.logo ? (
+                      <Box w="full" borderRadius="lg" overflow="hidden" p={2}>
                         <Img
-                          height="30px"
-                          src={companyInfo.logo?.message?.logo}
-                          alt={companyInfo.logo?.message?.domain + "here"}
+                          height={"48px"}
+                          src={companyData.logo?.message?.logo}
+                          alt={companyData.logo?.message?.domain}
                         />
                       </Box>
-                    ) : (companyName || tempLogo) &&
+                    ) : (companyData.companyName || logo) &&
                       shouldFetch &&
-                      companyInfo.companyName ? (
+                      companyData.companyName ? (
                       <>
-                        <LogoFallBack companyName={companyInfo.companyName} />
+                        <LogoFallBack companyName={companyData.companyName} />
                       </>
-                    ) : !shouldFetch && !tempLogo && companyInfo.companyName ? (
+                    ) : !shouldFetch && !logo && companyData.companyName ? (
                       <>
-                        <LogoFallBack companyName={companyInfo.companyName} />
+                        <LogoFallBack companyName={companyData.companyName} />
                       </>
-                    ) : !shouldFetch && tempLogo && companyName ? (
+                    ) : !shouldFetch && logo && companyData.companyName ? (
                       <>
-                        <LogoFallBack companyName={companyName} />
+                        <LogoFallBack companyName={companyData.companyName} />
                       </>
                     ) : null}
-                    <FormLabel>Company name</FormLabel>
+                    <FormLabel
+                      fontSize={"16px"}
+                      lineHeight={"24px"}
+                      fontWeight={"400"}
+                      fontFamily={"PP Telegraf"}
+                    >
+                      Company name
+                    </FormLabel>
                     <Input
+                      fontFamily={"PP Telegraf Light"}
                       required
                       isInvalid={
                         errors.companyName &&
-                        (!companyInfo.companyName || !values.companyName)
+                        (!companyData.companyName || !tempCompany.companyName)
                       }
                       errorBorderColor="red.300"
                       placeholder="Company name"
                       name="companyName"
-                      defaultValue={companyInfo.companyName || ""}
+                      defaultValue={companyData.companyName || ""}
                       onChange={handleChange}
                     />
                     {errors.companyName &&
-                      (!companyInfo.companyName || !values.companyName) && (
+                      (!companyData.companyName ||
+                        !tempCompany.companyName) && (
                         <Text fontSize="xs" fontWeight="400" color="red.500">
                           {errors.companyName}
                         </Text>
                       )}
                   </FormControl>
                   <FormControl p={2} id="company-title">
-                    <FormLabel>Job title</FormLabel>
+                    <FormLabel
+                      fontSize={"16px"}
+                      lineHeight={"24px"}
+                      fontWeight={"400"}
+                      fontFamily={"PP Telegraf"}
+                    >
+                      Job title
+                    </FormLabel>
                     <Input
+                      fontFamily={"PP Telegraf Light"}
                       required
                       isInvalid={
                         errors.companyTitle &&
-                        (!companyInfo.companyTitle || !values.companyTitle)
+                        (!companyData.companyTitle || !tempCompany.companyTitle)
                       }
                       errorBorderColor="red.300"
                       placeholder="Job title"
                       name="companyTitle"
-                      defaultValue={companyInfo.companyTitle || ""}
+                      defaultValue={companyData.companyTitle || ""}
                       onChange={handleChange}
                     />
                     {errors.companyTitle &&
-                      (!companyInfo.companyTitle || !values.companyTitle) && (
+                      (!companyData.companyTitle ||
+                        !tempCompany.companyTitle) && (
                         <Text fontSize="xs" fontWeight="400" color="red.500">
                           {errors.companyTitle}
                         </Text>
                       )}
                   </FormControl>
                   <FormControl p={2} id="company-start">
-                    <FormLabel>What was your start date?</FormLabel>
+                    <FormLabel
+                      fontSize={"16px"}
+                      lineHeight={"24px"}
+                      fontWeight={"400"}
+                      fontFamily={"PP Telegraf"}
+                    >
+                      What was your start date?
+                    </FormLabel>
                     <Input
+                      fontFamily={"PP Telegraf Light"}
                       required
                       isInvalid={
                         errors.companyStart &&
-                        (!companyInfo.companyStart || !values.companyStart)
+                        (!companyData.companyStart || !tempCompany.companyStart)
                       }
                       errorBorderColor="red.300"
                       name="companyStart"
-                      defaultValue={companyInfo.companyStart || ""}
+                      defaultValue={companyData.companyStart || ""}
                       onChange={handleChange}
                     />
                     {errors.companyStart &&
-                      (!companyInfo.companyStart || !values.companyStart) && (
+                      (!companyData.companyStart ||
+                        !tempCompany.companyStart) && (
                         <Text fontSize="xs" fontWeight="400" color="red.500">
                           {errors.companyStart}
                         </Text>
                       )}
                   </FormControl>
                   <FormControl p={2} id="company-end">
-                    <FormLabel>What was your end date?</FormLabel>
+                    <FormLabel
+                      fontSize={"16px"}
+                      lineHeight={"24px"}
+                      fontWeight={"400"}
+                      fontFamily={"PP Telegraf"}
+                    >
+                      What was your end date?
+                    </FormLabel>
                     <Input
+                      fontFamily={"PP Telegraf Light"}
                       required
                       isInvalid={
                         errors.companyEnd &&
-                        (!companyInfo.companyEnd || !values.companyEnd)
+                        (!companyData.companyEnd || !tempCompany.companyEnd)
                       }
                       errorBorderColor="red.300"
                       name="companyEnd"
-                      defaultValue={companyInfo.companyEnd || ""}
+                      defaultValue={companyData.companyEnd || ""}
                       onChange={handleChange}
                     />
                     {errors.companyEnd &&
-                      (!companyInfo.companyEnd || !values.companyEnd) && (
+                      (!companyData.companyEnd || !tempCompany.companyEnd) && (
                         <Text fontSize="xs" fontWeight="400" color="red.500">
                           {errors.companyEnd}
                         </Text>
                       )}
                     {errors.companyName &&
-                      (!companyInfo.companyName || !values.companyName) && (
+                      (!companyData.companyName ||
+                        !tempCompany.companyName) && (
                         <Text fontSize="xs" fontWeight="400" color="red.500">
                           {errors.companyName}
                         </Text>
                       )}
                   </FormControl>
                   <FormControl p={2} id="company-func">
-                    <FormLabel>Functional expertise</FormLabel>
+                    <FormLabel
+                      fontSize={"16px"}
+                      lineHeight={"24px"}
+                      fontWeight={"400"}
+                      fontFamily={"PP Telegraf"}
+                    >
+                      Functional expertise
+                    </FormLabel>
                     <Select
                       required
-                      defaultValue={companyInfo.companyFunc}
+                      fontFamily={"PP Telegraf Light"}
+                      defaultValue={companyData.companyFunc}
                       errorBorderColor="red.300"
                       placeholder="Select functional expertise"
-                      name="funcExpertise"
+                      name="companyFunc"
                       onChange={handleChange}
                     >
-                      <option>Accounting</option>
-                      <option>Creative</option>
-                      <option>Audit</option>
-                      <option>Board & Advisory</option>
-                      <option>Corporate Development</option>
-                      <option>Comp & Benefits</option>
-                      <option>Compliance</option>
-                      <option>Management Consulting</option>
-                      <option>Data & Analytics</option>
-                      <option>Product Design</option>
-                      <option>Digital</option>
-                      <option>Engineering</option>
-                      <option>Entrepreneurship</option>
-                      <option>Finance</option>
-                      <option>General Management</option>
-                      <option>Human Resources</option>
-                      <option>IT Infrastructure</option>
-                      <option>Innovation</option>
-                      <option>Investor</option>
-                      <option>Legal</option>
-                      <option>Marketing</option>
-                      <option>Media & Comms</option>
-                      <option>Merchandising</option>
-                      <option>Security</option>
-                      <option>Operations</option>
-                      <option>Portfolio Operations</option>
-                      <option>Procurement</option>
-                      <option>Product Management</option>
-                      <option>Investor Relations</option>
-                      <option>Regulatory</option>
-                      <option>Research</option>
-                      <option>Risk</option>
-                      <option>Strategy</option>
-                      <option>Technology</option>
-                      <option>Transformation</option>
-                      <option>Sales & Customer</option>
-                      <option>Data Science</option>
-                      <option>Talent Acquisition</option>
-                      <option>Tax</option>
-                      <option>Cybersecurity</option>
-                      <option>Investment Banking</option>
-                      <option>Supply Chain</option>
+                      {functionalExpertiseList.map((item, idx) => {
+                        return <option key={`&{item}--${idx}`}>{item}</option>;
+                      })}
                     </Select>
                   </FormControl>
                   <FormControl p={2} id="company-industry">
-                    <FormLabel>Industry</FormLabel>
+                    <FormLabel
+                      fontSize={"16px"}
+                      lineHeight={"24px"}
+                      fontWeight={"400"}
+                      fontFamily={"PP Telegraf"}
+                    >
+                      Industry
+                    </FormLabel>
                     <Select
                       required
-                      defaultValue={companyInfo.companyIndustry}
+                      fontFamily={"PP Telegraf Light"}
+                      defaultValue={companyData.companyIndustry}
                       errorBorderColor="red.300"
                       placeholder="Select industry expertise"
-                      name="industryExpertise"
+                      name="companyIndustry"
                       onChange={handleChange}
                     >
-                      <option>Accounting</option>
-                      <option>Angel Investment</option>
-                      <option>Asset Management</option>
-                      <option>Auto Insurance</option>
-                      <option>Banking</option>
-                      <option>Bitcoin</option>
-                      <option>Commercial Insurance</option>
-                      <option>Commercial Lending</option>
-                      <option>Credit</option>
-                      <option>Credit Bureau</option>
-                      <option>Credit Cards</option>
-                      <option>Crowdfunding</option>
-                      <option>Cryptocurrency</option>
-                      <option>Debit Cards</option>
-                      <option>Debt Collections</option>
-                      <option>Finance</option>
-                      <option>Financial Exchanges</option>
-                      <option>Financial Services</option>
-                      <option>FinTech</option>
-                      <option>Fraud Detection</option>
-                      <option>Funding Platform</option>
-                      <option>Gift Card</option>
-                      <option>Health Insurance</option>
-                      <option>Hedge Funds</option>
-                      <option>Impact Investing</option>
-                      <option>Incubators</option>
-                      <option>Insurance</option>
-                      <option>InsurTech</option>
-                      <option>Leasing</option>
-                      <option>Lending</option>
-                      <option>Life Insurance</option>
-                      <option>Micro Lending</option>
-                      <option>Mobile Payments</option>
-                      <option>Payments</option>
-                      <option>Personal Finance</option>
-                      <option>Prediction Markets</option>
-                      <option>Property Insurance</option>
-                      <option>Real Estate Investment</option>
-                      <option>Stock Exchanges</option>
-                      <option>Trading Platform</option>
-                      <option>Transaction Processing</option>
-                      <option>Venture Capital</option>
-                      <option>Virtual Currency</option>
-                      <option>Wealth Management</option>
+                      {industryExpertiseList.map((item, idx) => {
+                        return <option key={`&{item}--${idx}`}>{item}</option>;
+                      })}
                     </Select>
                   </FormControl>
                 </form>
@@ -599,24 +491,17 @@ const CompanyModal = (props) => {
             </ModalBody>
             <ModalFooter>
               <Button
-                colorScheme="blue"
-                mr={3}
-                onClick={() => {
-                  setTempLogo(false);
-                  props.onClose();
-                  setShouldFetch(false);
-                }}
-              >
-                Close
-              </Button>
-              <Button
                 isDisabled={isDisabled}
                 onClick={() => {
                   updateCompanyInfo();
                 }}
                 variant="ghost"
+                backgroundColor={"#C7F83C"}
+                color={"#0A1313"}
+                fontFamily={"PP Telegraf Bold"}
+                fontWeight={"700"}
               >
-                Save{" "}
+                Save
                 {isSubmitted ? (
                   <CircularProgress
                     size="22px"
@@ -636,6 +521,8 @@ const CompanyModal = (props) => {
 
 // Client-side data fetching for Clearbit's NameToDomain API (on company modal load)
 function CompanyInfoData(props) {
+  console.log(props);
+
   //
   // only fetch if event comes from 'company name' field
   //
@@ -655,19 +542,19 @@ function CompanyInfoData(props) {
     const { data } = useSWR(`/api/cors?${qs}`, fetcher);
     if (!data) {
       props.isDisabled(false);
-      props.setTempLogo(true);
+      props.setlogo(true);
     } else {
       props.isDisabled(false);
-      props.setTempLogo(data);
+      props.setlogo(data);
     }
 
     return (
       // return when shouldFetch == true && logo data is found
       <>
         {data && data?.message && data?.message?.logo ? (
-          <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+          <Box w="full" borderRadius="lg" overflow="hidden" p={2}>
             <Img
-              height="30px"
+              height={"48px"}
               src={data.message.logo}
               alt={data.message.domain}
             />
@@ -685,14 +572,12 @@ function CompanyInfoData(props) {
   // the return value if shouldFetch  == false, uses cached logo if available otherwise falls back to first letter of company name
   return (
     <>
-      {props.tempLogo &&
-      props.tempLogo?.message &&
-      props.tempLogo?.message?.logo ? (
-        <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+      {props.logo && props.logo?.message && props.logo?.message?.logo ? (
+        <Box w="full" borderRadius="lg" overflow="hidden" p={2}>
           <Img
-            height="30px"
-            src={props.tempLogo.message.logo}
-            alt={props.tempLogo.message.domain}
+            height={"48px"}
+            src={props.logo.message.logo}
+            alt={props.logo.message.domain}
           />
         </Box>
       ) : (
@@ -709,7 +594,7 @@ function CompanyInfoData(props) {
 export function LogoFallBack(props) {
   return (
     <>
-      <Box w="full" borderRadius="lg" overflow="hidden" p={4}>
+      <Box w="full" borderRadius="lg" overflow="hidden" p={2}>
         <Box
           w={"1.75rem"}
           h={"1.75rem"}
@@ -725,6 +610,7 @@ export function LogoFallBack(props) {
             justifyContent={"center"}
             alignItems={"center"}
             fontSize="xl"
+            fontFamily={"GrandSlang"}
             fontWeight="800"
             color="blue.700"
           >

@@ -1,18 +1,13 @@
-import { Container, Flex, VStack } from "@chakra-ui/react";
-
 import HeaderNav from "../components/HeaderNav/HeaderNav";
+import { Container, Flex, VStack } from "@chakra-ui/react";
 import SignUpSteps from "../components/SignUpSteps/SignUpSteps";
 
 const Steps = () => {
   return (
-    <Container maxW="container.xl" pb={6}>
-      <HeaderNav whichPage="steps" />
-      <Flex h="full">
-        <VStack w="full" h="full" spacing={8} alignItems="flex-start">
-          <SignUpSteps />
-        </VStack>
-      </Flex>
-    </Container>
+    <>
+      <title>twali.xyz - sign up</title>
+      <SignUpSteps />
+    </>
   );
 };
 

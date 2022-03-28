@@ -74,7 +74,7 @@ const IndexPage = () => {
                 alignSelf={"center"}
                 height={["36px", "48px", "65px"]}
                 width={["36px", "48px", "65.36px"]}
-                animation={handAnimation}
+                options={{ animationData: handAnimation }}
               />
             </HStack>
             <HStack alignItems={"baseline"}>
@@ -204,7 +204,7 @@ const IndexPage = () => {
                 width={"100%"}
                 height={"auto"}
                 minWidth={"100% !important"}
-                animation={bodyAnimation}
+                options={{ animationData: bodyAnimation }}
               />
             </VStack>
             <Flex
@@ -270,7 +270,7 @@ const IndexPage = () => {
                 lineHeight={"40px"}
                 marginBottom={["25px", "45px", "95px"]}
                 letterSpacing={"0.03em"}
-                fontFamily={"PP telegraf Light"}
+                fontFamily={"PP telegraf Medium"}
               >
                 Need expertise? Email{" "}
                 <Link
