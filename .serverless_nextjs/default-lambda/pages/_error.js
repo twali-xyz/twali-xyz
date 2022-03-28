@@ -5,7 +5,7 @@ exports.id = 820;
 exports.ids = [820];
 exports.modules = {
 
-/***/ 21109:
+/***/ 81067:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -37,7 +37,7 @@ __webpack_require__.r(__webpack_exports__);
 
       
       const { processEnv } = __webpack_require__(72333)
-      processEnv([{"path":".env","contents":"AWS_ACCESS_KEY_ID=AKIAXRF2N5UWPIIKMK7J\nAWS_SECRET_ACCESS_KEY=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\nAWS_REGION=us-east-1\n\nCLEARBIT_APIKEY=sk_6bcc4eeacc2e0695ccd95e414e0633a6\nLOCAL_DYNAMO_DB_ENDPOINT=http://localhost:8000"}])
+      processEnv([{"path":".env","contents":"AWS_ACCESS_KEY_ID=AKIAXRF2N5UWPIIKMK7J\nAWS_SECRET_ACCESS_KEY=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\nAWS_REGION=us-east-1\nNEXT_PUBLIC_GA_TRACKING_ID=G-LEJSEW5LRM\nCLEARBIT_APIKEY=sk_6bcc4eeacc2e0695ccd95e414e0633a6\nLOCAL_DYNAMO_DB_ENDPOINT=http://localhost:8000"}])
     
       
       const runtimeConfig = {}
@@ -100,11 +100,11 @@ __webpack_require__.r(__webpack_exports__);
         rewrites: combinedRewrites,
         i18n: undefined,
         page: "/_error",
-        buildId: "10lJIj7p-79NI8DgyO7QS",
-        escapedBuildId: "10lJIj7p\-79NI8DgyO7QS",
+        buildId: "cn04xGepfw0pKB3jmR8Xh",
+        escapedBuildId: "cn04xGepfw0pKB3jmR8Xh",
         basePath: "",
         pageIsDynamic: false,
-        encodedPreviewProps: {previewModeId:"b69521bbb9025f9c9b950a08bdb14a8c",previewModeSigningKey:"aaed18208d04526bd1808630cf7ec7ca146bdfeca7cde8474c217d98ae3fdf94",previewModeEncryptionKey:"188be8412dfcecede6ced50cc022815391ce5aa17e8f6c7c9bda3b22b40e5a0c"}
+        encodedPreviewProps: {previewModeId:"453d294e057d87ae5b8fc249ff4b7ed6",previewModeSigningKey:"00390b738bdd27877b6e9909b221a1dcac56607eeff50aa272d7013b7f719434",previewModeEncryptionKey:"07f00f533371a0b9613da9ddef8ebf17bd227215a6d6634604786d9e3b8b768d"}
       })
       
     
@@ -237,7 +237,7 @@ module.exports = require("zlib");
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [259,922], () => (__webpack_exec__(21109)));
+var __webpack_exports__ = __webpack_require__.X(0, [726,922], () => (__webpack_exec__(81067)));
 module.exports = __webpack_exports__;
 
 })();
