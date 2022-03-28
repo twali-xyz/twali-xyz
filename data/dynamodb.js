@@ -311,7 +311,9 @@ module.exports = {
 
 
   /**
-   * @desc Checks if userName does not exsit in db table
+   * @desc Checks if userName does not exsit in db table by checking if a return object is returned from DB.
+   * @dev Can implement a value check in the near future.
+   * @returns Returns a boolean value
   */
  userNameIsValid: async (userName) => {
    let exists = false;
@@ -325,11 +327,11 @@ module.exports = {
       ":userName": userName,
     },
    }).promise();
-console.log(dbUserName.Items)
+// console.log(dbUserName.Items)
    if(dbUserName.Items[0] !== undefined && dbUserName.Items[0] !== null){
      exists = true;
    }
-   console.log("does it exists", exists);
+   console.log("exists", exists);
    return exists;
  }
 };

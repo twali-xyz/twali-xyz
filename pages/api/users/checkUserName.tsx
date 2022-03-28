@@ -7,8 +7,8 @@ const checkUserNameHandler: NextApiHandler = async (req, res) => {
         try {
             const userName = JSON.parse(req.body);
             await data.userNameIsValid(userName);
-            res.setHeader("Content-Type", "application/json");
-            res.status(200).json("data posted");
+            // res.setHeader("Content-Type", "application/json");
+            // res.status(200).json("data posted");
         } catch (error){
             console.log(error);
         }
