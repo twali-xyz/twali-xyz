@@ -9,7 +9,6 @@ module.exports = {
     } else {
       console.warn("Bundling aws-sdk. Only doing this in development mode");
     }
-
     return config;
   },
 };
