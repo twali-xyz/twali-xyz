@@ -90,7 +90,7 @@ module.exports = {
           userName: userName,
           userWallet: userWallet,
           accType: accType,
-          uuid: v4(), // unique ID associated with each user account 
+          uuid: v4(), // unique ID associated with each user account
           createdAt: Date.now(),
           firstName: firstName,
           lastName: lastName,
