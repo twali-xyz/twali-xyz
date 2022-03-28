@@ -79,6 +79,7 @@ const LoginPage = (props) => {
   // );
   return (
     <>
+      <title>twali.xyz - login</title>
       <Container
         width="100%"
         height="1024px"

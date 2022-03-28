@@ -1,3 +1,4 @@
+import { Chip } from "./../Components/Chip";
 import { useEffect, useRef, useState } from "react";
 import {
   Box,
@@ -232,27 +233,12 @@ const CompanyModal = (props) => {
                   >
                     {[companyData.companyFunc, companyData.companyIndustry].map(
                       (name, idx) => (
-                        <Box
-                          key={`sm--${name}-${idx}`}
-                          borderRadius={"32px"}
-                          backgroundImage={
-                            "linear-gradient(#0DD5D1 0%, #9350B3 100%)"
-                          }
-                          p={"1px"}
-                        >
-                          <Text
-                            fontSize="14px"
-                            lineHeight={"24px"}
-                            fontFamily={"PP Telegraf"}
-                            alignSelf={"start"}
-                            backgroundColor={"#0A2625"}
-                            p={"4px 12px"}
-                            borderRadius={"32px"}
-                            whiteSpace={"nowrap"}
-                          >
-                            {name}
-                          </Text>
-                        </Box>
+                        <Chip
+                          key={`expertChip--${name}-${idx}`}
+                          text={name}
+                          name={name}
+                          idx={idx}
+                        />
                       )
                     )}
                   </HStack>

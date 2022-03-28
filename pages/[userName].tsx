@@ -24,6 +24,7 @@ const ProfilePage = () => {
   if (!userData) return <LoginPage loaded={!userData} />;
   return (
     <>
+      <title>twali.xyz - {userData.userName}</title>
       <Flex h="full">
         <VStack w="full" h="full" spacing={8} alignItems="flex-start">
           <ProfileDetails user={userData} />
