@@ -178,6 +178,7 @@ export default function ProfileImageUpload(props) {
               key={timestamp}
               src={`data:image/jpeg;base64,${newImg}`}
               alt={`${newImg}`}
+              ref={imgPreview}
             />
           ) : (
             <Img
