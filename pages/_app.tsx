@@ -1,5 +1,6 @@
 import "../styles/global.css";
 import { AppProps } from "next/app";
+import Script from 'next/script'
 import * as React from "react";
 import { ChakraProvider, extendTheme, ThemeConfig } from "@chakra-ui/react";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -42,9 +43,28 @@ const theme = extendTheme({
 
 function App({ Component, pageProps }: AppProps) {
   return (
+    // <>
+    //   {/* Global Site Tag (gtag.js) - Google Analytics */}
+    // <Script
+    // strategy="afterInteractive"
+    // src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_TRACKING_ID}`}
+    // />
+    // <Script
+    // id="gtag-init"
+    // strategy="afterInteractive"
+    // dangerouslySetInnerHTML={{
+    //   __html:`
+    //   window.dataLayer = window.dataLayer || [];
+    // function gtag(){dataLayer.push(arguments);}
+    // gtag('js', new Date());
+    // gtag('config', '${process.env.NEXT_PUBLIC_GA_TRACKING_ID}'); 
+    //   `,
+    // }}
+    // />
     <ChakraProvider theme={theme}>
       <Component {...pageProps} />
     </ChakraProvider>
+    // </>
   );
 }
 
