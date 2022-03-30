@@ -23,6 +23,7 @@ import {
   Tag,
 } from "@chakra-ui/react";
 import useSWR from "swr";
+import DatePicker from "react-date-picker/dist/entry.nostyle";
 import { connect } from "../../../utils/walletUtils";
 import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
 import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
@@ -46,26 +47,45 @@ const CompanyModal = (props) => {
     companyIndustry: "",
     companyLogo: false,
   };
-
+  const [compStart, setCompStart] = useState(undefined);
+  const [compEnd, setCompEnd] = useState(undefined);
   const [companyData, setCompanyData] = useState<any>();
 
   useEffect(() => {
     if (!props.isOpen) {
       setlogo(false);
+      setCompanyData(emptyCompanyInfo);
       return;
     }
     setCompanyData(
-      props.userData.companyInfo &&
-        props.userData.companyInfo[props.currCompany]
-        ? props.userData.companyInfo[props.currCompany]
+      props.userData?.companyInfo &&
+        props.userData?.companyInfo[props.currCompany]
+        ? props.userData?.companyInfo[props.currCompany]
         : emptyCompanyInfo
     );
+
     {
       props.userData?.companyInfo[props.currCompany] &&
         setlogo(props.userData?.companyInfo[props.currCompany].logo);
+      setCompStart(
+        props.userData?.companyInfo[props.currCompany]?.companyStart
+      );
+      setCompEnd(props.userData?.companyInfo[props.currCompany]?.companyEnd);
     }
-    return () => {};
   }, [props.isOpen]);
+
+  useEffect(() => {
+    setTempCompany({
+      ...tempCompany,
+      companyStart: compStart,
+      companyEnd: compEnd,
+    });
+    setCompanyData({
+      ...companyData,
+      companyStart: compStart,
+      companyEnd: compEnd,
+    });
+  }, [compStart, compEnd]);
 
   const [errors, setErrors] = useState({
     companyName: null,
@@ -135,8 +155,11 @@ const CompanyModal = (props) => {
   };
 
   const handleChange = (evt) => {
-    evt.persist();
-
+    try {
+      evt.persist();
+    } catch (error) {
+      console.log(error);
+    }
     setCompanyData({ ...companyData, [evt.target.name]: evt.target.value });
     setTempCompany({
       ...companyData,
@@ -385,17 +408,10 @@ const CompanyModal = (props) => {
                     >
                       What was your start date?
                     </FormLabel>
-                    <Input
-                      fontFamily={"PP Telegraf Light"}
-                      required
-                      isInvalid={
-                        errors.companyStart &&
-                        (!companyData.companyStart || !tempCompany.companyStart)
-                      }
-                      errorBorderColor="red.300"
-                      name="companyStart"
-                      defaultValue={companyData.companyStart || ""}
-                      onChange={handleChange}
+
+                    <DatePicker
+                      onChange={setCompStart}
+                      value={new Date(compStart)}
                     />
                     {errors.companyStart &&
                       (!companyData.companyStart ||
@@ -414,17 +430,9 @@ const CompanyModal = (props) => {
                     >
                       What was your end date?
                     </FormLabel>
-                    <Input
-                      fontFamily={"PP Telegraf Light"}
-                      required
-                      isInvalid={
-                        errors.companyEnd &&
-                        (!companyData.companyEnd || !tempCompany.companyEnd)
-                      }
-                      errorBorderColor="red.300"
-                      name="companyEnd"
-                      defaultValue={companyData.companyEnd || ""}
-                      onChange={handleChange}
+                    <DatePicker
+                      onChange={setCompEnd}
+                      value={new Date(compEnd)}
                     />
                     {errors.companyEnd &&
                       (!companyData.companyEnd || !tempCompany.companyEnd) && (
