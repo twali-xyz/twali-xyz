@@ -269,6 +269,7 @@ const CompanyModal = (props) => {
       </ModalContent>
     </>
   );
+  console.log(compStart, compEnd);
 
   return (
     <>
@@ -407,7 +408,7 @@ const CompanyModal = (props) => {
 
                     <DatePicker
                       onChange={setCompStart}
-                      value={new Date(compStart)}
+                      value={compStart ? new Date(compStart) : compStart}
                     />
                     {errors.companyStart &&
                       (!companyData.companyStart ||
@@ -428,7 +429,7 @@ const CompanyModal = (props) => {
                     </FormLabel>
                     <DatePicker
                       onChange={setCompEnd}
-                      value={new Date(compEnd)}
+                      value={compEnd ? new Date(compEnd) : compEnd}
                     />
                     {errors.companyEnd &&
                       (!companyData.companyEnd || !tempCompany.companyEnd) && (
