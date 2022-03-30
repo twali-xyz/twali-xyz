@@ -3,7 +3,6 @@
 DATE PICKER CSS */
 
 .react-date-picker {
-  display: inline-flex;
   position: relative;
 }
 .react-date-picker,
@@ -18,27 +17,31 @@ DATE PICKER CSS */
   background-color: #f0f0f0;
   color: #6d6d6d;
 }
+
 .react-date-picker__wrapper {
   display: flex;
   flex-grow: 1;
   flex-shrink: 0;
-  border: thin solid #587070;
+  border: thin solid var(--chakra-colors-whiteAlpha-400);
+  border-radius: 0.375rem;
   font-family: "PP Telegraf Light";
+  height: 45px;
+  padding: 8px;
+  font-size: 1rem;
 }
+
 .react-date-picker__inputGroup {
   min-width: calc((4px * 3) + 0.54em * 8 + 0.217em * 2);
   flex-grow: 1;
   padding: 0 2px;
   box-sizing: content-box;
 }
-.react-date-picker__inputGroup:focus {
-}
+
 .react-date-picker__inputGroup__divider {
   padding: 1px 0;
   white-space: pre;
 }
 .react-date-picker__inputGroup__input {
-  border-color: #c7f83c;
   min-width: 0.54em;
   height: 100%;
   position: relative;
