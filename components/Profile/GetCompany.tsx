@@ -54,66 +54,121 @@ export const GetCompany = (props) => {
           </UserPermissionsRestricted>
         </Box>
       ) : (
-        <Box
-          w="80px"
-          height="80px"
-          borderRadius="full"
-          backgroundColor="rgb(222, 222, 222)"
-          marginLeft={
-            props.currCompany === 0 || !props.currCompany
-              ? "0px"
-              : "32px !important"
-          }
-          bgGradient={
-            "linear-gradient(136.3deg, #0DD5D1 -3.88%, #9350B3 84.78%)"
-          }
-          overflow="hidden"
-          p={0}
-          key={`${props.companyName}--${props.currCompany}--box`}
-          onMouseEnter={(e) => {
-            let addImg = e.currentTarget.children[0] as HTMLElement;
-            let compLogo = e.currentTarget.children[1] as HTMLElement;
-            addImg.style.display = "flex";
-            compLogo.style.display = "none";
-          }}
-          onMouseLeave={(e) => {
-            let addImg = e.currentTarget.children[0] as HTMLElement;
-            let compLogo = e.currentTarget.children[1] as HTMLElement;
-            addImg.style.display = "none";
-            compLogo.style.display = "flex";
-          }}
-          onClick={() => {
-            props.setCurrCompany(props.currCompany);
-            props.onCompanyModalOpen();
-          }}
-        >
-          <Img
-            backgroundColor="rgb(222, 222, 222)"
-            bgGradient={
-              "linear-gradient(136.3deg, #0DD5D1 -3.88%, #9350B3 84.78%)"
-            }
-            borderRadius="full"
-            style={{ cursor: "pointer" }}
-            key={`${props.companyName}--${props.currCompany}`}
-            alignSelf="center"
-            src="edit.svg"
-            alt="edit stock img"
-            display={"none"}
-          />
-          <Text
-            w={"full"}
-            h={"full"}
-            fontSize="4xl"
-            fontWeight="400"
-            display={"flex"}
-            color={"#F9FFF2"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            fontFamily={"GrandSlang"}
-          >
-            {props.companyName[0].toUpperCase()}
-          </Text>
-        </Box>
+        <>
+          <UserPermissionsRestricted to="view">
+            <Box
+              w="80px"
+              height="80px"
+              borderRadius="full"
+              backgroundColor="rgb(222, 222, 222)"
+              marginLeft={
+                props.currCompany === 0 || !props.currCompany
+                  ? "0px"
+                  : "32px !important"
+              }
+              bgGradient={
+                "linear-gradient(136.3deg, #0DD5D1 -3.88%, #9350B3 84.78%)"
+              }
+              overflow="hidden"
+              p={0}
+              key={`${props.companyName}--${props.currCompany}--box`}
+              _hover={{ cursor: "pointer" }}
+              onClick={() => {
+                props.setCurrCompany(props.currCompany);
+                props.onCompanyModalOpen();
+              }}
+            >
+              <Img
+                backgroundColor="rgb(222, 222, 222)"
+                bgGradient={
+                  "linear-gradient(136.3deg, #0DD5D1 -3.88%, #9350B3 84.78%)"
+                }
+                borderRadius="full"
+                style={{ cursor: "pointer" }}
+                key={`${props.companyName}--${props.currCompany}`}
+                alignSelf="center"
+                src="edit.svg"
+                alt="edit stock img"
+                display={"none"}
+              />
+              <Text
+                w={"full"}
+                h={"full"}
+                fontSize="4xl"
+                fontWeight="400"
+                display={"flex"}
+                color={"#F9FFF2"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                fontFamily={"GrandSlang"}
+              >
+                {props.companyName[0].toUpperCase()}
+              </Text>
+            </Box>
+          </UserPermissionsRestricted>
+          <UserPermissionsRestricted to="edit">
+            <Box
+              w="80px"
+              height="80px"
+              borderRadius="full"
+              backgroundColor="rgb(222, 222, 222)"
+              marginLeft={
+                props.currCompany === 0 || !props.currCompany
+                  ? "0px"
+                  : "32px !important"
+              }
+              bgGradient={
+                "linear-gradient(136.3deg, #0DD5D1 -3.88%, #9350B3 84.78%)"
+              }
+              overflow="hidden"
+              p={0}
+              key={`${props.companyName}--${props.currCompany}--box`}
+              onMouseEnter={(e) => {
+                let addImg = e.currentTarget.children[0] as HTMLElement;
+                let compLogo = e.currentTarget.children[1] as HTMLElement;
+                addImg.style.display = "flex";
+                compLogo.style.display = "none";
+              }}
+              onMouseLeave={(e) => {
+                let addImg = e.currentTarget.children[0] as HTMLElement;
+                let compLogo = e.currentTarget.children[1] as HTMLElement;
+                addImg.style.display = "none";
+                compLogo.style.display = "flex";
+              }}
+              onClick={() => {
+                props.setCurrCompany(props.currCompany);
+                props.onCompanyModalOpen();
+              }}
+            >
+              <Img
+                backgroundColor="rgb(222, 222, 222)"
+                bgGradient={
+                  "linear-gradient(136.3deg, #0DD5D1 -3.88%, #9350B3 84.78%)"
+                }
+                borderRadius="full"
+                style={{ cursor: "pointer" }}
+                key={`${props.companyName}--${props.currCompany}`}
+                alignSelf="center"
+                src="edit.svg"
+                alt="edit stock img"
+                display={"none"}
+              />
+              <Text
+                w={"full"}
+                h={"full"}
+                fontSize="4xl"
+                fontWeight="400"
+                display={"flex"}
+                color={"#F9FFF2"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                fontFamily={"GrandSlang"}
+              >
+                {props.companyName[0].toUpperCase()}
+              </Text>
+            </Box>
+          </UserPermissionsRestricted>
+        </>
       )}
     </>
   );

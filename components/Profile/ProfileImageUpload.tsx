@@ -1,4 +1,13 @@
-import { Box, Button, Img, Input, CircularProgress, Text, Alert, AlertIcon } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Img,
+  Input,
+  CircularProgress,
+  Text,
+  Alert,
+  AlertIcon,
+} from "@chakra-ui/react";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
@@ -14,8 +23,12 @@ export default function ProfileImageUpload(props) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [timestamp, setTimestamp] = useState(Date.now());
   const [isFileTooBig, setIsFileTooBig] = useState(false);
-  const reference = useRef(null);
   const [newImg, setNewImg] = useState("");
+
+  const inputRef = useRef(null);
+  const imgPreview = useRef(null);
+  const previewStatus =
+    imgPreview?.current?.src.split(/(twali-assets\/plusicon\.png)/).length > 1;
 
   const initializeImage = async () => {
     try {
@@ -41,6 +54,9 @@ export default function ProfileImageUpload(props) {
     if (fileSize >= 1024) {
       setIsFileTooBig(true);
     } else {
+      if (imgPreview.current) {
+        imgPreview.current.src = URL.createObjectURL(finalFile);
+      }
       setSelectedFile(finalFile);
       setIsSelected(true);
       setIsFileTooBig(false);
@@ -49,8 +65,8 @@ export default function ProfileImageUpload(props) {
   };
 
   const handleOpen = () => {
-    if (reference.current) {
-      reference.current.click();
+    if (inputRef.current) {
+      inputRef.current.click();
     }
   };
   const handleSubmission = (evt) => {
@@ -109,42 +125,42 @@ export default function ProfileImageUpload(props) {
 
   const viewProfileImg = (
     <>
-    { newImg ? (
-      <Box 
-        height={"160px"}
-        width={"160px"}
-        alignSelf="center"
-        overflow="hidden"
-        pos={"relative"}
-        bottom={5}
-        marginBottom={0}
-        p={0}
-        borderRadius="0.375rem"
+      {newImg ? (
+        <Box
+          height={"160px"}
+          width={"160px"}
+          alignSelf="center"
+          overflow="hidden"
+          pos={"relative"}
+          bottom={5}
+          marginBottom={0}
+          p={0}
+          borderRadius="0.375rem"
         >
           <Img
             key={`${newImg}--view-profile-img`}
             src={`data:image/jpeg;base64,${newImg}`}
             alt={`${newImg}`}
           />
-      </Box>
-    ): null}
-  </>
-  )
+        </Box>
+      ) : null}
+    </>
+  );
 
   return (
     <>
-    <UserPermissionsRestricted
-            to="edit"
-            key={`${timestamp}--usr-permission`}
-            fallback={viewProfileImg}
-          >
-      <Input
-        type="file"
-        name="profilePhoto"
-        visibility={"hidden"}
-        onChange={changeHandler}
-        ref={reference}
-      />
+      <UserPermissionsRestricted
+        to="edit"
+        key={`${timestamp}--usr-permission`}
+        fallback={viewProfileImg}
+      >
+        <Input
+          type="file"
+          name="profilePhoto"
+          visibility={"hidden"}
+          onChange={changeHandler}
+          ref={inputRef}
+        />
         <Button
           name="file"
           height={"160px"}
@@ -157,45 +173,62 @@ export default function ProfileImageUpload(props) {
           p={0}
           onClick={handleOpen}
         >
-        { newImg ? (
-          <Img
-          key={timestamp}
-          src={`data:image/jpeg;base64,${newImg}`}
-          alt={`${newImg}`}
-        />
-        ): <Img
-        borderRadius="full"
-        width="80px"
-        height="80px"
-        src="twali-assets/plusicon.png"
-        alt="plus icon"
-      />}
-      </Button>
-      {selectedFile && selectedFile.name ? <Text
-        fontFamily={"PP Telegraf"}
-        fontSize="14px"
-        lineHeight={"24px"}
-        fontWeight={"400"}
-        pos={"relative"}
-      >{selectedFile.name}</Text>: null}
-      {isFileTooBig ? <Alert width={500} status='error'>
-    <AlertIcon />
-    <Text
-        fontFamily={"PP Telegraf"}
-        fontSize="14px"
-        lineHeight={"24px"}
-        fontWeight={"400"}
-        pos={"relative"}
-      >Oops! Your image is too big. Please upload again! (less than 1MB)</Text>
-  </Alert>: null}
-      {isSelected && (
-        <Button onClick={(evt) => handleSubmission(evt)}>save {isSubmitted ? <CircularProgress
-        size="22px"
-        thickness="4px"
-        isIndeterminate
-        color="#3C2E26"
-      />: null}</Button>
-      )}
+          {newImg ? (
+            <Img
+              key={timestamp}
+              src={`data:image/jpeg;base64,${newImg}`}
+              alt={`${newImg}`}
+              ref={imgPreview}
+            />
+          ) : (
+            <Img
+              borderRadius={previewStatus ? "full" : "unset"}
+              width={previewStatus ? "80px" : "unset"}
+              height={previewStatus ? "80px" : "unset"}
+              src="twali-assets/plusicon.png"
+              ref={imgPreview}
+              alt="plus icon"
+            />
+          )}
+        </Button>
+        {selectedFile && selectedFile.name ? (
+          <Text
+            fontFamily={"PP Telegraf"}
+            fontSize="14px"
+            lineHeight={"24px"}
+            fontWeight={"400"}
+            pos={"relative"}
+          >
+            {selectedFile.name}
+          </Text>
+        ) : null}
+        {isFileTooBig ? (
+          <Alert width={500} status="error">
+            <AlertIcon />
+            <Text
+              fontFamily={"PP Telegraf"}
+              fontSize="14px"
+              lineHeight={"24px"}
+              fontWeight={"400"}
+              pos={"relative"}
+            >
+              Oops! Your image is too big. Please upload again! (less than 1MB)
+            </Text>
+          </Alert>
+        ) : null}
+        {isSelected && (
+          <Button onClick={(evt) => handleSubmission(evt)}>
+            save{" "}
+            {isSubmitted ? (
+              <CircularProgress
+                size="22px"
+                thickness="4px"
+                isIndeterminate
+                color="#3C2E26"
+              />
+            ) : null}
+          </Button>
+        )}
       </UserPermissionsRestricted>
     </>
   );
