@@ -155,11 +155,7 @@ const CompanyModal = (props) => {
   };
 
   const handleChange = (evt) => {
-    try {
-      evt.persist();
-    } catch (error) {
-      console.log(error);
-    }
+    evt.persist();
     setCompanyData({ ...companyData, [evt.target.name]: evt.target.value });
     setTempCompany({
       ...companyData,
