@@ -460,6 +460,7 @@ const CompanyModal = (props) => {
                     />
 
                     {errors.companyEnd &&
+                      !tempCompany.currentStatus &&
                       (!companyData.companyEnd || !tempCompany.companyEnd) && (
                         <Text fontSize="xs" fontWeight="400" color="red.500">
                           {errors.companyEnd}
