@@ -92,6 +92,21 @@ const CompanyModal = (props) => {
     });
   }, [compStart, compEnd, currentStatus]);
 
+  useEffect(() => {
+    if (currentStatus) {
+      setTempCompany({
+        ...tempCompany,
+        companyEnd: "",
+        currentStatus: currentStatus,
+      });
+      setCompanyData({
+        ...companyData,
+        companyEnd: "",
+        currentStatus: currentStatus,
+      });
+    }
+  }, [currentStatus]);
+
   const [errors, setErrors] = useState({
     companyName: null,
     companyTitle: null,
