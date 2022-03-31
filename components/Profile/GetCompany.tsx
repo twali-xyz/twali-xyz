@@ -8,6 +8,7 @@ export const GetCompany = (props) => {
         <Box
           w="80px"
           height="80px"
+          marginLeft={"0px !important"}
           display="flex"
           borderRadius="full"
           alignItems="center"
@@ -15,7 +16,6 @@ export const GetCompany = (props) => {
           backgroundColor="rgb(222,222,222)"
           overflow="hidden"
           p={0}
-          marginLeft={props.currCompany === 0 ? "0px" : "32px !important"}
           key={`${props.companyName}--${props.currCompany}--box`}
         >
           <UserPermissionsRestricted to="view">
@@ -59,13 +59,9 @@ export const GetCompany = (props) => {
             <Box
               w="80px"
               height="80px"
+              marginLeft={"0 !important"}
               borderRadius="full"
               backgroundColor="rgb(222, 222, 222)"
-              marginLeft={
-                props.currCompany === 0 || !props.currCompany
-                  ? "0px"
-                  : "32px !important"
-              }
               bgGradient={
                 "linear-gradient(136.3deg, #0DD5D1 -3.88%, #9350B3 84.78%)"
               }
@@ -110,13 +106,9 @@ export const GetCompany = (props) => {
             <Box
               w="80px"
               height="80px"
+              marginLeft={"0 !important"}
               borderRadius="full"
               backgroundColor="rgb(222, 222, 222)"
-              marginLeft={
-                props.currCompany === 0 || !props.currCompany
-                  ? "0px"
-                  : "32px !important"
-              }
               bgGradient={
                 "linear-gradient(136.3deg, #0DD5D1 -3.88%, #9350B3 84.78%)"
               }
