@@ -1,3 +1,4 @@
+import { Current } from "./currentStatusSlider";
 import { Chip } from "./../Components/Chip";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -20,7 +21,6 @@ import {
   Input,
   Select,
   Img,
-  Tag,
 } from "@chakra-ui/react";
 import useSWR from "swr";
 import DatePicker from "react-date-picker/dist/entry.nostyle";
@@ -50,7 +50,7 @@ const CompanyModal = (props) => {
   const [compStart, setCompStart] = useState(undefined);
   const [compEnd, setCompEnd] = useState(undefined);
   const [companyData, setCompanyData] = useState<any>();
-
+  const [currentStatus, setCurrentStatus] = useState(0);
   useEffect(() => {
     if (!props.isOpen) {
       setlogo(false);
@@ -71,6 +71,9 @@ const CompanyModal = (props) => {
         props.userData?.companyInfo[props.currCompany]?.companyStart
       );
       setCompEnd(props.userData?.companyInfo[props.currCompany]?.companyEnd);
+      setCurrentStatus(
+        props.userData?.companyInfo[props.currCompany]?.currentStatus || 0
+      );
     }
   }, [props.isOpen]);
 
@@ -79,13 +82,30 @@ const CompanyModal = (props) => {
       ...tempCompany,
       companyStart: compStart,
       companyEnd: compEnd,
+      currentStatus: currentStatus,
     });
     setCompanyData({
       ...companyData,
       companyStart: compStart,
       companyEnd: compEnd,
+      currentStatus: currentStatus,
     });
-  }, [compStart, compEnd]);
+  }, [compStart, compEnd, currentStatus]);
+
+  useEffect(() => {
+    if (currentStatus) {
+      setTempCompany({
+        ...tempCompany,
+        companyEnd: "",
+        currentStatus: currentStatus,
+      });
+      setCompanyData({
+        ...companyData,
+        companyEnd: "",
+        currentStatus: currentStatus,
+      });
+    }
+  }, [currentStatus]);
 
   const [errors, setErrors] = useState({
     companyName: null,
@@ -103,8 +123,11 @@ const CompanyModal = (props) => {
       day: "numeric",
     };
     let newStart = new Date(start).toLocaleDateString(undefined, options);
-    let newEnd = new Date(end).toLocaleDateString(undefined, options);
-    return `${newStart} - ${newEnd}`;
+    if (end) {
+      let newEnd = new Date(end).toLocaleDateString(undefined, options);
+      return `${newStart} - ${newEnd}`;
+    }
+    return newStart;
   };
 
   let companyDateRange;
@@ -241,6 +264,10 @@ const CompanyModal = (props) => {
                 {companyData.companyStart && companyData.companyEnd ? (
                   <Text fontSize="md" color="gray.500">
                     {companyDateRange}
+                  </Text>
+                ) : companyData.companyStart && companyData.currentStatus ? (
+                  <Text fontSize="md" color="gray.500">
+                    {convertDates(companyData.companyStart, null)} - now
                   </Text>
                 ) : null}
 
@@ -429,8 +456,11 @@ const CompanyModal = (props) => {
                     <DatePicker
                       onChange={setCompEnd}
                       value={compEnd ? new Date(compEnd) : compEnd}
+                      disabled={!!companyData.currentStatus || !!currentStatus}
                     />
+
                     {errors.companyEnd &&
+                      !tempCompany.currentStatus &&
                       (!companyData.companyEnd || !tempCompany.companyEnd) && (
                         <Text fontSize="xs" fontWeight="400" color="red.500">
                           {errors.companyEnd}
@@ -443,6 +473,22 @@ const CompanyModal = (props) => {
                           {errors.companyName}
                         </Text>
                       )}
+                  </FormControl>
+                  <FormControl p={2} id="company-current">
+                    <FormLabel
+                      fontSize={"16px"}
+                      lineHeight={"24px"}
+                      fontWeight={"400"}
+                      fontFamily={"PP Telegraf"}
+                      mt={2}
+                    >
+                      I currently work here
+                    </FormLabel>
+                    <Current
+                      setCurrentStatus={setCurrentStatus}
+                      currentStatus={currentStatus}
+                      defaultValue={companyData.currentStatus || 0}
+                    />
                   </FormControl>
                   <FormControl p={2} id="company-func">
                     <FormLabel
