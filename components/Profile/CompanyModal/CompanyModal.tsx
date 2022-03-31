@@ -269,7 +269,6 @@ const CompanyModal = (props) => {
       </ModalContent>
     </>
   );
-  console.log(compStart, compEnd);
 
   return (
     <>
