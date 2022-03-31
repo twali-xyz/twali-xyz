@@ -39,7 +39,14 @@ export function ProfileExperience({
         to="edit"
         fallback={viewWorkElements(viewElements)}
       >
-        <HStack maxW={"640px"}>{workElements}</HStack>
+        <HStack
+          maxW={"640px"}
+          display={"grid"}
+          gridTemplateColumns={"repeat(auto-fill, 100px);"}
+          gridTemplateRows={"108px"}
+        >
+          {workElements}
+        </HStack>
       </UserPermissionsRestricted>
       <UserPermissionsRestricted to="edit" fallback={viewCompany}>
         <CompanyModal
