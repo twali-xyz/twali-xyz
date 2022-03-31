@@ -283,8 +283,6 @@ const ProfileDetails = ({ user }) => {
         Number(new Date(date2.props.company?.companyEnd))
       );
     });
-    console.log(elements);
-
     return elements;
   }
   const viewCompany = (

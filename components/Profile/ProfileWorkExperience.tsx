@@ -64,7 +64,13 @@ export function ProfileExperience({
 
 const viewWorkElements = (viewElements) => {
   return (
-    <HStack spacing={4} maxW={"640px"}>
+    <HStack
+      spacing={4}
+      maxW={"640px"}
+      display={"grid"}
+      gridTemplateColumns={"repeat(auto-fill, 100px);"}
+      gridTemplateRows={"108px"}
+    >
       {viewElements}
     </HStack>
   );
