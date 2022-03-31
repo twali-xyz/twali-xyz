@@ -279,8 +279,8 @@ const ProfileDetails = ({ user }) => {
     }
     elements = elements.sort(function (date1, date2) {
       return (
-        Number(new Date(date1.props.company?.companyEnd)) -
-        Number(new Date(date2.props.company?.companyEnd))
+        Number(new Date(date2.props.company?.companyStart)) -
+        Number(new Date(date1.props.company?.companyStart))
       );
     });
     return elements;

@@ -14,8 +14,8 @@ DATE PICKER CSS */
   box-sizing: border-box;
 }
 .react-date-picker--disabled {
-  background-color: #f0f0f0;
-  color: #6d6d6d;
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .react-date-picker__wrapper {
@@ -78,6 +78,7 @@ DATE PICKER CSS */
 }
 .react-date-picker__button:disabled .react-date-picker__button__icon {
   stroke: #6d6d6d;
+  cursor: not-allowed;
 }
 .react-date-picker__button svg {
   display: inherit;
