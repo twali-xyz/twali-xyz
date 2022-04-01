@@ -8,6 +8,7 @@ import { fab } from "@fortawesome/free-brands-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { mode } from "@chakra-ui/theme-tools";
 import { customSteps } from "../styles/customStepsTheme";
+import { UserProvider } from "../components/TwaliContext";
 
 library.add(fab, fas);
 
@@ -61,9 +62,11 @@ function App({ Component, pageProps }: AppProps) {
     //   `,
     // }}
     // />
-    <ChakraProvider theme={theme}>
-      <Component {...pageProps} />
-    </ChakraProvider>
+    <UserProvider>
+      <ChakraProvider theme={theme}>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </UserProvider>
     // </>
   );
 }

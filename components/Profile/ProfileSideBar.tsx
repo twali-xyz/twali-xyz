@@ -14,14 +14,11 @@ import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermission
 import EditProfileModal from "./EditProfileModal/EditProfileModal";
 import { ProfileSocialMedia } from "./ProfileSocialMedia";
 import { Chip } from "./Components/Chip";
+import useUser from "../TwaliContext";
 export function ProfileSideBar({
   onExpModalOpen,
   isExpModalOpen,
   onExpModalClose,
-  userData,
-  setUserData,
-  handleUpdatedExperiences,
-  handleUpdatedProfile,
 }) {
   const {
     isOpen: isProfileModalOpen,
@@ -29,6 +26,7 @@ export function ProfileSideBar({
     onClose: onProfileModalClose,
   } = useDisclosure();
 
+  const { ...userState } = useUser();
   return (
     <VStack
       marginTop={0}
@@ -58,7 +56,7 @@ export function ProfileSideBar({
           fontFamily={"GrandSlang"}
           textTransform={"capitalize"}
         >
-          {userData.currTitle}
+          {userState.currTitle}
         </Text>
         <UserPermissionsRestricted to="edit">
           <Button
@@ -78,13 +76,7 @@ export function ProfileSideBar({
               src={"twali-assets/editicon.png"}
             />
           </Button>
-          <EditProfileModal
-            isOpen={isExpModalOpen}
-            onClose={onExpModalClose}
-            userData={userData}
-            setUserData={setUserData}
-            handleUpdatedExperiences={handleUpdatedProfile}
-          />
+          <EditProfileModal isOpen={isExpModalOpen} onClose={onExpModalClose} />
         </UserPermissionsRestricted>
       </Flex>
       <HStack marginTop={10} marginBottom={0}>
@@ -104,7 +96,7 @@ export function ProfileSideBar({
           letterSpacing={"wide"}
           fontFamily={"PP Telegraf Light"}
         >
-          {userData.currLocation}
+          {userState.currLocation}
         </Text>
       </HStack>
       <Box marginTop={"8px !important"}>
@@ -125,10 +117,10 @@ export function ProfileSideBar({
           maxW={"496px"}
           fontFamily={"PP Telegraf Light"}
         >
-          {userData.bio}
+          {userState.bio}
         </Text>
       </Box>
-      <ProfileSocialMedia userData={userData} marginTop={"24px !important"} />
+      <ProfileSocialMedia userData={userState} marginTop={"24px !important"} />
 
       <Flex
         p={6}
@@ -181,9 +173,6 @@ export function ProfileSideBar({
               <EditExpertiseModal
                 isOpen={isProfileModalOpen}
                 onClose={onProfileModalClose}
-                userData={userData}
-                setUserData={setUserData}
-                handleUpdatedExperiences={handleUpdatedExperiences}
               />
             </UserPermissionsRestricted>
           </HStack>
@@ -194,11 +183,14 @@ export function ProfileSideBar({
             m={0}
             flexFlow={"wrap"}
           >
-            {userData &&
-              userData &&
-              userData.functionalExpertise &&
-              typeof userData?.functionalExpertise === "object" &&
-              userData?.functionalExpertise.map((expertise, idx) => {
+            {userState &&
+              userState &&
+              userState.functionalExpertise &&
+              typeof userState?.functionalExpertise === "object" &&
+              userState?.functionalExpertise.map &&
+              userState?.functionalExpertise.map((expertise, idx) => {
+                console.log(userState?.functionalExpertise);
+
                 if (expertise)
                   return (
                     <Chip
@@ -238,11 +230,11 @@ export function ProfileSideBar({
             flexFlow={"wrap"}
             justifyContent={"flex-start"}
           >
-            {userData &&
-              userData &&
-              userData.industryExpertise &&
-              typeof userData?.industryExpertise === "object" &&
-              userData?.industryExpertise.map((expertise, idx) => {
+            {userState &&
+              userState &&
+              userState.industryExpertise &&
+              typeof userState?.industryExpertise === "object" &&
+              userState?.industryExpertise.map((expertise, idx) => {
                 if (expertise)
                   return (
                     <Box

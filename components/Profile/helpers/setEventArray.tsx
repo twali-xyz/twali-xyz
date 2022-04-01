@@ -25,13 +25,7 @@
 //                       -> strippedEventName = [...eventArray]
 // })
 
-export function setEventArray({
-  evt,
-  values,
-  setValues,
-  userData,
-  setUserData,
-}) {
+export function setEventArray({ evt, values, setValues }) {
   if (!evt) return;
   const eventName = evt.target.name;
   const [strippedEventName, eventIndex] = [
@@ -44,7 +38,7 @@ export function setEventArray({
   for (let i = 0; i <= eventValues?.length; i++) {
     if (i === eventIndex - 1) {
       eventArray.push(evt.target.value);
-    } else {
+    } else if (eventValues[i]) {
       eventArray.push(eventValues[i]);
     }
   }
@@ -53,9 +47,4 @@ export function setEventArray({
     ...values,
     [strippedEventName]: eventArray,
   }));
-
-  setUserData({
-    ...userData,
-    [strippedEventName]: eventArray,
-  });
 }

@@ -54,6 +54,8 @@ const SignUpSteps = () => {
     industryExpertise: [],
     companyInfo: [],
     uuid: "",
+    editExpertise: Function(),
+    setData: Function(),
   });
 
   const validate = (values) => {
@@ -117,7 +119,7 @@ const SignUpSteps = () => {
       strippedEventName === "industryExpertise"
     ) {
       // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
-      setEventArray({ evt, setValues, values, userData, setUserData });
+      setEventArray({ evt, setValues, values });
     } else {
       const value = evt.target.value;
       setValues((values) => ({

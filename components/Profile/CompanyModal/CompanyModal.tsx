@@ -28,16 +28,18 @@ import { connect } from "../../../utils/walletUtils";
 import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
 import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
+import useUser from "../../TwaliContext";
 
 const CompanyModal = (props) => {
   const finalRef = useRef();
+  const { setData, ...userState } = useUser();
+
   const [count, setCount] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [shouldFetch, setShouldFetch] = useState(false);
   const [tempCompany, setTempCompany] = useState<any>({});
   const [logo, setlogo] = useState<any>();
   const [isDisabled, setIsDisabled] = useState(false);
-  const [userData, setUserData] = useState(props.userData);
   const emptyCompanyInfo = {
     companyName: "",
     companyTitle: "",
@@ -58,21 +60,18 @@ const CompanyModal = (props) => {
       return;
     }
     setCompanyData(
-      props.userData?.companyInfo &&
-        props.userData?.companyInfo[props.currCompany]
-        ? props.userData?.companyInfo[props.currCompany]
+      userState?.companyInfo && userState?.companyInfo[props.currCompany]
+        ? userState?.companyInfo[props.currCompany]
         : emptyCompanyInfo
     );
 
     {
-      props.userData?.companyInfo[props.currCompany] &&
-        setlogo(props.userData?.companyInfo[props.currCompany].logo);
-      setCompStart(
-        props.userData?.companyInfo[props.currCompany]?.companyStart
-      );
-      setCompEnd(props.userData?.companyInfo[props.currCompany]?.companyEnd);
+      userState?.companyInfo[props.currCompany] &&
+        setlogo(userState?.companyInfo[props.currCompany].logo);
+      setCompStart(userState?.companyInfo[props.currCompany]?.companyStart);
+      setCompEnd(userState?.companyInfo[props.currCompany]?.companyEnd);
       setCurrentStatus(
-        props.userData?.companyInfo[props.currCompany]?.currentStatus || 0
+        userState?.companyInfo[props.currCompany]?.currentStatus || 0
       );
     }
   }, [props.isOpen]);
@@ -144,24 +143,24 @@ const CompanyModal = (props) => {
     if (address) {
       setIsSubmitted(true);
 
-      if (userData.userWallet && userData.userName && companyData) {
-        userData.companyInfo[props.currCompany] = companyData;
+      if (userState.userWallet && userState.userName && companyData) {
+        userState.companyInfo[props.currCompany] = companyData;
         console.log(companyData);
 
         let companyAttributes = {
-          companyData: userData.companyInfo,
-          userName: userData.userName,
+          companyData: userState.companyInfo,
+          userName: userState.userName,
           currCompany: props.currCompany,
         };
         companyAttributes.companyData[props.currCompany].logo = logo;
-        updateUserCompanyData(userData.userWallet, companyAttributes);
-        props.handleUpdatedCompanyInfo(props.userData, false);
+        updateUserCompanyData(userState.userWallet, companyAttributes);
+        props.handleUpdatedCompanyInfo(userState, false);
+        window.location.reload();
         props.onClose();
         setlogo(false);
         setTempCompany(emptyCompanyInfo);
         setShouldFetch(false);
         setIsSubmitted(false);
-        window.location.reload();
       } else {
         console.log("No profile, pls create one...");
       }

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Button,
   Input,
@@ -17,21 +17,30 @@ import { MultiSelect } from "../Components/MultiSelect";
 import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
 import { setEventArray } from "../helpers/setEventArray";
-import { UserData } from "../../../utils/interfaces";
+import useUser from "../../TwaliContext";
 
 const EditExpertiseModal = (props) => {
   const finalRef = useRef();
+
+  const { editExpertise, ...userState } = useUser();
+
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [userData, setUserData] = useState<UserData>(props.userData);
   const [values, setValues] = useState({
-    functionalExpertise: props.userData.functionalExpertise,
-    industryExpertise: props.userData.industryExpertise,
+    functionalExpertise: userState.functionalExpertise,
+    industryExpertise: userState.industryExpertise,
   });
 
   const [errors, setErrors] = useState({
     industryExpertise: null,
     functionalExpertise: null,
   });
+
+  useEffect(() => {
+    setValues({
+      functionalExpertise: userState.functionalExpertise,
+      industryExpertise: userState.industryExpertise,
+    });
+  }, []);
 
   async function updateExperiences() {
     setErrors(validate(values));
@@ -42,28 +51,21 @@ const EditExpertiseModal = (props) => {
 
       // Update user data with the new changes
       if (
-        userData.userWallet &&
-        userData.userName &&
+        userState.userWallet &&
+        userState.userName &&
         values.functionalExpertise &&
         values.industryExpertise
       ) {
         let expertiseAttributes = {
-          userName: userData.userName,
+          userName: userState.userName,
           functionalExpertise: values.functionalExpertise,
           industryExpertise: values.industryExpertise,
         };
 
-        updateUserExpertise(userData.userWallet, expertiseAttributes);
-        props.handleUpdatedExperiences(userData, false);
+        updateUserExpertise(userState.userWallet, expertiseAttributes);
         props.onClose();
-        window.location.reload();
         setValues({
-          ...userData,
-          functionalExpertise: values.functionalExpertise,
-          industryExpertise: values.industryExpertise,
-        });
-        setUserData({
-          ...userData,
+          ...userState,
           functionalExpertise: values.functionalExpertise,
           industryExpertise: values.industryExpertise,
         });
@@ -82,6 +84,7 @@ const EditExpertiseModal = (props) => {
       body: JSON.stringify({ userData }),
     });
     console.log("USER expertise UPDATED BRUH");
+    editExpertise(values.functionalExpertise, values.industryExpertise);
   };
 
   const validate = (values) => {
@@ -99,27 +102,9 @@ const EditExpertiseModal = (props) => {
   };
   const handleChange = (evt) => {
     evt.persist();
-    const strippedEventName = evt.target.name.substring(
-      0,
-      evt.target.name.length - 1
-    );
-    if (
-      strippedEventName === "functionalExpertise" ||
-      strippedEventName === "industryExpertise"
-    ) {
-      // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
-      setEventArray({ evt, setValues, values, userData, setUserData });
-    } else {
-      setValues((values) => ({
-        ...values,
-        [evt.target.name]: evt.target.value,
-      }));
-      setUserData({
-        ...userData,
-        functionalExpertise: values.functionalExpertise,
-        industryExpertise: values.industryExpertise,
-      });
-    }
+
+    // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
+    setEventArray({ evt, setValues, values });
   };
 
   return (
@@ -144,22 +129,14 @@ const EditExpertiseModal = (props) => {
                 handleChange={handleChange}
                 options={functionalExpertiseList}
                 maxSelections={3}
-                defaultValues={
-                  values.functionalExpertise ||
-                  props.userData.functionalExpertise ||
-                  []
-                }
+                defaultValues={values.functionalExpertise || []}
               />
 
               <MultiSelect
                 name={"industryExpertise"}
                 formLabel={"Industry expertise"}
                 handleChange={handleChange}
-                defaultValues={
-                  values.industryExpertise ||
-                  props.userData.industryExpertise ||
-                  []
-                }
+                defaultValues={values.industryExpertise || []}
                 options={industryExpertiseList}
                 maxSelections={3}
               />
