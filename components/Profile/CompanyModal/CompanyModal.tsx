@@ -32,9 +32,7 @@ import useUser from "../../TwaliContext";
 
 const CompanyModal = (props) => {
   const finalRef = useRef();
-  const { setData, ...userState } = useUser();
-
-  const [count, setCount] = useState(0);
+  const { editCompany, ...userState } = useUser();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [shouldFetch, setShouldFetch] = useState(false);
   const [tempCompany, setTempCompany] = useState<any>({});
@@ -154,8 +152,7 @@ const CompanyModal = (props) => {
         };
         companyAttributes.companyData[props.currCompany].logo = logo;
         updateUserCompanyData(userState.userWallet, companyAttributes);
-        props.handleUpdatedCompanyInfo(userState, false);
-        window.location.reload();
+        editCompany(companyAttributes.companyData);
         props.onClose();
         setlogo(false);
         setTempCompany(emptyCompanyInfo);

@@ -20,8 +20,8 @@ export const UserProvider = ({ children }) => {
     dispatch({
       type: "EDIT_EXPERTISE",
       payload: {
-        functionalExpertise: [...functionalExpertise],
-        industryExpertise: [...industryExpertise],
+        functionalExpertise: functionalExpertise,
+        industryExpertise: industryExpertise,
       },
     });
   }
@@ -42,6 +42,15 @@ export const UserProvider = ({ children }) => {
     });
   }
 
+  function editCompany(companyInfo: []) {
+    dispatch({
+      type: "EDIT_COMPANY_INFO",
+      payload: {
+        companyInfo: companyInfo,
+      },
+    });
+  }
+
   return (
     <UserContext.Provider
       value={{
@@ -49,6 +58,7 @@ export const UserProvider = ({ children }) => {
         editExpertise,
         setData,
         editProfile,
+        editCompany,
       }}
     >
       {children}

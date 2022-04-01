@@ -53,7 +53,7 @@ const userReducer = (state, action) => {
         twitter: payload.twitter,
       };
 
-    case "EDIT_COMPANY":
+    case "EDIT_COMPANY_INFO":
       return {
         ...state,
         companyInfo: payload.companyInfo,
