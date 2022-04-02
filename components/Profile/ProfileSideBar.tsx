@@ -189,8 +189,6 @@ export function ProfileSideBar({
               typeof userState?.functionalExpertise === "object" &&
               userState?.functionalExpertise.map &&
               userState?.functionalExpertise.map((expertise, idx) => {
-                console.log(userState?.functionalExpertise);
-
                 if (expertise)
                   return (
                     <Chip
