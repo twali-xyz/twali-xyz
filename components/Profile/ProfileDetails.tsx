@@ -10,7 +10,6 @@ import {
   Flex,
   Container,
 } from "@chakra-ui/react";
-
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { connect } from "../../utils/walletUtils";
@@ -23,19 +22,23 @@ import LoginPage from "../../pages/login";
 import HeaderNav from "../HeaderNav/HeaderNav";
 import { UserData } from "../../utils/interfaces";
 import { GetCompany } from "./GetCompany";
-import CompModal from "./CompanyModal/CompanyModal";
+import useUser from "../TwaliContext";
 
 const ProfileDetails = ({ user }) => {
   // Fallback for getStaticPaths, when fallback: true
   // Useful for an app that has a large number of static pages, and this prevents the build time from slowing down
   // More info in Nextjs docs here: https://nextjs.org/docs/api-reference/data-fetching/get-static-paths#fallback-true
   const router = useRouter();
+  const { setData, ...userState } = useUser();
 
   if (router.isFallback) {
     return <LoginPage loaded={router.isFallback} />;
   }
-
   const [userData, setUserData] = useState<UserData>();
+
+  useEffect(() => {
+    userData && setData(JSON.parse(JSON.stringify(userData)));
+  }, [userData]);
 
   const {
     isOpen: isExpModalOpen,
@@ -225,30 +228,21 @@ const ProfileDetails = ({ user }) => {
     readProfile();
   }, []);
 
-  const handleUpdatedProfile = (userData) => {
-    setUserData({ ...userData });
-    readProfile();
-  };
-
-  const handleUpdatedCompanyInfo = (userData) => {
-    setUserData({ ...userData });
-    readProfile();
-  };
   function createWorkElements(number) {
     var elements = [];
-    let totalLen = userData.companyInfo ? userData.companyInfo.length : 0;
+    let totalLen = userState.companyInfo ? userState.companyInfo.length : 0;
     for (let i = 0; i < number; i++) {
       if (
-        userData.companyInfo &&
+        userState.companyInfo &&
         i < totalLen &&
-        userData.companyInfo[i] &&
-        userData.companyInfo[i].companyName
+        userState.companyInfo[i] &&
+        userState.companyInfo[i].companyName
       ) {
         elements.push(
           <GetCompany
             key={`${i}--company-info`}
-            company={userData.companyInfo[i]}
-            companyName={userData.companyInfo[i].companyName}
+            company={userState.companyInfo[i]}
+            companyName={userState.companyInfo[i].companyName}
             currCompany={i}
             setCurrCompany={setCurrCompany}
             onCompanyModalOpen={onCompanyModalOpen}
@@ -290,10 +284,7 @@ const ProfileDetails = ({ user }) => {
       isOpen={isCompanyModalOpen}
       onClose={onCompanyModalClose}
       currCompany={currCompany}
-      userData={userData}
-      setUserData={setUserData}
       userPermission="view"
-      handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
     />
   );
 
@@ -302,14 +293,14 @@ const ProfileDetails = ({ user }) => {
       {!loaded ? (
         <LoginPage loaded={!loaded} />
       ) : (
-        userData &&
-        userData.userName &&
-        userData.userWallet && (
+        userState &&
+        userState.userName &&
+        userState.userWallet && (
           <>
             <HeaderNav
               whichPage="profile"
               isConnectWalletBtn={isConnectWalletBtn}
-              userPage={userData}
+              userPage={userState}
               userWallet={loggedInUserAddress}
             />
             <Container
@@ -320,13 +311,13 @@ const ProfileDetails = ({ user }) => {
             >
               <UserPermissionsProvider
                 fetchPermission={fetchPermission(
-                  userData.userName,
+                  userState.userName,
                   loggedInUserAddress ? loggedInUserAddress : null
                 )}
               >
                 <ProfileHeader
-                  userName={userData.userName}
-                  uuid={userData.uuid}
+                  userName={userState.userName}
+                  uuid={userState.uuid}
                 />
                 <Flex
                   w="full"
@@ -338,10 +329,6 @@ const ProfileDetails = ({ user }) => {
                     onExpModalOpen={onExpModalOpen}
                     isExpModalOpen={isExpModalOpen}
                     onExpModalClose={onExpModalClose}
-                    userData={userData}
-                    setUserData={setUserData}
-                    handleUpdatedExperiences={handleUpdatedProfile}
-                    handleUpdatedProfile={handleUpdatedProfile}
                   />
                   <Box alignSelf="flex-start" w="full" overflow="hidden">
                     {/* social media URLs */}
@@ -362,9 +349,6 @@ const ProfileDetails = ({ user }) => {
                         isCompanyModalOpen={isCompanyModalOpen}
                         onCompanyModalClose={onCompanyModalClose}
                         currCompany={currCompany}
-                        userData={userData}
-                        setUserData={setUserData}
-                        handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
                       />
                     </VStack>
                   </Box>
