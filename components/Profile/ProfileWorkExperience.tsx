@@ -9,9 +9,6 @@ export function ProfileExperience({
   isCompanyModalOpen,
   onCompanyModalClose,
   currCompany,
-  userData,
-  setUserData,
-  handleUpdatedCompanyInfo,
 }) {
   let workElements = createWorkElements(6);
   let viewElements = [];
@@ -53,9 +50,6 @@ export function ProfileExperience({
           isOpen={isCompanyModalOpen}
           onClose={onCompanyModalClose}
           currCompany={currCompany}
-          userData={userData}
-          setUserData={setUserData}
-          handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
         />
       </UserPermissionsRestricted>
     </Box>

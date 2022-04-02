@@ -10,7 +10,6 @@ import {
   Flex,
   Container,
 } from "@chakra-ui/react";
-
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { connect } from "../../utils/walletUtils";
@@ -35,11 +34,10 @@ const ProfileDetails = ({ user }) => {
   if (router.isFallback) {
     return <LoginPage loaded={router.isFallback} />;
   }
-
-  const [userData, setUserData] = useState<UserData>({ ...userState, setData });
+  const [userData, setUserData] = useState<UserData>();
 
   useEffect(() => {
-    setData(userData ? JSON.parse(JSON.stringify(userData)) : userData);
+    userData && setData(JSON.parse(JSON.stringify(userData)));
   }, [userData]);
 
   const {
@@ -230,10 +228,6 @@ const ProfileDetails = ({ user }) => {
     readProfile();
   }, []);
 
-  const handleUpdatedCompanyInfo = (userState) => {
-    setUserData({ ...userState });
-    readProfile();
-  };
   function createWorkElements(number) {
     var elements = [];
     let totalLen = userState.companyInfo ? userState.companyInfo.length : 0;
@@ -290,10 +284,7 @@ const ProfileDetails = ({ user }) => {
       isOpen={isCompanyModalOpen}
       onClose={onCompanyModalClose}
       currCompany={currCompany}
-      userData={userState}
-      setUserData={setUserData}
       userPermission="view"
-      handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
     />
   );
 
@@ -358,9 +349,6 @@ const ProfileDetails = ({ user }) => {
                         isCompanyModalOpen={isCompanyModalOpen}
                         onCompanyModalClose={onCompanyModalClose}
                         currCompany={currCompany}
-                        userData={userState}
-                        setUserData={setUserData}
-                        handleUpdatedCompanyInfo={handleUpdatedCompanyInfo}
                       />
                     </VStack>
                   </Box>

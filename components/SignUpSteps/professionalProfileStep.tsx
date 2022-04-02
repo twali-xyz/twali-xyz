@@ -57,7 +57,7 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
                 errorBorderColor="red.300"
                 fontFamily={"PP Telegraf light"}
                 _placeholder={{ color: "#98B2B2" }}
-                value={values.currTitle || ""}
+                value={values?.currTitle || ""}
                 required
                 placeholder="Current title"
                 name="currTitle"
@@ -87,7 +87,7 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
                 fontFamily={"PP Telegraf Light"}
                 placeholder="Select current location"
                 _placeholder={{ color: "#98B2B2 !important" }}
-                color={values.currLocation ? "#F9FFF2" : "#98B2B2"}
+                color={values?.currLocation ? "#F9FFF2" : "#98B2B2"}
                 name="currLocation"
                 onChange={handleChange}
               >

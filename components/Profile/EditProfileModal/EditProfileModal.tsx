@@ -19,21 +19,12 @@ import {
 import { connect } from "../../../utils/walletUtils";
 import { listOfCountries } from "../../../utils/profileUtils";
 import useUser from "../../TwaliContext";
+import { UserData } from "../../../utils/interfaces";
 
 const EditProfileModal = (props) => {
   const finalRef = useRef();
   const { editProfile, ...userState } = useUser();
-  const [values, setValues] = useState({
-    firstName: userState.firstName,
-    lastName: userState.lastName,
-    currTitle: userState.currTitle,
-    currLocation: userState.currLocation,
-    bio: userState.bio,
-    linkedIn: userState.linkedIn,
-    twitter: userState.twitter,
-    userName: userState.userName,
-    email: userState.email,
-  });
+  const [values, setValues] = useState<UserData>();
   const [errors, setErrors] = useState({
     firstName: null,
     lastName: null,
@@ -47,7 +38,10 @@ const EditProfileModal = (props) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
+    if (!props.isOpen) return;
     setValues({
+      ...userState,
+      editProfile: editProfile,
       firstName: userState.firstName,
       lastName: userState.lastName,
       currTitle: userState.currTitle,
@@ -88,6 +82,7 @@ const EditProfileModal = (props) => {
         };
 
         updateUserProfile(userState.userWallet, experienceAttributes);
+        editProfile(experienceAttributes);
         props.onClose();
         setIsSubmitted(false);
       } else {
@@ -103,7 +98,6 @@ const EditProfileModal = (props) => {
       body: JSON.stringify({ userData }),
     });
     console.log("USER profile UPDATED BRUH");
-    editProfile(attributes);
   };
 
   const validate = (values) => {

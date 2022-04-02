@@ -2,9 +2,9 @@ import { createContext, useReducer, useContext } from "react";
 import { UserData } from "../utils/interfaces";
 import userReducer, { initialState } from "./twaliReducer";
 
-const UserContext = createContext(initialState);
+const UserContext = createContext<UserData>(initialState);
 
-export const UserProvider = ({ children }) => {
+export const UserProvider = ({ children }): JSX.Element => {
   const [state, dispatch] = useReducer(userReducer, initialState);
 
   function setData(newState: UserData) {
@@ -16,7 +16,10 @@ export const UserProvider = ({ children }) => {
     });
   }
 
-  function editExpertise(functionalExpertise: [], industryExpertise: []) {
+  function editExpertise(
+    functionalExpertise: string[],
+    industryExpertise: string[]
+  ) {
     dispatch({
       type: "EDIT_EXPERTISE",
       payload: {

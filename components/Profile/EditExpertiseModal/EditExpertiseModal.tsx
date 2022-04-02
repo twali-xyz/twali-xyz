@@ -12,12 +12,12 @@ import {
   CircularProgress,
 } from "@chakra-ui/react";
 import { connect } from "../../../utils/walletUtils";
-
 import { MultiSelect } from "../Components/MultiSelect";
 import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
 import { setEventArray } from "../helpers/setEventArray";
 import useUser from "../../TwaliContext";
+import { UserData } from "../../../utils/interfaces";
 
 const EditExpertiseModal = (props) => {
   const finalRef = useRef();
@@ -25,10 +25,7 @@ const EditExpertiseModal = (props) => {
   const { editExpertise, ...userState } = useUser();
 
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [values, setValues] = useState({
-    functionalExpertise: userState.functionalExpertise,
-    industryExpertise: userState.industryExpertise,
-  });
+  const [values, setValues] = useState<UserData>();
 
   const [errors, setErrors] = useState({
     industryExpertise: null,
@@ -36,11 +33,14 @@ const EditExpertiseModal = (props) => {
   });
 
   useEffect(() => {
+    if (!props.isOpen) return;
     setValues({
+      ...userState,
       functionalExpertise: userState.functionalExpertise,
       industryExpertise: userState.industryExpertise,
+      editExpertise,
     });
-  }, []);
+  }, [props.isOpen]);
 
   async function updateExperiences() {
     setErrors(validate(values));
@@ -63,11 +63,13 @@ const EditExpertiseModal = (props) => {
         };
 
         updateUserExpertise(userState.userWallet, expertiseAttributes);
+        editExpertise(values.functionalExpertise, values.industryExpertise);
         props.onClose();
         setValues({
           ...userState,
           functionalExpertise: values.functionalExpertise,
           industryExpertise: values.industryExpertise,
+          editExpertise,
         });
 
         setIsSubmitted(false);
@@ -84,7 +86,6 @@ const EditExpertiseModal = (props) => {
       body: JSON.stringify({ userData }),
     });
     console.log("USER expertise UPDATED BRUH");
-    editExpertise(values.functionalExpertise, values.industryExpertise);
   };
 
   const validate = (values) => {
@@ -129,14 +130,14 @@ const EditExpertiseModal = (props) => {
                 handleChange={handleChange}
                 options={functionalExpertiseList}
                 maxSelections={3}
-                defaultValues={values.functionalExpertise || []}
+                defaultValues={values?.functionalExpertise || []}
               />
 
               <MultiSelect
                 name={"industryExpertise"}
                 formLabel={"Industry expertise"}
                 handleChange={handleChange}
-                defaultValues={values.industryExpertise || []}
+                defaultValues={values?.industryExpertise || []}
                 options={industryExpertiseList}
                 maxSelections={3}
               />

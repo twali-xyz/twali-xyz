@@ -19,6 +19,8 @@ export interface UserData {
   companyInfo?: CompanyInfo[];
   uuid: string;
   editExpertise: Function,
+  editProfile: Function,
+  editCompany: Function,
   setData: Function
 }
 export interface CompanyInfo {
@@ -29,4 +31,6 @@ export interface CompanyInfo {
   companyEnd: Date;
   companyFunc: string;
   companyIndustry: string;
+  logo: any;
+  currentStatus: Number;
 }

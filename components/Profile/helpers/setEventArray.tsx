@@ -33,7 +33,7 @@ export function setEventArray({ evt, values, setValues }) {
     Number(eventName[eventName.length - 1]),
   ];
 
-  const eventValues = values[strippedEventName];
+  const eventValues = values[strippedEventName] || [];
   let eventArray = [];
   for (let i = 0; i <= eventValues?.length; i++) {
     if (i === eventIndex - 1) {
@@ -42,9 +42,8 @@ export function setEventArray({ evt, values, setValues }) {
       eventArray.push(eventValues[i]);
     }
   }
-
-  setValues((values) => ({
+  setValues({
     ...values,
     [strippedEventName]: eventArray,
-  }));
+  });
 }
