@@ -120,6 +120,7 @@ const SignUpSteps = () => {
     ) {
       // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
       setEventArray({ evt, setValues, values });
+      setEventArray({ evt, setValues: setUserData, values: userData });
     } else {
       const value = evt.target.value;
       setValues((values) => ({
