@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { listOfCountries } from "../../utils/profileUtils";
 import {
   FormControl,

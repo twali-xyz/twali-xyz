@@ -25,7 +25,6 @@ export function ProfileSideBar({
     onOpen: onProfileModalOpen,
     onClose: onProfileModalClose,
   } = useDisclosure();
-
   const { ...userState } = useUser();
   return (
     <VStack
@@ -184,7 +183,6 @@ export function ProfileSideBar({
             flexFlow={"wrap"}
           >
             {userState &&
-              userState &&
               userState.functionalExpertise &&
               typeof userState?.functionalExpertise === "object" &&
               userState?.functionalExpertise.map &&
@@ -229,7 +227,6 @@ export function ProfileSideBar({
             justifyContent={"flex-start"}
           >
             {userState &&
-              userState &&
               userState.industryExpertise &&
               typeof userState?.industryExpertise === "object" &&
               userState?.industryExpertise.map((expertise, idx) => {

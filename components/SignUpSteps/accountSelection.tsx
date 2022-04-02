@@ -11,7 +11,6 @@ export function AccountSelection({
   setAccSelectionComplete,
 }) {
   const router = useRouter();
-
   return (
     <Flex
       m={0}

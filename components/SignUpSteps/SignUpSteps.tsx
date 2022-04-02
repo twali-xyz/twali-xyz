@@ -69,22 +69,9 @@ const SignUpSteps = () => {
       errors.businessType = "Business type is required";
     }
 
-    // if (!values.businessLocation) {
-    //   errors.businessType = 'Business location is required';
-    // }
-
     if (!values.currTitle) {
       errors.currTitle = "Current title is required";
     }
-
-    // if (!values.functionalExpertise) {
-    //   errors.functionalExpertise = 'Functional expertise is required';
-    // }
-
-    // if (!values.industryExpertise) {
-    //   errors.industryExpertise = 'Industry expertise is required';
-    // }
-
     return errors;
   };
 
@@ -129,7 +116,6 @@ const SignUpSteps = () => {
       }),
     },
   ];
-
   // const checkUserName = async (userName) => {
   //   userData.userName = userName;
 
@@ -141,7 +127,6 @@ const SignUpSteps = () => {
   //     throw new Error("Select new username")
   //   }
   // }
-
   const createNewUser = async (address) => {
     userData.userWallet = address;
     // check if user doesnt already exsist with current address
