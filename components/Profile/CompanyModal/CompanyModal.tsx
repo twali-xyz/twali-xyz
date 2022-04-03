@@ -29,6 +29,7 @@ import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermiss
 import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
 import useUser from "../../TwaliContext";
+import useDebounce from "../../../utils/useDebounce";
 
 const CompanyModal = (props) => {
   const finalRef = useRef();
@@ -551,7 +552,12 @@ function CompanyInfoData(props) {
     searchParams.sort();
     const qs = searchParams.toString();
 
-    const { data } = useSWR(`/api/cors?${qs}`, fetcher);
+    const debouncedSearch = useDebounce(qs, 450);
+    const { data, error } = useSWR(
+      () => (debouncedSearch ? `/api/cors?${debouncedSearch}` : null),
+      fetcher
+    );
+
     if (!data) {
       props.isDisabled(false);
       props.setlogo(true);

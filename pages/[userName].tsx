@@ -1,6 +1,5 @@
-import { Container, Flex, VStack } from "@chakra-ui/react";
+import { Flex, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import HeaderNav from "../components/HeaderNav/HeaderNav";
 import ProfileDetails from "../components/Profile/ProfileDetails";
 import useSWR from "swr";
 import LoginPage from "./login";
