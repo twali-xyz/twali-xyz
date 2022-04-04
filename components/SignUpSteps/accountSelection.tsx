@@ -39,7 +39,7 @@ export function AccountSelection({
         }}
         backgroundImage={
           btnActive == 1 || btnActive == 0
-            ? `url("https://s3-alpha-sig.figma.com/img/1af8/2b0b/2aab5291c6d7d1dffbaa27b09b309dd3?Expires=1649030400&Signature=AawS5sdj8cjxNfSc2SSy0RUw04REC3cmTufXrRrvnJNBnG8wQoCCYrbSOmH0Fq3Uj16Wpr3yjE0NUM3RxU9~-6f-q1Fw6Qxym5VPp6W5yDpzeyyW2XfZerLyEh--tyailJDm-4B6hmn69x3CThgN93Idbm7Osg5SN8GWgC0Ubgn77ewoc5v671oXPXfpSfSNR5mw1CrCo18ubpk2YsxqmL7QQPmwHICoYnjudLLJ0rLfFq9fVp0aR~4dETYPjHeNTuI~ZSpTp00XBOM-SEsvIX9cicadmscluaMGNKkZ7wiJOutAY17Hn-jTVhKyTUuYn0cPVpoa7xRsPjbINFk6SA__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA")`
+            ? "/twali-assets/step1_background.png"
             : null
         }
         backgroundColor={"#0A1313"}
@@ -107,9 +107,7 @@ export function AccountSelection({
           selectUserAccType("Client");
         }}
         backgroundImage={
-          btnActive == 2
-            ? `url("https://s3-alpha-sig.figma.com/img/1af8/2b0b/2aab5291c6d7d1dffbaa27b09b309dd3?Expires=1649030400&Signature=AawS5sdj8cjxNfSc2SSy0RUw04REC3cmTufXrRrvnJNBnG8wQoCCYrbSOmH0Fq3Uj16Wpr3yjE0NUM3RxU9~-6f-q1Fw6Qxym5VPp6W5yDpzeyyW2XfZerLyEh--tyailJDm-4B6hmn69x3CThgN93Idbm7Osg5SN8GWgC0Ubgn77ewoc5v671oXPXfpSfSNR5mw1CrCo18ubpk2YsxqmL7QQPmwHICoYnjudLLJ0rLfFq9fVp0aR~4dETYPjHeNTuI~ZSpTp00XBOM-SEsvIX9cicadmscluaMGNKkZ7wiJOutAY17Hn-jTVhKyTUuYn0cPVpoa7xRsPjbINFk6SA__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA")`
-            : null
+          btnActive == 2 ? "/twali-assets/step1_background.png" : null
         }
         backgroundColor={"#0A1313"}
       >
