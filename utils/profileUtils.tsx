@@ -14,12 +14,12 @@ export const fetchPermission =
     // permissions: ["view"] for restricted
 
     let userData;
-    if (!cache[permission]) {
+    if (!Object.keys(cache).includes(currentUserName)) {
       const data = await fetch(`/api/users/${currentUserName}`);
       userData = await data.json();
-      cache[permission] = userData;
+      cache[currentUserName] = userData;
     } else {
-      userData = cache[permission];
+      userData = cache[currentUserName];
     }
 
     if (userData && userData.userWallet === loggedInUserAddress) {
@@ -27,12 +27,8 @@ export const fetchPermission =
         userName: currentUserName,
         permissions: ["edit"],
       };
-      cache[currentUserName] = userData;
-      return user.permissions.includes(permission);
-    } else {
-      cache[currentUserName] = userData;
-      return user.permissions.includes(permission);
     }
+    return user.permissions.includes(permission);
   };
 
 // Function that retrieves a list of countries options for a dropdown

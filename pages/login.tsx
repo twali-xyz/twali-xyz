@@ -11,7 +11,6 @@ import HeaderNav from "../components/HeaderNav/HeaderNav";
 // import { handleConnect } from "../components/Profile/helpers/handleConnect";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-
 import Web3 from "web3";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";

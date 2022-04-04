@@ -29,6 +29,7 @@ import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermiss
 import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
 import useUser from "../../TwaliContext";
+import useDebounce from "../../../utils/useDebounce";
 
 const CompanyModal = (props) => {
   const finalRef = useRef();
@@ -306,17 +307,7 @@ const CompanyModal = (props) => {
                           shouldFetch={shouldFetch}
                         />
                       </>
-                    ) : logo?.message?.logo ? (
-                      <>
-                        <Box w="full" borderRadius="lg" overflow="hidden" p={2}>
-                          <Img
-                            height={"48px"}
-                            src={logo?.message?.logo}
-                            alt={logo?.message?.domain}
-                          />
-                        </Box>
-                      </>
-                    ) : !logo && companyData.logo?.message?.logo ? (
+                    ) : companyData.logo?.message?.logo ? (
                       <Box w="full" borderRadius="lg" overflow="hidden" p={2}>
                         <Img
                           height={"48px"}
@@ -324,17 +315,7 @@ const CompanyModal = (props) => {
                           alt={companyData.logo?.message?.domain}
                         />
                       </Box>
-                    ) : (companyData.companyName || logo) &&
-                      shouldFetch &&
-                      companyData.companyName ? (
-                      <>
-                        <LogoFallBack companyName={companyData.companyName} />
-                      </>
-                    ) : !shouldFetch && !logo && companyData.companyName ? (
-                      <>
-                        <LogoFallBack companyName={companyData.companyName} />
-                      </>
-                    ) : !shouldFetch && logo && companyData.companyName ? (
+                    ) : companyData.companyName ? (
                       <>
                         <LogoFallBack companyName={companyData.companyName} />
                       </>
@@ -538,72 +519,55 @@ function CompanyInfoData(props) {
   //
   // only fetch if event comes from 'company name' field
   //
-  if (props.shouldFetch) {
-    const fetcher = (
-      companyDomain: string,
-      ...args: Parameters<typeof fetch>
-    ) => fetch(companyDomain).then((response) => response.json());
+  const fetcher = (companyDomain: string, ...args: Parameters<typeof fetch>) =>
+    fetch(companyDomain).then((response) => response.json());
 
-    let paramsObj = { params: props.companyName };
-    let searchParams = new URLSearchParams(paramsObj);
+  let paramsObj = { params: props.companyName };
+  let searchParams = new URLSearchParams(paramsObj);
 
-    // Create a stable key for SWR
-    searchParams.sort();
-    const qs = searchParams.toString();
+  // Create a stable key for SWR
+  searchParams.sort();
+  const qs = searchParams.toString();
 
-    const { data } = useSWR(`/api/cors?${qs}`, fetcher);
-    if (!data) {
-      props.isDisabled(false);
-      props.setlogo(true);
-    } else {
-      props.isDisabled(false);
-      props.setlogo(data);
-    }
+  const debouncedSearch = useDebounce(qs, 450);
+  const { data } = useSWR(
+    () => (debouncedSearch ? `/api/cors?${debouncedSearch}` : null),
+    fetcher
+  );
 
-    return (
-      // return when shouldFetch == true && logo data is found
-      <>
-        {data && data?.message && data?.message?.logo ? (
-          <Box w="full" borderRadius="lg" overflow="hidden" p={2}>
-            <Img
-              height={"48px"}
-              src={data.message.logo}
-              alt={data.message.domain}
-            />
-          </Box>
-        ) : props.companyName ? (
-          // return when shouldFetch returns no data
-          <>
-            <LogoFallBack companyName={props.companyName} />
-          </>
-        ) : null}
-      </>
-    );
+  if (!data) {
+    props.isDisabled(false);
+    props.setlogo(true);
+  } else {
+    props.isDisabled(false);
+    props.setlogo(data);
   }
 
-  // the return value if shouldFetch  == false, uses cached logo if available otherwise falls back to first letter of company name
   return (
+    // return when shouldFetch == true && logo data is found
     <>
-      {props.logo && props.logo?.message && props.logo?.message?.logo ? (
+      {data?.message?.logo ? (
         <Box w="full" borderRadius="lg" overflow="hidden" p={2}>
           <Img
             height={"48px"}
-            src={props.logo.message.logo}
-            alt={props.logo.message.domain}
+            src={data?.message?.logo}
+            alt={data?.message?.domain}
           />
         </Box>
       ) : (
-        props.companyName !== "" && (
-          <>
-            <LogoFallBack companyName={props.companyName} />
-          </>
-        )
+        <>
+          {props.companyName !== "" && (
+            <>
+              <LogoFallBack companyName={props.companyName} />
+            </>
+          )}
+        </>
       )}
     </>
   );
 }
 
-export function LogoFallBack(props) {
+function LogoFallBack(props) {
   return (
     <>
       <Box w="full" borderRadius="lg" overflow="hidden" p={2}>
