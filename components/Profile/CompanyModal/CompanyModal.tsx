@@ -45,7 +45,7 @@ const CompanyModal = (props) => {
     companyEnd: "",
     companyFunc: "",
     companyIndustry: "",
-    companyLogo: false,
+    logo: false,
   };
   const [compStart, setCompStart] = useState(undefined);
   const [compEnd, setCompEnd] = useState(undefined);
