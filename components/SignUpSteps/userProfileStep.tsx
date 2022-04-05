@@ -15,11 +15,12 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
         mx={0}
         my={2}
         h={"532px"}
-        border="1px solid #587070"
+        border="1px solid n3"
         borderRadius="16px"
         overflow="hidden"
         cursor="pointer"
-        backgroundColor={"#041A19E5"}
+        backgroundColor={"n6"}
+        opacity={"90%"}
         fontFamily={"PP Telegraf"}
         boxShadow={"8px 16px 24px 0px #062B2A8F"}
       >
@@ -49,7 +50,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                 <Input
                   px={2}
                   fontSize="16px"
-                  borderColor={"#587070"}
+                  borderColor={"n3"}
                   height={"40px"}
                   borderRadius={"4px"}
                   marginBottom={"12px"}
@@ -59,7 +60,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                   placeholder="First name"
                   name="firstName"
                   fontFamily={"PP Telegraf light"}
-                  _placeholder={{ color: "#98B2B2" }}
+                  _placeholder={{ color: "subtle" }}
                   value={values?.firstName || ""}
                   onChange={handleChange}
                 />
@@ -86,7 +87,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                 <Input
                   px={2}
                   fontSize="16px"
-                  borderColor={"#587070"}
+                  borderColor={"n3"}
                   height={"40px"}
                   borderRadius={"4px"}
                   marginBottom={"12px"}
@@ -96,7 +97,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                   placeholder="Last name"
                   name="lastName"
                   fontFamily={"PP Telegraf light"}
-                  _placeholder={{ color: "#98B2B2" }}
+                  _placeholder={{ color: "subtle" }}
                   value={values?.lastName || ""}
                   onChange={handleChange}
                 />
@@ -124,7 +125,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
               <Input
                 px={2}
                 fontSize="16px"
-                borderColor={"#587070"}
+                borderColor={"n3"}
                 height={"40px"}
                 borderRadius={"4px"}
                 marginBottom={"12px"}
@@ -134,7 +135,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                 placeholder="choose your unique name"
                 name="userName"
                 fontFamily={"PP Telegraf light"}
-                _placeholder={{ color: "#98B2B2" }}
+                _placeholder={{ color: "subtle" }}
                 value={values?.userName || ""}
                 onChange={handleChange}
               />
@@ -173,7 +174,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                   lineHeight={"16px"}
                   letterSpacing={"0em"}
                   textAlign={"left"}
-                  color={"#98B2B2"}
+                  color={"subtle"}
                   requiredIndicator={null}
                 >
                   your email won&apos;t be shared with others
@@ -182,7 +183,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
               <Input
                 px={2}
                 fontSize="16px"
-                borderColor={"#587070"}
+                borderColor={"n3"}
                 height={"40px"}
                 borderRadius={"4px"}
                 marginBottom={"12px"}
@@ -192,7 +193,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                 placeholder="Email"
                 name="email"
                 fontFamily={"PP Telegraf light"}
-                _placeholder={{ color: "#98B2B2" }}
+                _placeholder={{ color: "subtle" }}
                 value={values?.email || ""}
                 onChange={handleChange}
               />
@@ -220,12 +221,12 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                 <Input
                   px={2}
                   fontSize="16px"
-                  borderColor={"#587070"}
+                  borderColor={"n3"}
                   height={"40px"}
                   borderRadius={"4px"}
                   marginBottom={"12px"}
                   placeholder="Twitter"
-                  _placeholder={{ color: "#98B2B2" }}
+                  _placeholder={{ color: "subtle" }}
                   fontFamily={"PP Telegraf Light"}
                   name="twitter"
                   onChange={handleChange}
@@ -248,12 +249,12 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                 <Input
                   px={2}
                   fontSize="16px"
-                  borderColor={"#587070"}
+                  borderColor={"n3"}
                   height={"40px"}
                   borderRadius={"4px"}
                   marginBottom={"12px"}
                   placeholder="LinkedIn"
-                  _placeholder={{ color: "#98B2B2" }}
+                  _placeholder={{ color: "subtle" }}
                   fontFamily={"PP Telegraf Light"}
                   name="linkedIn"
                   onChange={handleChange}
@@ -291,7 +292,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                     lineHeight={"16px"}
                     letterSpacing={"0em"}
                     textAlign={"left"}
-                    color={"#98B2B2"}
+                    color={"subtle"}
                     requiredIndicator={null}
                   >
                     Add a personal or business website here
@@ -301,11 +302,11 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
               <Input
                 px={2}
                 fontSize="16px"
-                borderColor={"#587070"}
+                borderColor={"n3"}
                 height={"40px"}
                 borderRadius={"4px"}
                 placeholder="Website URL"
-                _placeholder={{ color: "#98B2B2" }}
+                _placeholder={{ color: "subtle" }}
                 fontFamily={"PP Telegraf Light"}
                 name="website"
                 onChange={handleChange}

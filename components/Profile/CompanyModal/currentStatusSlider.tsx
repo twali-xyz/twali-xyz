@@ -26,14 +26,9 @@ export function Current({ setCurrentStatus, currentStatus, defaultValue }) {
       <SliderMark value={1.25} m="16px" ml="-2.5" fontSize="sm">
         Yes
       </SliderMark>
-      <SliderTrack
-        bg="gray.300"
-        height={"24px"}
-        width={"24px"}
-        borderRadius={"full"}
-      >
+      <SliderTrack bg="n2" height={"24px"} width={"24px"} borderRadius={"full"}>
         <Box position="relative" right={200} />
-        <SliderFilledTrack bg="#C7F83C" />
+        <SliderFilledTrack bg="zing" />
       </SliderTrack>
       <SliderThumb
         boxSize={"20px"}

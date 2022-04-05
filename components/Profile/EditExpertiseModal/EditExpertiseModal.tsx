@@ -117,7 +117,9 @@ const EditExpertiseModal = (props) => {
       >
         <ModalOverlay />
         <ModalContent
-          backgroundColor={"#041A19"}
+          backgroundColor={"n6"}
+          boxShadow={"8px 16px 24px 0px #062B2A8F"}
+          border={"1px solid rgba(88, 112, 112, 1)"}
           fontFamily={"PP Telegraf Light"}
         >
           <ModalHeader>Update your background expertise</ModalHeader>
@@ -147,8 +149,8 @@ const EditExpertiseModal = (props) => {
           <ModalFooter>
             <Button
               variant="ghost"
-              backgroundColor={"#C7F83C"}
-              color={"#0A1313"}
+              backgroundColor={"zing"}
+              color={"inverse"}
               fontFamily={"PP Telegraf Bold"}
               fontWeight={"700"}
               onClick={updateExperiences}

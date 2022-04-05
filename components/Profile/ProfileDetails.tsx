@@ -307,7 +307,7 @@ const ProfileDetails = ({ user }) => {
               maxW="100%"
               p={0}
               marginTop={"0 !important"}
-              backgroundColor={"#0A1313"}
+              backgroundColor={"inverse"}
             >
               <UserPermissionsProvider
                 fetchPermission={fetchPermission(

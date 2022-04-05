@@ -227,7 +227,8 @@ const SignUpSteps = () => {
                         activeStep <= 0 ? router.push("/login") : prevStep();
                       }}
                       backgroundColor={"transparent"}
-                      border={"1px solid #98B2B2"}
+                      border={"1px solid"}
+                      borderColor={"subtle"}
                       height={"40px"}
                       pos={"relative"}
                       fontSize={"14px"}
@@ -257,10 +258,10 @@ const SignUpSteps = () => {
                       fontFamily={"PP Telegraf Bold"}
                       letterSpacing={"0.06em;"}
                       alignSelf="center"
-                      color={"#0A1313"}
+                      color={"inverse"}
                       borderRadius={"32px"}
                       textTransform={"uppercase"}
-                      backgroundColor={"#C7F83C"}
+                      backgroundColor={"zing"}
                       onClick={() => {
                         if (activeStep > 1) {
                           updateAccType();

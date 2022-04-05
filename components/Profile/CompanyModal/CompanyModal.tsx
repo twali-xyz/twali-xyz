@@ -219,7 +219,9 @@ const CompanyModal = (props) => {
   const companyModalView = (
     <>
       <ModalContent
-        backgroundColor={"#041A19"}
+        backgroundColor={"n6"}
+        boxShadow={"8px 16px 24px 0px #062B2A8F"}
+        border={"1px solid rgba(88, 112, 112, 1)"}
         fontFamily={"PP Telegraf Light"}
       >
         <ModalCloseButton />
@@ -259,10 +261,11 @@ const CompanyModal = (props) => {
                       (name, idx) => (
                         <Chip
                           key={`expertChip--${name}-${idx}`}
-                          text={name}
                           name={name}
                           idx={idx}
-                        />
+                        >
+                          {name}
+                        </Chip>
                       )
                     )}
                   </HStack>
@@ -289,7 +292,12 @@ const CompanyModal = (props) => {
         key={`companymodal--${props.currCompany}`}
       >
         <ModalOverlay />
-        <ModalContent backgroundColor={"#041A19"} fontFamily={"PP Telegraf"}>
+        <ModalContent
+          backgroundColor={"n6"}
+          boxShadow={"8px 16px 24px 0px #062B2A8F"}
+          border={"1px solid rgba(88, 112, 112, 1)"}
+          fontFamily={"PP Telegraf"}
+        >
           <UserPermissionsRestricted to="edit" fallback={companyModalView}>
             <ModalHeader pb={0}>Update your work experience</ModalHeader>
             <ModalCloseButton />
@@ -491,8 +499,8 @@ const CompanyModal = (props) => {
                   updateCompanyInfo();
                 }}
                 variant="ghost"
-                backgroundColor={"#C7F83C"}
-                color={"#0A1313"}
+                backgroundColor={"zing"}
+                color={"inverse"}
                 fontFamily={"PP Telegraf Bold"}
                 fontWeight={"700"}
               >

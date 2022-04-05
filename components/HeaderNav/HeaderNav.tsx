@@ -30,7 +30,7 @@ const HeaderNav = (props) => {
       wrap="wrap"
       w="100%"
       pos={props.step == 0 ? "absolute" : "relative"}
-      backgroundColor={whichPage === "profile" ? "#0A1313" : "transparent"}
+      backgroundColor={whichPage === "profile" ? "inverse" : "transparent"}
     >
       <Img
         width={"144px"}
@@ -44,8 +44,8 @@ const HeaderNav = (props) => {
             paddingRight={4}
             width={180}
             height={"52px"}
-            color={"#062B2A"}
-            backgroundColor={"#C7F83C"}
+            color={"inverse"}
+            backgroundColor={"zing"}
             onClick={() =>
               handleWalletConnect(userPage, setIsSubmitted, setLoaded, router)
             }
@@ -70,13 +70,14 @@ const HeaderNav = (props) => {
               pl={2}
               width={"100%"}
               height={"100%"}
-              border={"1px solid #F9FFF2"}
+              border={"1px solid"}
+              borderColor={"fresh"}
               alignItems={"center"}
               justifyItems={"center"}
               borderRadius={32}
             >
               <Text
-                color="white"
+                color={"fresh"}
                 maxW={"75px"}
                 fontSize={"14px"}
                 margin={"auto"}

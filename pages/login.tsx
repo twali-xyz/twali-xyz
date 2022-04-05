@@ -130,8 +130,8 @@ const LoginPage = (props) => {
               marginTop={"96px !important"}
               width={"207px"}
               height={"52px"}
-              color={"#062B2A"}
-              backgroundColor={"#C7F83C"}
+              color={"cave"}
+              backgroundColor={"zing"}
               onClick={handleWalletConnectOnLogin}
             >
               Connect Wallet{" "}

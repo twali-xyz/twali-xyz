@@ -23,7 +23,9 @@ const BadgesModal = (props) => {
       >
         <ModalOverlay />
         <ModalContent
-          backgroundColor={"#041A19"}
+          backgroundColor={"n6"}
+          boxShadow={"8px 16px 24px 0px #062B2A8F"}
+          border={"1px solid rgba(88, 112, 112, 1)"}
           fontFamily={"PP Telegraf Light"}
         >
           <ModalCloseButton />
