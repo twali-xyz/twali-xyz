@@ -38,18 +38,15 @@ const HeaderNav = (props) => {
         src="/twali-assets/navbar_logo.png"
       />
       {isConnectWalletBtn ? (
-        <HStack alignItems="center" w="180px" height={"32px"}>
+        <HStack alignItems="center">
           <Button
-            paddingLeft={4}
-            paddingRight={4}
-            width={180}
-            height={"52px"}
             variant={"primary-button"}
+            size={"lg"}
+            width={"190px"}
             onClick={() =>
               handleWalletConnect(userPage, setIsSubmitted, setLoaded, router)
             }
           >
-            Connect Wallet{" "}
             {isSubmitted ? (
               <CircularProgress
                 size="22px"
@@ -57,7 +54,9 @@ const HeaderNav = (props) => {
                 isIndeterminate
                 color="#3C2E26"
               />
-            ) : null}
+            ) : (
+              <Text>Connect Wallet</Text>
+            )}
           </Button>
         </HStack>
       ) : (
@@ -77,7 +76,7 @@ const HeaderNav = (props) => {
             >
               <Text
                 color={"fresh"}
-                maxW={"75px"}
+                maxW={"190px"}
                 fontSize={"14px"}
                 margin={"auto"}
                 alignSelf={"center"}
