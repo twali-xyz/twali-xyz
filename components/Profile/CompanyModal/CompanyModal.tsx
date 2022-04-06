@@ -498,7 +498,7 @@ const CompanyModal = (props) => {
                 onClick={() => {
                   updateCompanyInfo();
                 }}
-                variant="primary-button"
+                variant="primary"
                 size={"sm"}
               >
                 Save

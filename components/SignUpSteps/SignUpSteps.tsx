@@ -228,7 +228,7 @@ const SignUpSteps = () => {
                       pos={"relative"}
                       alignItems={"center"}
                       justifyContent={"center"}
-                      variant={"secondary-button"}
+                      variant={"secondary"}
                       size={"lg"}
                     >
                       <Text
@@ -244,7 +244,7 @@ const SignUpSteps = () => {
                     <Button
                       pos={"relative"}
                       alignSelf="center"
-                      variant={"primary-button"}
+                      variant={"primary"}
                       size={"lg"}
                       onClick={() => {
                         if (activeStep > 1) {

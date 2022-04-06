@@ -219,7 +219,7 @@ export default function ProfileImageUpload(props) {
         ) : null}
         {isSelected && (
           <Button
-            variant="primary-button"
+            variant="primary"
             size={"md"}
             onClick={(evt) => handleSubmission(evt)}
           >

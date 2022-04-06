@@ -40,7 +40,7 @@ const HeaderNav = (props) => {
       {isConnectWalletBtn ? (
         <HStack alignItems="center">
           <Button
-            variant={"primary-button"}
+            variant={"primary"}
             size={"lg"}
             width={"190px"}
             onClick={() =>

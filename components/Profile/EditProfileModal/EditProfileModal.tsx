@@ -377,11 +377,7 @@ const EditProfileModal = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              variant="primary-button"
-              size={"sm"}
-              onClick={updateExperiences}
-            >
+            <Button variant="primary" size={"sm"} onClick={updateExperiences}>
               Save{" "}
               {isSubmitted ? (
                 <CircularProgress

@@ -76,7 +76,7 @@ export function AccountSelection({
           alignSelf="center"
           pos={"relative"}
           top={"200px"}
-          variant={"primary-button"}
+          variant={"primary"}
           size={"lg"}
           padding={"16px, 24px, 13px, 24px !important"}
           onClick={(evt) => {
@@ -149,7 +149,7 @@ export function AccountSelection({
             alignSelf="center"
             pos={"relative"}
             top={"200px"}
-            variant={"primary-button"}
+            variant={"primary"}
             size={"lg"}
             padding={"16px, 24px, 13px, 24px !important"}
             visibility={btnActive == 2 ? "unset" : "hidden"}

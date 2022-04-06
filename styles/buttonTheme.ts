@@ -27,7 +27,7 @@ export const ButtonStyle: ComponentStyleConfig ={
     },
     // 3. We can add a new visual variant
     variants: {
-      "primary-button": {
+      primary: {
             backgroundColor: "zing",
             color:"cave",
             fontSize: "0.875rem",
@@ -49,7 +49,7 @@ export const ButtonStyle: ComponentStyleConfig ={
             },
             
       },
-      "secondary-button": {
+      secondary: {
         backgroundColor: "inverse",
         border: "1px solid rgba(152, 178, 178, 1)",
         color:"fresh",

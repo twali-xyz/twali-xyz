@@ -118,7 +118,7 @@ const LoginPage = (props) => {
           ) : (
             <Button
               marginTop={"96px !important"}
-              variant={"primary-button"}
+              variant={"primary"}
               size={"lg"}
               onClick={handleWalletConnectOnLogin}
             >

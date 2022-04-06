@@ -240,13 +240,10 @@ const IndexPage = () => {
                 width={["167px", "207px"]}
                 height={["48px", "52px"]}
                 color={"cave"}
+                variant={"primary"}
                 fontSize={["18px", "24px"]}
                 borderRadius={"52px"}
                 padding={"8px 24px 4px"}
-                letterSpacing={"0.06em"}
-                textTransform={"uppercase"}
-                backgroundColor={"zing"}
-                fontFamily={"PP Telegraf Bold"}
                 marginLeft={[
                   "5px !important",
                   "10px !important",
@@ -256,7 +253,12 @@ const IndexPage = () => {
                 marginTop={["15px", "25px", "0"]}
                 boxShadow={"0px 4px 4px 0px #00000040"}
               >
-                <Link href="https://airtable.com/shrjjPJnyesvqcSeB" isExternal>
+                <Link
+                  href="https://airtable.com/shrjjPJnyesvqcSeB"
+                  isExternal
+                  _hover={{ textDecor: "none" }}
+                  _focus={{ textDecor: "none" }}
+                >
                   apply here
                 </Link>
               </Button>
