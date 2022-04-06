@@ -498,11 +498,8 @@ const CompanyModal = (props) => {
                 onClick={() => {
                   updateCompanyInfo();
                 }}
-                variant="ghost"
-                backgroundColor={"zing"}
-                color={"inverse"}
-                fontFamily={"PP Telegraf Bold"}
-                fontWeight={"700"}
+                variant="primary-button"
+                size={"sm"}
               >
                 Save
                 {isSubmitted ? (

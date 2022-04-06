@@ -378,11 +378,8 @@ const EditProfileModal = (props) => {
 
           <ModalFooter>
             <Button
-              variant="ghost"
-              backgroundColor={"zing"}
-              color={"inverse"}
-              fontFamily={"PP Telegraf Bold"}
-              fontWeight={"700"}
+              variant="primary-button"
+              size={"sm"}
               onClick={updateExperiences}
             >
               Save{" "}

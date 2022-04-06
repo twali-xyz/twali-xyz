@@ -44,8 +44,7 @@ const HeaderNav = (props) => {
             paddingRight={4}
             width={180}
             height={"52px"}
-            color={"cave"}
-            backgroundColor={"zing"}
+            variant={"primary-button"}
             onClick={() =>
               handleWalletConnect(userPage, setIsSubmitted, setLoaded, router)
             }

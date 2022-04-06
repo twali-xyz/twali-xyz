@@ -88,6 +88,8 @@ export function MultiSelect({
           marginTop={"16px"}
           onClick={handleAddSelector}
           paddingLeft={"0"}
+          textTransform={"none"}
+          variant={"ghost"}
         >
           <HStack>
             <Img

@@ -74,14 +74,11 @@ export function AccountSelection({
         <Button
           disabled={!isAccTypeSelected}
           alignSelf="center"
-          backgroundColor={"zing"}
-          w="220px"
-          h={"40px"}
-          color={"inverse"}
           pos={"relative"}
           top={"200px"}
-          borderRadius={"32px"}
-          padding={"16px, 24px, 13px, 24px"}
+          variant={"primary-button"}
+          size={"lg"}
+          padding={"16px, 24px, 13px, 24px !important"}
           onClick={(evt) => {
             setIsAccTypeSelection(false);
             router.push("/steps");
@@ -150,14 +147,11 @@ export function AccountSelection({
           <Button
             disabled={!isAccTypeSelected}
             alignSelf="center"
-            backgroundColor={"zing"}
-            color={"inverse"}
-            w="220px"
-            h={"40px"}
             pos={"relative"}
             top={"200px"}
-            borderRadius={"32px"}
-            padding={"16px, 24px, 13px, 24px"}
+            variant={"primary-button"}
+            size={"lg"}
+            padding={"16px, 24px, 13px, 24px !important"}
             visibility={btnActive == 2 ? "unset" : "hidden"}
           >
             Continue

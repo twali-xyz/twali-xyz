@@ -220,25 +220,16 @@ const SignUpSteps = () => {
                   </Steps>
                   <HStack width={"100%"} justifyContent={"flex-end"}>
                     <Button
-                      w="160px"
                       alignSelf="left"
                       mr={"24px"}
                       onClick={() => {
                         activeStep <= 0 ? router.push("/login") : prevStep();
                       }}
-                      backgroundColor={"transparent"}
-                      border={"1px solid"}
-                      borderColor={"subtle"}
-                      height={"40px"}
                       pos={"relative"}
-                      fontSize={"14px"}
-                      fontFamily={"PP Telegraf Bold"}
-                      letterSpacing={"0.06em;"}
-                      borderRadius={"32px"}
                       alignItems={"center"}
-                      textTransform={"uppercase"}
                       justifyContent={"center"}
-                      variant="link"
+                      variant={"secondary-button"}
+                      size={"lg"}
                     >
                       <Text
                         display={"flex"}
@@ -251,17 +242,10 @@ const SignUpSteps = () => {
                       </Text>
                     </Button>
                     <Button
-                      w="160px"
-                      height={"40px"}
                       pos={"relative"}
-                      fontSize={"14px"}
-                      fontFamily={"PP Telegraf Bold"}
-                      letterSpacing={"0.06em;"}
                       alignSelf="center"
-                      color={"inverse"}
-                      borderRadius={"32px"}
-                      textTransform={"uppercase"}
-                      backgroundColor={"zing"}
+                      variant={"primary-button"}
+                      size={"lg"}
                       onClick={() => {
                         if (activeStep > 1) {
                           updateAccType();

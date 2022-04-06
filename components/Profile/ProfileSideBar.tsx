@@ -68,6 +68,8 @@ export function ProfileSideBar({
             pos={"relative"}
             top={"-45px !important"}
             left={"16px"}
+            width={"fit-content"}
+            borderRadius={"md"}
           >
             <Img
               width={"20px"}
@@ -161,6 +163,7 @@ export function ProfileSideBar({
                 p={0}
                 top={-4}
                 left={"16px"}
+                borderRadius={"md"}
               >
                 <Img
                   width={"20px"}
