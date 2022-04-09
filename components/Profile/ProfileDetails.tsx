@@ -334,10 +334,10 @@ const ProfileDetails = ({ user }) => {
                   <Box alignSelf="flex-start" w="full" overflow="hidden">
                     {/* social media URLs */}
                     <VStack
-                      pt={["0px", "60px"]}
-                      pl={["0 1%", "12.5%"]}
+                      p={["0px 1%", "0px 2%", "60px 0 0 12.5%"]}
                       mx={"auto"}
-                      width={["90vw", "inherit", "inherit"]}
+                      width={["90vw", "85vw", "unset"]}
+                      maxW={["565px", "565px", "unset"]}
                     >
                       <ProfileBadges
                         poapsData={poapsData}

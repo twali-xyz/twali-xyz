@@ -37,11 +37,11 @@ export function ProfileExperience({
         fallback={viewWorkElements(viewElements)}
       >
         <HStack
-          maxW={"640px"}
+          maxW={"685px"}
           display={"grid"}
           gridTemplateColumns={[
             "repeat(auto-fill, 92px)",
-            "repeat(auto-fill, 100px);",
+            "repeat(auto-fill, 112px);",
           ]}
           gridTemplateRows={"108px"}
         >
@@ -67,7 +67,7 @@ const viewWorkElements = (viewElements) => {
       display={"grid"}
       gridTemplateColumns={[
         "repeat(auto-fill, 92px)",
-        "repeat(auto-fill, 100px);",
+        "repeat(auto-fill, 110px);",
       ]}
       gridTemplateRows={"108px"}
     >
