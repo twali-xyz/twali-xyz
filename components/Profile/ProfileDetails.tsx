@@ -322,6 +322,7 @@ const ProfileDetails = ({ user }) => {
                 <Flex
                   w="full"
                   justifyContent={"space-around"}
+                  flexDir={["column", "column", "row"]}
                   margin={"auto"}
                   maxW={"1350px"}
                 >
@@ -332,7 +333,12 @@ const ProfileDetails = ({ user }) => {
                   />
                   <Box alignSelf="flex-start" w="full" overflow="hidden">
                     {/* social media URLs */}
-                    <VStack pt={"60px"} pl={"12.5%"}>
+                    <VStack
+                      pt={["0px", "60px"]}
+                      pl={["0 1%", "12.5%"]}
+                      mx={"auto"}
+                      width={["90vw", "inherit", "inherit"]}
+                    >
                       <ProfileBadges
                         poapsData={poapsData}
                         snapshotData={snapshotData}

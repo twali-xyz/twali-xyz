@@ -21,7 +21,7 @@ export function ProfileExperience({
   });
 
   return (
-    <Box w="full" overflow="hidden">
+    <Box w="full" overflow="hidden" mb={"16px !important"}>
       <Text
         pb={4}
         pt={5}
@@ -39,7 +39,10 @@ export function ProfileExperience({
         <HStack
           maxW={"640px"}
           display={"grid"}
-          gridTemplateColumns={"repeat(auto-fill, 100px);"}
+          gridTemplateColumns={[
+            "repeat(auto-fill, 95px)",
+            "repeat(auto-fill, 100px);",
+          ]}
           gridTemplateRows={"108px"}
         >
           {workElements}
@@ -62,7 +65,10 @@ const viewWorkElements = (viewElements) => {
       spacing={4}
       maxW={"640px"}
       display={"grid"}
-      gridTemplateColumns={"repeat(auto-fill, 100px);"}
+      gridTemplateColumns={[
+        "repeat(auto-fill, 95px)",
+        "repeat(auto-fill, 100px);",
+      ]}
       gridTemplateRows={"108px"}
     >
       {viewElements}

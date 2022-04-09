@@ -31,11 +31,11 @@ export function ProfileSideBar({
       marginTop={0}
       padding={0}
       my={0}
-      p={["0", "0", "0", "0 2%", "0 2% 0 1.5% "]}
+      p={["0 1%", "0 2%", "0 2% 0 1.5% "]}
       align="flex-start"
       justifyContent={"center"}
-      borderRight={"1px solid #587070"}
-      width={"73vw"}
+      borderRight={["unset", "unset", "1px solid #587070"]}
+      width={["90vw", "85vw", "73vw"]}
       maxW={"565px"}
       mx={"auto"}
     >
@@ -134,7 +134,7 @@ export function ProfileSideBar({
         backgroundColor={"n6"}
         marginTop={"52px !important"}
         justifyContent={"space-between"}
-        marginBottom={"80px !important"}
+        marginBottom={["30px !important", "30px !important", "80px !important"]}
         borderRadius={"16px 16px 16px 16px"}
       >
         <VStack
