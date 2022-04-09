@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { connect } from "../../../utils/walletUtils";
 import { listOfCountries } from "../../../utils/profileUtils";
-import useUser from "../../TwaliContext";
+import useUser from "../../../context/TwaliContext";
 import { UserData } from "../../../utils/interfaces";
 
 const EditProfileModal = (props) => {

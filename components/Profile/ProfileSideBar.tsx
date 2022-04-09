@@ -13,8 +13,8 @@ import EditExpertiseModal from "./EditExpertiseModal/EditExpertiseModal";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import EditProfileModal from "./EditProfileModal/EditProfileModal";
 import { ProfileSocialMedia } from "./ProfileSocialMedia";
-import { Chip } from "./Components/Chip";
-import useUser from "../TwaliContext";
+import { Chip } from "../reusable/Chip";
+import useUser from "../../context/TwaliContext";
 export function ProfileSideBar({
   onExpModalOpen,
   isExpModalOpen,

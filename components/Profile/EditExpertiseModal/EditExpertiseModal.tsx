@@ -12,12 +12,12 @@ import {
   CircularProgress,
 } from "@chakra-ui/react";
 import { connect } from "../../../utils/walletUtils";
-import { MultiSelect } from "../Components/MultiSelect";
 import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
-import { setEventArray } from "../helpers/setEventArray";
-import useUser from "../../TwaliContext";
+import { setEventArray } from "../../../utils/setEventArray";
+import useUser from "../../../context/TwaliContext";
 import { UserData } from "../../../utils/interfaces";
+import { MultiSelect } from "../../reusable/MultiSelect";
 
 const EditExpertiseModal = (props) => {
   const finalRef = useRef();

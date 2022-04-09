@@ -1,5 +1,5 @@
-import { Current } from "./currentStatusSlider";
-import { Chip } from "./../Components/Chip";
+import { TwaliSlider } from "../../reusable/TwaliSlider";
+import { Chip } from "../../reusable/Chip";
 import { useEffect, useRef, useState } from "react";
 import {
   Box,
@@ -28,7 +28,7 @@ import { connect } from "../../../utils/walletUtils";
 import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
 import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
-import useUser from "../../TwaliContext";
+import useUser from "../../../context/TwaliContext";
 import useDebounce from "../../../utils/useDebounce";
 
 const CompanyModal = (props) => {
@@ -439,10 +439,11 @@ const CompanyModal = (props) => {
                     >
                       I currently work here
                     </FormLabel>
-                    <Current
+                    <TwaliSlider
                       setCurrentStatus={setCurrentStatus}
                       currentStatus={currentStatus}
                       defaultValue={companyData.currentStatus || 0}
+                      marks={["No", "Yes"]}
                     />
                   </FormControl>
                   <FormControl p={2} id="company-func">
