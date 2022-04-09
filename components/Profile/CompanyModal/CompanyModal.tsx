@@ -299,7 +299,9 @@ const CompanyModal = (props) => {
           fontFamily={"PP Telegraf"}
         >
           <UserPermissionsRestricted to="edit" fallback={companyModalView}>
-            <ModalHeader pb={0}>Update your work experience</ModalHeader>
+            <ModalHeader pb={0} mt={"20px"}>
+              Update your work experience
+            </ModalHeader>
             <ModalCloseButton />
             <ModalBody fontSize={"14px"} lineHeight={"24px"} fontWeight={"400"}>
               {companyData ? (

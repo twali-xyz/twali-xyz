@@ -167,7 +167,7 @@ const EditProfileModal = (props) => {
           border={"1px solid rgba(88, 112, 112, 1)"}
           fontFamily={"PP Telegraf Light"}
         >
-          <ModalHeader>Update your profile</ModalHeader>
+          <ModalHeader mt={"20px"}>Update your profile</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form style={{ alignSelf: "center" }}>

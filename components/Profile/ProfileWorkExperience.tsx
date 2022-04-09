@@ -40,7 +40,7 @@ export function ProfileExperience({
           maxW={"640px"}
           display={"grid"}
           gridTemplateColumns={[
-            "repeat(auto-fill, 95px)",
+            "repeat(auto-fill, 92px)",
             "repeat(auto-fill, 100px);",
           ]}
           gridTemplateRows={"108px"}
@@ -66,7 +66,7 @@ const viewWorkElements = (viewElements) => {
       maxW={"640px"}
       display={"grid"}
       gridTemplateColumns={[
-        "repeat(auto-fill, 95px)",
+        "repeat(auto-fill, 92px)",
         "repeat(auto-fill, 100px);",
       ]}
       gridTemplateRows={"108px"}
