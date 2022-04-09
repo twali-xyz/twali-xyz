@@ -336,7 +336,7 @@ const ProfileDetails = ({ user }) => {
                     <VStack
                       p={["0px 1%", "0px 2%", "60px 0 0 12.5%"]}
                       mx={"auto"}
-                      width={["90vw", "85vw", "unset"]}
+                      width={["98vw", "95vw", "unset"]}
                       maxW={["565px", "565px", "unset"]}
                     >
                       <ProfileBadges

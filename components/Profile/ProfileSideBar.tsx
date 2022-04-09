@@ -35,7 +35,7 @@ export function ProfileSideBar({
       align="flex-start"
       justifyContent={"center"}
       borderRight={["unset", "unset", "1px solid #587070"]}
-      width={["90vw", "85vw", "73vw"]}
+      width={["98vw", "95vw", "73vw"]}
       maxW={"565px"}
       mx={"auto"}
     >
