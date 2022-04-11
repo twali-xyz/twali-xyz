@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { listOfCountries } from "../../utils/profileUtils";
 import {
   FormControl,
@@ -11,7 +10,6 @@ import {
   Tooltip,
   Link,
 } from "@chakra-ui/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const merchantProfileStep = ({ handleChange, values, errors }) => {
   return (
@@ -77,8 +75,9 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
                 placeholder="Select business type"
                 iconColor={"#F9FFF2"}
                 name="businessType"
+                defaultValue={values?.businessType}
                 onChange={handleChange}
-                color={values.businessType ? "#F9FFF2" : "#98B2B2"}
+                color={values?.businessType ? "#F9FFF2" : "#98B2B2"}
               >
                 <option>I'm not incorporated!</option>
                 <option>Sole proprietorship</option>
@@ -133,7 +132,7 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
                 </Tooltip>
               </HStack>
               <Input
-                disabled={values.businessType === "I'm not incorporated!"}
+                disabled={values?.businessType === "I'm not incorporated!"}
                 px={4}
                 fontSize="16px"
                 borderColor={"#587070"}
@@ -142,10 +141,11 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
                 marginBottom={"12px"}
                 required
                 isInvalid={errors.businessName}
+                defaultValue={values?.businessName || ""}
                 errorBorderColor="red.300"
                 fontFamily={"PP Telegraf light"}
                 _placeholder={{ color: "#98B2B2" }}
-                value={values.businessName || ""}
+                value={values?.businessName || ""}
                 placeholder="Business name"
                 name="businessName"
                 onChange={handleChange}
@@ -173,11 +173,12 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
               </FormLabel>
               <Select
                 fontFamily={"PP Telegraf Light"}
-                color={values.businessLocation ? "#F9FFF2" : "#98B2B2"}
+                color={values?.businessLocation ? "#F9FFF2" : "#98B2B2"}
+                defaultValue={values?.businessLocation || ""}
                 placeholder="Select business location"
                 name="businessLocation"
                 onChange={handleChange}
-                disabled={values.businessType === "I'm not incorporated!"}
+                disabled={values?.businessType === "I'm not incorporated!"}
               >
                 {listOfCountries()}
               </Select>

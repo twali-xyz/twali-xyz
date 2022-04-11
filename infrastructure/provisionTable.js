@@ -15,7 +15,7 @@ let dynamodb = new AWS.DynamoDB();
  *
  * **/
 let params = {
-  TableName: "main_user_profiles_db",
+  TableName: "dev_staging_user_profile_test",
   KeySchema: [
     { AttributeName: "userWallet", KeyType: "HASH" }, // Partition Key
     { AttributeName: "userName", KeyType: "RANGE" }, // Sort Ket
@@ -49,7 +49,7 @@ let params = {
 (async function () {
   await dynamodb.createTable(params).promise();
 
-  console.log("Created table in us-east-1");
+  console.log("dev_staging_user_profile_test");
 
   // Only a replicated instance for production. Not Supported by local.
   if (!process.env.LOCAL_DYNAMO_DB_ENDPOINT) {

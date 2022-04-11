@@ -14,10 +14,14 @@ export interface UserData {
   businessLocation: string;
   currTitle: string;
   currLocation?: string;
-  functionalExpertise?: [];
-  industryExpertise?: [];
+  functionalExpertise?: string[];
+  industryExpertise?: string[];
   companyInfo?: CompanyInfo[];
   uuid: string;
+  editExpertise: Function,
+  editProfile: Function,
+  editCompany: Function,
+  setData: Function
 }
 export interface CompanyInfo {
   companyName: string;
@@ -27,4 +31,6 @@ export interface CompanyInfo {
   companyEnd: Date;
   companyFunc: string;
   companyIndustry: string;
+  logo: any;
+  currentStatus: Number;
 }

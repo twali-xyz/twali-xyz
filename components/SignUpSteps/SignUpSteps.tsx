@@ -21,25 +21,19 @@ import { userProfileStep } from "./userProfileStep";
 import { merchantProfileStep } from "./merchantProfileStep";
 import { professionalProfileStep } from "./professionalProfileStep";
 import HeaderNav from "../HeaderNav/HeaderNav";
+import useUser from "../TwaliContext";
 
 const SignUpSteps = () => {
   const router = useRouter();
+  const { setData, ...userState } = useUser();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isAccTypeSelection, setIsAccTypeSelection] = useState(true);
   const [isAccTypeSelected, setIsAccTypeSelected] = useState(false);
-  const [values, setValues] = useState({
-    functionalExpertise: [],
-    industryExpertise: [],
-    userName: '',
-  });
   const [errors, setErrors] = useState({
-    firstName: null,
-    lastName: null,
-    userName: null,
-    email: null,
-    businessName: null,
-    businessType: null,
-    currTitle: null
+    userName: "",
+    firstName: "",
+    lastName: "",
+    email: "",
   });
   const [accType, setAccType] = useState("");
   const [btnActive, setBtnActive] = useState(0);
@@ -47,25 +41,11 @@ const SignUpSteps = () => {
   const toast = useToast()
 
   const [userData, setUserData] = useState<UserData>({
+    ...userState,
     userName: "",
     userWallet: "",
-    accType: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    bio: "",
-    twitter: "",
-    linkedIn: "",
-    website: "",
-    businessName: "",
-    businessType: "",
-    businessLocation: "",
-    currTitle: "",
-    currLocation: "",
-    functionalExpertise: [],
-    industryExpertise: [],
-    companyInfo: [],
     uuid: "",
+    setData,
   });
 
   const validate = (values) => {
@@ -97,22 +77,9 @@ const SignUpSteps = () => {
       errors.businessType = "Business type is required";
     }
 
-    // if (!values.businessLocation) {
-    //   errors.businessType = 'Business location is required';
-    // }
-
     if (!values.currTitle) {
       errors.currTitle = "Current title is required";
     }
-
-    // if (!values.functionalExpertise) {
-    //   errors.functionalExpertise = 'Functional expertise is required';
-    // }
-
-    // if (!values.industryExpertise) {
-    //   errors.industryExpertise = 'Industry expertise is required';
-    // }
-
     return errors;
   };
 
@@ -128,13 +95,9 @@ const SignUpSteps = () => {
       strippedEventName === "industryExpertise"
     ) {
       // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
-      setEventArray({ evt, setValues, values, userData, setUserData });
+      setEventArray({ evt, setValues: setUserData, values: userData });
     } else {
       const value = evt.target.value;
-      setValues((values) => ({
-        ...values,
-        [evt.target.name]: value,
-      }));
       setUserData({
         ...userData,
         [evt.target.name]: value,
@@ -146,15 +109,19 @@ const SignUpSteps = () => {
   const steps = [
     {
       label: "User Profile",
-      content: userProfileStep({ handleChange, values, errors }),
+      content: userProfileStep({ handleChange, values: userData, errors }),
     },
     {
       label: "Merchant Profile",
-      content: merchantProfileStep({ handleChange, values, errors }),
+      content: merchantProfileStep({ handleChange, values: userData, errors }),
     },
     {
       label: "Professional Profile",
-      content: professionalProfileStep({ handleChange, values, errors }),
+      content: professionalProfileStep({
+        handleChange,
+        values: userData,
+        errors,
+      }),
     },
   ];
 
@@ -210,9 +177,9 @@ const SignUpSteps = () => {
 
   // Checks user input for a unique username
   const checkUserProfileStepValidity = () => {
-    setErrors(validate(values));
-    if (values.userName && values.userName !== '') {
-      let isValid = checkUserName(values.userName);
+    setErrors(validate(userData));
+    if (userData.userName && userData.userName !== '') {
+      let isValid = checkUserName(userData.userName);
       isValid.then(valid => {
         if (valid) {
           setIsDisabled(true);
