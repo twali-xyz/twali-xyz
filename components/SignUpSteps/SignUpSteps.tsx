@@ -1,5 +1,5 @@
 import { AccountSelection } from "./accountSelection";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Step, Steps, useSteps } from "chakra-ui-steps";
 import { connect } from "../../utils/walletUtils";
 import background from "../../public/twali-assets/backgroundscreen.png";
@@ -12,6 +12,7 @@ import {
   Flex,
   VStack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { setEventArray } from "../Profile/helpers/setEventArray";
@@ -29,10 +30,21 @@ const SignUpSteps = () => {
   const [values, setValues] = useState({
     functionalExpertise: [],
     industryExpertise: [],
+    userName: '',
   });
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({
+    firstName: null,
+    lastName: null,
+    userName: null,
+    email: null,
+    businessName: null,
+    businessType: null,
+    currTitle: null
+  });
   const [accType, setAccType] = useState("");
   const [btnActive, setBtnActive] = useState(0);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const toast = useToast()
 
   const [userData, setUserData] = useState<UserData>({
     userName: "",
@@ -106,7 +118,6 @@ const SignUpSteps = () => {
 
   const handleChange = (evt) => {
     evt.persist();
-
     let strippedEventName = evt.target.name.substring(
       0,
       evt.target.name.length - 1
@@ -128,6 +139,7 @@ const SignUpSteps = () => {
         ...userData,
         [evt.target.name]: value,
       });
+      setIsDisabled(false);
     }
   };
 
@@ -146,17 +158,15 @@ const SignUpSteps = () => {
     },
   ];
 
-  // const checkUserName = async (userName) => {
-  //   userData.userName = userName;
+  const checkUserName = async (userName) => {
+    userData.userName = userName;
 
-  //   let available = await fetch(`/api/users/checkUserName`, {
-  //   method: "POST",
-  //   body: JSON.stringify(userData.userName)
-  //     }).then((res)=> res.json());
-  //   if (available == true){
-  //     throw new Error("Select new username")
-  //   }
-  // }
+    let isTaken = await fetch(`/api/users/checkIsValid?isValid=userName`, {
+    method: "POST",
+    body: JSON.stringify(userData.userName)
+      }).then((res)=> res.json());
+    return isTaken;
+  }
 
   const createNewUser = async (address) => {
     userData.userWallet = address;
@@ -197,8 +207,35 @@ const SignUpSteps = () => {
     setIsAccTypeSelected(true);
   };
   const [accSelectionComplete, setAccSelectionComplete] = useState(false);
-  // Either displaying the account type selection
-  // Or the steps component based on user selection
+
+  // Checks user input for a unique username
+  const checkUserProfileStepValidity = () => {
+    setErrors(validate(values));
+    if (values.userName && values.userName !== '') {
+      let isValid = checkUserName(values.userName);
+      isValid.then(valid => {
+        if (valid) {
+          setIsDisabled(true);
+          toast({
+            title: 'User name taken',
+            description: "Oops! User name is taken. Pick another one!",
+            status: 'error',
+            variant: 'subtle',
+            duration: 3000,
+            isClosable: true,
+          })
+        } else if (!errors.userName && !errors.firstName && !errors.lastName && !errors.email) {
+          setIsDisabled(false);
+          if (activeStep > 1) {
+            updateAccType();
+          } else {
+            nextStep();
+          }
+        }
+      });
+    }
+  };
+
   return (
     <>
       <Container
@@ -281,6 +318,7 @@ const SignUpSteps = () => {
                       </Text>
                     </Button>
                     <Button
+                      disabled={isDisabled}
                       w="160px"
                       height={"40px"}
                       pos={"relative"}
@@ -293,11 +331,7 @@ const SignUpSteps = () => {
                       textTransform={"uppercase"}
                       backgroundColor={"#C7F83C"}
                       onClick={() => {
-                        if (activeStep > 1) {
-                          updateAccType();
-                        } else {
-                          nextStep();
-                        }
+                        checkUserProfileStepValidity()
                       }}
                     >
                       <Text
