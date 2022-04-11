@@ -1,10 +1,10 @@
 twali-xyz-staging:
   component: "@sls-next/serverless-component@3.7.0-alpha.11"
   inputs:
-    policy: "arn:aws:iam::517934542124:policy/dynamoRW-staging"
-    roleArn: "arn:aws:iam::517934542124:role/isdq5cs-qxf7o2s"
+    roleArn: "arn:aws:iam::517934542124:role/deploy-dev"
     build:
       env:
-        TABLE_NAME: "main_user_profiles_db"
+        TABLE_NAME: "dev_staging_user_profile_test"
     cloudfront:
-      distributionId: E1N063HBIE24ZH
+      distributionId: EHZYCKLX3TYQ4
+    bucketName: pxn4tf-zy2dp9

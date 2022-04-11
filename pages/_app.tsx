@@ -1,6 +1,6 @@
 import "../styles/global.css";
+import "../styles/datePicker.css";
 import { AppProps } from "next/app";
-import Script from 'next/script'
 import * as React from "react";
 import { ChakraProvider, extendTheme, ThemeConfig } from "@chakra-ui/react";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -8,6 +8,7 @@ import { fab } from "@fortawesome/free-brands-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { mode } from "@chakra-ui/theme-tools";
 import { customSteps } from "../styles/customStepsTheme";
+import { UserProvider } from "../components/TwaliContext";
 
 library.add(fab, fas);
 
@@ -57,13 +58,15 @@ function App({ Component, pageProps }: AppProps) {
     //   window.dataLayer = window.dataLayer || [];
     // function gtag(){dataLayer.push(arguments);}
     // gtag('js', new Date());
-    // gtag('config', '${process.env.NEXT_PUBLIC_GA_TRACKING_ID}'); 
+    // gtag('config', '${process.env.NEXT_PUBLIC_GA_TRACKING_ID}');
     //   `,
     // }}
     // />
-    <ChakraProvider theme={theme}>
-      <Component {...pageProps} />
-    </ChakraProvider>
+    <UserProvider>
+      <ChakraProvider theme={theme}>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </UserProvider>
     // </>
   );
 }

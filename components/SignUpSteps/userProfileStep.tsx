@@ -60,7 +60,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                   name="firstName"
                   fontFamily={"PP Telegraf light"}
                   _placeholder={{ color: "#98B2B2" }}
-                  value={values.firstName || ""}
+                  value={values?.firstName || ""}
                   onChange={handleChange}
                 />
                 {errors.firstName && (
@@ -97,7 +97,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                   name="lastName"
                   fontFamily={"PP Telegraf light"}
                   _placeholder={{ color: "#98B2B2" }}
-                  value={values.lastName || ""}
+                  value={values?.lastName || ""}
                   onChange={handleChange}
                 />
                 {errors.lastName && (
@@ -135,7 +135,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                 name="userName"
                 fontFamily={"PP Telegraf light"}
                 _placeholder={{ color: "#98B2B2" }}
-                value={values.userName || ""}
+                value={values?.userName || ""}
                 onChange={handleChange}
               />
               {errors.userName && (
@@ -193,7 +193,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                 name="email"
                 fontFamily={"PP Telegraf light"}
                 _placeholder={{ color: "#98B2B2" }}
-                value={values.email || ""}
+                value={values?.email || ""}
                 onChange={handleChange}
               />
               {errors.email && (
