@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "@types/node": "^16.3.3",
-    "@types/react": "^17.0.14",
+    "@types/react": "^17.0.44",
     "dotenv": "^16.0.0",
     "electron": "^17.0.1",
     "prettier": "2.5.1",
