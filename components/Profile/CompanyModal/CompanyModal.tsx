@@ -21,6 +21,7 @@ import {
   Input,
   Select,
   Img,
+  Textarea,
 } from "@chakra-ui/react";
 import useSWR from "swr";
 import DatePicker from "react-date-picker/dist/entry.nostyle";
@@ -98,6 +99,7 @@ const CompanyModal = (props) => {
     companyEnd: null,
     companyFunction: null,
     companyIndustry: null,
+    companyDescription: null,
   });
 
   const convertDates = (start, end) => {
@@ -241,6 +243,10 @@ const CompanyModal = (props) => {
                   <Text fontSize="2xl">{companyData.companyTitle}</Text>
                 ) : null}
 
+                {companyData.companyDescription ? (
+                  <Text fontSize="lg">{companyData.companyDescription}</Text>
+                ) : null}
+
                 {companyData.companyStart && companyData.companyEnd ? (
                   <Text fontSize="md" color="gray.500">
                     {companyDateRange}
@@ -380,6 +386,35 @@ const CompanyModal = (props) => {
                         {errors.companyTitle}
                       </Text>
                     )}
+                  </FormControl>
+                  <FormControl p={2} id="company-description">
+                    <FormLabel
+                      fontSize={"16px"}
+                      lineHeight={"24px"}
+                      fontWeight={"400"}
+                      fontFamily={"PP Telegraf"}
+                    >
+                      Job Description
+                    </FormLabel>
+                    <Textarea
+                      fontFamily={"PP Telegraf Light"}
+                      required
+                      isInvalid={
+                        errors.companyDescription &&
+                        !companyData.companyDescription
+                      }
+                      errorBorderColor="red.300"
+                      placeholder="Job Description"
+                      name="companyDescription"
+                      defaultValue={companyData.companyDescription || ""}
+                      onChange={handleChange}
+                    />
+                    {errors.companyDescription &&
+                      !companyData.companyDescription && (
+                        <Text fontSize="xs" fontWeight="400" color="red.500">
+                          {errors.companyDescription}
+                        </Text>
+                      )}
                   </FormControl>
                   <FormControl p={2} id="company-start">
                     <FormLabel

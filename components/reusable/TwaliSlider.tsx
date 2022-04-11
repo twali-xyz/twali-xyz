@@ -19,10 +19,10 @@ interface Props {
  * Twali slider component for binary selection
  *
  *
- * @param setCurrentStatus  React.Dispatch<React.SetStateAction<number>>
- * @param currentStatus tracks current status of slider. <Number> 0 || 1
- * @param marks string array of length 2 containing the desired slider marks. string[]
- * @param defaultValue optional <Number> 0 || 1. defaults to 0 if no value is provided
+ * @param {React.Dispatch<React.SetStateAction<number>>} setCurrentStatus
+ * @param {number} currentStatus tracks current status of slider 0 || 1
+ * @param {string[]} marks string array of length 2 containing the desired slider marks
+ * @param {number} defaultValue optional 0 || 1. defaults to 0 if no value is provided
  *
  * @returns JSX slider element
  *

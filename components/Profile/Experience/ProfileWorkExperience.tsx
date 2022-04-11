@@ -1,7 +1,7 @@
 import { Box, Text, HStack } from "@chakra-ui/react";
 import React from "react";
-import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
-import CompanyModal from "./CompanyModal/CompanyModal";
+import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
+import CompanyModal from "../CompanyModal/CompanyModal";
 
 export function ProfileExperience({
   createWorkElements,

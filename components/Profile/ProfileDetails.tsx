@@ -1,6 +1,6 @@
-import { ProfileBadges } from "./ProfileBadges";
-import { ProfileExperience } from "./ProfileWorkExperience";
-import { ProfileSideBar } from "./ProfileSideBar";
+import { ProfileBadges } from "./Experience/ProfileBadges";
+import { ProfileExperience } from "./Experience/ProfileWorkExperience";
+import { ProfileDataLayout } from "./ProfileData/ProfileDataLayout";
 import { ProfileHeader } from "./ProfileHeader";
 import {
   Box,
@@ -326,7 +326,7 @@ const ProfileDetails = ({ user }) => {
                   margin={"auto"}
                   maxW={"1350px"}
                 >
-                  <ProfileSideBar
+                  <ProfileDataLayout
                     onExpModalOpen={onExpModalOpen}
                     isExpModalOpen={isExpModalOpen}
                     onExpModalClose={onExpModalClose}

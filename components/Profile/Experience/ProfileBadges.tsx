@@ -1,7 +1,7 @@
 import { Box, Text, HStack, Img, Tooltip } from "@chakra-ui/react";
 import React from "react";
-import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
-import BadgesModal from "./BadgesModal/BadgesModal";
+import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
+import BadgesModal from "../BadgesModal/BadgesModal";
 export function ProfileBadges({
   poapsData,
   snapshotData,
