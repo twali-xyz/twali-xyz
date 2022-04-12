@@ -34,6 +34,9 @@ const SignUpSteps = () => {
     firstName: "",
     lastName: "",
     email: "",
+    businessName: "", 
+    businessType: "",
+    currTitle: "",
   });
   const [accType, setAccType] = useState("");
   const [btnActive, setBtnActive] = useState(0);
@@ -69,7 +72,7 @@ const SignUpSteps = () => {
       errors.email = "Email address is invalid";
     }
 
-    if (!values.businessName) {
+    if (!values.businessName && values.businessType !== "I'm not incorporated!") {
       errors.businessName = "Business name is required";
     }
 
@@ -105,6 +108,16 @@ const SignUpSteps = () => {
       setIsDisabled(false);
     }
   };
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setErrors(validate(userData));
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [userData, 500]);
 
   const steps = [
     {
@@ -176,11 +189,14 @@ const SignUpSteps = () => {
   const [accSelectionComplete, setAccSelectionComplete] = useState(false);
 
   // Checks user input for a unique username
+  // Error checks for main required fields
   const checkUserProfileStepValidity = () => {
-    setErrors(validate(userData));
     if (userData.userName && userData.userName !== '') {
-      let isValid = checkUserName(userData.userName);
-      isValid.then(valid => {
+      setErrors(validate(userData));
+      let isValid = checkUserName(userData.userName); // checks if the user name already exists in DB
+
+      // Displays a toast alert to inform the user - need a unique user name
+      isValid.then(valid => { 
         if (valid) {
           setIsDisabled(true);
           toast({
@@ -188,17 +204,22 @@ const SignUpSteps = () => {
             description: "Oops! User name is taken. Pick another one!",
             status: 'error',
             variant: 'subtle',
-            duration: 3000,
+            duration: 5000,
             isClosable: true,
           })
-        } else if (!errors.userName && !errors.firstName && !errors.lastName && !errors.email) {
+        } 
+        else if (activeStep <= 0 && !errors.userName && !errors.firstName && !errors.lastName && !errors.email) {
           setIsDisabled(false);
-          if (activeStep > 1) {
-            updateAccType();
-          } else {
-            nextStep();
-          }
-        }
+          nextStep();
+        } else if (activeStep == 1 && !errors.businessType && !errors.businessName) {
+          setIsDisabled(false);
+          nextStep();
+        } else if (activeStep > 1 && !errors.currTitle) {
+          setIsDisabled(false);
+          updateAccType();
+        } else {
+          setIsDisabled(true);
+        }    
       });
     }
   };
