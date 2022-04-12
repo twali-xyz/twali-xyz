@@ -1,7 +1,8 @@
 import { mode } from "@chakra-ui/theme-tools";
 import {extendTheme, ThemeConfig } from "@chakra-ui/react";
-import { customSteps } from "./stepsTheme";
-import { ButtonStyle as Button } from "./buttonTheme";
+import { customSteps } from "./components/stepsTheme";
+import { ButtonStyle as Button } from "./components/buttonTheme";
+import { ChipStyle as Chip } from "./components/chipTheme";
 
 const config: ThemeConfig = {
   initialColorMode: "dark",
@@ -59,6 +60,7 @@ export const twaliTheme = extendTheme({
   },
   components: {
     Steps: customSteps,
-    Button: Button
+    Button: Button,
+    Chip: Chip
   },
 });
