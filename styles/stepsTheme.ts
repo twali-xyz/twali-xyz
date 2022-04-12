@@ -1,4 +1,3 @@
-import { background, extendTheme } from "@chakra-ui/react";
 import type { ComponentStyleConfig } from "@chakra-ui/theme";
 
 // You can also use the more specific type for
@@ -63,3 +62,4 @@ export const customSteps: ComponentStyleConfig = {
   // The default `size` or `variant` values
   defaultProps: {},
 };
+

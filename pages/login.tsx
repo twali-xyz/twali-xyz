@@ -8,7 +8,6 @@ import {
 } from "@chakra-ui/react";
 import background from "../public/twali-assets/backgroundscreen.png";
 import HeaderNav from "../components/HeaderNav/HeaderNav";
-// import { handleConnect } from "../components/Profile/helpers/handleConnect";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Web3 from "web3";
@@ -67,15 +66,6 @@ const LoginPage = (props) => {
     }
   };
 
-  // const handleWalletConnect = handleConnect(
-  //   setIsSubmitted,
-  //   setName,
-  //   setEmail,
-  //   setAccType,
-  //   router,
-  //   setLoaded,
-  //   setProfileData
-  // );
   return (
     <>
       <title>twali.xyz - login</title>
@@ -128,10 +118,8 @@ const LoginPage = (props) => {
           ) : (
             <Button
               marginTop={"96px !important"}
-              width={"207px"}
-              height={"52px"}
-              color={"#062B2A"}
-              backgroundColor={"#C7F83C"}
+              variant={"primary"}
+              size={"lg"}
               onClick={handleWalletConnectOnLogin}
             >
               Connect Wallet{" "}

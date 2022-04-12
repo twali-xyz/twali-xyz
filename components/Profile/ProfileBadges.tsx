@@ -58,7 +58,7 @@ export function ProfileBadges({
         {!badges?.length && (
           <Text
             fontSize="16px"
-            color={"#98B2B2"}
+            color={"subtle"}
             mt={4}
             mb={8}
             lineHeight={"24px"}
@@ -137,8 +137,8 @@ export function ProfileBadges({
                 <UserPermissionsRestricted to="view">
                   <Tooltip
                     margin={0}
-                    backgroundColor={"#F9FFF2"}
-                    color={"#0A1313"}
+                    backgroundColor={"fresh"}
+                    color={"inverse"}
                     label={
                       "Badges earned participating in web3 will appear here"
                     }

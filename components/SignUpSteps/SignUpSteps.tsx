@@ -220,24 +220,16 @@ const SignUpSteps = () => {
                   </Steps>
                   <HStack width={"100%"} justifyContent={"flex-end"}>
                     <Button
-                      w="160px"
                       alignSelf="left"
                       mr={"24px"}
                       onClick={() => {
                         activeStep <= 0 ? router.push("/login") : prevStep();
                       }}
-                      backgroundColor={"transparent"}
-                      border={"1px solid #98B2B2"}
-                      height={"40px"}
                       pos={"relative"}
-                      fontSize={"14px"}
-                      fontFamily={"PP Telegraf Bold"}
-                      letterSpacing={"0.06em;"}
-                      borderRadius={"32px"}
                       alignItems={"center"}
-                      textTransform={"uppercase"}
                       justifyContent={"center"}
-                      variant="link"
+                      variant={"secondary"}
+                      size={"lg"}
                     >
                       <Text
                         display={"flex"}
@@ -250,17 +242,10 @@ const SignUpSteps = () => {
                       </Text>
                     </Button>
                     <Button
-                      w="160px"
-                      height={"40px"}
                       pos={"relative"}
-                      fontSize={"14px"}
-                      fontFamily={"PP Telegraf Bold"}
-                      letterSpacing={"0.06em;"}
                       alignSelf="center"
-                      color={"#0A1313"}
-                      borderRadius={"32px"}
-                      textTransform={"uppercase"}
-                      backgroundColor={"#C7F83C"}
+                      variant={"primary"}
+                      size={"lg"}
                       onClick={() => {
                         if (activeStep > 1) {
                           updateAccType();
