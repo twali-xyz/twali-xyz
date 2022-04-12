@@ -52,7 +52,7 @@ export function TwaliSlider({
       </SliderMark>
       <SliderTrack bg="n2" height={"24px"} width={"24px"} borderRadius={"full"}>
         <Box position="relative" right={200} />
-        <SliderFilledTrack bg="zing" />
+        <SliderFilledTrack bg="zing" borderRadius={"full"} />
       </SliderTrack>
       <SliderThumb
         boxSize={"20px"}

@@ -11,7 +11,6 @@ interface IMultiContainerProps extends BoxProps {
   variant?: "solid" | "gradient" | "ghost" | "button" | undefined;
   colorScheme?: string;
   size?: "prose" | "1/4" | "2/4" | "3/4" | "full";
-  button?: boolean;
   onClick?: MouseEventHandler;
 }
 
@@ -20,7 +19,6 @@ export const Chip: React.FC<IMultiContainerProps> = ({
   colorScheme = undefined,
   size = undefined,
   children,
-  button,
   onClick,
   ...rest
 }) => {
