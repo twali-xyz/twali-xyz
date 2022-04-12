@@ -265,13 +265,7 @@ const CompanyModal = (props) => {
                   >
                     {[companyData.companyFunc, companyData.companyIndustry].map(
                       (name, idx) => (
-                        <Chip
-                          key={`expertChip--${name}-${idx}`}
-                          name={name}
-                          idx={idx}
-                        >
-                          {name}
-                        </Chip>
+                        <Chip key={`expertChip--${name}-${idx}`}>{name}</Chip>
                       )
                     )}
                   </HStack>
