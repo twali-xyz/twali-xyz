@@ -12,12 +12,12 @@ import {
   CircularProgress,
 } from "@chakra-ui/react";
 import { connect } from "../../../utils/walletUtils";
-import { MultiSelect } from "../Components/MultiSelect";
 import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
-import { setEventArray } from "../helpers/setEventArray";
-import useUser from "../../TwaliContext";
+import { setEventArray } from "../../../utils/setEventArray";
+import useUser from "../../../context/TwaliContext";
 import { UserData } from "../../../utils/interfaces";
+import { MultiSelect } from "../../reusable/MultiSelect";
 
 const EditExpertiseModal = (props) => {
   const finalRef = useRef();
@@ -122,7 +122,9 @@ const EditExpertiseModal = (props) => {
           border={"1px solid rgba(88, 112, 112, 1)"}
           fontFamily={"PP Telegraf Light"}
         >
-          <ModalHeader>Update your background expertise</ModalHeader>
+          <ModalHeader mt={"20px"}>
+            Update your background expertise
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form style={{ alignSelf: "center" }}>

@@ -23,7 +23,7 @@ const HeaderNav = (props) => {
     <Flex
       height={"80px"}
       p={4}
-      px={8}
+      px={[2, 8]}
       as="nav"
       align="center"
       justify="space-between"
@@ -33,7 +33,7 @@ const HeaderNav = (props) => {
       backgroundColor={whichPage === "profile" ? "inverse" : "transparent"}
     >
       <Img
-        width={"144px"}
+        width={["120px", "144px"]}
         height={"auto"}
         src="/twali-assets/navbar_logo.png"
       />
@@ -76,7 +76,7 @@ const HeaderNav = (props) => {
             >
               <Text
                 color={"fresh"}
-                maxW={"190px"}
+                maxW={["80px", "190px"]}
                 fontSize={"14px"}
                 margin={"auto"}
                 alignSelf={"center"}

@@ -1,4 +1,4 @@
-import { MultiSelect } from "../Profile/Components/MultiSelect";
+import { MultiSelect } from "../reusable/MultiSelect";
 import { listOfCountries } from "../../utils/profileUtils";
 import {
   FormControl,

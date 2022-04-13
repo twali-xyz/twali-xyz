@@ -7,7 +7,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 
-import { UserProvider } from "../components/TwaliContext";
+import { UserProvider } from "../context/TwaliContext";
 import { twaliTheme } from "../styles/twaliTheme";
 
 library.add(fab, fas);

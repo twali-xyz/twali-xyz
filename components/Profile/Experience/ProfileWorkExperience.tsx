@@ -1,7 +1,7 @@
 import { Box, Text, HStack } from "@chakra-ui/react";
 import React from "react";
-import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
-import CompanyModal from "./CompanyModal/CompanyModal";
+import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
+import CompanyModal from "../CompanyModal/CompanyModal";
 
 export function ProfileExperience({
   createWorkElements,
@@ -21,7 +21,7 @@ export function ProfileExperience({
   });
 
   return (
-    <Box w="full" overflow="hidden">
+    <Box w="full" overflow="hidden" mb={"16px !important"}>
       <Text
         pb={4}
         pt={5}
@@ -37,9 +37,12 @@ export function ProfileExperience({
         fallback={viewWorkElements(viewElements)}
       >
         <HStack
-          maxW={"640px"}
+          maxW={"685px"}
           display={"grid"}
-          gridTemplateColumns={"repeat(auto-fill, 100px);"}
+          gridTemplateColumns={[
+            "repeat(auto-fill, 102px)",
+            "repeat(auto-fill, 112px)",
+          ]}
           gridTemplateRows={"108px"}
         >
           {workElements}
@@ -62,7 +65,11 @@ const viewWorkElements = (viewElements) => {
       spacing={4}
       maxW={"640px"}
       display={"grid"}
-      gridTemplateColumns={"repeat(auto-fill, 100px);"}
+      gridTemplateColumns={[
+        "repeat(auto-fill, 102px)",
+        "repeat(auto-fill, 112px)",
+        "repeat(auto-fill, 112px)",
+      ]}
       gridTemplateRows={"108px"}
     >
       {viewElements}

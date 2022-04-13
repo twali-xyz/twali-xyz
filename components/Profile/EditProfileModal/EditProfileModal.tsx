@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { connect } from "../../../utils/walletUtils";
 import { listOfCountries } from "../../../utils/profileUtils";
-import useUser from "../../TwaliContext";
+import useUser from "../../../context/TwaliContext";
 import { UserData } from "../../../utils/interfaces";
 
 const EditProfileModal = (props) => {
@@ -167,7 +167,7 @@ const EditProfileModal = (props) => {
           border={"1px solid rgba(88, 112, 112, 1)"}
           fontFamily={"PP Telegraf Light"}
         >
-          <ModalHeader>Update your profile</ModalHeader>
+          <ModalHeader mt={"20px"}>Update your profile</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form style={{ alignSelf: "center" }}>
