@@ -157,6 +157,7 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
               />
               <Text
                 fontSize="xs"
+                height={"20.5px"}
                 fontWeight="400"
                 color="red.500"
                 visibility={
@@ -166,7 +167,7 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
                     : "hidden"
                 }
               >
-                {errors.businessName || "none"}
+                {errors.businessName}
               </Text>
             </FormControl>
 

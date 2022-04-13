@@ -65,11 +65,12 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                 />
                 <Text
                   fontSize="xs"
+                  height={"20.5px"}
                   fontWeight="400"
                   color="red.500"
                   visibility={errors.firstName ? "visible" : "hidden"}
                 >
-                  {errors.firstName || "none"}
+                  {errors.firstName}
                 </Text>
               </FormControl>
               <FormControl px={2} py={1} mx={1} id="last-name" isRequired>
@@ -105,11 +106,12 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                 />
                 <Text
                   fontSize="xs"
+                  height={"20.5px"}
                   fontWeight="400"
                   color="red.500"
                   visibility={errors.lastName ? "visible" : "hidden"}
                 >
-                  {errors.lastName || "none"}
+                  {errors.lastName}
                 </Text>
               </FormControl>
             </HStack>
@@ -146,11 +148,12 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
               />
               <Text
                 fontSize="xs"
+                height={"20.5px"}
                 fontWeight="400"
                 color="red.500"
                 visibility={errors.userName ? "visible" : "hidden"}
               >
-                {errors.userName || "none"}
+                {errors.userName}
               </Text>
             </FormControl>
             <FormControl px={2} py={1} mx={1} id="email" isRequired>
@@ -207,11 +210,12 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
               />
               <Text
                 fontSize="xs"
+                height={"20.5px"}
                 fontWeight="400"
                 color="red.500"
                 visibility={errors.email ? "visible" : "hidden"}
               >
-                {errors.email || "none"}
+                {errors.email}
               </Text>
             </FormControl>
             <HStack spacing={2}>

@@ -67,11 +67,12 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
               />
               <Text
                 fontSize="xs"
+                height={"20.5px"}
                 fontWeight="400"
                 color="red.500"
                 visibility={errors.currTitle ? "visible" : "hidden"}
               >
-                {errors.currTitle || "none"}
+                {errors.currTitle}
               </Text>
             </FormControl>
             <FormControl p={2} pb={4} id="current-location">
