@@ -1,5 +1,5 @@
 import { AccountSelection } from "./accountSelection";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Step, Steps, useSteps } from "chakra-ui-steps";
 import { connect } from "../../utils/walletUtils";
 import background from "../../public/twali-assets/backgroundscreen.png";
@@ -12,6 +12,7 @@ import {
   Flex,
   VStack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { setEventArray } from "../../utils/setEventArray";
@@ -28,9 +29,19 @@ const SignUpSteps = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isAccTypeSelection, setIsAccTypeSelection] = useState(true);
   const [isAccTypeSelected, setIsAccTypeSelected] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({
+    userName: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    businessName: "", 
+    businessType: "",
+    currTitle: "",
+  });
   const [accType, setAccType] = useState("");
   const [btnActive, setBtnActive] = useState(0);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const toast = useToast()
 
   const [userData, setUserData] = useState<UserData>({
     ...userState,
@@ -61,7 +72,7 @@ const SignUpSteps = () => {
       errors.email = "Email address is invalid";
     }
 
-    if (!values.businessName) {
+    if (!values.businessName && values.businessType !== "I'm not incorporated!") {
       errors.businessName = "Business name is required";
     }
 
@@ -77,7 +88,6 @@ const SignUpSteps = () => {
 
   const handleChange = (evt) => {
     evt.persist();
-
     let strippedEventName = evt.target.name.substring(
       0,
       evt.target.name.length - 1
@@ -95,8 +105,19 @@ const SignUpSteps = () => {
         ...userData,
         [evt.target.name]: value,
       });
+      setIsDisabled(false);
     }
   };
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setErrors(validate(userData));
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [userData, 500]);
 
   const steps = [
     {
@@ -116,17 +137,17 @@ const SignUpSteps = () => {
       }),
     },
   ];
-  // const checkUserName = async (userName) => {
-  //   userData.userName = userName;
 
-  //   let available = await fetch(`/api/users/checkUserName`, {
-  //   method: "POST",
-  //   body: JSON.stringify(userData.userName)
-  //     }).then((res)=> res.json());
-  //   if (available == true){
-  //     throw new Error("Select new username")
-  //   }
-  // }
+  const checkUserName = async (userName) => {
+    userData.userName = userName;
+
+    let isTaken = await fetch(`/api/users/checkIsValid?isValid=userName`, {
+    method: "POST",
+    body: JSON.stringify(userData.userName)
+      }).then((res)=> res.json());
+    return isTaken;
+  }
+
   const createNewUser = async (address) => {
     userData.userWallet = address;
     // check if user doesnt already exsist with current address
@@ -166,8 +187,43 @@ const SignUpSteps = () => {
     setIsAccTypeSelected(true);
   };
   const [accSelectionComplete, setAccSelectionComplete] = useState(false);
-  // Either displaying the account type selection
-  // Or the steps component based on user selection
+
+  // Checks user input for a unique username
+  // Error checks for main required fields
+  const checkUserProfileStepValidity = () => {
+    if (userData.userName && userData.userName !== '') {
+      setErrors(validate(userData));
+      let isValid = checkUserName(userData.userName); // checks if the user name already exists in DB
+
+      // Displays a toast alert to inform the user - need a unique user name
+      isValid.then(valid => { 
+        if (valid) {
+          setIsDisabled(true);
+          toast({
+            title: 'User name taken',
+            description: "Oops! User name is taken. Pick another one!",
+            status: 'error',
+            variant: 'subtle',
+            duration: 5000,
+            isClosable: true,
+          })
+        } 
+        else if (activeStep <= 0 && !errors.userName && !errors.firstName && !errors.lastName && !errors.email) {
+          setIsDisabled(false);
+          nextStep();
+        } else if (activeStep == 1 && !errors.businessType && !errors.businessName) {
+          setIsDisabled(false);
+          nextStep();
+        } else if (activeStep > 1 && !errors.currTitle) {
+          setIsDisabled(false);
+          updateAccType();
+        } else {
+          setIsDisabled(true);
+        }    
+      });
+    }
+  };
+
   return (
     <>
       <Container
@@ -242,16 +298,13 @@ const SignUpSteps = () => {
                       </Text>
                     </Button>
                     <Button
+                      disabled={isDisabled}
                       pos={"relative"}
                       alignSelf="center"
                       variant={"primary"}
                       size={"lg"}
                       onClick={() => {
-                        if (activeStep > 1) {
-                          updateAccType();
-                        } else {
-                          nextStep();
-                        }
+                        checkUserProfileStepValidity()
                       }}
                     >
                       <Text
