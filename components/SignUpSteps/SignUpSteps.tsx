@@ -15,13 +15,13 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { setEventArray } from "../Profile/helpers/setEventArray";
+import { setEventArray } from "../../utils/setEventArray";
 import { UserData } from "../../utils/interfaces";
 import { userProfileStep } from "./userProfileStep";
 import { merchantProfileStep } from "./merchantProfileStep";
 import { professionalProfileStep } from "./professionalProfileStep";
 import HeaderNav from "../HeaderNav/HeaderNav";
-import useUser from "../TwaliContext";
+import useUser from "../../context/TwaliContext";
 
 const SignUpSteps = () => {
   const router = useRouter();
