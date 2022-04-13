@@ -53,7 +53,6 @@ module.exports = {
       .catch((err) => console.log(err));
     return dbUser;
   },
-
   /**
    * @desc Creates a user profile with the `userName` being set as the primary key in the database.
    * @param {Object} userData holds the primary key from object to process to database and any addtional metadata.
@@ -111,9 +110,9 @@ module.exports = {
         /**
          * Set create user condition that no duplicate 'SK' -- userName can be created
          */
-        //   ConditionExpression: "attribute_not_exists(#userName)",
+        // ConditionExpression: "attribute_not_exists(#userName)",
         //   ExpressionAttributeNames: {
-        //     "#userName": userName
+        //     "#userName": userName,
         // }
       })
       .promise();
@@ -308,30 +307,30 @@ module.exports = {
       .catch(console.error);
     return allUsers;
   },
-
   /**
    * @desc Checks if userName does not exsit in db table by checking if a return object is returned from DB.
    * @dev Can implement a value check in the near future.
    * @returns Returns a boolean value
    */
-  userNameIsValid: async (userName) => {
-    let exists = false;
-    const dbUserName = await getDynamoDBClient()
-      .query({
-        TableName,
-        IndexName: "wallet_name_index",
-        // ProjectionExpression: "userName",
-        KeyConditionExpression: "userName = :userName",
-        ExpressionAttributeValues: {
-          ":userName": userName,
-        },
-      })
-      .promise();
-    // console.log(dbUserName.Items)
-    if (dbUserName.Items[0] !== undefined && dbUserName.Items[0] !== null) {
-      exists = true;
-    }
-    console.log("exists", exists);
-    return exists;
-  },
+     userNameIsValid: async (userName) => {
+        const dbUser = await getDynamoDBClient()
+          .query({
+            TableName,
+            IndexName: "wallet_name_index",
+            // ProjectionExpression: "userName",
+            KeyConditionExpression: "userName = :userName",
+            ExpressionAttributeValues: {
+              ":userName": userName,
+            },
+          })
+          .promise()
+          .then((data) => data.Items[0])
+          .catch(console.error);
+        
+          if (dbUser && dbUser.userName !== undefined && dbUser.userName !== null) {
+            return true;
+          } else {
+            return false;
+          }
+    },
 };

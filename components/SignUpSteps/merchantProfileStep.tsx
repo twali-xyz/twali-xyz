@@ -142,7 +142,7 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
                 borderRadius={"4px"}
                 marginBottom={"12px"}
                 required
-                isInvalid={errors.businessName}
+                isInvalid={errors.businessName && values?.businessType !== "I'm not incorporated!"}
                 defaultValue={values?.businessName || ""}
                 errorBorderColor="red.300"
                 fontFamily={"PP Telegraf light"}
@@ -152,7 +152,7 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
                 name="businessName"
                 onChange={handleChange}
               />
-              {errors.businessName && (
+              {errors.businessName && values?.businessType !== "I'm not incorporated!" && (
                 <Text fontSize="xs" fontWeight="400" color="red.500">
                   {errors.businessName}
                 </Text>
