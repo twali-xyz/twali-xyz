@@ -93,7 +93,7 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
                         <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.businessType}</Text>
                       )} */}
             </FormControl>
-            <FormControl p={2} id="business-name" isRequired>
+            <FormControl p={2} pb={0} pt={4} id="business-name" isRequired>
               <HStack display="flex" justifyContent="space-between">
                 <FormLabel
                   marginBottom={1}
@@ -140,9 +140,12 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
                 borderColor={"n3"}
                 height={"40px"}
                 borderRadius={"4px"}
-                marginBottom={"12px"}
+                marginBottom={"4px"}
                 required
-                isInvalid={errors.businessName && values?.businessType !== "I'm not incorporated!"}
+                isInvalid={
+                  errors.businessName &&
+                  values?.businessType !== "I'm not incorporated!"
+                }
                 defaultValue={values?.businessName || ""}
                 errorBorderColor="red.300"
                 fontFamily={"PP Telegraf light"}
@@ -152,11 +155,19 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
                 name="businessName"
                 onChange={handleChange}
               />
-              {errors.businessName && values?.businessType !== "I'm not incorporated!" && (
-                <Text fontSize="xs" fontWeight="400" color="red.500">
-                  {errors.businessName}
-                </Text>
-              )}
+              <Text
+                fontSize="xs"
+                fontWeight="400"
+                color="red.500"
+                visibility={
+                  errors.businessName &&
+                  values?.businessType !== "I'm not incorporated!"
+                    ? "visible"
+                    : "hidden"
+                }
+              >
+                {errors.businessName || "none"}
+              </Text>
             </FormControl>
 
             <FormControl p={2} id="business-location" isRequired>

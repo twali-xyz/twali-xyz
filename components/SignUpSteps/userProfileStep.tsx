@@ -32,8 +32,8 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
             lineHeight="tight"
             isTruncated
           >
-            <HStack spacing={2}>
-              <FormControl p={2} mx={1} id="first-name" isRequired>
+            <HStack height={"90px"} spacing={2}>
+              <FormControl px={2} py={1} mx={1} id="first-name" isRequired>
                 <FormLabel
                   marginBottom={1}
                   pos={"relative"}
@@ -53,7 +53,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                   borderColor={"n3"}
                   height={"40px"}
                   borderRadius={"4px"}
-                  marginBottom={"12px"}
+                  marginBottom={"4px"}
                   required
                   isInvalid={errors.firstName}
                   errorBorderColor="red.300"
@@ -64,13 +64,16 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                   value={values?.firstName || ""}
                   onChange={handleChange}
                 />
-                {errors.firstName && (
-                  <Text fontSize="xs" fontWeight="400" color="red.500">
-                    {errors.firstName}
-                  </Text>
-                )}
+                <Text
+                  fontSize="xs"
+                  fontWeight="400"
+                  color="red.500"
+                  visibility={errors.firstName ? "visible" : "hidden"}
+                >
+                  {errors.firstName || "none"}
+                </Text>
               </FormControl>
-              <FormControl p={2} mx={1} id="last-name" isRequired>
+              <FormControl px={2} py={1} mx={1} id="last-name" isRequired>
                 <FormLabel
                   marginBottom={1}
                   pos={"relative"}
@@ -90,7 +93,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                   borderColor={"n3"}
                   height={"40px"}
                   borderRadius={"4px"}
-                  marginBottom={"12px"}
+                  marginBottom={"4px"}
                   required
                   isInvalid={errors.lastName}
                   errorBorderColor="red.300"
@@ -101,14 +104,17 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                   value={values?.lastName || ""}
                   onChange={handleChange}
                 />
-                {errors.lastName && (
-                  <Text fontSize="xs" fontWeight="400" color="red.500">
-                    {errors.lastName}
-                  </Text>
-                )}
+                <Text
+                  fontSize="xs"
+                  fontWeight="400"
+                  color="red.500"
+                  visibility={errors.lastName ? "visible" : "hidden"}
+                >
+                  {errors.lastName || "none"}
+                </Text>
               </FormControl>
             </HStack>
-            <FormControl p={2} mx={1} id="display-name" isRequired>
+            <FormControl px={2} py={1} mx={1} id="display-name" isRequired>
               <FormLabel
                 marginBottom={1}
                 pos={"relative"}
@@ -128,7 +134,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                 borderColor={"n3"}
                 height={"40px"}
                 borderRadius={"4px"}
-                marginBottom={"12px"}
+                marginBottom={"4px"}
                 required
                 isInvalid={errors.userName}
                 errorBorderColor="red.300"
@@ -139,13 +145,16 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                 value={values?.userName || ""}
                 onChange={handleChange}
               />
-              {errors.userName && (
-                <Text fontSize="xs" fontWeight="400" color="red.500">
-                  {errors.userName}
-                </Text>
-              )}
+              <Text
+                fontSize="xs"
+                fontWeight="400"
+                color="red.500"
+                visibility={errors.userName ? "visible" : "hidden"}
+              >
+                {errors.userName || "none"}
+              </Text>
             </FormControl>
-            <FormControl p={2} mx={1} id="email" isRequired>
+            <FormControl px={2} py={1} mx={1} id="email" isRequired>
               <HStack
                 alignItems={"baseline"}
                 justifyContent={"space-between"}
@@ -186,7 +195,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                 borderColor={"n3"}
                 height={"40px"}
                 borderRadius={"4px"}
-                marginBottom={"12px"}
+                marginBottom={"4px"}
                 required
                 isInvalid={errors.email}
                 errorBorderColor="red.300"
@@ -197,14 +206,17 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                 value={values?.email || ""}
                 onChange={handleChange}
               />
-              {errors.email && (
-                <Text fontSize="xs" fontWeight="400" color="red.500">
-                  {errors.email}
-                </Text>
-              )}
+              <Text
+                fontSize="xs"
+                fontWeight="400"
+                color="red.500"
+                visibility={errors.email ? "visible" : "hidden"}
+              >
+                {errors.email || "none"}
+              </Text>
             </FormControl>
             <HStack spacing={2}>
-              <FormControl p={2} mx={1} id="twitter">
+              <FormControl px={2} py={1} mx={1} id="twitter">
                 <FormLabel
                   marginBottom={1}
                   pos={"relative"}
@@ -224,7 +236,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                   borderColor={"n3"}
                   height={"40px"}
                   borderRadius={"4px"}
-                  marginBottom={"12px"}
+                  marginBottom={"4px"}
                   placeholder="Twitter"
                   _placeholder={{ color: "subtle" }}
                   fontFamily={"PP Telegraf Light"}
@@ -232,7 +244,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                   onChange={handleChange}
                 />
               </FormControl>
-              <FormControl p={2} mx={1} id="linkedin">
+              <FormControl px={2} py={1} mx={1} id="linkedin">
                 <FormLabel
                   marginBottom={1}
                   pos={"relative"}
@@ -252,7 +264,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                   borderColor={"n3"}
                   height={"40px"}
                   borderRadius={"4px"}
-                  marginBottom={"12px"}
+                  marginBottom={"4px"}
                   placeholder="LinkedIn"
                   _placeholder={{ color: "subtle" }}
                   fontFamily={"PP Telegraf Light"}
@@ -261,7 +273,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                 />
               </FormControl>
             </HStack>
-            <FormControl pt={2} pb={3} px={2} id="website">
+            <FormControl py={4} px={2} id="website">
               <Box display="flex" justifyContent="space-between" width={"100%"}>
                 <HStack
                   alignItems={"baseline"}

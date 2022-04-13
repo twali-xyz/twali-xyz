@@ -67,7 +67,12 @@ export function MultiSelect({
   }
 
   return (
-    <FormControl p={2} id={`${splitLabel[0]}-${splitLabel[1]}`} isRequired>
+    <FormControl
+      p={2}
+      id={`${splitLabel[0]}-${splitLabel[1]}`}
+      isRequired
+      {...props}
+    >
       <FormLabel
         pos={"relative"}
         left={"1px"}

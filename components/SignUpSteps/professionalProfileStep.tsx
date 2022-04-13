@@ -34,7 +34,7 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
             lineHeight="tight"
             isTruncated
           >
-            <FormControl p={2} id="current-company-title" isRequired>
+            <FormControl p={2} pb={0} id="current-company-title" isRequired>
               <FormLabel
                 marginBottom={1}
                 pos={"relative"}
@@ -54,7 +54,7 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
                 borderColor={"n3"}
                 height={"40px"}
                 borderRadius={"4px"}
-                marginBottom={"12px"}
+                marginBottom={"4px"}
                 isInvalid={errors.currTitle}
                 errorBorderColor="red.300"
                 fontFamily={"PP Telegraf light"}
@@ -65,13 +65,16 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
                 name="currTitle"
                 onChange={handleChange}
               />
-              {errors.currTitle && (
-                <Text fontSize="xs" fontWeight="400" color="red.500">
-                  {errors.currTitle}
-                </Text>
-              )}
+              <Text
+                fontSize="xs"
+                fontWeight="400"
+                color="red.500"
+                visibility={errors.currTitle ? "visible" : "hidden"}
+              >
+                {errors.currTitle || "none"}
+              </Text>
             </FormControl>
-            <FormControl p={2} id="current-location">
+            <FormControl p={2} pb={4} id="current-location">
               <FormLabel
                 marginBottom={1}
                 pos={"relative"}
@@ -103,6 +106,7 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
               defaultValues={[]}
               options={functionalExpertiseList}
               maxSelections={3}
+              paddingY={4}
             />
             <MultiSelect
               name={"industryExpertise"}
