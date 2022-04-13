@@ -22,7 +22,9 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
         borderRadius="lg"
         overflow="hidden"
         cursor="pointer"
-        backgroundColor={"#041A19E5"}
+        backgroundColor={"n6"}
+        opacity={"90%"}
+        boxShadow={"8px 16px 24px 0px #062B2A8F"}
       >
         <Box p="4">
           <Box
@@ -49,14 +51,14 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
               <Input
                 px={2}
                 fontSize="16px"
-                borderColor={"#587070"}
+                borderColor={"n3"}
                 height={"40px"}
                 borderRadius={"4px"}
                 marginBottom={"12px"}
                 isInvalid={errors.currTitle}
                 errorBorderColor="red.300"
                 fontFamily={"PP Telegraf light"}
-                _placeholder={{ color: "#98B2B2" }}
+                _placeholder={{ color: "subtle" }}
                 value={values?.currTitle || ""}
                 required
                 placeholder="Current title"
@@ -86,8 +88,8 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
               <Select
                 fontFamily={"PP Telegraf Light"}
                 placeholder="Select current location"
-                _placeholder={{ color: "#98B2B2 !important" }}
-                color={values?.currLocation ? "#F9FFF2" : "#98B2B2"}
+                _placeholder={{ color: "subtle !important" }}
+                color={values?.currLocation ? "fresh" : "subtle"}
                 name="currLocation"
                 onChange={handleChange}
               >

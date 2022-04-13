@@ -21,7 +21,7 @@ const IndexPage = () => {
         margin={"auto"}
         maxWidth={"100%"}
         width={"100%"}
-        backgroundColor="#062B2A"
+        backgroundColor="cave"
       >
         <ScrollingHeader
           borderTop={"none"}
@@ -50,7 +50,7 @@ const IndexPage = () => {
               <Text
                 margin={0}
                 padding={0}
-                color={"#F9FFF2"}
+                color={"fresh"}
                 fontSize={["18px", "28px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 paddingRight={["1px", "2px", "4px", "6px", "10px"]}
@@ -61,7 +61,7 @@ const IndexPage = () => {
               <Text
                 margin={0}
                 padding={0}
-                color={"#F9FFF2"}
+                color={"fresh"}
                 fontSize={["18px", "28px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 paddingRight={"10px"}
@@ -87,7 +87,7 @@ const IndexPage = () => {
               <Text
                 margin={0}
                 padding={0}
-                color={"#F9FFF2"}
+                color={"fresh"}
                 fontSize={["18px", "28px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 fontFamily={"Scope Light"}
@@ -100,7 +100,7 @@ const IndexPage = () => {
               <Text
                 margin={0}
                 padding={0}
-                color={"#F9FFF2"}
+                color={"fresh"}
                 fontSize={["18px", "28px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 fontFamily={"Scope Light"}
@@ -126,7 +126,7 @@ const IndexPage = () => {
               <Text
                 margin={0}
                 padding={0}
-                color={"#F9FFF2"}
+                color={"fresh"}
                 fontSize={["18px", "28px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 fontFamily={"Scope Light"}
@@ -138,7 +138,7 @@ const IndexPage = () => {
                 padding={0}
                 left={["0px", "8px", "14px", "16px"]}
                 pos={"relative"}
-                color={"#F9FFF2"}
+                color={"fresh"}
                 fontSize={["18px", "28px", "32px", "48px", "64px"]}
                 fontWeight={"400"}
                 fontFamily={"GrandSlang"}
@@ -239,14 +239,11 @@ const IndexPage = () => {
               <Button
                 width={["167px", "207px"]}
                 height={["48px", "52px"]}
-                color={"#062B2A"}
+                color={"cave"}
+                variant={"primary"}
                 fontSize={["18px", "24px"]}
                 borderRadius={"52px"}
                 padding={"8px 24px 4px"}
-                letterSpacing={"0.06em"}
-                textTransform={"uppercase"}
-                backgroundColor={"#C7F83C"}
-                fontFamily={"PP Telegraf Bold"}
                 marginLeft={[
                   "5px !important",
                   "10px !important",
@@ -256,14 +253,19 @@ const IndexPage = () => {
                 marginTop={["15px", "25px", "0"]}
                 boxShadow={"0px 4px 4px 0px #00000040"}
               >
-                <Link href="https://airtable.com/shrjjPJnyesvqcSeB" isExternal>
+                <Link
+                  href="https://airtable.com/shrjjPJnyesvqcSeB"
+                  isExternal
+                  _hover={{ textDecor: "none" }}
+                  _focus={{ textDecor: "none" }}
+                >
                   apply here
                 </Link>
               </Button>
             </Flex>
             <HStack>
               <Text
-                color={"#F9FFF2"}
+                color={"fresh"}
                 fontSize={["16px", "20px", "18px", "28px", "32px"]}
                 fontWeight={"400"}
                 marginTop={["25px", "45px", "95px"]}
@@ -274,7 +276,7 @@ const IndexPage = () => {
               >
                 Need expertise? Email{" "}
                 <Link
-                  color={"#58F27A"}
+                  color={"slime"}
                   fontWeight={"400"}
                   letterSpacing={"0.03em"}
                   href="mailto:degen@twali.xyz"

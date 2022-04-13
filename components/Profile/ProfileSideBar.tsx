@@ -49,7 +49,7 @@ export function ProfileSideBar({
         <Text
           fontSize="40px"
           marginTop={"52px"}
-          color={"#C7F83C"}
+          color={"zing"}
           lineHeight={"56px"}
           letterSpacing={"wide"}
           fontFamily={"GrandSlang"}
@@ -68,6 +68,8 @@ export function ProfileSideBar({
             pos={"relative"}
             top={"-45px !important"}
             left={"16px"}
+            width={"fit-content"}
+            borderRadius={"md"}
           >
             <Img
               width={"20px"}
@@ -80,7 +82,7 @@ export function ProfileSideBar({
       </Flex>
       <HStack marginTop={10} marginBottom={0}>
         <Text
-          color={"#C7F83C"}
+          color={"zing"}
           fontSize={"18px"}
           fontWeight={"400"}
           lineHeight={"28px"}
@@ -100,7 +102,7 @@ export function ProfileSideBar({
       </HStack>
       <Box marginTop={"8px !important"}>
         <Text
-          color={"#C7F83C"}
+          color={"zing"}
           fontSize={"18px"}
           fontWeight={"400"}
           lineHeight={"28px"}
@@ -129,18 +131,18 @@ export function ProfileSideBar({
         flexDir={"column"}
         maxWidth={"486px"}
         textAlign={"start"}
-        backgroundColor={"#0A2625"}
+        backgroundColor={"n6"}
         marginTop={"52px !important"}
         justifyContent={"space-between"}
         marginBottom={"80px !important"}
         borderRadius={"16px 16px 16px 16px"}
       >
         <VStack
-          color="#F9FFF2"
+          color="fresh"
           fontSize={"18px"}
           fontWeight={"400"}
           lineHeight={"28px"}
-          backgroundColor={"#0A2625"}
+          backgroundColor={"n6"}
           fontFamily={"PP Telegraf Light"}
           borderRadius={"16px 16px 16px 16px"}
         >
@@ -161,6 +163,7 @@ export function ProfileSideBar({
                 p={0}
                 top={-4}
                 left={"16px"}
+                borderRadius={"md"}
               >
                 <Img
                   width={"20px"}
@@ -191,20 +194,21 @@ export function ProfileSideBar({
                   return (
                     <Chip
                       key={`chip--${expertise}-${idx}`}
-                      text={expertise}
                       marginRight={idx === 2 ? 0 : 4}
                       marginBottom={4}
-                    />
+                    >
+                      {expertise}
+                    </Chip>
                   );
               })}
           </Flex>
         </VStack>
         <VStack
-          color="#F9FFF2"
+          color="fresh"
           fontSize={"18px"}
           fontWeight={"400"}
           lineHeight={"28px"}
-          backgroundColor={"#0A2625"}
+          backgroundColor={"n6"}
           fontFamily={"PP Telegraf Light"}
           borderRadius={"16px 16px 16px 16px"}
         >
@@ -232,29 +236,13 @@ export function ProfileSideBar({
               userState?.industryExpertise.map((expertise, idx) => {
                 if (expertise)
                   return (
-                    <Box
-                      key={idx}
-                      borderRadius={"32px"}
-                      backgroundImage={
-                        "linear-gradient(#0DD5D1 0%, #9350B3 100%)"
-                      }
-                      p={"1px"}
+                    <Chip
+                      key={`chip--${expertise}-${idx}`}
                       marginRight={idx === 2 ? 0 : 4}
                       marginBottom={4}
                     >
-                      <Text
-                        fontSize="14px"
-                        lineHeight={"24px"}
-                        fontFamily={"PP Telegraf"}
-                        alignSelf={"start"}
-                        backgroundColor={"#0A2625"}
-                        p={"4px 12px"}
-                        whiteSpace={"nowrap"}
-                        borderRadius={"32px"}
-                      >
-                        {expertise}
-                      </Text>
-                    </Box>
+                      {expertise}
+                    </Chip>
                   );
               })}
           </Flex>

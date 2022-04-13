@@ -61,9 +61,10 @@ export const GetCompany = (props) => {
               height="80px"
               marginLeft={"0 !important"}
               borderRadius="full"
-              backgroundColor="rgb(222, 222, 222)"
-              bgGradient={
-                "linear-gradient(136.3deg, #0DD5D1 -3.88%, #9350B3 84.78%)"
+              background={
+                props.currCompany < 5
+                  ? `gradient${props.currCompany + 1}`
+                  : "gradient2"
               }
               overflow="hidden"
               p={0}
@@ -93,7 +94,7 @@ export const GetCompany = (props) => {
                 fontSize="4xl"
                 fontWeight="400"
                 display={"flex"}
-                color={"#F9FFF2"}
+                color={"fresh"}
                 justifyContent={"center"}
                 alignItems={"center"}
                 fontFamily={"GrandSlang"}
@@ -108,9 +109,10 @@ export const GetCompany = (props) => {
               height="80px"
               marginLeft={"0 !important"}
               borderRadius="full"
-              backgroundColor="rgb(222, 222, 222)"
-              bgGradient={
-                "linear-gradient(136.3deg, #0DD5D1 -3.88%, #9350B3 84.78%)"
+              background={
+                props.currCompany < 5
+                  ? `gradient${props.currCompany + 1}`
+                  : "gradient2"
               }
               overflow="hidden"
               p={0}
@@ -133,10 +135,7 @@ export const GetCompany = (props) => {
               }}
             >
               <Img
-                backgroundColor="rgb(222, 222, 222)"
-                bgGradient={
-                  "linear-gradient(136.3deg, #0DD5D1 -3.88%, #9350B3 84.78%)"
-                }
+                backgroundColor={"rgb(222,222,222)"}
                 borderRadius="full"
                 style={{ cursor: "pointer" }}
                 key={`${props.companyName}--${props.currCompany}`}
@@ -151,7 +150,7 @@ export const GetCompany = (props) => {
                 fontSize="4xl"
                 fontWeight="400"
                 display={"flex"}
-                color={"#F9FFF2"}
+                color={"fresh"}
                 justifyContent={"center"}
                 alignItems={"center"}
                 fontFamily={"GrandSlang"}

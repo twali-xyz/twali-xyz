@@ -168,6 +168,7 @@ export default function ProfileImageUpload(props) {
           alignSelf="center"
           overflow="hidden"
           pos={"relative"}
+          borderRadius={"md"}
           bottom={5}
           marginBottom={0}
           p={0}
@@ -217,7 +218,11 @@ export default function ProfileImageUpload(props) {
           </Alert>
         ) : null}
         {isSelected && (
-          <Button onClick={(evt) => handleSubmission(evt)}>
+          <Button
+            variant="primary"
+            size={"md"}
+            onClick={(evt) => handleSubmission(evt)}
+          >
             save{" "}
             {isSubmitted ? (
               <CircularProgress
