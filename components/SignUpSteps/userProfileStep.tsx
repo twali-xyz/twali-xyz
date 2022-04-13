@@ -14,7 +14,6 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
         maxWidth={"496px"}
         mx={0}
         my={2}
-        h={"532px"}
         border="1px solid n3"
         borderRadius="16px"
         overflow="hidden"
