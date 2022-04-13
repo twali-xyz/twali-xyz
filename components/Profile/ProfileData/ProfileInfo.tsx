@@ -88,6 +88,7 @@ export function ProfileInfo({
           lineHeight={"24px"}
           maxW={"496px"}
           fontFamily={"PP Telegraf Light"}
+          whiteSpace={"break-spaces"}
         >
           {userState.bio}
         </Text>

@@ -244,7 +244,9 @@ const CompanyModal = (props) => {
                 ) : null}
 
                 {companyData.companyDescription ? (
-                  <Text fontSize="lg">{companyData.companyDescription}</Text>
+                  <Text fontSize="lg" whiteSpace={"break-spaces"}>
+                    {companyData.companyDescription}
+                  </Text>
                 ) : null}
 
                 {companyData.companyStart && companyData.companyEnd ? (
