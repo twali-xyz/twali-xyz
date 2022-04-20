@@ -64,8 +64,10 @@ const SignUpSteps = () => {
 
     if (!values.userName) {
       errors.userName = "User name is required";
+    } else if (/\s/.test(values.userName)){
+        errors.userName = "User name can't contain spaces"
     }
-
+      
     if (!values.email) {
       errors.email = "Email address is required";
     } else if (!/\S+@\S+\.\S+/.test(values.email)) {

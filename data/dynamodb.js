@@ -9,14 +9,18 @@ const getDynamoDBClient = () => {
     : "us-east-2";
 
   // Only needed with local development.
-  // if (process.env.LOCAL_DYNAMO_DB_ENDPOINT) {
-  AWS.config.update({
-    // accessKeyId: "xxxx",
-    // secretAccessKey: "xxxx",
-    region: "us-east-1",
-    // endpoint: "http://localhost:8000",
-  });
-  // }
+  if (process.env.LOCAL_DYNAMO_DB_ENDPOINT || "http://localhost:8000") {
+    AWS.config.update({
+      accessKeyId: "xxxx",
+      secretAccessKey: "xxxx",
+      region: "us-east-1",
+      endpoint: "http://localhost:8000",
+    });
+  } else {
+    AWS.config.update({
+      region: "us-east-1",
+    });
+  }
 
   const options = {
     convertEmptyValues: true,
