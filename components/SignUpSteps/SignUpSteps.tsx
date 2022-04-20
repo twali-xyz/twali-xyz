@@ -56,23 +56,29 @@ const SignUpSteps = () => {
 
     if (!values.firstName) {
       errors.firstName = "First name is required";
+    } else if (!/^[a-zA-ZÀ-ÿ]+$/.test(values.firstName)) {
+      errors.firstName = "First name can only contain letters";
     }
 
     if (!values.lastName) {
       errors.lastName = "Last name is required";
+    } else if (!/^[a-zA-ZÀ-ÿ]+[-]*[a-zA-ZÀ-ÿ]+$/.test(values.lastName)) {
+      errors.lastName = "Last name can only contain letters and '-'";
     }
 
     if (!values.userName) {
       errors.userName = "User name is required";
-    } else if (/[\s\d]/g.test(values.userName)){
-        errors.userName = "User name can't contain spaces or numbers"
+    } else if (/[\s\W]/g.test(values.userName)){
+        errors.userName = "User name can only contain letters and '_'" 
+    } else if (values.userName.length >=16) {
+      errors.userName = "User name max character limit is 16"
     }
       
     if (!values.email) {
       errors.email = "Email address is required";
     } else if (!/\S+@\S+\.\S+/.test(values.email)) {
       errors.email = "Email address is invalid";
-    }
+    } 
 
     if (!values.businessName && values.businessType !== "I'm not incorporated!") {
       errors.businessName = "Business name is required";
