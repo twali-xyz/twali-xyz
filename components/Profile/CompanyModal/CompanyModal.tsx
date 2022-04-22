@@ -466,7 +466,6 @@ const CompanyModal = (props) => {
                       lineHeight={"24px"}
                       fontWeight={"400"}
                       fontFamily={"PP Telegraf"}
-                      mt={2}
                     >
                       I currently work here
                     </FormLabel>
@@ -474,10 +473,14 @@ const CompanyModal = (props) => {
                       setCurrentStatus={setCurrentStatus}
                       currentStatus={currentStatus}
                       defaultValue={companyData.currentStatus || 0}
-                      marks={["No", "Yes"]}
+                      marks={[
+                        { mark: "No", value: 0 },
+                        { mark: "yes", value: 1 },
+                      ]}
+                      variant={"binary"}
                     />
                   </FormControl>
-                  <FormControl p={2} id="company-func">
+                  <FormControl mt={3} p={2} id="company-func">
                     <FormLabel
                       fontSize={"16px"}
                       lineHeight={"24px"}

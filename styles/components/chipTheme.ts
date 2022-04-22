@@ -17,6 +17,9 @@ export const ChipStyle: ComponentStyleConfig = {
       display: "flex",
       alignItems: "center",
       p:"1px",
+      height: "34px",
+      width:"fit-content"
+
     },
     inner: {
         fontSize:"14px",
@@ -44,9 +47,63 @@ export const ChipStyle: ComponentStyleConfig = {
         background:"unset"
       }
     },
+    "bounty": {
+      outer: {
+        background: "transparent",
+        height: "28px",
+        padding: "0px !important",
+        border: "1px solid #14C791BF",
+
+      },
+      inner: {
+        background: "#58F27A1A",
+        borderRadius:"sm",
+        height: "inherit",
+        alignSelf: "center",
+        fontSize: "12px",
+        justifyContent: "center"
+
+      }
+    },
+    "status": {
+      outer: {
+        background:"transparent",
+        padding: "0px !important",
+        height: "28px",
+        border:"1px solid #3290D3"
+
+      },
+      inner: {
+        background: "#3290D31A",
+        borderRadius:"sm",
+        height: "inherit",
+        alignSelf: "center",
+        fontSize: "12px",
+        justifyContent: "center"
+
+      }
+    },
+    "created": {
+      outer: {
+        background: "transparent",
+        height: "28px",
+        padding: "0px !important",
+        border: "1px solid #98B2B2"
+
+      },
+      inner: {
+        background: "#98B2B226",
+        borderRadius:"sm",
+        height: "inherit",
+        alignSelf: "center",
+        fontSize: "12px",
+        justifyContent: "center"
+
+      }
+    },
     "button": {
       outer: {
-        background:"gradient1"
+        background:"gradient1",
       },
       inner: {
         background:"unset"
