@@ -216,7 +216,6 @@ const ProfileDetails = ({ user }) => {
       }
 
       let resArr: any = [];
-
       finalData.forEach(function (item) {
         var i = resArr.findIndex((x) => x.spaceID == item.spaceID);
         if (i <= -1) {

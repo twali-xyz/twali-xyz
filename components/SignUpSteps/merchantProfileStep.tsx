@@ -150,7 +150,7 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
                 errorBorderColor="red.300"
                 fontFamily={"PP Telegraf light"}
                 _placeholder={{ color: "subtle" }}
-                value={values?.businessName || ""}
+                // value={values?.businessName || ""}
                 placeholder="Business name"
                 name="businessName"
                 onChange={handleChange}
