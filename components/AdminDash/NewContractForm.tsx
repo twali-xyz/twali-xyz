@@ -1,8 +1,15 @@
 
 
 // Form that submits and creates contract clones
-const NewContractForm = () => {
+export function NewContractForm ({
 
+    
+}){
+
+    return(
+        <>
+        <title>Contract Form</title>
+        </>
+    )
 };
 
-export default NewContractForm;
