@@ -17,8 +17,9 @@ export default function Dropdown({
   const [selected, setSelected] = useState({});
 
   function handleClick(event) {
-    if (selected[event.target.name]) {
-      delete selected[event.target.name];
+    if (selected[event.target.value]) {
+      selected[event.target.value];
+      delete selected[event.target.value];
       setSelected({
         ...selected,
       });
@@ -46,7 +47,6 @@ export default function Dropdown({
     setSelected({
       ...filterParams[name],
     });
-    console.log(selected, filterParams);
 
     return () => {};
   }, [filterParams]);

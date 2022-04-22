@@ -25,11 +25,6 @@ export function FilterInputs({ filterParams, setFilterParams }) {
     delete filterParams[e.target.name][e.target.value];
     setFilterParams({ ...filterParams });
   }
-  useEffect(() => {
-    console.log(filterParams);
-
-    return () => {};
-  }, [filterParams]);
 
   return (
     <VStack
@@ -65,18 +60,7 @@ export function FilterInputs({ filterParams, setFilterParams }) {
           setFilterParams={setFilterParams}
         />
       </FormControl>
-      <FormControl>
-        <RangeSlider
-          aria-label={["min", "max"]}
-          onChangeEnd={(val) => console.log(val)}
-        >
-          <RangeSliderTrack>
-            <RangeSliderFilledTrack />
-          </RangeSliderTrack>
-          <RangeSliderThumb index={0} />
-          <RangeSliderThumb index={1} />
-        </RangeSlider>
-      </FormControl>
+
       <VStack
         flexWrap={"wrap"}
         alignSelf={"flex-start"}
