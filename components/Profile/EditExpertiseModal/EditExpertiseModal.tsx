@@ -12,12 +12,12 @@ import {
   CircularProgress,
 } from "@chakra-ui/react";
 import { connect } from "../../../utils/walletUtils";
-import { MultiSelect } from "../Components/MultiSelect";
 import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
-import { setEventArray } from "../helpers/setEventArray";
-import useUser from "../../TwaliContext";
+import { setEventArray } from "../../../utils/setEventArray";
+import useUser from "../../../context/TwaliContext";
 import { UserData } from "../../../utils/interfaces";
+import { MultiSelect } from "../../reusable/MultiSelect";
 
 const EditExpertiseModal = (props) => {
   const finalRef = useRef();
@@ -117,10 +117,14 @@ const EditExpertiseModal = (props) => {
       >
         <ModalOverlay />
         <ModalContent
-          backgroundColor={"#041A19"}
+          backgroundColor={"n6"}
+          boxShadow={"8px 16px 24px 0px #062B2A8F"}
+          border={"1px solid rgba(88, 112, 112, 1)"}
           fontFamily={"PP Telegraf Light"}
         >
-          <ModalHeader>Update your background expertise</ModalHeader>
+          <ModalHeader mt={"20px"}>
+            Update your background expertise
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form style={{ alignSelf: "center" }}>
@@ -145,14 +149,7 @@ const EditExpertiseModal = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              variant="ghost"
-              backgroundColor={"#C7F83C"}
-              color={"#0A1313"}
-              fontFamily={"PP Telegraf Bold"}
-              fontWeight={"700"}
-              onClick={updateExperiences}
-            >
+            <Button variant="primary" size={"sm"} onClick={updateExperiences}>
               Save{" "}
               {isSubmitted ? (
                 <CircularProgress

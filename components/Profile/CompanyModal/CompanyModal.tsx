@@ -1,5 +1,5 @@
-import { Current } from "./currentStatusSlider";
-import { Chip } from "./../Components/Chip";
+import { TwaliSlider } from "../../reusable/TwaliSlider";
+import { Chip } from "../../reusable/Chip";
 import { useEffect, useRef, useState } from "react";
 import {
   Box,
@@ -21,6 +21,7 @@ import {
   Input,
   Select,
   Img,
+  Textarea,
 } from "@chakra-ui/react";
 import useSWR from "swr";
 import DatePicker from "react-date-picker/dist/entry.nostyle";
@@ -28,7 +29,7 @@ import { connect } from "../../../utils/walletUtils";
 import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
 import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
-import useUser from "../../TwaliContext";
+import useUser from "../../../context/TwaliContext";
 import useDebounce from "../../../utils/useDebounce";
 
 const CompanyModal = (props) => {
@@ -45,7 +46,7 @@ const CompanyModal = (props) => {
     companyEnd: "",
     companyFunc: "",
     companyIndustry: "",
-    companyLogo: false,
+    logo: false,
   };
   const [compStart, setCompStart] = useState(undefined);
   const [compEnd, setCompEnd] = useState(undefined);
@@ -98,6 +99,7 @@ const CompanyModal = (props) => {
     companyEnd: null,
     companyFunction: null,
     companyIndustry: null,
+    companyDescription: null,
   });
 
   const convertDates = (start, end) => {
@@ -219,7 +221,9 @@ const CompanyModal = (props) => {
   const companyModalView = (
     <>
       <ModalContent
-        backgroundColor={"#041A19"}
+        backgroundColor={"n6"}
+        boxShadow={"8px 16px 24px 0px #062B2A8F"}
+        border={"1px solid rgba(88, 112, 112, 1)"}
         fontFamily={"PP Telegraf Light"}
       >
         <ModalCloseButton />
@@ -237,6 +241,12 @@ const CompanyModal = (props) => {
 
                 {companyData.companyTitle ? (
                   <Text fontSize="2xl">{companyData.companyTitle}</Text>
+                ) : null}
+
+                {companyData.companyDescription ? (
+                  <Text fontSize="lg" whiteSpace={"break-spaces"}>
+                    {companyData.companyDescription}
+                  </Text>
                 ) : null}
 
                 {companyData.companyStart && companyData.companyEnd ? (
@@ -257,12 +267,7 @@ const CompanyModal = (props) => {
                   >
                     {[companyData.companyFunc, companyData.companyIndustry].map(
                       (name, idx) => (
-                        <Chip
-                          key={`expertChip--${name}-${idx}`}
-                          text={name}
-                          name={name}
-                          idx={idx}
-                        />
+                        <Chip key={`expertChip--${name}-${idx}`}>{name}</Chip>
                       )
                     )}
                   </HStack>
@@ -289,9 +294,16 @@ const CompanyModal = (props) => {
         key={`companymodal--${props.currCompany}`}
       >
         <ModalOverlay />
-        <ModalContent backgroundColor={"#041A19"} fontFamily={"PP Telegraf"}>
+        <ModalContent
+          backgroundColor={"n6"}
+          boxShadow={"8px 16px 24px 0px #062B2A8F"}
+          border={"1px solid rgba(88, 112, 112, 1)"}
+          fontFamily={"PP Telegraf"}
+        >
           <UserPermissionsRestricted to="edit" fallback={companyModalView}>
-            <ModalHeader pb={0}>Update your work experience</ModalHeader>
+            <ModalHeader pb={0} mt={"20px"}>
+              Update your work experience
+            </ModalHeader>
             <ModalCloseButton />
             <ModalBody fontSize={"14px"} lineHeight={"24px"} fontWeight={"400"}>
               {companyData ? (
@@ -371,6 +383,35 @@ const CompanyModal = (props) => {
                       </Text>
                     )}
                   </FormControl>
+                  <FormControl p={2} id="company-description">
+                    <FormLabel
+                      fontSize={"16px"}
+                      lineHeight={"24px"}
+                      fontWeight={"400"}
+                      fontFamily={"PP Telegraf"}
+                    >
+                      Job Description
+                    </FormLabel>
+                    <Textarea
+                      fontFamily={"PP Telegraf Light"}
+                      required
+                      isInvalid={
+                        errors.companyDescription &&
+                        !companyData.companyDescription
+                      }
+                      errorBorderColor="red.300"
+                      placeholder="Job Description"
+                      name="companyDescription"
+                      defaultValue={companyData.companyDescription || ""}
+                      onChange={handleChange}
+                    />
+                    {errors.companyDescription &&
+                      !companyData.companyDescription && (
+                        <Text fontSize="xs" fontWeight="400" color="red.500">
+                          {errors.companyDescription}
+                        </Text>
+                      )}
+                  </FormControl>
                   <FormControl p={2} id="company-start">
                     <FormLabel
                       fontSize={"16px"}
@@ -429,10 +470,11 @@ const CompanyModal = (props) => {
                     >
                       I currently work here
                     </FormLabel>
-                    <Current
+                    <TwaliSlider
                       setCurrentStatus={setCurrentStatus}
                       currentStatus={currentStatus}
                       defaultValue={companyData.currentStatus || 0}
+                      marks={["No", "Yes"]}
                     />
                   </FormControl>
                   <FormControl p={2} id="company-func">
@@ -490,11 +532,8 @@ const CompanyModal = (props) => {
                 onClick={() => {
                   updateCompanyInfo();
                 }}
-                variant="ghost"
-                backgroundColor={"#C7F83C"}
-                color={"#0A1313"}
-                fontFamily={"PP Telegraf Bold"}
-                fontWeight={"700"}
+                variant="primary"
+                size={"sm"}
               >
                 Save
                 {isSubmitted ? (

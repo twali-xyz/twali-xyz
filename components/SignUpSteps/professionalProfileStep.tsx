@@ -1,4 +1,4 @@
-import { MultiSelect } from "../Profile/Components/MultiSelect";
+import { MultiSelect } from "../reusable/MultiSelect";
 import { listOfCountries } from "../../utils/profileUtils";
 import {
   FormControl,
@@ -22,7 +22,9 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
         borderRadius="lg"
         overflow="hidden"
         cursor="pointer"
-        backgroundColor={"#041A19E5"}
+        backgroundColor={"n6"}
+        opacity={"90%"}
+        boxShadow={"8px 16px 24px 0px #062B2A8F"}
       >
         <Box p="4">
           <Box
@@ -32,7 +34,7 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
             lineHeight="tight"
             isTruncated
           >
-            <FormControl p={2} id="current-company-title" isRequired>
+            <FormControl p={2} pb={0} id="current-company-title" isRequired>
               <FormLabel
                 marginBottom={1}
                 pos={"relative"}
@@ -49,27 +51,31 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
               <Input
                 px={2}
                 fontSize="16px"
-                borderColor={"#587070"}
+                borderColor={"n3"}
                 height={"40px"}
                 borderRadius={"4px"}
-                marginBottom={"12px"}
+                marginBottom={"4px"}
                 isInvalid={errors.currTitle}
                 errorBorderColor="red.300"
                 fontFamily={"PP Telegraf light"}
-                _placeholder={{ color: "#98B2B2" }}
+                _placeholder={{ color: "subtle" }}
                 value={values?.currTitle || ""}
                 required
                 placeholder="Current title"
                 name="currTitle"
                 onChange={handleChange}
               />
-              {errors.currTitle && (
-                <Text fontSize="xs" fontWeight="400" color="red.500">
-                  {errors.currTitle}
-                </Text>
-              )}
+              <Text
+                fontSize="xs"
+                height={"20.5px"}
+                fontWeight="400"
+                color="red.500"
+                visibility={errors.currTitle ? "visible" : "hidden"}
+              >
+                {errors.currTitle}
+              </Text>
             </FormControl>
-            <FormControl p={2} id="current-location">
+            <FormControl p={2} pb={4} id="current-location">
               <FormLabel
                 marginBottom={1}
                 pos={"relative"}
@@ -86,8 +92,8 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
               <Select
                 fontFamily={"PP Telegraf Light"}
                 placeholder="Select current location"
-                _placeholder={{ color: "#98B2B2 !important" }}
-                color={values?.currLocation ? "#F9FFF2" : "#98B2B2"}
+                _placeholder={{ color: "subtle !important" }}
+                color={values?.currLocation ? "fresh" : "subtle"}
                 name="currLocation"
                 onChange={handleChange}
               >
@@ -101,6 +107,7 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
               defaultValues={[]}
               options={functionalExpertiseList}
               maxSelections={3}
+              paddingY={4}
             />
             <MultiSelect
               name={"industryExpertise"}

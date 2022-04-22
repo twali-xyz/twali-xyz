@@ -14,12 +14,12 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
         maxWidth={"496px"}
         mx={0}
         my={2}
-        h={"532px"}
-        border="1px solid #587070"
+        border="1px solid n3"
         borderRadius="16px"
         overflow="hidden"
         cursor="pointer"
-        backgroundColor={"#041A19E5"}
+        backgroundColor={"n6"}
+        opacity={"90%"}
         fontFamily={"PP Telegraf"}
         boxShadow={"8px 16px 24px 0px #062B2A8F"}
       >
@@ -31,8 +31,8 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
             lineHeight="tight"
             isTruncated
           >
-            <HStack spacing={2}>
-              <FormControl p={2} mx={1} id="first-name" isRequired>
+            <HStack height={"90px"} spacing={2}>
+              <FormControl px={2} py={1} mx={1} id="first-name" isRequired>
                 <FormLabel
                   marginBottom={1}
                   pos={"relative"}
@@ -49,27 +49,31 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                 <Input
                   px={2}
                   fontSize="16px"
-                  borderColor={"#587070"}
+                  borderColor={"n3"}
                   height={"40px"}
                   borderRadius={"4px"}
-                  marginBottom={"12px"}
+                  marginBottom={"4px"}
                   required
                   isInvalid={errors.firstName}
                   errorBorderColor="red.300"
                   placeholder="First name"
                   name="firstName"
                   fontFamily={"PP Telegraf light"}
-                  _placeholder={{ color: "#98B2B2" }}
+                  _placeholder={{ color: "subtle" }}
                   value={values?.firstName || ""}
                   onChange={handleChange}
                 />
-                {errors.firstName && (
-                  <Text fontSize="xs" fontWeight="400" color="red.500">
-                    {errors.firstName}
-                  </Text>
-                )}
+                <Text
+                  fontSize="xs"
+                  height={"20.5px"}
+                  fontWeight="400"
+                  color="red.500"
+                  visibility={errors.firstName ? "visible" : "hidden"}
+                >
+                  {errors.firstName}
+                </Text>
               </FormControl>
-              <FormControl p={2} mx={1} id="last-name" isRequired>
+              <FormControl px={2} py={1} mx={1} id="last-name" isRequired>
                 <FormLabel
                   marginBottom={1}
                   pos={"relative"}
@@ -86,28 +90,32 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                 <Input
                   px={2}
                   fontSize="16px"
-                  borderColor={"#587070"}
+                  borderColor={"n3"}
                   height={"40px"}
                   borderRadius={"4px"}
-                  marginBottom={"12px"}
+                  marginBottom={"4px"}
                   required
                   isInvalid={errors.lastName}
                   errorBorderColor="red.300"
                   placeholder="Last name"
                   name="lastName"
                   fontFamily={"PP Telegraf light"}
-                  _placeholder={{ color: "#98B2B2" }}
+                  _placeholder={{ color: "subtle" }}
                   value={values?.lastName || ""}
                   onChange={handleChange}
                 />
-                {errors.lastName && (
-                  <Text fontSize="xs" fontWeight="400" color="red.500">
-                    {errors.lastName}
-                  </Text>
-                )}
+                <Text
+                  fontSize="xs"
+                  height={"20.5px"}
+                  fontWeight="400"
+                  color="red.500"
+                  visibility={errors.lastName ? "visible" : "hidden"}
+                >
+                  {errors.lastName}
+                </Text>
               </FormControl>
             </HStack>
-            <FormControl p={2} mx={1} id="display-name" isRequired>
+            <FormControl px={2} py={1} mx={1} id="display-name" isRequired>
               <FormLabel
                 marginBottom={1}
                 pos={"relative"}
@@ -124,27 +132,31 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
               <Input
                 px={2}
                 fontSize="16px"
-                borderColor={"#587070"}
+                borderColor={"n3"}
                 height={"40px"}
                 borderRadius={"4px"}
-                marginBottom={"12px"}
+                marginBottom={"4px"}
                 required
                 isInvalid={errors.userName}
                 errorBorderColor="red.300"
                 placeholder="choose your unique name"
                 name="userName"
                 fontFamily={"PP Telegraf light"}
-                _placeholder={{ color: "#98B2B2" }}
+                _placeholder={{ color: "subtle" }}
                 value={values?.userName || ""}
                 onChange={handleChange}
               />
-              {errors.userName && (
-                <Text fontSize="xs" fontWeight="400" color="red.500">
-                  {errors.userName}
-                </Text>
-              )}
+              <Text
+                fontSize="xs"
+                height={"20.5px"}
+                fontWeight="400"
+                color="red.500"
+                visibility={errors.userName ? "visible" : "hidden"}
+              >
+                {errors.userName}
+              </Text>
             </FormControl>
-            <FormControl p={2} mx={1} id="email" isRequired>
+            <FormControl px={2} py={1} mx={1} id="email" isRequired>
               <HStack
                 alignItems={"baseline"}
                 justifyContent={"space-between"}
@@ -173,7 +185,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                   lineHeight={"16px"}
                   letterSpacing={"0em"}
                   textAlign={"left"}
-                  color={"#98B2B2"}
+                  color={"subtle"}
                   requiredIndicator={null}
                 >
                   your email won&apos;t be shared with others
@@ -182,28 +194,32 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
               <Input
                 px={2}
                 fontSize="16px"
-                borderColor={"#587070"}
+                borderColor={"n3"}
                 height={"40px"}
                 borderRadius={"4px"}
-                marginBottom={"12px"}
+                marginBottom={"4px"}
                 required
                 isInvalid={errors.email}
                 errorBorderColor="red.300"
                 placeholder="Email"
                 name="email"
                 fontFamily={"PP Telegraf light"}
-                _placeholder={{ color: "#98B2B2" }}
+                _placeholder={{ color: "subtle" }}
                 value={values?.email || ""}
                 onChange={handleChange}
               />
-              {errors.email && (
-                <Text fontSize="xs" fontWeight="400" color="red.500">
-                  {errors.email}
-                </Text>
-              )}
+              <Text
+                fontSize="xs"
+                height={"20.5px"}
+                fontWeight="400"
+                color="red.500"
+                visibility={errors.email ? "visible" : "hidden"}
+              >
+                {errors.email}
+              </Text>
             </FormControl>
             <HStack spacing={2}>
-              <FormControl p={2} mx={1} id="twitter">
+              <FormControl px={2} py={1} mx={1} id="twitter">
                 <FormLabel
                   marginBottom={1}
                   pos={"relative"}
@@ -220,18 +236,18 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                 <Input
                   px={2}
                   fontSize="16px"
-                  borderColor={"#587070"}
+                  borderColor={"n3"}
                   height={"40px"}
                   borderRadius={"4px"}
-                  marginBottom={"12px"}
+                  marginBottom={"4px"}
                   placeholder="Twitter"
-                  _placeholder={{ color: "#98B2B2" }}
+                  _placeholder={{ color: "subtle" }}
                   fontFamily={"PP Telegraf Light"}
                   name="twitter"
                   onChange={handleChange}
                 />
               </FormControl>
-              <FormControl p={2} mx={1} id="linkedin">
+              <FormControl px={2} py={1} mx={1} id="linkedin">
                 <FormLabel
                   marginBottom={1}
                   pos={"relative"}
@@ -248,19 +264,19 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                 <Input
                   px={2}
                   fontSize="16px"
-                  borderColor={"#587070"}
+                  borderColor={"n3"}
                   height={"40px"}
                   borderRadius={"4px"}
-                  marginBottom={"12px"}
+                  marginBottom={"4px"}
                   placeholder="LinkedIn"
-                  _placeholder={{ color: "#98B2B2" }}
+                  _placeholder={{ color: "subtle" }}
                   fontFamily={"PP Telegraf Light"}
                   name="linkedIn"
                   onChange={handleChange}
                 />
               </FormControl>
             </HStack>
-            <FormControl pt={2} pb={3} px={2} id="website">
+            <FormControl py={4} px={2} id="website">
               <Box display="flex" justifyContent="space-between" width={"100%"}>
                 <HStack
                   alignItems={"baseline"}
@@ -291,7 +307,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                     lineHeight={"16px"}
                     letterSpacing={"0em"}
                     textAlign={"left"}
-                    color={"#98B2B2"}
+                    color={"subtle"}
                     requiredIndicator={null}
                   >
                     Add a personal or business website here
@@ -301,11 +317,11 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
               <Input
                 px={2}
                 fontSize="16px"
-                borderColor={"#587070"}
+                borderColor={"n3"}
                 height={"40px"}
                 borderRadius={"4px"}
                 placeholder="Website URL"
-                _placeholder={{ color: "#98B2B2" }}
+                _placeholder={{ color: "subtle" }}
                 fontFamily={"PP Telegraf Light"}
                 name="website"
                 onChange={handleChange}

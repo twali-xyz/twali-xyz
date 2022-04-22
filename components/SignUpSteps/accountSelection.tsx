@@ -28,7 +28,7 @@ export function AccountSelection({
         width={["100%", "100%", "50%"]}
         minH={["90vh", "75vh", "100vh"]}
         height={"100%"}
-        color={"black"}
+        color={"inverse"}
         justifyContent={"center "}
         backgroundSize={"cover"}
         backgroundPosition={"100% "}
@@ -42,7 +42,7 @@ export function AccountSelection({
             ? "/twali-assets/step1_background.png"
             : null
         }
-        backgroundColor={"#0A1313"}
+        backgroundColor={"inverse"}
       >
         <Text
           pos={"relative"}
@@ -54,9 +54,9 @@ export function AccountSelection({
           lineHeight={"88px"}
           letterSpacing={"0.04em"}
           fontFamily={"Scope Light"}
-          color={btnActive == 1 || btnActive == 0 ? "#0A1313" : "#C7F83C"}
+          color={btnActive == 1 || btnActive == 0 ? "inverse" : "zing"}
           backgroundColor={
-            btnActive == 1 || btnActive == 0 ? "#C7F83C" : "#0A1313"
+            btnActive == 1 || btnActive == 0 ? "zing" : "inverse"
           }
         >
           expert
@@ -64,7 +64,7 @@ export function AccountSelection({
         <Text
           pos={"relative"}
           top={"108px"}
-          color={"#F9FFF2"}
+          color={"fresh"}
           fontFamily={"PP Telegraf Light"}
           fontSize={"16px"}
           lineHeight={"24px"}
@@ -74,14 +74,11 @@ export function AccountSelection({
         <Button
           disabled={!isAccTypeSelected}
           alignSelf="center"
-          backgroundColor={"#C7F83C"}
-          w="220px"
-          h={"40px"}
-          color={"#0A1313"}
           pos={"relative"}
           top={"200px"}
-          borderRadius={"32px"}
-          padding={"16px, 24px, 13px, 24px"}
+          variant={"primary"}
+          size={"lg"}
+          padding={"16px, 24px, 13px, 24px !important"}
           onClick={(evt) => {
             setIsAccTypeSelection(false);
             router.push("/steps");
@@ -109,7 +106,7 @@ export function AccountSelection({
         backgroundImage={
           btnActive == 2 ? "/twali-assets/step1_background.png" : null
         }
-        backgroundColor={"#0A1313"}
+        backgroundColor={"inverse"}
       >
         <Text
           pos={"relative"}
@@ -121,15 +118,15 @@ export function AccountSelection({
           fontSize={"72px"}
           lineHeight={"88px"}
           letterSpacing={"0.04em"}
-          color={btnActive == 2 ? "#0A1313" : "#C7F83C"}
-          backgroundColor={btnActive == 2 ? "#C7F83C" : "#0A1313"}
+          color={btnActive == 2 ? "inverse" : "zing"}
+          backgroundColor={btnActive == 2 ? "zing" : "inverse"}
         >
           client
         </Text>
         <Text
           pos={"relative"}
           top={"108px"}
-          color={"#F9FFF2"}
+          color={"fresh"}
           fontFamily={"PP Telegraf Light"}
           fontSize={"16px"}
           lineHeight={"24px"}
@@ -150,14 +147,11 @@ export function AccountSelection({
           <Button
             disabled={!isAccTypeSelected}
             alignSelf="center"
-            backgroundColor={"#C7F83C"}
-            color={"#0A1313"}
-            w="220px"
-            h={"40px"}
             pos={"relative"}
             top={"200px"}
-            borderRadius={"32px"}
-            padding={"16px, 24px, 13px, 24px"}
+            variant={"primary"}
+            size={"lg"}
+            padding={"16px, 24px, 13px, 24px !important"}
             visibility={btnActive == 2 ? "unset" : "hidden"}
           >
             Continue

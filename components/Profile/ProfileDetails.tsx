@@ -1,6 +1,6 @@
-import { ProfileBadges } from "./ProfileBadges";
-import { ProfileExperience } from "./ProfileWorkExperience";
-import { ProfileSideBar } from "./ProfileSideBar";
+import { ProfileBadges } from "./Experience/ProfileBadges";
+import { ProfileExperience } from "./Experience/ProfileWorkExperience";
+import { ProfileDataLayout } from "./ProfileData/ProfileDataLayout";
 import { ProfileHeader } from "./ProfileHeader";
 import {
   Box,
@@ -22,7 +22,7 @@ import LoginPage from "../../pages/login";
 import HeaderNav from "../HeaderNav/HeaderNav";
 import { UserData } from "../../utils/interfaces";
 import { GetCompany } from "./GetCompany";
-import useUser from "../TwaliContext";
+import useUser from "../../context/TwaliContext";
 
 const ProfileDetails = ({ user }) => {
   // Fallback for getStaticPaths, when fallback: true
@@ -307,7 +307,7 @@ const ProfileDetails = ({ user }) => {
               maxW="100%"
               p={0}
               marginTop={"0 !important"}
-              backgroundColor={"#0A1313"}
+              backgroundColor={"inverse"}
             >
               <UserPermissionsProvider
                 fetchPermission={fetchPermission(
@@ -322,17 +322,23 @@ const ProfileDetails = ({ user }) => {
                 <Flex
                   w="full"
                   justifyContent={"space-around"}
+                  flexDir={["column", "column", "row"]}
                   margin={"auto"}
                   maxW={"1350px"}
                 >
-                  <ProfileSideBar
+                  <ProfileDataLayout
                     onExpModalOpen={onExpModalOpen}
                     isExpModalOpen={isExpModalOpen}
                     onExpModalClose={onExpModalClose}
                   />
                   <Box alignSelf="flex-start" w="full" overflow="hidden">
                     {/* social media URLs */}
-                    <VStack pt={"60px"} pl={"12.5%"}>
+                    <VStack
+                      p={["0px 1%", "0px 2%", "60px 0 0 12.5%"]}
+                      mx={"auto"}
+                      width={["98vw", "95vw", "unset"]}
+                      maxW={["565px", "565px", "unset"]}
+                    >
                       <ProfileBadges
                         poapsData={poapsData}
                         snapshotData={snapshotData}

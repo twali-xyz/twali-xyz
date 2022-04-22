@@ -34,7 +34,7 @@ for (let i = 0; i <= 100; i++) {
         marginX={"25px"}
         paddingX={"12px"}
         fontSize={"16px"}
-        color={"#ffffff"}
+        color={"fresh"}
         lineHeight={"32px"}
         whiteSpace={"nowrap"}
         fontFamily={"Scope Medium"}
@@ -48,7 +48,7 @@ for (let i = 0; i <= 100; i++) {
         height={"100%"}
         marginX={"25px"}
         display={"flex"}
-        color={"#ffffff"}
+        color={"fresh"}
         paddingX={"12px"}
         fontSize={"16px"}
         lineHeight={"32px"}

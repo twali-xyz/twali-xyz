@@ -1,7 +1,7 @@
 import { Box, Text, HStack, Img, Tooltip } from "@chakra-ui/react";
 import React from "react";
-import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
-import BadgesModal from "./BadgesModal/BadgesModal";
+import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
+import BadgesModal from "../BadgesModal/BadgesModal";
 export function ProfileBadges({
   poapsData,
   snapshotData,
@@ -58,7 +58,7 @@ export function ProfileBadges({
         {!badges?.length && (
           <Text
             fontSize="16px"
-            color={"#98B2B2"}
+            color={"subtle"}
             mt={4}
             mb={8}
             lineHeight={"24px"}
@@ -74,9 +74,13 @@ export function ProfileBadges({
           <HStack
             spacing={4}
             maxW={"640px"}
-            display={"flex"}
-            flexWrap={"wrap"}
-            justifyContent={[badges?.length < 6 ? "unset" : "space-between"]}
+            display={"grid"}
+            gridTemplateColumns={[
+              "repeat(auto-fill, 102px)",
+              "repeat(auto-fill, 112px)",
+              "repeat(auto-fill, 112px)",
+            ]}
+            gridTemplateRows={"108px"}
           >
             {!!badges?.length ? (
               <>
@@ -84,17 +88,10 @@ export function ProfileBadges({
                   <>
                     {badge.type == "snapshot" ? (
                       <Img
-                        marginLeft={[
-                          "0 !important",
-                          idx === 0 || idx >= 6 ? "0px" : "32px !important",
-                        ]}
-                        marginBottom={[
-                          "0 !important",
-                          idx >= 6 ? "0px" : "32px !important",
-                        ]}
                         style={{
                           cursor: "pointer",
                         }}
+                        marginLeft={"0px !important"}
                         key={badge.spaceID}
                         borderRadius="full"
                         width="80px"
@@ -107,14 +104,7 @@ export function ProfileBadges({
                       />
                     ) : badge.type == "poap" ? (
                       <Img
-                        marginLeft={[
-                          "0 !important",
-                          idx === 0 || idx >= 6 ? "0px" : "32px !important",
-                        ]}
-                        marginBottom={[
-                          "0 !important",
-                          idx >= 6 ? "0px" : "32px !important",
-                        ]}
+                        marginLeft={"0px !important"}
                         style={{
                           cursor: "pointer",
                         }}
@@ -137,8 +127,8 @@ export function ProfileBadges({
                 <UserPermissionsRestricted to="view">
                   <Tooltip
                     margin={0}
-                    backgroundColor={"#F9FFF2"}
-                    color={"#0A1313"}
+                    backgroundColor={"fresh"}
+                    color={"inverse"}
                     label={
                       "Badges earned participating in web3 will appear here"
                     }

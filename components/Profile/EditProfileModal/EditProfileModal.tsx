@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { connect } from "../../../utils/walletUtils";
 import { listOfCountries } from "../../../utils/profileUtils";
-import useUser from "../../TwaliContext";
+import useUser from "../../../context/TwaliContext";
 import { UserData } from "../../../utils/interfaces";
 
 const EditProfileModal = (props) => {
@@ -162,10 +162,12 @@ const EditProfileModal = (props) => {
       >
         <ModalOverlay />
         <ModalContent
-          backgroundColor={"#041A19"}
+          backgroundColor={"n6"}
+          boxShadow={"8px 16px 24px 0px #062B2A8F"}
+          border={"1px solid rgba(88, 112, 112, 1)"}
           fontFamily={"PP Telegraf Light"}
         >
-          <ModalHeader>Update your profile</ModalHeader>
+          <ModalHeader mt={"20px"}>Update your profile</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form style={{ alignSelf: "center" }}>
@@ -375,14 +377,7 @@ const EditProfileModal = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              variant="ghost"
-              backgroundColor={"#C7F83C"}
-              color={"#0A1313"}
-              fontFamily={"PP Telegraf Bold"}
-              fontWeight={"700"}
-              onClick={updateExperiences}
-            >
+            <Button variant="primary" size={"sm"} onClick={updateExperiences}>
               Save{" "}
               {isSubmitted ? (
                 <CircularProgress

@@ -31,6 +31,7 @@ export interface CompanyInfo {
   companyEnd: Date;
   companyFunc: string;
   companyIndustry: string;
+  companyDescription: string;
   logo: any;
   currentStatus: Number;
 }

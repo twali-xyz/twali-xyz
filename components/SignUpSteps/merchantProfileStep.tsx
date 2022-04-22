@@ -22,7 +22,9 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
         borderRadius="lg"
         overflow="hidden"
         cursor="pointer"
-        backgroundColor={"#041A19E5"}
+        opacity={"90%"}
+        backgroundColor={"n6"}
+        boxShadow={"8px 16px 24px 0px #062B2A8F"}
         marginBottom={"180px"}
       >
         <Box p="4">
@@ -63,7 +65,7 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
                     lineHeight={"16px"}
                     letterSpacing={"0em"}
                     textAlign={"left"}
-                    color={"#0DD5D1"}
+                    color={"aqua"}
                   >
                     click to learn more
                   </Text>
@@ -73,11 +75,11 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
                 errorBorderColor="red.300"
                 fontFamily={"PP Telegraf Light"}
                 placeholder="Select business type"
-                iconColor={"#F9FFF2"}
+                iconColor={"fresh"}
                 name="businessType"
                 defaultValue={values?.businessType}
                 onChange={handleChange}
-                color={values?.businessType ? "#F9FFF2" : "#98B2B2"}
+                color={values?.businessType ? "fresh" : "subtle"}
               >
                 <option>I'm not incorporated!</option>
                 <option>Sole proprietorship</option>
@@ -91,7 +93,7 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
                         <Text fontSize='xs' fontWeight='400' color='red.500'>{errors.businessType}</Text>
                       )} */}
             </FormControl>
-            <FormControl p={2} id="business-name" isRequired>
+            <FormControl p={2} pb={0} pt={4} id="business-name" isRequired>
               <HStack display="flex" justifyContent="space-between">
                 <FormLabel
                   marginBottom={1}
@@ -107,8 +109,8 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
                   Business name
                 </FormLabel>
                 <Tooltip
-                  backgroundColor={"#F9FFF2"}
-                  color={"#0A1313"}
+                  backgroundColor={"fresh"}
+                  color={"inverse"}
                   placement="auto-start"
                   hasArrow
                   label="If you are a sole proprietor, partnership, or single-member LLC, your 'Business Name' may be registered as your personal name or your business’s DBA.
@@ -124,9 +126,9 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
                       lineHeight={"16px"}
                       letterSpacing={"0em"}
                       textAlign={"left"}
-                      color={"#0DD5D1"}
+                      color={"aqua"}
                     >
-                      What is my business type?
+                      What is my business name?
                     </Text>
                   </Box>
                 </Tooltip>
@@ -135,26 +137,38 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
                 disabled={values?.businessType === "I'm not incorporated!"}
                 px={4}
                 fontSize="16px"
-                borderColor={"#587070"}
+                borderColor={"n3"}
                 height={"40px"}
                 borderRadius={"4px"}
-                marginBottom={"12px"}
+                marginBottom={"4px"}
                 required
-                isInvalid={errors.businessName}
+                isInvalid={
+                  errors.businessName &&
+                  values?.businessType !== "I'm not incorporated!"
+                }
                 defaultValue={values?.businessName || ""}
                 errorBorderColor="red.300"
                 fontFamily={"PP Telegraf light"}
-                _placeholder={{ color: "#98B2B2" }}
+                _placeholder={{ color: "subtle" }}
                 value={values?.businessName || ""}
                 placeholder="Business name"
                 name="businessName"
                 onChange={handleChange}
               />
-              {errors.businessName && (
-                <Text fontSize="xs" fontWeight="400" color="red.500">
-                  {errors.businessName}
-                </Text>
-              )}
+              <Text
+                fontSize="xs"
+                height={"20.5px"}
+                fontWeight="400"
+                color="red.500"
+                visibility={
+                  errors.businessName &&
+                  values?.businessType !== "I'm not incorporated!"
+                    ? "visible"
+                    : "hidden"
+                }
+              >
+                {errors.businessName}
+              </Text>
             </FormControl>
 
             <FormControl p={2} id="business-location" isRequired>
@@ -173,7 +187,7 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
               </FormLabel>
               <Select
                 fontFamily={"PP Telegraf Light"}
-                color={values?.businessLocation ? "#F9FFF2" : "#98B2B2"}
+                color={values?.businessLocation ? "fresh" : "subtle"}
                 defaultValue={values?.businessLocation || ""}
                 placeholder="Select business location"
                 name="businessLocation"

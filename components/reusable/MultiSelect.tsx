@@ -67,7 +67,12 @@ export function MultiSelect({
   }
 
   return (
-    <FormControl p={2} id={`${splitLabel[0]}-${splitLabel[1]}`} isRequired>
+    <FormControl
+      p={2}
+      id={`${splitLabel[0]}-${splitLabel[1]}`}
+      isRequired
+      {...props}
+    >
       <FormLabel
         pos={"relative"}
         left={"1px"}
@@ -88,6 +93,8 @@ export function MultiSelect({
           marginTop={"16px"}
           onClick={handleAddSelector}
           paddingLeft={"0"}
+          textTransform={"none"}
+          variant={"ghost"}
         >
           <HStack>
             <Img
@@ -100,7 +107,7 @@ export function MultiSelect({
             <Text
               fontFamily={"PP Telegraf Light"}
               fontWeight={"400"}
-              color={"#C7F83C"}
+              color={"zing"}
               fontSize={"16px"}
               lineHeight={"24px"}
             >
@@ -114,7 +121,7 @@ export function MultiSelect({
 }
 
 function Selector({ splitLabel, handleChange, options, idx, defaultValue }) {
-  const [color, setColor] = useState("#98B2B2");
+  const [color, setColor] = useState("subtle");
   return (
     <Select
       key={`${splitLabel[0]}-${idx}`}
@@ -124,16 +131,16 @@ function Selector({ splitLabel, handleChange, options, idx, defaultValue }) {
       onChange={(e) => {
         handleChange(e);
         if (e.target.value) {
-          setColor("#F9FFF2");
+          setColor("fresh");
         } else {
-          setColor("#98B2B2");
+          setColor("subtle");
         }
       }}
       defaultValue={defaultValue}
       errorBorderColor="red.300"
       fontFamily={"PP Telegraf light"}
-      color={defaultValue ? "#F9FFF2" : color}
-      _placeholder={{ color: "#98B2B2" }}
+      color={defaultValue ? "fresh" : color}
+      _placeholder={{ color: "subtle" }}
     >
       {options?.map((option, idx) => {
         return <option key={`${option}--option-${idx}`}>{option}</option>;
