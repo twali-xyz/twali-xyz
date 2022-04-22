@@ -7,12 +7,7 @@ import {
 } from "@chakra-ui/icons";
 
 import React, { useEffect, useState } from "react";
-export default function Dropdown({
-  options,
-  filterParams,
-  setFilterParams,
-  name,
-}) {
+export default function Dropdown({ options, values, setValues, name }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState({});
 
@@ -23,8 +18,8 @@ export default function Dropdown({
       setSelected({
         ...selected,
       });
-      setFilterParams({
-        ...filterParams,
+      setValues({
+        ...values,
         [name]: { ...selected },
       });
       return;
@@ -33,8 +28,8 @@ export default function Dropdown({
       ...selected,
       [event.target.name]: event.target.value,
     });
-    setFilterParams({
-      ...filterParams,
+    setValues({
+      ...values,
       [name]: { ...selected, [event.target.value]: event.target.value },
     });
     return;
@@ -45,11 +40,11 @@ export default function Dropdown({
   }
   useEffect(() => {
     setSelected({
-      ...filterParams[name],
+      ...values[name],
     });
 
     return () => {};
-  }, [filterParams]);
+  }, [values]);
 
   return (
     <>

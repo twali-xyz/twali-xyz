@@ -1,28 +1,19 @@
-import {
-  Box,
-  Flex,
-  FormControl,
-  HStack,
-  RangeSlider,
-  RangeSliderFilledTrack,
-  RangeSliderThumb,
-  RangeSliderTrack,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import { Chiplets } from "./Chiplets";
+import { Box, Flex, FormControl, HStack, Text, VStack } from "@chakra-ui/react";
+import React from "react";
 import { functionalExpertiseList } from "../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
 import { Chip } from "../reusable/Chip";
 import Dropdown from "../reusable/Dropdown";
+import { TwaliRangeSlider } from "../reusable/TwaliRangeSlider";
 export function FilterInputs({ filterParams, setFilterParams }) {
-  function handleChange(e) {
-    setFilterParams({ ...filterParams, [e.target.name]: e.target.value });
-  }
   function handleRemove(e) {
-    console.log("LOGGED", filterParams[e.target.name], e.target);
-
-    delete filterParams[e.target.name][e.target.value];
+    // when the target field is budget the whole field can be removed instead of trying to remove one value
+    if (e.target.name === "budget") {
+      delete filterParams[e.target.name];
+    } else {
+      delete filterParams[e.target.name][e.target.value];
+    }
     setFilterParams({ ...filterParams });
   }
 
@@ -40,62 +31,32 @@ export function FilterInputs({ filterParams, setFilterParams }) {
         <Dropdown
           name={"industry"}
           options={industryExpertiseList}
-          filterParams={filterParams}
-          setFilterParams={setFilterParams}
+          values={filterParams}
+          setValues={setFilterParams}
         />
       </FormControl>
       <FormControl>
         <Dropdown
           name={"function"}
           options={functionalExpertiseList}
-          filterParams={filterParams}
-          setFilterParams={setFilterParams}
+          values={filterParams}
+          setValues={setFilterParams}
         />
       </FormControl>
       <FormControl>
         <Dropdown
           name={"type"}
           options={industryExpertiseList}
-          filterParams={filterParams}
-          setFilterParams={setFilterParams}
+          values={filterParams}
+          setValues={setFilterParams}
         />
       </FormControl>
-
-      <VStack
-        flexWrap={"wrap"}
-        alignSelf={"flex-start"}
-        alignItems={"flex-start"}
-        width={"100%"}
-      >
-        {Object.entries(filterParams).map((entry, idx) => {
-          if (Object.values(entry[1]).length <= 0) return;
-          return (
-            <Box key={idx}>
-              <HStack>
-                <Text>{entry[0]}</Text>
-              </HStack>
-              <Flex flexWrap={"wrap"}>
-                {Object.values(entry[1])?.map((filter, idx) => {
-                  return (
-                    <Chip
-                      pos={"relative"}
-                      zIndex={0}
-                      my={2}
-                      mx={2}
-                      variant="button"
-                      key={idx}
-                      name={entry[0]}
-                      onClick={handleRemove}
-                    >
-                      {filter}
-                    </Chip>
-                  );
-                })}
-              </Flex>
-            </Box>
-          );
-        })}
-      </VStack>
+      <TwaliRangeSlider
+        name={"budget"}
+        values={filterParams}
+        setValues={setFilterParams}
+      />
+      <Chiplets handleRemove={handleRemove} filterParams={filterParams} />
     </VStack>
   );
 }

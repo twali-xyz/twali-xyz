@@ -26,7 +26,6 @@ export default function marketplace() {
     if (filterParams) {
       getContracts(filterParams);
     }
-    return () => {};
   }, [filterParams]);
 
   return (
