@@ -1,9 +1,8 @@
 import { Chiplets } from "./Chiplets";
-import { Box, Flex, FormControl, HStack, Text, VStack } from "@chakra-ui/react";
+import { FormControl, VStack } from "@chakra-ui/react";
 import React from "react";
 import { functionalExpertiseList } from "../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
-import { Chip } from "../reusable/Chip";
 import Dropdown from "../reusable/Dropdown";
 import { TwaliRangeSlider } from "../reusable/TwaliRangeSlider";
 export function FilterInputs({ filterParams, setFilterParams }) {
@@ -55,6 +54,7 @@ export function FilterInputs({ filterParams, setFilterParams }) {
         name={"budget"}
         values={filterParams}
         setValues={setFilterParams}
+        dropdown={true}
       />
       <Chiplets handleRemove={handleRemove} filterParams={filterParams} />
     </VStack>
