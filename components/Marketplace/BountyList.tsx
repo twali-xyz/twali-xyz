@@ -1,7 +1,7 @@
 import { Link, VStack } from "@chakra-ui/react";
 import React from "react";
 import { BountyCard } from "./BountyCard";
-export function BountyList({ contracts, sortParams }) {
+export const BountyList = ({ contracts, sortParams }) => {
   function compare(a, b, type) {
     if (a[type] < b[type]) {
       return -1;
@@ -44,4 +44,4 @@ export function BountyList({ contracts, sortParams }) {
           })}
     </VStack>
   );
-}
+};

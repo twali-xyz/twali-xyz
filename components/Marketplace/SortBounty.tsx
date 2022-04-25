@@ -1,6 +1,6 @@
 import { FormControl, HStack, Select, Text } from "@chakra-ui/react";
 import React from "react";
-export function SortBounty({ contracts, setSortParams }) {
+export const SortBounty = ({ contracts, setSortParams }) => {
   return (
     <HStack width={"300px"} alignSelf={"flex-start"} marginLeft={"48px"}>
       <FormControl>
@@ -45,4 +45,4 @@ export function SortBounty({ contracts, setSortParams }) {
       </Text>
     </HStack>
   );
-}
+};

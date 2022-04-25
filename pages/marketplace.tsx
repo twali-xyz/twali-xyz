@@ -22,7 +22,7 @@ export default function marketplace() {
   searchParams.sort();
   const qs = searchParams.toString();
 
-  const { data, error } = useSWR(qs, fetcher);
+  const { data, error } = useSWR("api/marketplace/filter", fetcher);
   function createURL(filterParams) {
     searchParams = new URLSearchParams({});
     let urlQuery = "";

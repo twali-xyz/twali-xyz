@@ -24,10 +24,11 @@ interface IMultiContainerProps extends RangeSliderProps {
   min?: number;
   max?: number;
   step?: number;
+  symbol?: string;
   props?;
 }
 
-export function TwaliRangeSlider({
+export const TwaliRangeSlider = ({
   variant = undefined,
   colorScheme = undefined,
   size = undefined,
@@ -36,11 +37,12 @@ export function TwaliRangeSlider({
   values,
   setValues,
   dropdown,
+  symbol,
   min = 0,
   max = 100,
   step,
   ...props
-}: IMultiContainerProps) {
+}: IMultiContainerProps) => {
   const { isOpen, onClose, onToggle } = useDisclosure();
   const [sliderValue, setSliderValue] = useState([min, max]);
 
@@ -102,7 +104,6 @@ export function TwaliRangeSlider({
         borderRadius={"8px"}
         display={"flex"}
         visibility={isOpen ? "visible" : "hidden"}
-        rotate={isOpen ? "0" : "90"}
         transition={"ease-in-out"}
         transform={"auto"}
         translateY={isOpen ? "0" : "-8px"}
@@ -154,11 +155,15 @@ export function TwaliRangeSlider({
             ml="-6"
             w="12"
           >
-            {sliderValue[0] > 999
-              ? (sliderValue[0] / 1000) % 2
-                ? `$${(sliderValue[0] / 1000).toFixed(2)}k`
-                : `$${(sliderValue[0] / 1000).toFixed(0)}k`
-              : `$${sliderValue[0]}`}
+            {symbol && symbol === "$"
+              ? sliderValue[0] > 999
+                ? (sliderValue[0] / 1000) % 2
+                  ? `$${(sliderValue[0] / 1000).toFixed(2)}k`
+                  : `$${(sliderValue[0] / 1000).toFixed(0)}k`
+                : `$${sliderValue[0]}`
+              : symbol
+              ? `${sliderValue[0]} ${symbol}`
+              : `${sliderValue[0]}`}
           </RangeSliderMark>
           <RangeSliderMark
             value={max}
@@ -170,11 +175,15 @@ export function TwaliRangeSlider({
             w="12"
             whiteSpace={"nowrap"}
           >
-            {sliderValue[1] > 999
-              ? (sliderValue[1] / 1000) % 2
-                ? `$${(sliderValue[1] / 1000).toFixed(2)}k`
-                : `$${(sliderValue[1] / 1000).toFixed(0)}k`
-              : `$${sliderValue[1]}`}
+            {symbol && symbol === "$"
+              ? sliderValue[1] > 999
+                ? (sliderValue[1] / 1000) % 2
+                  ? `$${(sliderValue[1] / 1000).toFixed(2)}k`
+                  : `$${(sliderValue[1] / 1000).toFixed(0)}k`
+                : `$${sliderValue[1]}`
+              : symbol
+              ? `${sliderValue[1]} ${symbol}`
+              : `${sliderValue[1]}`}
           </RangeSliderMark>
           <RangeSliderTrack height={"4px"} background={"n3"}>
             <RangeSliderFilledTrack background={"n1"} />
@@ -197,4 +206,4 @@ export function TwaliRangeSlider({
       </Flex>
     </Box>
   );
-}
+};

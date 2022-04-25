@@ -1,7 +1,7 @@
 import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 import { Chip } from "../reusable/Chip";
-export function Chiplets({ handleRemove, filterParams, ...props }) {
+export const Chiplets = ({ handleRemove, filterParams, ...props }) => {
   return (
     <VStack
       flexWrap={"wrap"}
@@ -48,4 +48,4 @@ export function Chiplets({ handleRemove, filterParams, ...props }) {
       })}
     </VStack>
   );
-}
+};

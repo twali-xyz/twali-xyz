@@ -1,6 +1,8 @@
 import { NextApiHandler } from "next";
 
 const getAllBounties: NextApiHandler = async (req, res) => {
+  console.log("REQUEST>>>>", req.headers, "RESULT>>>>", res);
+
   try {
     await fetch("https://jsonplaceholder.typicode.com/posts")
       .then((response) => response.json())

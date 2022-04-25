@@ -40,7 +40,7 @@ interface marks {
  * @returns JSX slider element
  *
  */
-export function TwaliSlider({
+export const TwaliSlider = ({
   variant = undefined,
   colorScheme = undefined,
   size = undefined,
@@ -50,7 +50,7 @@ export function TwaliSlider({
   defaultValue,
   step,
   ...props
-}: IMultiContainerProps) {
+}: IMultiContainerProps) => {
   const styles = useMultiStyleConfig(`TwaliSlider`, {
     variant,
     colorScheme,
@@ -101,4 +101,4 @@ export function TwaliSlider({
       />
     </Slider>
   );
-}
+};

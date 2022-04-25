@@ -1,24 +1,7 @@
-import {
-  Box,
-  Button,
-  SlideFade,
-  useDisclosure,
-  useOutsideClick,
-} from "@chakra-ui/react";
-import {
-  CheckCircleIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-  TimeIcon,
-} from "@chakra-ui/icons";
+import { Box, Button, useDisclosure, useOutsideClick } from "@chakra-ui/react";
+import { CheckCircleIcon, ChevronDownIcon, TimeIcon } from "@chakra-ui/icons";
 import React, { useEffect, useState } from "react";
-export default function Dropdown({
-  options,
-  values,
-  setValues,
-  name,
-  ...props
-}) {
+export const Dropdown = ({ options, values, setValues, name, ...props }) => {
   const { isOpen, onClose, onToggle } = useDisclosure();
   const [selected, setSelected] = useState({});
 
@@ -117,4 +100,4 @@ export default function Dropdown({
       </Box>
     </>
   );
-}
+};

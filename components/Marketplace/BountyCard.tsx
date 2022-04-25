@@ -19,7 +19,7 @@ interface BountyCard {
  * @returns JSX BountyCard element
  *
  */
-export function BountyCard({ title, body, img, ...props }) {
+export const BountyCard = ({ title, body, img, ...props }) => {
   return (
     <Box
       {...props}
@@ -69,4 +69,4 @@ export function BountyCard({ title, body, img, ...props }) {
       </VStack>
     </Box>
   );
-}
+};
