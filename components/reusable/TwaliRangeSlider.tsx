@@ -9,6 +9,8 @@ import {
   RangeSliderProps,
   RangeSliderThumb,
   RangeSliderTrack,
+  useDisclosure,
+  useOutsideClick,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 
@@ -40,14 +42,16 @@ export function TwaliRangeSlider({
   step,
   ...props
 }: IMultiContainerProps) {
-  const [isOpen, setIsOpen] = useState(dropdown ? false : true);
+  const { isOpen, onClose, onToggle } = useDisclosure();
   const [sliderValue, setSliderValue] = useState([min, max]);
-  function handleOpenClose() {
-    setIsOpen(!isOpen);
-  }
-  function handleChange(val) {
-    console.log(val);
 
+  const ref = React.useRef();
+  useOutsideClick({
+    ref: ref,
+    handler: onClose,
+  });
+
+  function handleChange(val) {
     setValues({ ...values, [name]: sliderValue });
     setSliderValue(val);
   }
@@ -65,6 +69,7 @@ export function TwaliRangeSlider({
       height={"40px"}
       alignSelf={"flex-start"}
       pos={"relative"}
+      ref={ref}
     >
       {dropdown && (
         <Button
@@ -77,7 +82,7 @@ export function TwaliRangeSlider({
           fontFamily={"PP Telegraf Light"}
           fontSize={"16px !important"}
           color={"subtle"}
-          onClick={handleOpenClose}
+          onClick={onToggle}
           paddingX={1}
           width={"100%"}
           borderRadius={"4px"}
@@ -89,14 +94,20 @@ export function TwaliRangeSlider({
       <Flex
         pos={"relative"}
         zIndex={10}
-        width={"280px"}
-        height={"124px"}
+        width={isOpen ? "280px" : "40px"}
+        height={isOpen ? "124px" : "40px"}
         background="#041A19E5"
         boxShadow={"8px 16px 24px 0px #062B2A8F"}
         border={"1px solid"}
         borderColor={"zing"}
         borderRadius={"8px"}
-        display={dropdown ? (isOpen ? "flex" : "none") : "flex"}
+        display={"flex"}
+        visibility={isOpen ? "visible" : "hidden"}
+        transition={"ease-in-out"}
+        transform={"auto"}
+        translateY={isOpen ? "0" : "-8px"}
+        translateX={isOpen ? "0" : "18px"}
+        transitionDuration={".2s"}
         padding={"8px 24px 24px 8px"}
         paddingLeft={"16px"}
         flexDir={"column"}
@@ -104,6 +115,7 @@ export function TwaliRangeSlider({
         alignItems={"center"}
       >
         <Button
+          display={isOpen ? "block" : "none"}
           alignSelf={"flex-end"}
           variant={"unstyled"}
           onClick={handleReset}
@@ -118,6 +130,7 @@ export function TwaliRangeSlider({
           reset
         </Button>
         <RangeSlider
+          display={isOpen ? "block" : "none"}
           alignSelf={"flex-start"}
           pos={dropdown ? "absolute" : "relative"}
           aria-label={["min", "max"]}

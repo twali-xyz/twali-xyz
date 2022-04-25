@@ -15,7 +15,7 @@ export default function marketplace() {
   const [sortParams, setSortParams] = useState();
   const [query, setQuery] = useState("");
 
-  let paramsObj = { params: query };
+  let paramsObj = { params: "" };
   let searchParams = new URLSearchParams(paramsObj);
 
   // Create a stable key for SWR
@@ -24,21 +24,29 @@ export default function marketplace() {
   console.log(searchParams.get("function"));
 
   const { data, error } = useSWR(qs, fetcher);
-  console.log(data, qs);
+  console.log(data, error, qs);
 
   function createURL(filterParams) {
+    searchParams = new URLSearchParams({});
     let urlQuery = "";
     Object.entries(filterParams).forEach((element) => {
-      console.log(element[0], Object.values(element[1]));
-      urlQuery += `${urlQuery.length === 0 ? "" : "&"}?${
+      // https://en.wikipedia.org/wiki/Query_string
+      //  ?field1=value1&field1=value2&field2=value3
+      urlQuery += `${urlQuery.length === 0 ? "?" : "&"}${
         element[0]
-      }=${Object.values(element[1]).join("%20")}`.replace(/ /g, "_");
+      }=${Object.values(element[1]).join(`&${element[0]}=`)}`.replace(
+        / /g,
+        "_"
+      );
+
+      searchParams.append(element[0], String(element[1]));
     });
     setQuery(urlQuery);
   }
 
   useEffect(() => {
     createURL(filterParams);
+    console.log(query);
   }, [filterParams]);
 
   return (
