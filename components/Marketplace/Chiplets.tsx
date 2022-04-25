@@ -11,17 +11,22 @@ export function Chiplets({ handleRemove, filterParams, ...props }) {
       {...props}
     >
       {/* map out the headers for each filter type */}
-      {Object.entries(filterParams).map((entry, idx) => {
-        if (Object.values(entry[1]).length <= 0) return;
+      {Object.entries(filterParams).map((filterObj, idx) => {
+        const [filterHeader, filters] = filterObj;
+
+        if (!filters) return;
+        if (Object.values(filters).length <= 0) return;
+        console.log(filters);
+
         return (
           <Box key={idx}>
             <HStack>
-              <Text>{entry[0]}</Text>
+              <Text>{filterHeader}</Text>
             </HStack>
             <Flex flexWrap={"wrap"}>
               {/* For the budget we get two values that must be placed in a single chip otherwise
                otherwise each filter selection gets it's own chips  */}
-              {entry[0] === "budget" ? (
+              {filterHeader === "budget" ? (
                 <Chip
                   pos={"relative"}
                   zIndex={0}
@@ -29,13 +34,13 @@ export function Chiplets({ handleRemove, filterParams, ...props }) {
                   mx={2}
                   variant="button"
                   key={idx}
-                  name={entry[0]}
+                  name={filterHeader}
                   onClick={handleRemove}
                 >
-                  {`$${entry[1][0]} - $${entry[1][1]}`}
+                  {`$${filters[0]} - $${filters[1]}`}
                 </Chip>
               ) : (
-                Object.values(entry[1])?.map((filter, idx) => {
+                Object.values(filters)?.map((filters, idx) => {
                   return (
                     <Chip
                       pos={"relative"}
@@ -44,10 +49,12 @@ export function Chiplets({ handleRemove, filterParams, ...props }) {
                       mx={2}
                       variant="button"
                       key={idx}
-                      name={entry[0]}
+                      name={filterHeader}
                       onClick={handleRemove}
                     >
-                      {filter}
+                      {filterHeader === "startDate"
+                        ? new Date(filters).toLocaleDateString("en-US")
+                        : filters}
                     </Chip>
                   );
                 })

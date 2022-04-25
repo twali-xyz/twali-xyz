@@ -24,12 +24,11 @@ export default function marketplace() {
   console.log(searchParams.get("function"));
 
   const { data, error } = useSWR(qs, fetcher);
-  console.log(data, error, qs);
-
   function createURL(filterParams) {
     searchParams = new URLSearchParams({});
     let urlQuery = "";
     Object.entries(filterParams).forEach((element) => {
+      if (!element[1]) return;
       // https://en.wikipedia.org/wiki/Query_string
       //  ?field1=value1&field1=value2&field2=value3
       urlQuery += `${urlQuery.length === 0 ? "?" : "&"}${
@@ -46,7 +45,7 @@ export default function marketplace() {
 
   useEffect(() => {
     createURL(filterParams);
-    console.log(query);
+    console.log(filterParams);
   }, [filterParams]);
 
   return (

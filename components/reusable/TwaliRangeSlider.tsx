@@ -37,8 +37,8 @@ export function TwaliRangeSlider({
   values,
   setValues,
   dropdown,
-  min,
-  max,
+  min = 0,
+  max = 100,
   step,
   ...props
 }: IMultiContainerProps) {

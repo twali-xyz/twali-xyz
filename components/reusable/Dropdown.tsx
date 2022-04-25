@@ -77,11 +77,13 @@ export default function Dropdown({
           padding="0 16px"
         >
           {name}
-          {isOpen ? (
-            <ChevronUpIcon marginLeft={4} />
-          ) : (
-            <ChevronDownIcon marginLeft={4} />
-          )}
+
+          <ChevronDownIcon
+            marginLeft={4}
+            transform={"auto"}
+            rotate={isOpen ? "180" : "0"}
+            transitionDuration={".16s"}
+          />
         </Button>
         <Box
           pos={"absolute"}

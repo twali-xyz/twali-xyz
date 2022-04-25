@@ -50,6 +50,10 @@ select:focus {
   box-shadow: none !important;
 }
 
+/* start date in marketplace calendar */
+.start-date {
+  color: #98B2B2
+}
 @font-face {
   font-family: "GrandSlang Italic";
   src: url("../public/fonts/GrandSlang-Italic.eot");
