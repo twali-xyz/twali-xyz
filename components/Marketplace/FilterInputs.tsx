@@ -28,6 +28,7 @@ export function FilterInputs({ filterParams, setFilterParams }) {
     >
       <FormControl>
         <Dropdown
+          my={"8px"}
           name={"industry"}
           options={industryExpertiseList}
           values={filterParams}
@@ -36,6 +37,7 @@ export function FilterInputs({ filterParams, setFilterParams }) {
       </FormControl>
       <FormControl>
         <Dropdown
+          my={"8px"}
           name={"function"}
           options={functionalExpertiseList}
           values={filterParams}
@@ -44,6 +46,7 @@ export function FilterInputs({ filterParams, setFilterParams }) {
       </FormControl>
       <FormControl>
         <Dropdown
+          my={"8px"}
           name={"type"}
           options={industryExpertiseList}
           values={filterParams}
@@ -54,9 +57,18 @@ export function FilterInputs({ filterParams, setFilterParams }) {
         name={"budget"}
         values={filterParams}
         setValues={setFilterParams}
+        width={"50%"}
         dropdown={true}
+        min={0}
+        max={50000}
+        alignSelf={"flex-start"}
       />
-      <Chiplets handleRemove={handleRemove} filterParams={filterParams} />
+      <Chiplets
+        pos={"relative"}
+        zIndex={0}
+        handleRemove={handleRemove}
+        filterParams={filterParams}
+      />
     </VStack>
   );
 }

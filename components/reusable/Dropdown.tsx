@@ -7,13 +7,18 @@ import {
 } from "@chakra-ui/icons";
 
 import React, { useEffect, useState } from "react";
-export default function Dropdown({ options, values, setValues, name }) {
+export default function Dropdown({
+  options,
+  values,
+  setValues,
+  name,
+  ...props
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState({});
 
   function handleClick(event) {
     if (selected[event.target.value]) {
-      selected[event.target.value];
       delete selected[event.target.value];
       setSelected({
         ...selected,
@@ -42,23 +47,16 @@ export default function Dropdown({ options, values, setValues, name }) {
     setSelected({
       ...values[name],
     });
-
-    return () => {};
   }, [values]);
 
   return (
     <>
-      <Box
-        box-shadow="8px 16px 24px 0px #0421208F"
-        pos={"relative"}
-        width={"292px"}
-      >
+      <Box pos={"relative"} width={"292px"} {...props}>
         <Button
           variant={"dropdown"}
           height={"40px"}
-          bg={"n6"}
+          bg={"n7"}
           border="1px solid #587070"
-          justifyContent={"center"}
           alignItems={"center"}
           fontFamily={"PP Telegraf Light"}
           fontSize={"16px !important"}
@@ -66,6 +64,9 @@ export default function Dropdown({ options, values, setValues, name }) {
           onClick={handleOpenClose}
           paddingX={1}
           width={"100%"}
+          borderRadius={"4px"}
+          justifyContent="space-between"
+          padding="0 16px"
         >
           {name}
           {isOpen ? (
@@ -76,6 +77,7 @@ export default function Dropdown({ options, values, setValues, name }) {
         </Button>
         <Box
           pos={"absolute"}
+          boxShadow="8px 16px 24px 0px #0421208F"
           zIndex={10}
           display={isOpen ? "block" : "none"}
           maxH={"246px"}

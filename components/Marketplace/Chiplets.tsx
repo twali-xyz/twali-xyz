@@ -1,13 +1,14 @@
 import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 import { Chip } from "../reusable/Chip";
-export function Chiplets({ handleRemove, filterParams }) {
+export function Chiplets({ handleRemove, filterParams, ...props }) {
   return (
     <VStack
       flexWrap={"wrap"}
       alignSelf={"flex-start"}
       alignItems={"flex-start"}
       width={"100%"}
+      {...props}
     >
       {/* map out the headers for each filter type */}
       {Object.entries(filterParams).map((entry, idx) => {
@@ -31,7 +32,7 @@ export function Chiplets({ handleRemove, filterParams }) {
                   name={entry[0]}
                   onClick={handleRemove}
                 >
-                  {`${entry[1][0]} - ${entry[1][1]}`}
+                  {`$${entry[1][0]} - $${entry[1][1]}`}
                 </Chip>
               ) : (
                 Object.values(entry[1])?.map((filter, idx) => {

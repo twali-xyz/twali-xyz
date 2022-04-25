@@ -5,27 +5,40 @@ import { Flex, VStack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import HeaderNav from "../components/HeaderNav/HeaderNav";
 import useUser from "../context/TwaliContext";
+import useSWR from "swr";
+const fetcher = (...args: Parameters<typeof fetch>) =>
+  fetch(...args).then((res) => res.json());
 
 export default function marketplace() {
   const { ...userState } = useUser();
-
   const [filterParams, setFilterParams] = useState({});
   const [sortParams, setSortParams] = useState();
-  const [contracts, setContracts] = useState();
+  const [query, setQuery] = useState("");
+
+  let paramsObj = { params: query };
+  let searchParams = new URLSearchParams(paramsObj);
+
+  // Create a stable key for SWR
+  searchParams.sort();
+  const qs = searchParams.toString();
+  console.log(searchParams.get("function"));
+
+  const { data, error } = useSWR(qs, fetcher);
+  console.log(data, qs);
+
+  function createURL(filterParams) {
+    let urlQuery = "";
+    Object.entries(filterParams).forEach((element) => {
+      console.log(element[0], Object.values(element[1]));
+      urlQuery += `${urlQuery.length === 0 ? "" : "&"}?${
+        element[0]
+      }=${Object.values(element[1]).join("%20")}`.replace(/ /g, "_");
+    });
+    setQuery(urlQuery);
+  }
 
   useEffect(() => {
-    // when fitlerParams change retrieve the contracts that match
-    async function getContracts(filterParams: {}) {
-      await fetch("https://jsonplaceholder.typicode.com/posts")
-        .then((response) => response.json())
-        .then((json) => {
-          setContracts(json);
-        });
-    }
-
-    if (filterParams) {
-      getContracts(filterParams);
-    }
+    createURL(filterParams);
   }, [filterParams]);
 
   return (
@@ -50,8 +63,8 @@ export default function marketplace() {
           width={"100%"}
           background="n4"
         >
-          <SortBounty contracts={contracts} setSortParams={setSortParams} />
-          <BountyList contracts={contracts} sortParams={sortParams} />
+          <SortBounty contracts={data} setSortParams={setSortParams} />
+          <BountyList contracts={data} sortParams={sortParams} />
         </VStack>
       </Flex>
     </>
