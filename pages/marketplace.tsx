@@ -15,13 +15,12 @@ export default function marketplace() {
   const [sortParams, setSortParams] = useState();
   const [query, setQuery] = useState("");
 
-  let paramsObj = { params: "" };
+  let paramsObj = { query };
   let searchParams = new URLSearchParams(paramsObj);
 
   // Create a stable key for SWR
   searchParams.sort();
   const qs = searchParams.toString();
-  console.log(searchParams.get("function"));
 
   const { data, error } = useSWR(qs, fetcher);
   function createURL(filterParams) {
@@ -37,15 +36,12 @@ export default function marketplace() {
         / /g,
         "_"
       );
-
-      searchParams.append(element[0], String(element[1]));
     });
     setQuery(urlQuery);
   }
 
   useEffect(() => {
     createURL(filterParams);
-    console.log(filterParams);
   }, [filterParams]);
 
   return (

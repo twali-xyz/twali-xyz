@@ -18,10 +18,21 @@ export function FilterInputs({ filterParams, setFilterParams }) {
   const { isOpen, onToggle } = useDisclosure();
   const [dateSelected, setDateSelected] = useState(null);
 
+  // name: "exampleName", options: [exampleOptions]
+  const dropdowns = [
+    { name: "industry", options: industryExpertiseList },
+    { name: "functional", options: functionalExpertiseList },
+    { name: "type", options: industryExpertiseList },
+  ];
   function handleRemove(e) {
+    // without this an error is thrown when the svg within the chip button is clicked
+    if (!e.target.name) return;
     // when the target field is budget the whole field can be removed instead of trying to remove one value
     if (e.target.name === "budget" || e.target.name === "startDate") {
       delete filterParams[e.target.name];
+      if (e.target.name === "startDate") {
+        setDateSelected(null);
+      }
     } else {
       delete filterParams[e.target.name][e.target.value];
     }
@@ -50,33 +61,21 @@ export function FilterInputs({ filterParams, setFilterParams }) {
       paddingTop={"90px"}
       paddingX={"54px"}
     >
-      <FormControl>
-        <Dropdown
-          my={"8px"}
-          name={"industry"}
-          options={industryExpertiseList}
-          values={filterParams}
-          setValues={setFilterParams}
-        />
-      </FormControl>
-      <FormControl>
-        <Dropdown
-          my={"8px"}
-          name={"function"}
-          options={functionalExpertiseList}
-          values={filterParams}
-          setValues={setFilterParams}
-        />
-      </FormControl>
-      <FormControl>
-        <Dropdown
-          my={"8px"}
-          name={"type"}
-          options={industryExpertiseList}
-          values={filterParams}
-          setValues={setFilterParams}
-        />
-      </FormControl>
+      {Object.entries(dropdowns).map((dropdownObj, idx) => {
+        const { name, options } = dropdownObj[1];
+        return (
+          <FormControl key={idx}>
+            <Dropdown
+              my={"8px"}
+              name={name}
+              options={options}
+              values={filterParams}
+              setValues={setFilterParams}
+            />
+          </FormControl>
+        );
+      })}
+
       <HStack
         width={"100%"}
         alignItems={"baseline"}
@@ -111,6 +110,7 @@ export function FilterInputs({ filterParams, setFilterParams }) {
               alignItems={"baseline"}
               fontSize={"16px"}
               onClick={onToggle}
+              cursor={"pointer"}
             >
               Start Date
             </Text>

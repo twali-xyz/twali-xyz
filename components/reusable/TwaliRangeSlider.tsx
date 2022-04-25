@@ -1,4 +1,3 @@
-import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -52,7 +51,7 @@ export function TwaliRangeSlider({
   });
 
   function handleChange(val) {
-    setValues({ ...values, [name]: sliderValue });
+    setValues({ ...values, [name]: { [name]: sliderValue } });
     setSliderValue(val);
   }
   function handleSliderMarkers(val) {
@@ -103,6 +102,7 @@ export function TwaliRangeSlider({
         borderRadius={"8px"}
         display={"flex"}
         visibility={isOpen ? "visible" : "hidden"}
+        rotate={isOpen ? "0" : "90"}
         transition={"ease-in-out"}
         transform={"auto"}
         translateY={isOpen ? "0" : "-8px"}
