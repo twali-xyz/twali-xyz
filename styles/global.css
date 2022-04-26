@@ -54,6 +54,10 @@ select:focus {
 .start-date {
   color: #98B2B2
 }
+
+.sort-dropdown > button {
+  background-color: transparent;
+}
 @font-face {
   font-family: "GrandSlang Italic";
   src: url("../public/fonts/GrandSlang-Italic.eot");

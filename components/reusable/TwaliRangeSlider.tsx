@@ -11,7 +11,7 @@ import {
   useDisclosure,
   useOutsideClick,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface IMultiContainerProps extends RangeSliderProps {
   variant?: undefined;
@@ -19,7 +19,7 @@ interface IMultiContainerProps extends RangeSliderProps {
   size?: "prose" | "1/4" | "2/4" | "3/4" | "full";
   name?: string;
   values?: Object[];
-  setValues?: React.Dispatch<React.SetStateAction<Object[]>>;
+  onChange?: React.Dispatch<React.SetStateAction<Object[]>>;
   dropdown?: boolean;
   min?: number;
   max?: number;
@@ -33,9 +33,9 @@ export const TwaliRangeSlider = ({
   colorScheme = undefined,
   size = undefined,
   defaultValue = undefined,
+  onChange,
   name,
   values,
-  setValues,
   dropdown,
   symbol,
   min = 0,
@@ -45,7 +45,7 @@ export const TwaliRangeSlider = ({
 }: IMultiContainerProps) => {
   const { isOpen, onClose, onToggle } = useDisclosure();
   const [sliderValue, setSliderValue] = useState([min, max]);
-
+  const [finalValue, setFinalValue] = useState();
   const ref = React.useRef();
   useOutsideClick({
     ref: ref,
@@ -53,17 +53,20 @@ export const TwaliRangeSlider = ({
   });
 
   function handleChange(val) {
-    setValues({ ...values, [name]: { [name]: sliderValue } });
-    setSliderValue(val);
+    setFinalValue(val);
   }
   function handleSliderMarkers(val) {
     setSliderValue(val);
   }
   function handleReset() {
-    delete values["budget"];
-    setValues({ ...values });
+    delete values[name];
     setSliderValue([min, max]);
+    setFinalValue(null);
   }
+
+  useEffect(() => {
+    onChange(finalValue);
+  }, [finalValue]);
   return (
     <Box
       width={"84px"}

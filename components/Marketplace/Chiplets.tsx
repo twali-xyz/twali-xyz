@@ -15,6 +15,7 @@ export const Chiplets = ({ handleRemove, filterParams, ...props }) => {
         const [filterType, filters] = filterObj;
         if (!filters) return;
         if (Object.values(filters).length <= 0) return;
+        console.log(filters);
 
         return (
           <Box key={idx}>
@@ -23,24 +24,30 @@ export const Chiplets = ({ handleRemove, filterParams, ...props }) => {
             </HStack>
             <Flex flexWrap={"wrap"}>
               {Object.values(filters)?.map((filter, idx) => {
-                return (
+                console.log(filter, idx);
+
+                return (filterType === "budget" && idx === 0) ||
+                  (filterType === "duration" && idx === 0) ||
+                  (filterType !== "budget" && filterType !== "duration") ? (
                   <Chip
                     pos={"relative"}
                     zIndex={0}
                     my={2}
-                    mx={2}
+                    mr={2}
                     variant="button"
                     key={idx}
                     name={filterType}
                     onClick={handleRemove}
                   >
                     {filterType === "budget"
-                      ? `$${filter[0]} - $${filter[1]}`
+                      ? idx === 0 && `$${filters[0]}-$${filters[1]}`
+                      : filterType === "duration"
+                      ? `${filters[0]}-${filters[1]} days`
                       : filterType === "startDate"
                       ? new Date(filter).toLocaleDateString("en-US")
                       : filter}
                   </Chip>
-                );
+                ) : null;
               })}
             </Flex>
           </Box>

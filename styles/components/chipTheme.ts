@@ -106,7 +106,8 @@ export const ChipStyle: ComponentStyleConfig = {
         background:"gradient1",
       },
       inner: {
-        background:"unset"
+        background:"unset",
+        paddingRight: "4px"
       },
       button: {
         display: "flex",

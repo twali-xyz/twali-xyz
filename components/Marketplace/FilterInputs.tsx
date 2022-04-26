@@ -36,12 +36,19 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
     { name: "functional", options: functionalExpertiseList },
     // { name: "type", options: industryExpertiseList },
   ];
+
   function handleRemove(e) {
     // without this an error is thrown when the svg within the chip button is clicked
+
     if (!e.target.name) return;
     // when the target field is budget the whole field can be removed instead of trying to remove one value
-    if (e.target.name === "budget" || e.target.name === "startDate") {
+    if (
+      e.target.name === "budget" ||
+      e.target.name === "startDate" ||
+      e.target.name === "duration"
+    ) {
       delete filterParams[e.target.name];
+      // renders start date input with text upon clearing date
       if (e.target.name === "startDate") {
         setDateSelected(null);
       }
@@ -62,64 +69,51 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
     setDateSelected(value);
     setFilterParams({ ...filterParams, ["startDate"]: { startDate: value } });
   }
+  console.log(filterParams);
 
   return (
     <VStack
       width={"25vw"}
       minW={"400px"}
-      maxW={"600px"}
+      maxW={"400px"}
       background={"inverse"}
       height={"calc(100vh)"}
       paddingTop={"90px"}
-      paddingX={"54px"}
     >
-      {Object.entries(dropdowns).map((dropdownObj, idx) => {
-        const { name, options } = dropdownObj[1];
-        return (
-          <FormControl key={idx}>
-            <Dropdown
-              my={"8px"}
-              name={name}
-              options={options}
-              values={filterParams}
-              setValues={setFilterParams}
-            />
-          </FormControl>
-        );
-      })}
-
+      <VStack paddingX={"54px"}>
+        {Object.entries(dropdowns).map((dropdownObj, idx) => {
+          const { name, options } = dropdownObj[1];
+          return (
+            <FormControl key={idx}>
+              <Dropdown
+                my={"8px"}
+                name={name}
+                options={options}
+                onChange={(val) => {
+                  if (val) {
+                    setFilterParams({
+                      ...filterParams,
+                      [name]: val,
+                    });
+                    return;
+                  } else if (!val) {
+                    delete filterParams[name];
+                    setFilterParams(filterParams);
+                  }
+                }}
+              />
+            </FormControl>
+          );
+        })}
+      </VStack>
       <HStack
         width={"100%"}
         alignItems={"baseline"}
         justifyContent={"space-between"}
         p={0}
+        mt={0}
+        paddingX={"54px"}
       >
-        <FormControl>
-          <TwaliRangeSlider
-            name={"budget"}
-            values={filterParams}
-            setValues={setFilterParams}
-            width={"100%"}
-            dropdown={true}
-            symbol={"$"}
-            min={0}
-            max={50000}
-            alignSelf={"flex-start"}
-          />
-        </FormControl>
-        <FormControl>
-          <TwaliRangeSlider
-            name={"duration"}
-            values={filterParams}
-            setValues={setFilterParams}
-            width={"100%"}
-            dropdown={true}
-            symbol={"days"}
-            min={1}
-            max={30}
-            alignSelf={"flex-start"}
-          />
-        </FormControl>
         <FormControl>
           <Box onClick={onToggle}>
             <Box
@@ -161,9 +155,55 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
             />
           </Box>
         </FormControl>
+
+        <FormControl>
+          <TwaliRangeSlider
+            name={"duration"}
+            values={filterParams}
+            onChange={(values) => {
+              if (values) {
+                setFilterParams({
+                  ...filterParams,
+                  duration: values,
+                });
+              }
+            }}
+            width={"87px"}
+            dropdown={true}
+            symbol={"days"}
+            min={1}
+            max={30}
+            alignSelf={"flex-start"}
+          />
+        </FormControl>
+
+        <FormControl>
+          <TwaliRangeSlider
+            name={"budget"}
+            values={filterParams}
+            onChange={(values) => {
+              if (values) {
+                setFilterParams({
+                  ...filterParams,
+                  budget: values,
+                });
+              }
+            }}
+            width={"87px"}
+            dropdown={true}
+            symbol={"$"}
+            min={0}
+            max={50000}
+            alignSelf={"flex-start"}
+          />
+        </FormControl>
       </HStack>
       <Chiplets
+        maxH={"70vh"}
+        flexWrap={"noWrap"}
+        overflowY={"scroll"}
         pos={"relative"}
+        padding={"55px"}
         zIndex={0}
         handleRemove={handleRemove}
         filterParams={filterParams}

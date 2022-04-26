@@ -1,7 +1,7 @@
 import { Box, Button, useDisclosure, useOutsideClick } from "@chakra-ui/react";
 import { CheckCircleIcon, ChevronDownIcon, TimeIcon } from "@chakra-ui/icons";
 import React, { useEffect, useState } from "react";
-export const Dropdown = ({ options, values, setValues, name, ...props }) => {
+export const Dropdown = ({ options, onChange, name, ...props }) => {
   const { isOpen, onClose, onToggle } = useDisclosure();
   const [selected, setSelected] = useState({});
 
@@ -17,28 +17,18 @@ export const Dropdown = ({ options, values, setValues, name, ...props }) => {
       setSelected({
         ...selected,
       });
-      setValues({
-        ...values,
-        [name]: { ...selected },
-      });
       return;
     }
     setSelected({
       ...selected,
-      [event.target.name]: event.target.value,
-    });
-    setValues({
-      ...values,
-      [name]: { ...selected, [event.target.value]: event.target.value },
+      [event.target.value]: event.target.value,
     });
     return;
   }
 
   useEffect(() => {
-    setSelected({
-      ...values[name],
-    });
-  }, [values]);
+    onChange(selected);
+  }, [selected]);
 
   return (
     <>
