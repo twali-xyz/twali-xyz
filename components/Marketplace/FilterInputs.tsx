@@ -89,6 +89,7 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
                 my={"8px"}
                 name={name}
                 options={options}
+                multiSelect={true}
                 onChange={(val) => {
                   if (val) {
                     setFilterParams({

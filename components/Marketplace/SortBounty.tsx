@@ -8,6 +8,7 @@ export const SortBounty = ({ contracts, setSortParams }) => {
       <FormControl>
         <Dropdown
           className={"sort-dropdown"}
+          multiSelect={false}
           values={""}
           name={"sort"}
           options={options}

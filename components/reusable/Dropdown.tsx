@@ -1,7 +1,13 @@
 import { Box, Button, useDisclosure, useOutsideClick } from "@chakra-ui/react";
 import { CheckCircleIcon, ChevronDownIcon, TimeIcon } from "@chakra-ui/icons";
 import React, { useEffect, useState } from "react";
-export const Dropdown = ({ options, onChange, name, ...props }) => {
+export const Dropdown = ({
+  options,
+  onChange,
+  name,
+  multiSelect = false,
+  ...props
+}) => {
   const { isOpen, onClose, onToggle } = useDisclosure();
   const [selected, setSelected] = useState({});
 
@@ -11,8 +17,20 @@ export const Dropdown = ({ options, onChange, name, ...props }) => {
     handler: onClose,
   });
 
-  function handleClick(event) {
-    if (selected[event.target.value]) {
+  function handleSelect(event) {
+    if (Object.values(selected).includes(event.target.value)) {
+      delete selected[event.target.value];
+      setSelected({
+        ...selected,
+      });
+      return;
+    }
+    setSelected({
+      [event.target.value]: event.target.value,
+    });
+  }
+  function handleMultiSelect(event) {
+    if (Object.values(selected).includes(event.target.value)) {
       delete selected[event.target.value];
       setSelected({
         ...selected,
@@ -78,10 +96,14 @@ export const Dropdown = ({ options, onChange, name, ...props }) => {
                 value={option}
                 name={name}
                 width={"100%"}
-                onClick={handleClick}
+                onClick={multiSelect ? handleMultiSelect : handleSelect}
                 key={idx}
               >
-                {selected[option] ? <CheckCircleIcon /> : <TimeIcon />}
+                {selected && selected[option] ? (
+                  <CheckCircleIcon />
+                ) : (
+                  <TimeIcon />
+                )}
                 {option}
               </Button>
             );
