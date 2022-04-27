@@ -104,3 +104,18 @@ DATE PICKER CSS */
 .react-calendar__tile:hover {
   color: #c7f83c;
 }
+
+.react-calendar__tile--rangeStart {
+  background-color: #c7f83c;
+  color: #6d6d6d;
+}
+
+.react-calendar__tile--rangeEnd {
+  background-color: #c7f83c;
+  color: #6d6d6d;
+}
+
+.react-calendar__tile--active {
+  background-color: #c7f83c;
+  color: #6d6d6d;
+}

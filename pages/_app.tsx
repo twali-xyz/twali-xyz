@@ -1,5 +1,6 @@
 import "../styles/global.css";
 import "../styles/datePicker.css";
+import "../styles/dateRangePicker.css";
 import { AppProps } from "next/app";
 import * as React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
