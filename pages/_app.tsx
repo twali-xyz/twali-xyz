@@ -4,14 +4,9 @@ import "../styles/dateRangePicker.css";
 import { AppProps } from "next/app";
 import * as React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { fab } from "@fortawesome/free-brands-svg-icons";
-import { fas } from "@fortawesome/free-solid-svg-icons";
 
 import { UserProvider } from "../context/TwaliContext";
 import { twaliTheme } from "../styles/twaliTheme";
-
-library.add(fab, fas);
 
 function App({ Component, pageProps }: AppProps) {
   return (
