@@ -10,13 +10,15 @@ import { BountyList } from "../../components/Marketplace/BountyList";
 
 const fetcher = (...args: Parameters<typeof fetch>) =>
   fetch(...args).then((res) => res.json());
-export default function filter() {
+
+export default function marketplace() {
   const router = useRouter();
   const { ...userState } = useUser();
   const [filterParams, setFilterParams] = useState({});
   const [sortParams, setSortParams] = useState();
   const [query, setQuery] = useState("");
 
+  // set the filterParams based on the URL query params
   useEffect(() => {
     if (!router.query) return;
 
@@ -50,7 +52,7 @@ export default function filter() {
       setFilterParams(tempFilter);
     }
     return () => {};
-  }, [router.query]);
+  }, [router.asPath]);
 
   const { data, error } = useSWR(`api/marketplace/filter${query}`, fetcher);
 
@@ -70,6 +72,7 @@ export default function filter() {
     setQuery(urlQuery);
   }
 
+  // when the filter params change a new URL is created
   useEffect(() => {
     createURL(filterParams);
   }, [filterParams]);

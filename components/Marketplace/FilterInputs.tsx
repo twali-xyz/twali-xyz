@@ -1,6 +1,7 @@
 import { Chiplets } from "./Chiplets";
 import {
   Box,
+  Button,
   FormControl,
   HStack,
   Text,
@@ -13,6 +14,7 @@ import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
 import { Dropdown } from "../reusable/Dropdown";
 import { TwaliRangeSlider } from "../reusable/TwaliRangeSlider";
 import DatePicker from "react-date-picker/dist/entry.nostyle";
+import Router from "next/router";
 
 export const FilterInputs = ({ filterParams, setFilterParams }) => {
   const { isOpen, onToggle } = useDisclosure();
@@ -86,6 +88,13 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
       delete filterParams[name];
       setFilterParams({ ...filterParams });
     }
+  }
+
+  function resetFilter() {
+    setFilterParams({});
+    Router.push({
+      pathname: "/marketplace",
+    });
   }
 
   return (
@@ -215,12 +224,40 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
         }}
         pos={"relative"}
         padding={"48px"}
+        pb={2}
         pt={6}
         mt={"16px !important"}
         zIndex={0}
         handleRemove={handleRemove}
         filterParams={filterParams}
       />
+      {Object.entries(filterParams).length ? (
+        <Box width={"100%"} padding={"0 48px"}>
+          <Button
+            //styleName: Label/label14;
+            fontFamily="PP Telegraf"
+            fontSize="14px"
+            fontWeight="500"
+            lineHeight="24px"
+            letterSpacing="0.02em"
+            textAlign="left"
+            color={"zing"}
+            variant={"unstyled"}
+            textTransform={"capitalize"}
+            whiteSpace={"nowrap"}
+            width={"fit-content"}
+            height={"24px"}
+            onClick={resetFilter}
+          >
+            <HStack>
+              <Text>Reset</Text>{" "}
+              <Text textTransform={"lowercase"} ml={"8px !important"}>
+                filters
+              </Text>
+            </HStack>
+          </Button>
+        </Box>
+      ) : null}
     </VStack>
   );
 };
