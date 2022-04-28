@@ -40,12 +40,12 @@ export const TwaliRangeSlider = ({
   symbol,
   min = 0,
   max = 100,
-  step,
+  step = 1,
   ...props
 }: IMultiContainerProps) => {
   const { isOpen, onClose, onToggle } = useDisclosure();
   const [sliderValue, setSliderValue] = useState([min, max]);
-  const [finalValue, setFinalValue] = useState();
+  const [finalValue, setFinalValue] = useState(null);
   const ref = React.useRef();
   useOutsideClick({
     ref: ref,
@@ -67,6 +67,7 @@ export const TwaliRangeSlider = ({
   useEffect(() => {
     onChange(finalValue);
   }, [finalValue]);
+
   return (
     <Box
       width={"84px"}
@@ -80,7 +81,8 @@ export const TwaliRangeSlider = ({
           variant={"dropdown"}
           height={"40px"}
           bg={"n7"}
-          border="1px solid #587070"
+          border="1px solid"
+          borderColor={props.borderColor}
           justifyContent={"center"}
           alignItems={"center"}
           fontFamily={"PP Telegraf Light"}
@@ -134,6 +136,7 @@ export const TwaliRangeSlider = ({
           reset
         </Button>
         <RangeSlider
+          step={step}
           display={isOpen ? "block" : "none"}
           alignSelf={"flex-start"}
           pos={dropdown ? "absolute" : "relative"}
@@ -161,7 +164,7 @@ export const TwaliRangeSlider = ({
             {symbol && symbol === "$"
               ? sliderValue[0] > 999
                 ? (sliderValue[0] / 1000) % 2
-                  ? `$${(sliderValue[0] / 1000).toFixed(2)}k`
+                  ? `$${(sliderValue[0] / 1000).toFixed(1)}k`
                   : `$${(sliderValue[0] / 1000).toFixed(0)}k`
                 : `$${sliderValue[0]}`
               : symbol

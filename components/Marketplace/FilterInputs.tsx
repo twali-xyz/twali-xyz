@@ -13,10 +13,18 @@ import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
 import { Dropdown } from "../reusable/Dropdown";
 import { TwaliRangeSlider } from "../reusable/TwaliRangeSlider";
 import DatePicker from "react-date-picker/dist/entry.nostyle";
+import Router, { useRouter } from "next/router";
 
 export const FilterInputs = ({ filterParams, setFilterParams }) => {
   const { isOpen, onToggle } = useDisclosure();
   const [dateSelected, setDateSelected] = useState(null);
+  const rangeSliders = [
+    { name: "duration", symbol: "days", min: 1, max: 30 },
+    { name: "budget", symbol: "$", min: 0, max: 50000 },
+  ];
+  const router = useRouter();
+  const { filter, industry, functional, startDate, duration, budget } =
+    router.query;
 
   useEffect(() => {
     document
@@ -38,6 +46,14 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
   ];
 
   function handleRemove(e) {
+    console.log(
+      filterParams,
+      Object.keys(filterParams).includes(e.target.name)
+    );
+    if (Object.keys(filterParams).includes(e.target.name)) {
+      console.log(Object.keys(filterParams[e.target.name]).length);
+    }
+
     // without this an error is thrown when the svg within the chip button is clicked
 
     if (!e.target.name) return;
@@ -45,7 +61,9 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
     if (
       e.target.name === "budget" ||
       e.target.name === "startDate" ||
-      e.target.name === "duration"
+      e.target.name === "duration" ||
+      (Object.keys(filterParams).includes(e.target.name) &&
+        Object.keys(filterParams[e.target.name]).length <= 0)
     ) {
       delete filterParams[e.target.name];
       // renders start date input with text upon clearing date
@@ -69,7 +87,37 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
     setDateSelected(value);
     setFilterParams({ ...filterParams, ["startDate"]: { startDate: value } });
   }
-  console.log(filterParams);
+
+  function handleChange(val, name) {
+    if (val) {
+      setFilterParams({
+        ...filterParams,
+        [name]: val,
+      });
+      return;
+    } else if (!val) {
+      delete filterParams[name];
+      setFilterParams(filterParams);
+    }
+  }
+
+  useEffect(() => {
+    if (Object.entries(filterParams).length > 3) {
+      let filterQuery = {};
+      Object.entries(filterParams).forEach((filter) => {
+        const filterName = filter[0];
+        const filterData = filter[1];
+        console.log(Object.values(filterData));
+
+        filterQuery[filterName] = Object.values(filterData);
+      });
+
+      Router.push({
+        pathname: `/marketplace/filter`,
+        query: { ...filterQuery },
+      });
+    }
+  }, [filterParams]);
 
   return (
     <VStack
@@ -89,18 +137,15 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
                 my={"8px"}
                 name={name}
                 options={options}
+                borderColor={
+                  Object.keys(filterParams).includes(name) &&
+                  Object.keys(filterParams[name]).length
+                    ? "fresh"
+                    : "n3"
+                }
                 multiSelect={true}
                 onChange={(val) => {
-                  if (val) {
-                    setFilterParams({
-                      ...filterParams,
-                      [name]: val,
-                    });
-                    return;
-                  } else if (!val) {
-                    delete filterParams[name];
-                    setFilterParams(filterParams);
-                  }
+                  handleChange(val, name);
                 }}
               />
             </FormControl>
@@ -124,9 +169,11 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
               width={"100px"}
               p={0}
               border={"1px solid"}
-              borderColor={"n3"}
               borderRadius={"4px"}
               background={"n7"}
+              borderColor={
+                Object.keys(filterParams).includes("startDate") ? "fresh" : "n3"
+              }
               height={"40px"}
               top={"15px"}
             >
@@ -143,9 +190,7 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
                 cursor={"pointer"}
                 whiteSpace={"nowrap"}
               >
-                {dateSelected
-                  ? new Date(dateSelected).toLocaleDateString("en-US")
-                  : "Start Date"}
+                Start Date
               </Text>
             </Box>
             <DatePicker
@@ -156,55 +201,53 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
             />
           </Box>
         </FormControl>
-
-        <FormControl>
-          <TwaliRangeSlider
-            name={"duration"}
-            values={filterParams}
-            onChange={(values) => {
-              if (values) {
-                setFilterParams({
-                  ...filterParams,
-                  duration: values,
-                });
-              }
-            }}
-            width={"87px"}
-            dropdown={true}
-            symbol={"days"}
-            min={1}
-            max={30}
-            alignSelf={"flex-start"}
-          />
-        </FormControl>
-
-        <FormControl>
-          <TwaliRangeSlider
-            name={"budget"}
-            values={filterParams}
-            onChange={(values) => {
-              if (values) {
-                setFilterParams({
-                  ...filterParams,
-                  budget: values,
-                });
-              }
-            }}
-            width={"87px"}
-            dropdown={true}
-            symbol={"$"}
-            min={0}
-            max={50000}
-            alignSelf={"flex-start"}
-          />
-        </FormControl>
+        {rangeSliders.map(({ name, symbol, min, max }, idx) => {
+          return (
+            <FormControl key={idx}>
+              <TwaliRangeSlider
+                name={name}
+                values={filterParams}
+                borderColor={
+                  Object.keys(filterParams).includes(name) ? "fresh" : "n3"
+                }
+                onChange={(values) => {
+                  handleChange(values, name);
+                }}
+                width={"87px"}
+                dropdown={true}
+                symbol={symbol}
+                min={min}
+                max={max}
+                alignSelf={"flex-start"}
+              />
+            </FormControl>
+          );
+        })}
       </HStack>
       <Chiplets
         maxH={"70vh"}
         flexWrap={"noWrap"}
         overflowY={"scroll"}
+        css={{
+          "&::-webkit-scrollbar": {
+            width: "4px",
+            background: "zing",
+            color: "zing",
+          },
+          "&::-webkit-scrollbar-track": {
+            width: "6px",
+            background: "zing",
+            color: "zing",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "zing",
+            borderRadius: "24px",
+          },
+        }}
         pos={"relative"}
-        padding={"55px"}
+        padding={"48px"}
+        pt={6}
+        mt={"16px !important"}
         zIndex={0}
         handleRemove={handleRemove}
         filterParams={filterParams}

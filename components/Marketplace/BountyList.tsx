@@ -1,7 +1,7 @@
-import { Link, VStack } from "@chakra-ui/react";
+import { CircularProgress, Flex, Link, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 import { BountyCard } from "./BountyCard";
-export const BountyList = ({ contracts, sortParams }) => {
+export const BountyList = ({ contracts, error, sortParams }) => {
   function compare(a, b, type) {
     if (a[type] < b[type]) {
       return -1;
@@ -11,6 +11,20 @@ export const BountyList = ({ contracts, sortParams }) => {
     }
     return 0;
   }
+
+  if (error) return <Text>failed to load contracts</Text>;
+
+  if (!contracts)
+    return (
+      <Flex height={"100%"} alignItems={"center"}>
+        <CircularProgress
+          justifySelf={"center"}
+          thickness="4px"
+          isIndeterminate
+          color="#3C2E26"
+        />
+      </Flex>
+    );
 
   return (
     <VStack

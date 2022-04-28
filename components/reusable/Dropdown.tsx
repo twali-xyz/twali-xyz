@@ -55,15 +55,15 @@ export const Dropdown = ({
           variant={"dropdown"}
           height={"40px"}
           bg={"n7"}
-          border="1px solid #587070"
           alignItems={"center"}
           fontFamily={"PP Telegraf Light"}
           fontSize={"16px !important"}
+          borderColor={props.borderColor || null}
+          borderRadius={"4px"}
           color={"subtle"}
           onClick={onToggle}
           paddingX={1}
           width={"100%"}
-          borderRadius={"4px"}
           justifyContent="space-between"
           padding="0 16px"
         >
@@ -80,6 +80,22 @@ export const Dropdown = ({
           pos={"absolute"}
           boxShadow="8px 16px 24px 0px #0421208F"
           zIndex={isOpen ? 10 : -1}
+          css={{
+            "&::-webkit-scrollbar": {
+              width: "4px",
+              background: "zing",
+              color: "zing",
+            },
+            "&::-webkit-scrollbar-track": {
+              width: "6px",
+              background: "zing",
+              color: "zing",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              background: "zing",
+              borderRadius: "24px",
+            },
+          }}
           display={"block"}
           transition={"ease-in-out"}
           transform={"auto"}
@@ -98,13 +114,14 @@ export const Dropdown = ({
                 width={"100%"}
                 onClick={multiSelect ? handleMultiSelect : handleSelect}
                 key={idx}
+                justifyContent={"space-between"}
               >
+                {option}
                 {selected && selected[option] ? (
                   <CheckCircleIcon />
                 ) : (
                   <TimeIcon />
                 )}
-                {option}
               </Button>
             );
           })}
