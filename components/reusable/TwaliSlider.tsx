@@ -55,6 +55,7 @@ export function TwaliSlider({
         <SliderFilledTrack bg="zing" borderRadius={"full"} />
       </SliderTrack>
       <SliderThumb
+        zIndex={0}
         boxSize={"20px"}
         pos={"relative"}
         left={
