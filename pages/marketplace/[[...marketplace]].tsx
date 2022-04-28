@@ -12,38 +12,47 @@ const fetcher = (...args: Parameters<typeof fetch>) =>
   fetch(...args).then((res) => res.json());
 export default function filter() {
   const router = useRouter();
-
   const { ...userState } = useUser();
   const [filterParams, setFilterParams] = useState({});
   const [sortParams, setSortParams] = useState();
   const [query, setQuery] = useState("");
-  // Create a stable key for SWR
+
   useEffect(() => {
     if (!router.query) return;
 
+    // the filter query can be a string or [] when sent through router.query
+    // but we always want typeof filterValues === []
     let tempFilter = {};
+
     Object.entries(router.query).forEach((filterData) => {
       let filterObjectArray = {};
       let [filterType, filterValues] = filterData;
+
       if (typeof filterValues === "string") {
         filterValues = [filterValues];
       }
+
       filterValues.forEach((value) => {
         filterObjectArray[value] = value;
       });
-      tempFilter[filterType] = filterObjectArray;
+      if (
+        filterType === "duration" ||
+        filterType === "budget" ||
+        filterType === "startDate"
+      ) {
+        tempFilter[filterType] = filterValues;
+      } else {
+        tempFilter[filterType] = filterObjectArray;
+      }
     });
 
     if (Object.entries(tempFilter).length > 0) {
       setFilterParams(tempFilter);
     }
     return () => {};
-  }, [router]);
+  }, [router.query]);
 
-  const { data, error } = useSWR(
-    `api/marketplace/filter${query || router.asPath}`,
-    fetcher
-  );
+  const { data, error } = useSWR(`api/marketplace/filter${query}`, fetcher);
 
   function createURL(filterParams) {
     let urlQuery = "";
@@ -65,8 +74,10 @@ export default function filter() {
     createURL(filterParams);
   }, [filterParams]);
 
+  // push to the new URL with the query included
   useEffect(() => {
     if (!query) return;
+
     let urlQuery = {};
     Object.entries(filterParams).forEach((filter) => {
       const [filterName, filterValues] = filter;

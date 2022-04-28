@@ -31,7 +31,7 @@ export const SortBounty = ({ contracts, onChange }) => {
           textAlign="left"
           placeholder="sort by"
           onChange={(e) => {
-            onChange(Object.keys(e)[0]);
+            e && onChange(Object.keys(e)[0]);
           }}
         />
       </FormControl>

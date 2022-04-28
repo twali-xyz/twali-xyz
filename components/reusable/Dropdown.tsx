@@ -1,6 +1,7 @@
 import { Box, Button, useDisclosure, useOutsideClick } from "@chakra-ui/react";
 import { CheckCircleIcon, ChevronDownIcon, TimeIcon } from "@chakra-ui/icons";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 export const Dropdown = ({
   options,
   onChange,
@@ -10,6 +11,37 @@ export const Dropdown = ({
 }) => {
   const { isOpen, onClose, onToggle } = useDisclosure();
   const [selected, setSelected] = useState({});
+  const router = useRouter();
+
+  useEffect(() => {
+    // set selected based on URL query
+    if (!router.query || name === "sort") return;
+    let tempFilter = {};
+
+    Object.entries(router.query).forEach((filterData) => {
+      let filterObjectArray = {};
+      let [filterType, filterValues] = filterData;
+
+      if (typeof filterValues === "string") {
+        filterValues = [filterValues];
+      }
+
+      if (
+        filterType === "duration" ||
+        filterType === "budget" ||
+        filterType === "startDate"
+      ) {
+        tempFilter[filterType] = filterValues;
+      } else {
+        filterValues.forEach((value) => {
+          filterObjectArray[value] = value;
+        });
+        tempFilter[filterType] = filterObjectArray;
+      }
+    });
+
+    setSelected(tempFilter[name]);
+  }, [router.query]);
 
   const ref = React.useRef();
   useOutsideClick({
@@ -18,7 +50,7 @@ export const Dropdown = ({
   });
 
   function handleSelect(event) {
-    if (Object.values(selected).includes(event.target.value)) {
+    if (selected && Object.values(selected).includes(event.target.value)) {
       delete selected[event.target.value];
       setSelected({
         ...selected,
@@ -30,7 +62,7 @@ export const Dropdown = ({
     });
   }
   function handleMultiSelect(event) {
-    if (Object.values(selected).includes(event.target.value)) {
+    if (selected && Object.values(selected).includes(event.target.value)) {
       delete selected[event.target.value];
       setSelected({
         ...selected,

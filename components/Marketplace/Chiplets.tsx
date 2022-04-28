@@ -20,7 +20,6 @@ export const Chiplets = ({ handleRemove, filterParams, ...props }) => {
       {/* map out the headers for each filter type */}
 
       {Object.entries(filterParams).map((filterObj, idx) => {
-        console.log(Object.entries(filterParams));
         const [filterType, filters] = filterObj;
         if (!filters) return;
         if (Object.values(filters).length <= 0) return;

@@ -13,7 +13,6 @@ import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
 import { Dropdown } from "../reusable/Dropdown";
 import { TwaliRangeSlider } from "../reusable/TwaliRangeSlider";
 import DatePicker from "react-date-picker/dist/entry.nostyle";
-import Router, { useRouter } from "next/router";
 
 export const FilterInputs = ({ filterParams, setFilterParams }) => {
   const { isOpen, onToggle } = useDisclosure();
@@ -22,9 +21,6 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
     { name: "duration", symbol: "days", min: 1, max: 30 },
     { name: "budget", symbol: "$", min: 0, max: 50000 },
   ];
-  const router = useRouter();
-  const { filter, industry, functional, startDate, duration, budget } =
-    router.query;
 
   useEffect(() => {
     document
@@ -46,16 +42,7 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
   ];
 
   function handleRemove(e) {
-    console.log(
-      filterParams,
-      Object.keys(filterParams).includes(e.target.name)
-    );
-    if (Object.keys(filterParams).includes(e.target.name)) {
-      console.log(Object.keys(filterParams[e.target.name]).length);
-    }
-
     // without this an error is thrown when the svg within the chip button is clicked
-
     if (!e.target.name) return;
     // when the target field is budget the whole field can be removed instead of trying to remove one value
     if (
@@ -77,7 +64,7 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
   }
 
   function handleSelectDate(value) {
-    // needed to prevent invalid date chiplet appearing
+    // value check needed to prevent invalid date chiplet appearing
     if (!value) {
       setDateSelected(null);
       delete filterParams["startDate"];
@@ -97,27 +84,9 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
       return;
     } else if (!val) {
       delete filterParams[name];
-      setFilterParams(filterParams);
+      setFilterParams({ ...filterParams });
     }
   }
-
-  useEffect(() => {
-    if (Object.entries(filterParams).length > 3) {
-      let filterQuery = {};
-      Object.entries(filterParams).forEach((filter) => {
-        const filterName = filter[0];
-        const filterData = filter[1];
-        console.log(Object.values(filterData));
-
-        filterQuery[filterName] = Object.values(filterData);
-      });
-
-      Router.push({
-        pathname: `/marketplace/filter`,
-        query: { ...filterQuery },
-      });
-    }
-  }, [filterParams]);
 
   return (
     <VStack
