@@ -54,7 +54,7 @@ export default function marketplace() {
     return () => {};
   }, [router.asPath]);
 
-  const { data, error } = useSWR(`api/marketplace/filter${query}`, fetcher);
+  const { data, error } = useSWR(`api/marketplace/contracts${query}`, fetcher);
 
   function createURL(filterParams) {
     let urlQuery = "";
@@ -99,6 +99,7 @@ export default function marketplace() {
       pathname: "/marketplace",
       query: urlQuery,
     });
+    console.log(query, urlQuery);
 
     return () => {};
   }, [query]);
