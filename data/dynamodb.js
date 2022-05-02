@@ -13,7 +13,7 @@ const getDynamoDBClient = () => {
     // accessKeyId: "xxxx",
     // secretAccessKey: "xxxx",
     region: "us-east-1",
-    // endpoint: "http://localhost:8000",
+    endpoint: "http://localhost:8000",
   });
 
   const options = {
@@ -332,28 +332,28 @@ module.exports = {
     }
   },
 
-  // filterMarketplace: async (query) => {
-  //   let expressionAttributes = {};
-  //   Object.entries(query).forEach((filter) => {
-  //     const [filterType, filterValues] = filter;
-  //     expressionAttributes[`:${filterType}`] = filterValues;
-  //   });
-  //   const dbUser = await getDynamoDBClient();
-  //   Object.entries(expressionAttributes).length &&
-  //     console.log(
-  //       "PARAMS: ",
-  //       await dbUser.query({
-  //         // TableName,
-  //         // FilterExpression: Object.entries(expressionAttributes).map(
-  //         //   ([filterType, filterValues], idx) => {
-  //         //     console.log(filterType, filterValues, idx);
-  //         //     return { filterType: [...filterValues] };
-  //         //   }
-  //         // ),
+  filterMarketplace: async (query) => {
+    let expressionAttributes = {};
+    Object.entries(query).forEach((filter) => {
+      const [filterType, filterValues] = filter;
+      expressionAttributes[`:${filterType}`] = filterValues;
+    });
+    const dbUser = await getDynamoDBClient();
+    Object.entries(expressionAttributes).length &&
+      console.log(
+        "PARAMS: ",
+        await dbUser.query({
+          // TableName,
+          // FilterExpression: Object.entries(expressionAttributes).map(
+          //   ([filterType, filterValues], idx) => {
+          //     console.log(filterType, filterValues, idx);
+          //     return { filterType: [...filterValues] };
+          //   }
+          // ),
 
-  //         KeyConditionExpression: `${query["pid"]} = :pid`,
-  //         ExpressionAttributeValues: expressionAttributes,
-  //       }).params
-  //     );
-  // },
+          KeyConditionExpression: `${query["pid"]} = :pid`,
+          ExpressionAttributeValues: expressionAttributes,
+        }).params
+      );
+  },
 };
