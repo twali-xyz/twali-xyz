@@ -50,6 +50,15 @@ select:focus {
   box-shadow: none !important;
 }
 
+.werk-token-name {
+  padding-left: 14px;
+}
+
+.chakra-menu__menu-button:focus {
+  border-color: #c7f83c !important;
+  box-shadow: none !important;
+}
+
 @font-face {
   font-family: "GrandSlang Italic";
   src: url("../public/fonts/GrandSlang-Italic.eot");
@@ -153,3 +162,5 @@ select:focus {
   font-style: normal;
   font-display: swap;
 }
+
+

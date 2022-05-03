@@ -15,7 +15,7 @@ export const statementOfWerk = ({ values }) => {
       <HStack spacing={24}>
       <Box
         maxWidth={"496px"}
-        h="100%"
+        h="450px"
         w="xl"
         borderWidth="1px"
         borderRadius="lg"
@@ -92,7 +92,7 @@ export const statementOfWerk = ({ values }) => {
                 px={2}
                 fontSize="16px"
                 borderColor={"n3"}
-                height={"150px"}
+                height={"250px"}
                 borderRadius={"4px"}
                 marginBottom={"4px"}
                 // isInvalid={errors.currTitle}
@@ -120,7 +120,7 @@ export const statementOfWerk = ({ values }) => {
       </Box>
       <Box
         maxWidth={"496px"}
-        h="100%"
+        h="250px"
         w="xl"
         borderWidth="1px"
         borderRadius="lg"
@@ -129,6 +129,7 @@ export const statementOfWerk = ({ values }) => {
         backgroundColor={"n6"}
         opacity={"90%"}
         boxShadow={"8px 16px 24px 0px #062B2A8F"}
+        alignSelf="baseline"
       >
         <Box p="4">
           <Box
