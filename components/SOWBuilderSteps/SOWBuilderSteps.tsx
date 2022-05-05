@@ -1,11 +1,18 @@
 import { useState } from "react";
 import { Step, Steps, useSteps } from "chakra-ui-steps";
+import ProjectDetails from "../Project/ProjectDetails";
+import background from "../../public/twali-assets/backgroundscreen.png";
+import HeaderNav from "../../components/HeaderNav/HeaderNav";
+
 
 import {
   Heading,
   Button,
   HStack,
   CircularProgress,
+  Container, 
+  VStack,
+  Flex,
   Text,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
@@ -41,9 +48,9 @@ const SOWBuilderSteps = () => {
     },
     {
       label: "Review",
-      content: statementOfWerk({
-        values: userData,
-      }),
+      // content: statementOfWerk({
+      //   values: userData,
+      // }),
     },
     {
       label: "Submission",
@@ -59,6 +66,29 @@ const SOWBuilderSteps = () => {
 
   return (
     <>
+      {activeStep === 2 ? (
+        <ProjectDetails activeStep={activeStep} prevStep={prevStep} nextStep={nextStep}/>
+      ): (
+        <>
+      <Container
+        width="100%"
+        minHeight="100vh"
+        maxW={"100%"}
+        pos={"relative"}
+        bgSize={"cover"}
+        bgPosition={"center"}
+        bgImg={`url(${background.src})`}
+        px={0}
+      >
+        <HeaderNav whichPage="werk"/>
+        <Container
+          maxW="container.xl"
+          pb="inherit"
+          px={0}
+          m="inherit"
+        >
+        <Flex h="full">
+            <VStack w="full" h="full" spacing={8} alignItems="flex-start">
       <Heading
         fontSize={"72px"}
         lineHeight={"88px"}
@@ -117,7 +147,7 @@ const SOWBuilderSteps = () => {
             justifyContent={"center"}
             alignItems={"center"}
           >
-            continue
+            { activeStep === 1 ? 'preview': 'continue'}
           </Text>
 
           {isSubmitted ? (
@@ -130,6 +160,13 @@ const SOWBuilderSteps = () => {
           ) : null}
         </Button>{" "}
       </HStack>
+      </VStack>
+        </Flex>
+        </Container>
+      </Container>
+      </>
+      )
+      }
     </>
   );
 };

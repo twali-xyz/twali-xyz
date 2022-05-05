@@ -62,7 +62,47 @@ export const ChipStyle: ComponentStyleConfig = {
         background: "rgba(10, 19, 19, 0.2)",
         borderRadius: "50%"
       }
-    }
+    },
+    "tag": {
+      outer: {
+        background:"subtle",
+        borderRadius:"4px",
+      },
+      inner: {
+        backgroundColor: "inverse",
+        borderRadius:"4px",
+      },
+    },
+    "crest": {
+      outer: {
+        background:"crest",
+        borderRadius:"4px",
+      },
+      inner: {
+        backgroundColor: "inverse",
+        borderRadius:"4px",
+      },
+    },
+    "lilac": {
+      outer: {
+        background:"lilac",
+        borderRadius:"4px",
+      },
+      inner: {
+        backgroundColor: "inverse",
+        borderRadius:"4px",
+      },
+    },
+    "grass": {
+      outer: {
+        background:"grass",
+        borderRadius:"4px",
+      },
+      inner: {
+        backgroundColor: "inverse",
+        borderRadius:"4px",
+      },
+    },
   },
   // The default `size` or `variant` values
   defaultProps: {},
