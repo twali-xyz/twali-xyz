@@ -10,10 +10,10 @@ const getDynamoDBClient = () => {
 
   // Only needed with local development.
     AWS.config.update({
-      // accessKeyId: "xxxx",
-      // secretAccessKey: "xxxx",
+      accessKeyId: "xxxx",
+      secretAccessKey: "xxxx",
       region: "us-east-1",
-      // endpoint: "http://localhost:8000",
+      endpoint: "http://localhost:8000",
     });
 
 

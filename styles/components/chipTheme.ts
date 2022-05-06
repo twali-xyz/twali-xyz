@@ -44,6 +44,23 @@ export const ChipStyle: ComponentStyleConfig = {
         background:"unset"
       }
     },
+    "status": {
+      outer: {
+        background:"transparent",
+        padding: "0px !important",
+        height: "28px",
+        border:"1px solid #3290D3"
+
+      },
+      inner: {
+        background: "#3290D31A",
+        borderRadius:"sm",
+        height: "inherit",
+        alignSelf: "center",
+        fontSize: "12px",
+        justifyContent: "center"
+      }
+    },
     "button": {
       outer: {
         background:"gradient1"

@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { handleWalletConnect } from "../../utils/walletUtils";
+import Link from "next/link";
 
 const HeaderNav = (props) => {
   const whichPage = props.whichPage;
@@ -37,6 +38,7 @@ const HeaderNav = (props) => {
         height={"auto"}
         src="/twali-assets/navbar_logo.png"
       />
+      <HStack>
       {isConnectWalletBtn ? (
         <HStack alignItems="center">
           <Button
@@ -61,6 +63,20 @@ const HeaderNav = (props) => {
         </HStack>
       ) : (
         userWallet && (
+          <>
+          <HStack mr={10}>
+            <Link href={"admindash"}>
+              <Text
+              fontSize={"14px"}
+              letterSpacing={"2%"}
+              textTransform={"uppercase"}
+              cursor={"pointer"}
+              color={whichPage === "admindash" ? "zing" : "fresh"}
+              >
+                admindash
+              </Text>
+            </Link>
+          </HStack>
           <HStack alignItems="center" w="130px" height={"32px"}>
             <Flex
               ml="2"
@@ -89,8 +105,10 @@ const HeaderNav = (props) => {
               </Text>
             </Flex>
           </HStack>
+        </>
         )
       )}
+      </HStack>
     </Flex>
   );
 };

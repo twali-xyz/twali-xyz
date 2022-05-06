@@ -1,1 +1,0 @@
-export const ABI = [/*Smart Contract ABI*/];
