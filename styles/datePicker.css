@@ -4,6 +4,7 @@ DATE PICKER CSS */
 
 .react-date-picker {
   position: relative;
+
 }
 .react-date-picker,
 .react-date-picker *,
@@ -19,6 +20,7 @@ DATE PICKER CSS */
 }
 
 .react-date-picker__wrapper {
+
   display: flex;
   flex-grow: 1;
   flex-shrink: 0;
@@ -31,10 +33,12 @@ DATE PICKER CSS */
 }
 
 .react-date-picker__inputGroup {
-  min-width: calc((4px * 3) + 0.54em * 8 + 0.217em * 2);
+  width: calc((4px * 3) + 0.56em * 8 + 0.217em * 2);
   flex-grow: 1;
   padding: 0 2px;
   box-sizing: content-box;
+  max-width: 100%;
+
 }
 
 .react-date-picker__inputGroup__divider {
@@ -98,8 +102,11 @@ DATE PICKER CSS */
 }
 .react-date-picker__calendar .react-calendar {
   background-color: rgb(4, 26, 25);
+  border: 1px solid #c7f83c;
   padding: 10px;
   border-width: thin;
+  margin-top: 16px;
+
 }
 .react-calendar__tile:hover {
   color: #c7f83c;
@@ -118,4 +125,12 @@ DATE PICKER CSS */
 .react-calendar__tile--active {
   background-color: #c7f83c;
   color: #6d6d6d;
+}
+.market-cal {
+  display: none;
+}
+
+.market-date-picker__calendar{
+  margin-top: 20px !important;
+ border-radius: 4px;
 }
