@@ -38,10 +38,10 @@ const ProjectHeader = (props) => {
               backgroundColor={"inverse"}
         >
         <HStack marginTop={9}>
-        <Chip variant={"created"}>Listed 24d ago</Chip>
-        <Chip variant={"status"}>Status</Chip>
-        <Chip variant="lilac">Solo Project</Chip>
-        <Chip  variant={"bounty"}>30,000 MATIC</Chip>
+        <Chip variant="created">Listed 24d ago</Chip>
+        <Chip variant="status">Status</Chip>
+        <Chip variant="type">Solo Project</Chip>
+        <Chip variant="bounty">30,000 MATIC</Chip>
         </HStack>
         <Heading
             color="zing"

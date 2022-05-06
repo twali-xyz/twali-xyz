@@ -23,7 +23,7 @@ export const ChipStyle: ComponentStyleConfig = {
     },
     inner: {
         fontSize:"14px",
-        lineHeight:"24px",
+        lineHeight:"22px",
         fontFamily:"PP Telegraf",
         alignSelf:"start",
         backgroundColor:"n6",
@@ -53,16 +53,15 @@ export const ChipStyle: ComponentStyleConfig = {
         height: "28px",
         padding: "0px !important",
         border: "1px solid #14C791BF",
-
+        borderRadius: "4px"
       },
       inner: {
         background: "#58F27A1A",
-        borderRadius:"sm",
+        borderRadius: "4px",
         height: "inherit",
         alignSelf: "center",
         fontSize: "12px",
         justifyContent: "center"
-
       }
     },
     "status": {
@@ -70,12 +69,12 @@ export const ChipStyle: ComponentStyleConfig = {
         background:"transparent",
         padding: "0px !important",
         height: "28px",
-        border:"1px solid #3290D3"
-
+        border:"1px solid #3290D3",
+        borderRadius: "4px"
       },
       inner: {
         background: "#3290D31A",
-        borderRadius:"sm",
+        borderRadius: "4px",
         height: "inherit",
         alignSelf: "center",
         fontSize: "12px",
@@ -88,17 +87,34 @@ export const ChipStyle: ComponentStyleConfig = {
         background: "transparent",
         height: "28px",
         padding: "0px !important",
-        border: "1px solid #98B2B2"
-
+        border: "1px solid #98B2B2",
+        borderRadius: "4px"
       },
       inner: {
         background: "#98B2B226",
-        borderRadius:"sm",
+        borderRadius: "4px",
         height: "inherit",
         alignSelf: "center",
         fontSize: "12px",
         justifyContent: "center"
 
+      }
+    },
+    "type": {
+      outer: {
+        background: "transparent",
+        height: "28px",
+        padding: "0px !important",
+        border: "1px solid #A096E8",
+        borderRadius: "4px"
+      },
+      inner: {
+        background: "#A096E81A",
+        borderRadius: "4px",
+        height: "inherit",
+        alignSelf: "center",
+        fontSize: "12px",
+        justifyContent: "center"
       }
     },
     "button": {
@@ -120,46 +136,6 @@ export const ChipStyle: ComponentStyleConfig = {
         background: "rgba(10, 19, 19, 0.2)",
         borderRadius: "50%"
       }
-    },
-    "tag": {
-      outer: {
-        background:"subtle",
-        borderRadius:"4px",
-      },
-      inner: {
-        backgroundColor: "inverse",
-        borderRadius:"4px",
-      },
-    },
-    "crest": {
-      outer: {
-        background:"crest",
-        borderRadius:"4px",
-      },
-      inner: {
-        backgroundColor: "inverse",
-        borderRadius:"4px",
-      },
-    },
-    "lilac": {
-      outer: {
-        background:"lilac",
-        borderRadius:"4px",
-      },
-      inner: {
-        backgroundColor: "inverse",
-        borderRadius:"4px",
-      },
-    },
-    "grass": {
-      outer: {
-        background:"grass",
-        borderRadius:"4px",
-      },
-      inner: {
-        backgroundColor: "inverse",
-        borderRadius:"4px",
-      },
     },
   },
   // The default `size` or `variant` values
