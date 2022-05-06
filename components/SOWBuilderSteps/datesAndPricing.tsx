@@ -223,7 +223,7 @@ import {
                                 borderRadius="full"
                                 backgroundColor="transparent"
                                 width="16px"
-                                src="https://assets.trustwalletapp.com/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
+                                src="https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
                                 alt="add img"
                                 />
                                 <span className="werk-token-name">USDC</span>
