@@ -202,7 +202,7 @@ import {
                              <MenuItem minH='48px'
                                 onClick={() => setMenuSelection("Token", '')}
                                 >
-                                <span class="werk-token-name">Token</span>
+                                <span className="werk-token-name">Token</span>
                                 </MenuItem>
                                 <MenuItem minH='48px'
                                 onClick={() => setMenuSelection("ETH", "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png")}
@@ -214,7 +214,7 @@ import {
                                 src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png"
                                 alt="add img"
                                 />
-                                <span class="werk-token-name">ETH</span>
+                                <span className="werk-token-name">ETH</span>
                                 </MenuItem>
                                 <MenuItem minH='40px'
                                 onClick={() => setMenuSelection("USDC", "https://assets.trustwalletapp.com/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png")}
@@ -226,7 +226,7 @@ import {
                                 src="https://assets.trustwalletapp.com/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
                                 alt="add img"
                                 />
-                                <span class="werk-token-name">USDC</span>
+                                <span className="werk-token-name">USDC</span>
                                 </MenuItem>
                             </MenuList>
                             </Menu>
