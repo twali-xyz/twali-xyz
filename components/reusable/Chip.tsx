@@ -1,4 +1,4 @@
-import React, { MouseEventHandler } from "react";
+import React, { MouseEventHandler, useRef } from "react";
 import {
   useMultiStyleConfig,
   Box,
@@ -8,9 +8,18 @@ import {
 } from "@chakra-ui/react";
 
 interface IMultiContainerProps extends BoxProps {
-  variant?: "solid" | "gradient" | "ghost" | "button" | undefined;
+  variant?:
+    | "solid"
+    | "gradient"
+    | "ghost"
+    | "button"
+    | "bounty"
+    | "status"
+    | "created"
+    | undefined;
   colorScheme?: string;
   size?: "prose" | "1/4" | "2/4" | "3/4" | "full";
+  name?: string;
   onClick?: MouseEventHandler;
 }
 
@@ -20,6 +29,7 @@ export const Chip: React.FC<IMultiContainerProps> = ({
   size = undefined,
   children,
   onClick,
+  name,
   ...rest
 }) => {
   const styles = useMultiStyleConfig(`Chip`, {
@@ -27,12 +37,24 @@ export const Chip: React.FC<IMultiContainerProps> = ({
     colorScheme,
     size,
   });
+  const btnRef = useRef(null);
 
   return (
     <Box __css={{ ...styles.outer }} {...rest}>
       <Text sx={{ ...styles.inner }}>{children}</Text>
-      <Button sx={{ ...styles.button }} onClick={onClick}>
+      <Button
+        ref={btnRef}
+        sx={{ ...styles.button }}
+        name={name}
+        value={String(children)}
+        onClick={onClick}
+        pos={"relative"}
+        zIndex={100}
+      >
         <svg
+          onClick={() => {
+            btnRef.current.click();
+          }}
           width="8"
           height="8"
           viewBox="0 0 8 8"

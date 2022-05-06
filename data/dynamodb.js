@@ -9,13 +9,12 @@ const getDynamoDBClient = () => {
     : "us-east-2";
 
   // Only needed with local development.
-    AWS.config.update({
-      // accessKeyId: "xxxx",
-      // secretAccessKey: "xxxx",
-      region: "us-east-1",
-      // endpoint: "http://localhost:8000",
-    });
-
+  AWS.config.update({
+    // accessKeyId: "xxxx",
+    // secretAccessKey: "xxxx",
+    region: "us-east-1",
+    endpoint: "http://localhost:8000",
+  });
 
   const options = {
     convertEmptyValues: true,
@@ -311,25 +310,50 @@ module.exports = {
    * @dev Can implement a value check in the near future.
    * @returns Returns a boolean value
    */
-     userNameIsValid: async (userName) => {
-        const dbUser = await getDynamoDBClient()
-          .query({
-            TableName,
-            IndexName: "wallet_name_index",
-            // ProjectionExpression: "userName",
-            KeyConditionExpression: "userName = :userName",
-            ExpressionAttributeValues: {
-              ":userName": userName,
-            },
-          })
-          .promise()
-          .then((data) => data.Items[0])
-          .catch(console.error);
-        
-          if (dbUser && dbUser.userName !== undefined && dbUser.userName !== null) {
-            return true;
-          } else {
-            return false;
-          }
-    },
+  userNameIsValid: async (userName) => {
+    const dbUser = await getDynamoDBClient()
+      .query({
+        TableName,
+        IndexName: "wallet_name_index",
+        // ProjectionExpression: "userName",
+        KeyConditionExpression: "userName = :userName",
+        ExpressionAttributeValues: {
+          ":userName": userName,
+        },
+      })
+      .promise()
+      .then((data) => data.Items[0])
+      .catch(console.error);
+
+    if (dbUser && dbUser.userName !== undefined && dbUser.userName !== null) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  filterMarketplace: async (query) => {
+    let expressionAttributes = {};
+    Object.entries(query).forEach((filter) => {
+      const [filterType, filterValues] = filter;
+      expressionAttributes[`:${filterType}`] = filterValues;
+    });
+    const dbUser = await getDynamoDBClient();
+    Object.entries(expressionAttributes).length &&
+      console.log(
+        "PARAMS: ",
+        await dbUser.query({
+          // TableName,
+          // FilterExpression: Object.entries(expressionAttributes).map(
+          //   ([filterType, filterValues], idx) => {
+          //     console.log(filterType, filterValues, idx);
+          //     return { filterType: [...filterValues] };
+          //   }
+          // ),
+
+          KeyConditionExpression: `${query["pid"]} = :pid`,
+          ExpressionAttributeValues: expressionAttributes,
+        }).params
+      );
+  },
 };

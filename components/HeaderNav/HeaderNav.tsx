@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { handleWalletConnect } from "../../utils/walletUtils";
+import Link from "next/link";
 
 const HeaderNav = (props) => {
   const whichPage = props.whichPage;
@@ -37,60 +38,92 @@ const HeaderNav = (props) => {
         height={"auto"}
         src="/twali-assets/navbar_logo.png"
       />
-      {isConnectWalletBtn ? (
-        <HStack alignItems="center">
-          <Button
-            variant={"primary"}
-            size={"lg"}
-            width={"190px"}
-            onClick={() =>
-              handleWalletConnect(userPage, setIsSubmitted, setLoaded, router)
-            }
-          >
-            {isSubmitted ? (
-              <CircularProgress
-                size="22px"
-                thickness="4px"
-                isIndeterminate
-                color="#3C2E26"
-              />
-            ) : (
-              <Text>Connect Wallet</Text>
-            )}
-          </Button>
-        </HStack>
-      ) : (
-        userWallet && (
-          <HStack alignItems="center" w="130px" height={"32px"}>
-            <Flex
-              ml="2"
-              mt="1"
-              pl={2}
-              width={"100%"}
-              height={"100%"}
-              border={"1px solid"}
-              borderColor={"fresh"}
-              alignItems={"center"}
-              justifyItems={"center"}
-              borderRadius={32}
-            >
-              <Text
-                color={"fresh"}
-                maxW={["80px", "190px"]}
-                fontSize={"14px"}
-                margin={"auto"}
-                alignSelf={"center"}
-                fontWeight={"700"}
-                letterSpacing={"0.06em"}
-                textTransform={"uppercase"}
-                isTruncated
+      <HStack>
+        {isConnectWalletBtn ? (
+          <>
+            <HStack alignItems="center">
+              <Button
+                variant={"primary"}
+                size={"lg"}
+                width={"190px"}
+                onClick={() =>
+                  handleWalletConnect(
+                    userPage,
+                    setIsSubmitted,
+                    setLoaded,
+                    router
+                  )
+                }
               >
-                {userWallet}
-              </Text>
-            </Flex>
-          </HStack>
-        )
-      )}
+                {isSubmitted ? (
+                  <CircularProgress
+                    size="22px"
+                    thickness="4px"
+                    isIndeterminate
+                    color="#3C2E26"
+                  />
+                ) : (
+                  <Text>Connect Wallet</Text>
+                )}
+              </Button>
+            </HStack>
+          </>
+        ) : (
+          userWallet && (
+            <>
+              <HStack mr={10}>
+                <Link href={"marketplace"}>
+                  <Text
+                    fontSize={"14px"}
+                    letterSpacing={"2%"}
+                    textTransform={"uppercase"}
+                    cursor={"pointer"}
+                    color={whichPage === "marketplace" ? "zing" : "fresh"}
+                  >
+                    marketplace
+                  </Text>
+                </Link>
+              </HStack>
+              <HStack
+                alignItems="center"
+                justify={"space-between"}
+                justifySelf={"flex-end"}
+                maxW="400px"
+                width={"fit-content"}
+                height={"32px"}
+              >
+                <Flex
+                  pl={2}
+                  mr={"0 !important"}
+                  width={"100%"}
+                  height={"100%"}
+                  maxW={"160px"}
+                  border={"1px solid"}
+                  borderColor={"fresh"}
+                  alignItems={"center"}
+                  justifyItems={"center"}
+                  borderRadius={32}
+                >
+                  <Text
+                    color={"fresh"}
+                    maxW={["80px", "190px"]}
+                    fontSize={"14px"}
+                    margin={"auto"}
+                    alignSelf={"center"}
+                    fontWeight={"700"}
+                    letterSpacing={"0.06em"}
+                    textTransform={"uppercase"}
+                    padding="4px 8px"
+                    isTruncated
+                  >
+                    {userWallet}
+                  </Text>
+                </Flex>
+              </HStack>
+            </>
+          )
+        )}
+      </HStack>
     </Flex>
   );
 };
