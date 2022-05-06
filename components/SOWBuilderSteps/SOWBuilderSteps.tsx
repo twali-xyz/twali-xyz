@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Step, Steps, useSteps } from "chakra-ui-steps";
-import ProjectDetails from "../Project/ProjectDetails";
+import Project from "../Project/Project";
 import background from "../../public/twali-assets/backgroundscreen.png";
 import HeaderNav from "../../components/HeaderNav/HeaderNav";
 
@@ -19,6 +19,7 @@ import { useRouter } from "next/router";
 import { UserData } from "../../utils/interfaces";
 import { statementOfWerk } from "./statementOfWerk";
 import { datesAndPricing } from "./datesAndPricing";
+import { submissionOfWerk } from "./submissionOfWerk";
 
 import useUser from "../../context/TwaliContext";
 
@@ -54,7 +55,7 @@ const SOWBuilderSteps = () => {
     },
     {
       label: "Submission",
-      content: statementOfWerk({
+      content: submissionOfWerk({
         values: userData,
       }),
     },
@@ -67,7 +68,7 @@ const SOWBuilderSteps = () => {
   return (
     <>
       {activeStep === 2 ? (
-        <ProjectDetails activeStep={activeStep} prevStep={prevStep} nextStep={nextStep}/>
+        <Project activeStep={activeStep} prevStep={prevStep} nextStep={nextStep}/>
       ): (
         <>
       <Container
@@ -147,7 +148,7 @@ const SOWBuilderSteps = () => {
             justifyContent={"center"}
             alignItems={"center"}
           >
-            { activeStep === 1 ? 'preview': 'continue'}
+            { activeStep === 1 ? 'preview': activeStep === 3 ? 'submit': 'continue'}
           </Text>
 
           {isSubmitted ? (

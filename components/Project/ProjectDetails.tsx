@@ -1,86 +1,44 @@
-import HeaderNav from "../HeaderNav/HeaderNav";
-import { 
-  Container,
-  Button,
-  HStack,
-  Text,
-  CircularProgress
- } from '@chakra-ui/react';
- import { useRouter } from "next/router";
-import ProjectHeader from './ProjectHeader';
+import { Container, Text, HStack, Flex } from '@chakra-ui/react';
 
 const ProjectDetails = (props) => {
-  const router = useRouter();
     return (
         <>
-            <HeaderNav
-              whichPage="profile"
-            //   isConnectWalletBtn={isConnectWalletBtn}
-            //   userPage={userState}
-            //   userWallet={loggedInUserAddress}
-            />
-            <Container
+        <Container
               maxW="100%"
               p={4}
+              marginLeft={20}
               marginTop={"0 !important"}
               backgroundColor={"inverse"}
-              paddingRight={24}
-            >
-        <HStack width={"100%"} justifyContent={"flex-end"}>
-        <Button
-          alignSelf="left"
-          mr={"24px"}
-          onClick={() => {
-            props.activeStep <= 0 ? router.push("/marketplace") : props.prevStep();
-          }}
-          pos={"relative"}
-          alignItems={"center"}
-          justifyContent={"center"}
-          variant={"secondary"}
-          size={"lg"}
         >
-          <Text
-            display={"flex"}
-            width={"100%"}
-            height={"100%"}
-            justifyContent={"center"}
-            alignItems={"center"}
-          >
-            back to edit
-          </Text>
-        </Button>
-        <Button
-          // disabled={isDisabled}
-          pos={"relative"}
-          alignSelf="center"
-          variant={"primary"}
-          size={"lg"}
-          onClick={() => {
-            props.nextStep();
-          }}
+        <Flex
+          flexDir={"column"}
+          width={"100%"}
+          justifyContent={"flex-start"}
+          m={0}
+          marginTop={12}
         >
-          <Text
-            display={"flex"}
-            width={"100%"}
-            height={"100%"}
-            justifyContent={"center"}
-            alignItems={"center"}
-          >
-            continue
-          </Text>
-
-          {/* {isSubmitted ? (
-            <CircularProgress
-              size="22px"
-              thickness="4px"
-              isIndeterminate
-              color="#3C2E26"
-            />
-          ) : null} */}
-        </Button>{" "}
-      </HStack>
-      <ProjectHeader/>
-            </Container>
+            <HStack>
+            <Text marginRight={4} fontSize="sm" color="subtle">Duration</Text>
+            <Text fontSize="sm" color="primary">29 Days</Text>
+            </HStack>
+            <HStack marginTop={6}>
+            <Text marginRight={4} fontSize="sm" color="subtle">Date Listed</Text>
+            <Text fontSize="sm" color="primary">Aug 15, 2022</Text>
+            </HStack>
+            <HStack marginTop={6}>
+            <Text marginRight={4} fontSize="sm" color="subtle">Start by</Text>
+            <Text fontSize="sm" color="primary">Nov 1, 2022</Text>
+            </HStack>
+            <HStack marginTop={6}>
+            <Text marginRight={4} fontSize="sm" color="subtle">Finish by</Text>
+            <Text fontSize="sm" color="primary">Dec 1, 2022</Text>
+            </HStack>
+            <HStack marginTop={6}>
+            <Text marginRight={4} fontSize="sm" color="subtle">Budget</Text>
+            <Text fontSize="sm" color="primary">$20,000</Text>
+            </HStack>
+        </Flex>
+        </Container>
         </>
     )
 }
