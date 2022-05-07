@@ -19,6 +19,7 @@ export default function marketplace() {
   const [query, setQuery] = useState("");
 
   // set the filterParams based on the URL query params
+  // needed to set filters when user goes to marketplace from a URL that contains a query
   useEffect(() => {
     if (!router.query) return;
 
@@ -77,7 +78,7 @@ export default function marketplace() {
     createURL(filterParams);
   }, [filterParams]);
 
-  // push to the new URL with the query included
+  // push to the new URL with the new query included
   useEffect(() => {
     if (!query) return;
 
@@ -124,7 +125,9 @@ export default function marketplace() {
           paddingTop={"90px"}
           height={"100vh"}
           width={"100%"}
-          background="n4"
+          background={
+            "linear-gradient(65.14deg, #0F2922 10.35%, #1A232A 76.62%);"
+          }
         >
           <SortBounty contracts={data} onChange={(val) => setSortParams(val)} />
           <BountyList contracts={data} error={error} sortParams={sortParams} />

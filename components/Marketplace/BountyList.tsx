@@ -37,25 +37,49 @@ export const BountyList = ({ contracts, error, sortParams }) => {
       {contracts?.length &&
         contracts
           .sort((a, b) => compare(a, b, sortParams || ""))
-          .map(({ title, body, href, img }, idx) => {
-            return (
-              <Link
-                _hover={{
-                  textDecor: "none",
-                  cursor: "pointer",
-                }}
-                href={href}
-                key={idx}
-                width={"100%"}
-              >
-                <BountyCard
-                  title={title}
-                  body={body}
-                  img={`https://via.placeholder.com/290?text=${title[0]}`}
-                />
-              </Link>
-            );
-          })}
+          .map(
+            (
+              {
+                title,
+                description,
+                type,
+                created_on,
+                status,
+                token,
+                amount,
+                converted_amount,
+                contract_id,
+                due_date,
+              },
+              idx
+            ) => {
+              return (
+                <Link
+                  _hover={{
+                    textDecor: "none",
+                    cursor: "pointer",
+                  }}
+                  href={`contracts/${contract_id}`}
+                  key={idx}
+                  width={"100%"}
+                >
+                  <BountyCard
+                    my={"8px"}
+                    type={type}
+                    title={title}
+                    body={description}
+                    img={`https://via.placeholder.com/290?text=${status}`}
+                    amount={amount}
+                    token={token}
+                    status={status}
+                    created_on={created_on}
+                    due_date={due_date}
+                    converted_amount={converted_amount}
+                  />
+                </Link>
+              );
+            }
+          )}
     </VStack>
   );
 };

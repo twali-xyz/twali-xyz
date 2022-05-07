@@ -19,7 +19,19 @@ interface BountyCard {
  * @returns JSX BountyCard element
  *
  */
-export const BountyCard = ({ title, body, img, ...props }) => {
+export const BountyCard = ({
+  title,
+  body,
+  img,
+  amount,
+  status,
+  created_on,
+  due_date,
+  token,
+  ...props
+}) => {
+  console.log();
+
   return (
     <Box
       {...props}
@@ -45,25 +57,42 @@ export const BountyCard = ({ title, body, img, ...props }) => {
           ></Img>
           <Text>{title}</Text>
         </HStack>
-        <Box mt={"32px !important"} width={"100%"}>
+        <Box mt={"32px !important"} mb={"8px !important"} width={"100%"}>
           <Text
             fontFamily={"PP Telegraf Light"}
-            fontSize={"16px"}
+            fontSize={"14px"}
+            fontWeight={"300"}
+            color={"subtle"}
             width={"100%"}
             noOfLines={2}
           >
             {body}
           </Text>
         </Box>
-        <HStack>
+        <HStack mt={2}>
           <Chip borderRadius={"4px"} height={"28px"} variant={"created"}>
-            Listed 18d ago
+            Listed{" "}
+            {Math.ceil(
+              (new Date(Date.now()).getTime() -
+                new Date(Number(created_on) * 1000).getTime()) /
+                (1000 * 3600 * 24)
+            )}
+            d ago
           </Chip>
           <Chip borderRadius={"4px"} height={"28px"} variant={"status"}>
-            Status
+            {status}
+          </Chip>
+          <Chip
+            borderRadius={"4px"}
+            height={"28px"}
+            variant={"bounty"}
+            background={"#2e165069"}
+            borderColor={"plum"}
+          >
+            {new Date(due_date * 1000).toLocaleDateString("us-en")}
           </Chip>
           <Chip borderRadius={"4px"} height={"28px"} variant={"bounty"}>
-            $20,000 USDC
+            {amount} {token}
           </Chip>
         </HStack>
       </VStack>
