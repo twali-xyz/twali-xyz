@@ -1,15 +1,47 @@
 import { CircularProgress, Flex, Link, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 import { BountyCard } from "./BountyCard";
+
+interface BountyList {
+  contracts: JSON;
+  error: string;
+  sortParams: string;
+}
+
+/**
+ * Bounty list component
+ *
+ *
+ * @param {JSON} contracts contracts to display
+ * @param {string} error error when fetching contracts
+ * @param {string} sortParams name of the active sort parameter
+ *
+ * @returns JSX BountyList element
+ *
+ */
+
 export const BountyList = ({ contracts, error, sortParams }) => {
-  function compare(a, b, type) {
-    if (a[type] < b[type]) {
-      return -1;
+  function compare(a, b, sortParams) {
+    if (sortParams === "title") {
+      if (a[sortParams] < b[sortParams]) {
+        return -1;
+      }
+      if (a[sortParams] > b[sortParams]) {
+        return 1;
+      }
+      return 0;
     }
-    if (a[type] > b[type]) {
-      return 1;
+    if (sortParams === "date created" || sortParams === "amount") {
+      const key =
+        sortParams === "date created" ? "created_on" : "converted_amount";
+      if (a[key] > b[key]) {
+        return -1;
+      }
+      if (a[key] < b[key]) {
+        return 1;
+      }
+      return 0;
     }
-    return 0;
   }
 
   if (error) return <Text>failed to load contracts</Text>;
@@ -50,6 +82,7 @@ export const BountyList = ({ contracts, error, sortParams }) => {
                 converted_amount,
                 contract_id,
                 due_date,
+                start_date,
               },
               idx
             ) => {
@@ -74,6 +107,7 @@ export const BountyList = ({ contracts, error, sortParams }) => {
                     status={status}
                     created_on={created_on}
                     due_date={due_date}
+                    start_date={start_date}
                     converted_amount={converted_amount}
                   />
                 </Link>

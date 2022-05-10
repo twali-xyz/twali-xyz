@@ -1,9 +1,7 @@
 import { NextApiHandler } from "next";
 import data from "../../../data";
 
-// import jsonData from "../../../public/marketplaceTestJson.json";
-
-const getAllBounties: NextApiHandler = async (req, res) => {
+const retrieveBounties: NextApiHandler = async (req, res) => {
   try {
     let info = await data.filterMarketplace(req.query);
 
@@ -13,4 +11,4 @@ const getAllBounties: NextApiHandler = async (req, res) => {
   }
 };
 
-export default getAllBounties;
+export default retrieveBounties;

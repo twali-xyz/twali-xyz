@@ -1,4 +1,10 @@
-import { Box, Button, useDisclosure, useOutsideClick } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Text,
+  useDisclosure,
+  useOutsideClick,
+} from "@chakra-ui/react";
 import { CheckCircleIcon, ChevronDownIcon, TimeIcon } from "@chakra-ui/icons";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -99,7 +105,7 @@ export const Dropdown = ({
           justifyContent="space-between"
           padding="0 16px"
         >
-          {name}
+          <Text>{props.placeholder || name || "select"}</Text>
 
           <ChevronDownIcon
             marginLeft={4}

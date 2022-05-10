@@ -333,9 +333,9 @@ module.exports = {
   },
 
   /**
-   * @desc Filters contracts for the marketplace
+   * @desc Takes in a query and filters contracts for the marketplace
    * @dev
-   * @returns returns json object
+   * @returns returns json object containing contracts
    */
   filterMarketplace: async (query) => {
     // Create the DynamoDB Client with the region you want
@@ -347,7 +347,6 @@ module.exports = {
     // Call DynamoDB's scan API
     const output = executeScan(dynamoDbClient, scanInput).then((output) => {
       console.info("Scan API call has been executed.");
-      console.log(output["Items"]);
       return output;
     });
 
@@ -394,7 +393,7 @@ module.exports = {
             ExpressionAttributeNames[`#${filterType}`] = "industry";
             break;
 
-          case "functional":
+          case "expertise":
             queryPortion = arrayFilterString;
             FilterExpression = FilterExpression + queryPortion;
             ExpressionAttributeNames[`#${filterType}`] = "expertise";
@@ -421,7 +420,7 @@ module.exports = {
           default:
             break;
         }
-
+        // set ExpressionAttributeValues
         if (typeof filter === "string") {
           if (filterType === "startDate") {
             ExpressionAttributeValues[`:${filterType}`] =
@@ -431,9 +430,12 @@ module.exports = {
           }
         } else {
           filter.forEach((filterAttribute, idx) => {
-            if (filterType === "budget" || filterType === "duration") {
+            if (filterType === "budget") {
               ExpressionAttributeValues[`:${filterType}${idx}`] =
                 Number(filterAttribute);
+            } else if (filterType === "duration") {
+              ExpressionAttributeValues[`:${filterType}${idx}`] =
+                Number(filterAttribute) * 86400;
             } else {
               ExpressionAttributeValues[`:${filterType}${idx}`] =
                 filterAttribute;
@@ -441,14 +443,7 @@ module.exports = {
           });
         }
       });
-      console.log(
-        "FILTER_EXPRESSION: ",
-        FilterExpression,
-        "\nEXPRESSION_ATTRIBUTE_NAMES: ",
-        ExpressionAttributeNames,
-        "\nEXPRESSION_ATTRIBUTE_VALUES: ",
-        ExpressionAttributeValues
-      );
+
       return {
         TableName,
         ConsistentRead: false,
@@ -457,6 +452,7 @@ module.exports = {
         ExpressionAttributeNames: ExpressionAttributeNames,
       };
     }
+
     async function executeScan(dynamoDbClient, scanInput) {
       // Call DynamoDB's scan API
       try {

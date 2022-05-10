@@ -100,7 +100,6 @@ export default function marketplace() {
       pathname: "/marketplace",
       query: urlQuery,
     });
-    console.log(query, urlQuery);
 
     return () => {};
   }, [query]);

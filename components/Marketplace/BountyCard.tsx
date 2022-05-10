@@ -9,7 +9,7 @@ interface BountyCard {
 }
 
 /**
- * Twali slider component for binary selection
+ * Individual bounty card component
  *
  *
  * @param {string} title main title
@@ -27,6 +27,7 @@ export const BountyCard = ({
   status,
   created_on,
   due_date,
+  start_date,
   token,
   ...props
 }) => {
@@ -89,7 +90,7 @@ export const BountyCard = ({
             background={"#2e165069"}
             borderColor={"plum"}
           >
-            {new Date(due_date * 1000).toLocaleDateString("us-en")}
+            {new Date(start_date * 1000).toLocaleDateString("us-en")}
           </Chip>
           <Chip borderRadius={"4px"} height={"28px"} variant={"bounty"}>
             {amount} {token}
