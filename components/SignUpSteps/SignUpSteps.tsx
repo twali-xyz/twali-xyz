@@ -282,7 +282,7 @@ const SignUpSteps = () => {
                       </Step>
                     ))}
                   </Steps>
-                  <HStack width={"100%"} justifyContent={"flex-end"}>
+                  <HStack spacing={2} width={"100%"} justifyContent={"flex-end"}>
                     <Button
                       alignSelf="left"
                       mr={"24px"}

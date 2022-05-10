@@ -23,6 +23,7 @@ export const customSteps: ComponentStyleConfig = {
       fontSize: "16px",
       lineHeight: "24px",
       width: "600px",
+      listStyleType: "none",
     },
     connector: {
       borderTopWidth: "0",
