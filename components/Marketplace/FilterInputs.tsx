@@ -34,10 +34,12 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
   ];
 
   useEffect(() => {
+    if (!document.querySelector(".react-date-picker__wrapper")) return;
     document
       .querySelector(".react-date-picker__wrapper")
       .classList.add("market-cal");
 
+    if (!document.querySelector(".react-calendar")) return;
     document
       .querySelector(".react-calendar")
       .classList.add("market-date-picker__calendar");
@@ -181,7 +183,7 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
             </Box>
             <DatePicker
               name="startDate"
-              isOpen={isOpen}
+              isOpen={isOpen || null}
               onChange={(val) => {
                 handleSelectDate(val);
                 onClose();

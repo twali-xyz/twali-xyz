@@ -1,5 +1,6 @@
 const { v4 } = require("uuid");
 const TableName = process.env.TABLE_NAME;
+const Contracts = process.env.CONTRACTS;
 
 const getDynamoDBClient = () => {
   const AWS = require("aws-sdk");
@@ -445,7 +446,7 @@ module.exports = {
       });
 
       return {
-        TableName,
+        TableName: Contracts,
         ConsistentRead: false,
         FilterExpression: FilterExpression,
         ExpressionAttributeValues: ExpressionAttributeValues,
