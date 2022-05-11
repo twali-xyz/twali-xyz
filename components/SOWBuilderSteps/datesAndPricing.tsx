@@ -86,6 +86,13 @@ import {
                     <DateRangePicker
                     //   onChange={setStartDate}
                     //   className={ dateRange[0] && dateRange[1] ? 'date-range' : ''}
+                      calendarIcon={<Img
+                        // borderRadius="full"
+                        // backgroundColor="transparent"
+                        // width="16px"
+                        src="/twali-assets/calendar.svg"
+                        alt="calendar"
+                        />}
                       onChange={setDateRange}
                       selectRange={true}
                       value={dateRange ? [new Date(dateRange[0]), new Date(dateRange[1])]: undefined}
@@ -108,40 +115,18 @@ import {
                         Due Date
                         </FormLabel>
                         <DatePicker
+                            calendarIcon={<Img
+                              // borderRadius="full"
+                              // backgroundColor="transparent"
+                              // width="16px"
+                              src="/twali-assets/calendar.svg"
+                              alt="calendar"
+                              />}
                             onChange={setDueDate}
                             value={dueDate ? new Date(dueDate): undefined}
                         />
                     </FormControl>
                     <FormControl p={2} id="werk-amount">
-                    <FormLabel
-                        fontSize={"16px"}
-                        lineHeight={"24px"}
-                        fontWeight={"400"}
-                        fontFamily={"PP Telegraf"}
-                        >
-                        Amount
-                        </FormLabel>
-                        {/* <HStack> */}
-                        <Input
-                            px={2}
-                            fontSize="16px"
-                            borderColor={"n3"}
-                            height={"40px"}
-                            borderRadius={"4px"}
-                            marginBottom={"4px"}
-                            marginRight="14px"
-                            required
-                            width="100px"
-                            // width="100%"
-                            // isInvalid={errors.firstName}
-                            errorBorderColor="red.300"
-                            placeholder="1.0"
-                            name="firstName"
-                            fontFamily={"PP Telegraf light"}
-                            _placeholder={{ color: "subtle" }}
-                            // value={values?.firstName || ""}
-                            onChange={handleChange}
-                            />
                             {/* <Text
                             fontSize="xs"
                             height={"20.5px"}
@@ -231,6 +216,35 @@ import {
                             </MenuList>
                             </Menu>
                             {/* </HStack> */}
+                            <FormLabel
+                        fontSize={"16px"}
+                        lineHeight={"24px"}
+                        fontWeight={"400"}
+                        fontFamily={"PP Telegraf"}
+                        >
+                        Amount
+                        </FormLabel>
+                        {/* <HStack> */}
+                        <Input
+                            px={2}
+                            fontSize="16px"
+                            borderColor={"n3"}
+                            height={"40px"}
+                            borderRadius={"4px"}
+                            marginBottom={"4px"}
+                            marginRight="14px"
+                            required
+                            width="100px"
+                            // width="100%"
+                            // isInvalid={errors.firstName}
+                            errorBorderColor="red.300"
+                            placeholder="1.0"
+                            name="firstName"
+                            fontFamily={"PP Telegraf light"}
+                            _placeholder={{ color: "subtle" }}
+                            // value={values?.firstName || ""}
+                            onChange={handleChange}
+                            />
                     </FormControl>
             </Box>
           </Box>

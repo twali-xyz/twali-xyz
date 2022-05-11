@@ -86,10 +86,11 @@ const Project = (props) => {
       </HStack>
       <ProjectHeader/>
       <HStack>
-      <Flex flexDirection="column" width="100%">
+      <Flex flexDirection="column" width="100%" maxWidth="550px">
         <ProjectExpertise />
         <ProjectDetails/>
       </Flex>
+      <div className= "twali-vertical-line"></div>
       <ProjectDescription/>
       </HStack>
             </Container>

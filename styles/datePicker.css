@@ -71,7 +71,9 @@ DATE PICKER CSS */
 .react-date-picker__button {
   border: 0;
   background: transparent;
-  padding: 4px 6px;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-bottom: 2px;
 }
 .react-date-picker__button:enabled {
   cursor: pointer;

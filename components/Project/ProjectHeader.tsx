@@ -7,33 +7,11 @@ import { Avatar } from '@chakra-ui/react'
 const ProjectHeader = (props) => {
     return (
         <>
-        <Button
-        marginLeft={20}
-            height="2rem"
-            padding="1rem"
-          pos={"relative"}
-          alignSelf="center"
-          variant={"ghost"}
-          size={"2xl"}
-          onClick={() => {
-            props.nextStep();
-          }}
-        >
-          <Text
-            display={"flex"}
-            width={"100%"}
-            height={"100%"}
-            justifyContent={"center"}
-            alignItems={"center"}
-          >
-            {"<--- back to marketplace"}
-          </Text>
-
-        </Button>{" "}
         <Container
               maxW="100%"
               p={4}
               marginLeft={20}
+              paddingBottom="2rem"
               marginTop={"0 !important"}
               backgroundColor={"inverse"}
         >
@@ -65,6 +43,7 @@ const ProjectHeader = (props) => {
           <Text fontSize="sm">Created by Nick Cooke</Text>
         </HStack>
         </Container>
+        <hr className="twali-horizontal-line"/>
         </>
     )
 }

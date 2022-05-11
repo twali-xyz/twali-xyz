@@ -6,6 +6,7 @@ const ProjectDescription = (props) => {
         <Container
               maxW="100%"
               p={4}
+              paddingLeft="2.4rem"
               marginLeft={20}
               marginTop={"0 !important"}
               backgroundColor={"inverse"}
