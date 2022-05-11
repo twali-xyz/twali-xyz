@@ -34,7 +34,7 @@ const ProjectDescription = (props) => {
                     fontFamily={"GrandSlang"}
                     fontWeight={"400"}
                   >
-                    Project Files
+                    Werk Files
                   </Heading>
                   <VStack alignSelf="flex-start">
                   <Text fontWeight="light" fontSize="sm" color="aqua" textDecoration="underline" cursor="pointer">file_final_version_02-2022.pdf</Text>
