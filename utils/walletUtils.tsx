@@ -75,7 +75,7 @@ export const handleWalletConnect = async (
   router
 ) => {
   try {
-    console.log("window check in utils ", window.ethereum);
+    
     const web3Modal = new Web3Modal({
       disableInjectedProvider: false,
       network: "rinkeby",
