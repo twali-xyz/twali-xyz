@@ -12,7 +12,7 @@ const ProjectExpertise = (props) => {
         <Container
               maxW="100%"
               p={4}
-              marginLeft={20}
+              marginLeft="2rem"
               marginTop={"0 !important"}
               backgroundColor={"inverse"}
         >
