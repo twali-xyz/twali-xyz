@@ -1,6 +1,13 @@
-import { Container, Text, HStack, Flex, Heading, VStack } from '@chakra-ui/react';
+import { Container, Text, Button, HStack, Img, Flex, Heading, VStack, useDisclosure } from '@chakra-ui/react';
+import ProjectDescriptionModal from './ProjectDescriptionModal/ProjectDescriptionModal';
 
 const ProjectDescription = (props) => {
+  const {
+    isOpen: isProjectDescModalOpen,
+    onOpen: onProjectDescModalOpen,
+    onClose: onProjectDescModalClose,
+  } = useDisclosure();
+
     return (
         <>
         <Container
@@ -12,6 +19,28 @@ const ProjectDescription = (props) => {
               backgroundColor={"inverse"}
         >
             <VStack spacing={6} marginTop={0} alignItems="unset">
+              <HStack alignSelf="flex-end">
+              <Button
+            onClick={onProjectDescModalOpen}
+            alignSelf="flex-end"
+            variant="ghost"
+            aria-label="Update project title"
+            margin={"0px"}
+            mx={"0px"}
+            pos={"relative"}
+            top={"-45px !important"}
+            left={"16px"}
+            width={"fit-content"}
+            borderRadius={"md"}
+          >
+            <Img
+              width={"20px"}
+              height={"20px"}
+              src={"twali-assets/editicon.png"}
+            />
+          </Button>
+          <ProjectDescriptionModal isOpen={isProjectDescModalOpen} onClose={onProjectDescModalClose}/>
+              </HStack>
                 <Heading
             color="zing"
                     fontSize={"36px"}

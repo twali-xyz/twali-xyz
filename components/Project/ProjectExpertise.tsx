@@ -1,12 +1,18 @@
 import HeaderNav from "../HeaderNav/HeaderNav";
-import { Container, Text, Button, HStack, Heading, Box, Img, Flex } from '@chakra-ui/react';
+import { Container, Text, Button, HStack, Heading, Box, Img, Flex, useDisclosure, VStack } from '@chakra-ui/react';
 import { Chip } from '../reusable/Chip';
 import { Avatar } from '@chakra-ui/react'
 import { functionalExpertiseList } from "../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
-
+import ProjectExpertiseModal from "./ProjectExpertiseModal/ProjectExpertiseModal";
 
 const ProjectExpertise = (props) => {
+    const {
+        isOpen: isProjectExpertiseModalOpen,
+        onOpen: onProjectExpertiseModalOpen,
+        onClose: onProjectExpertiseModalClose,
+      } = useDisclosure();
+
     return (
         <>
         <Container
@@ -16,8 +22,30 @@ const ProjectExpertise = (props) => {
               marginTop={"0 !important"}
               backgroundColor={"inverse"}
         >
-        
-        <Text fontSize="sm" marginTop={12} marginBottom={6}>Industry</Text>
+            <VStack paddingRight={12} paddingTop={4}>
+            <HStack alignSelf="flex-end">
+                <Button
+            onClick={onProjectExpertiseModalOpen}
+            alignSelf="flex-end"
+            variant="ghost"
+            aria-label="Update project title"
+            margin={"0px"}
+            mx={"0px"}
+            pos={"relative"}
+            top={"-45px !important"}
+            left={"16px"}
+            width={"fit-content"}
+            borderRadius={"md"}
+          >
+            <Img
+              width={"20px"}
+              height={"20px"}
+              src={"twali-assets/editicon.png"}
+            />
+          </Button>
+          <ProjectExpertiseModal isOpen={isProjectExpertiseModalOpen} onClose={onProjectExpertiseModalClose}/>
+          </HStack>
+        <Text alignSelf="flex-start" fontSize="sm" marginTop={12} marginBottom={6}>Industry</Text>
         <Flex
           flexDir={"row"}
           width={"100%"}
@@ -35,7 +63,7 @@ const ProjectExpertise = (props) => {
                 marginBottom={4} marginLeft={4}
             >Industry</Chip>
         </Flex>
-        <Text fontSize="sm" marginTop={6} marginBottom={6}>Expertise</Text>
+        <Text alignSelf="flex-start" fontSize="sm" marginTop={6} marginBottom={6}>Expertise</Text>
         <Flex
           flexDir={"row"}
           width={"100%"}
@@ -53,6 +81,7 @@ const ProjectExpertise = (props) => {
                 marginBottom={4} marginLeft={4}
             >Expertise</Chip>
         </Flex>
+        </VStack>
         </Container>
         </>
     )

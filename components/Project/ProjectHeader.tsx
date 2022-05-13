@@ -46,7 +46,6 @@ const ProjectHeader = (props) => {
               src={"twali-assets/editicon.png"}
             />
           </Button>
-
           <ProjectHeaderModal isOpen={isProjectHeaderModalOpen} onClose={onProjectHeaderModalClose}/>
         </HStack>
         <Heading
