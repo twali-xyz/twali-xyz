@@ -1,4 +1,4 @@
-import { FormControl, HStack, Select, Text } from "@chakra-ui/react";
+import { FormControl, HStack, Text } from "@chakra-ui/react";
 import React from "react";
 import { Dropdown } from "../reusable/Dropdown";
 export const SortBounty = ({ contracts, onChange }) => {
