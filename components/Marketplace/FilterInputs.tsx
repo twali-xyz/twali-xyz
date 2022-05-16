@@ -30,7 +30,7 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
 
   const rangeSliders = [
     { name: "duration", symbol: "days", min: 1, max: 90 },
-    { name: "budget", symbol: "$", min: 0, max: 50000 },
+    { name: "budget", symbol: "$", min: 0, max: 100000 },
   ];
 
   useEffect(() => {
