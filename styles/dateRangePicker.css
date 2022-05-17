@@ -115,7 +115,10 @@
   
   .react-calendar__tile--active {
     background-color: #c7f83c;
-    color: #F9FFF2;
+    color: #98B2B2;
+  }
+  .react-calendar__tile--active.react-calendar__tile:hover {
+    color: #0A1313
   }
 
   .react-calendar__tile--rangeStart {
