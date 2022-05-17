@@ -14,7 +14,7 @@ try:
         Item={
             "PK": "USER#0x4949567a31ee75242ebcba5b101f4e65d0e6fe92",
             "SK": "#CONTRACT#0001",
-            "contract_id": "0001",
+            "contract_id": "0021", # TBD - if we create ID on creation with different format, (e.g., 0-100 or random).
             "contract_created_on": now, # using the now from line 5 to get current time in unix format.
             "contractOwner_userName": "NickGonzalez4__",
             "contract_title": "werk title 1",
