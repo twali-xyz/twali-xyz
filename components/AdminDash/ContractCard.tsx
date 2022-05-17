@@ -2,6 +2,8 @@ import { Box, HStack, Img, Text, VStack } from "@chakra-ui/react";
 import {useState, useEffect }from "react";
 import { Chip } from "../reusable/Chip";
 import { setTwaliClone } from "../../utils/contractBaseInterface";
+
+
 interface ContractCard {
     address: string;
 }
@@ -9,7 +11,6 @@ interface ContractCard {
  *  Created Contract Cards to view after creation
  * 
  */
-
 export const ContractCard = ({cloneAddress }) => {
     const [ constractStatus, setContractStatus] = useState("");
 

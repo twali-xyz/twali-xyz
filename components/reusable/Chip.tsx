@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 
 interface IMultiContainerProps extends BoxProps {
-  variant?: "solid" | "gradient" | "ghost" | "button" | undefined;
+  variant?: "solid" | "gradient" | "ghost" | "button" | "status" | undefined;
   colorScheme?: string;
   size?: "prose" | "1/4" | "2/4" | "3/4" | "full";
   onClick?: MouseEventHandler;

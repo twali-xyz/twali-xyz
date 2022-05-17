@@ -32,7 +32,7 @@ export function ContractList({clones}){
                 textDecor: "none",
                 cursor: "pointer",
               }}
-              href={""}
+              href={`/contracts/${address}`}
               key={i}
               width={"100%"}
             >
