@@ -1,6 +1,5 @@
 const { v4 } = require("uuid");
 const TableName = process.env.TABLE_NAME;
-const Contracts = process.env.CONTRACTS;
 
 const getDynamoDBClient = () => {
   const AWS = require("aws-sdk");
@@ -11,12 +10,12 @@ const getDynamoDBClient = () => {
 
   // Only needed with local development.
 
-    AWS.config.update({
-      // accessKeyId: "xxxx",
-      // secretAccessKey: "xxxx",
-      region: "us-east-1",
-      // endpoint: "http://localhost:8000",
-    });
+  AWS.config.update({
+    // accessKeyId: "xxxx",
+    // secretAccessKey: "xxxx",
+    region: "us-east-1",
+    endpoint: "http://localhost:8000",
+  });
 
   const options = {
     convertEmptyValues: true,
@@ -86,6 +85,8 @@ module.exports = {
       .put({
         TableName,
         Item: {
+          PK: `USER#${userWallet}`,
+          SK: `USER#${userWallet}`,
           userName: userName,
           userWallet: userWallet,
           accType: accType,
@@ -126,10 +127,11 @@ module.exports = {
    * @returns Returns a user as and object.
    **/
   getUser: async (userName) => {
+    console.log("LOG>>>>>", userName);
     const dbUser = await getDynamoDBClient()
       .query({
         TableName,
-        IndexName: "wallet_name_index",
+        IndexName: "userNameIndex",
         // ProjectionExpression: "userName",
         KeyConditionExpression: "userName = :userName",
         ExpressionAttributeValues: {
@@ -137,7 +139,10 @@ module.exports = {
         },
       })
       .promise()
-      .then((data) => data.Items[0])
+      .then((data) => {
+        console.log(data.Items[0]);
+        return data.Items[0];
+      })
       .catch(console.error);
     return dbUser;
   },
@@ -155,9 +160,10 @@ module.exports = {
       .query({
         TableName,
         // ProjectionExpression: "userWallet",
-        KeyConditionExpression: "userWallet = :userWallet",
+
+        KeyConditionExpression: "PK = :PK",
         ExpressionAttributeValues: {
-          ":userWallet": userWallet,
+          ":PK": `USER#${userWallet}`,
         },
       })
       .promise()
@@ -182,8 +188,8 @@ module.exports = {
       .update({
         TableName,
         Key: {
-          userWallet: userWallet,
-          userName: userName,
+          PK: `USER#${userWallet}`,
+          SK: `USER#${userWallet}`,
         },
         UpdateExpression:
           "SET functionalExpertise = :functionalExpertise, industryExpertise = :industryExpertise",
@@ -223,8 +229,8 @@ module.exports = {
       .update({
         TableName,
         Key: {
-          userWallet: userWallet,
-          userName: userName,
+          PK: `USER#${userWallet}`,
+          SK: `USER#${userWallet}`,
         },
         UpdateExpression:
           "SET firstName = :firstName, lastName = :lastName, currTitle = :currTitle, currLocation = :currLocation, bio = :bio, linkedIn = :linkedIn, twitter = :twitter, email = :email",
@@ -262,8 +268,8 @@ module.exports = {
       const params = {
         TableName,
         Key: {
-          userWallet: userWallet,
-          userName: userName,
+          PK: `USER#${userWallet}`,
+          SK: `USER#${userWallet}`,
         },
         UpdateExpression: "SET companyInfo = :updatedData",
         ExpressionAttributeValues: {
@@ -316,7 +322,7 @@ module.exports = {
     const dbUser = await getDynamoDBClient()
       .query({
         TableName,
-        IndexName: "wallet_name_index",
+        IndexName: "userNameIndex",
         // ProjectionExpression: "userName",
         KeyConditionExpression: "userName = :userName",
         ExpressionAttributeValues: {
@@ -368,7 +374,7 @@ module.exports = {
         ":status": "live",
       };
       let ExpressionAttributeNames = {
-        "#Status": "status",
+        "#Status": "contract_status",
       };
 
       Object.entries(query).forEach(([filterType, filter], idx) => {
@@ -392,19 +398,19 @@ module.exports = {
           case "industry":
             queryPortion = arrayFilterString;
             FilterExpression = FilterExpression + queryPortion;
-            ExpressionAttributeNames[`#${filterType}`] = "industry";
+            ExpressionAttributeNames[`#${filterType}`] = "contract_industry";
             break;
 
           case "expertise":
             queryPortion = arrayFilterString;
             FilterExpression = FilterExpression + queryPortion;
-            ExpressionAttributeNames[`#${filterType}`] = "expertise";
+            ExpressionAttributeNames[`#${filterType}`] = "contract_expertise";
             break;
 
           case "duration":
             queryPortion = `${queryPortion} #${filterType} BETWEEN :${filterType}0 AND :${filterType}1`;
             FilterExpression = FilterExpression + queryPortion;
-            ExpressionAttributeNames[`#${filterType}`] = "duration";
+            ExpressionAttributeNames[`#${filterType}`] = "contract_duration";
             break;
 
           case "budget":
@@ -416,7 +422,7 @@ module.exports = {
           case "startDate":
             queryPortion = `${queryPortion} #${filterType} > :${filterType}`;
             FilterExpression = FilterExpression + queryPortion;
-            ExpressionAttributeNames[`#${filterType}`] = "start_date";
+            ExpressionAttributeNames[`#${filterType}`] = "contract_start_date";
             break;
 
           default:
@@ -447,7 +453,7 @@ module.exports = {
       });
 
       return {
-        TableName: Contracts,
+        TableName,
         ConsistentRead: false,
         FilterExpression: FilterExpression,
         ExpressionAttributeValues: ExpressionAttributeValues,

@@ -72,17 +72,17 @@ export const BountyList = ({ contracts, error, sortParams }) => {
           .map(
             (
               {
-                title,
-                description,
-                type,
-                created_on,
-                status,
+                contract_title,
+                contract_description,
+                contract_type,
+                contract_created_on,
+                contract_status,
                 token,
-                amount,
+                contract_amount,
                 converted_amount,
                 contract_id,
                 due_date,
-                start_date,
+                contract_start_date,
               },
               idx
             ) => {
@@ -98,16 +98,16 @@ export const BountyList = ({ contracts, error, sortParams }) => {
                 >
                   <BountyCard
                     my={"8px"}
-                    type={type}
-                    title={title}
-                    body={description}
+                    type={contract_type}
+                    title={contract_title}
+                    body={contract_description}
                     img={`https://via.placeholder.com/290?text=${status}`}
-                    amount={amount}
+                    amount={contract_amount}
                     token={token}
-                    status={status}
-                    created_on={created_on}
+                    status={contract_status}
+                    created_on={contract_created_on}
                     due_date={due_date}
-                    start_date={start_date}
+                    start_date={contract_start_date}
                     converted_amount={converted_amount}
                   />
                 </Link>

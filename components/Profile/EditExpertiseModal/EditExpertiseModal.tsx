@@ -20,6 +20,8 @@ import { UserData } from "../../../utils/interfaces";
 import { MultiSelect } from "../../reusable/MultiSelect";
 
 const EditExpertiseModal = (props) => {
+  console.log(props);
+
   const finalRef = useRef();
 
   const { editExpertise, ...userState } = useUser();

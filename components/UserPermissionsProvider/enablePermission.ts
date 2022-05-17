@@ -11,6 +11,7 @@ const enablePermission = (permission: Permission) => {
   isAllowedTo(permission).then((allowed) => {
     setLoading(false);
     setAllowed(allowed);
+    
   });
   return [loading, allowed];
 };

@@ -287,6 +287,7 @@ const ProfileDetails = ({ user }) => {
       userPermission="view"
     />
   );
+  console.log(userState);
 
   return (
     <>

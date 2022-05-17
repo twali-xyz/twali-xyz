@@ -23,7 +23,7 @@ export const ChipStyle: ComponentStyleConfig = {
     },
     inner: {
         fontSize:"14px",
-        lineHeight:"22px",
+        lineHeight:"24px",
         fontFamily:"PP Telegraf",
         alignSelf:"start",
         backgroundColor:"n6",
@@ -58,6 +58,7 @@ export const ChipStyle: ComponentStyleConfig = {
       inner: {
         background: "#58F27A1A",
         borderRadius: "4px",
+        lineHeight:"22px",
         height: "inherit",
         alignSelf: "center",
         fontSize: "12px",
@@ -76,6 +77,7 @@ export const ChipStyle: ComponentStyleConfig = {
         background: "#3290D31A",
         borderRadius: "4px",
         height: "inherit",
+        lineHeight:"22px",
         alignSelf: "center",
         fontSize: "12px",
         justifyContent: "center"
@@ -94,6 +96,7 @@ export const ChipStyle: ComponentStyleConfig = {
         background: "#98B2B226",
         borderRadius: "4px",
         height: "inherit",
+        lineHeight:"22px",
         alignSelf: "center",
         fontSize: "12px",
         justifyContent: "center"
@@ -112,6 +115,7 @@ export const ChipStyle: ComponentStyleConfig = {
         background: "#A096E81A",
         borderRadius: "4px",
         height: "inherit",
+        lineHeight:"22px",
         alignSelf: "center",
         fontSize: "12px",
         justifyContent: "center"
