@@ -46,7 +46,7 @@ const ProjectExpertiseModal = (props) => {
           border={"1px solid rgba(88, 112, 112, 1)"}
           fontFamily={"PP Telegraf Light"}
         >
-        <ModalHeader mt={"20px"}>Statement of Werk</ModalHeader>
+        <ModalHeader mt={"20px"}>Expertise</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form style={{ alignSelf: "center" }}>
