@@ -12,14 +12,16 @@ const ProjectDescription = (props) => {
         <>
         <Container
               maxW="800px"
-              p={4}
-              paddingLeft="2.4rem"
-              marginLeft={20}
+              // p={4}
+              paddingRight="1.8rem"
+              paddingTop={4}
+              paddingBottom={4}
+              paddingLeft="1.4rem"
+              marginLeft={10}
               marginTop={"0 !important"}
               backgroundColor={"inverse"}
         >
-            <VStack spacing={6} marginTop={0} alignItems="unset">
-              <HStack alignSelf="flex-end">
+                        <HStack alignSelf="flex-end" flexDirection="row-reverse">
               <Button
             onClick={onProjectDescModalOpen}
             alignSelf="flex-end"
@@ -28,8 +30,6 @@ const ProjectDescription = (props) => {
             margin={"0px"}
             mx={"0px"}
             pos={"relative"}
-            top={"-45px !important"}
-            left={"16px"}
             width={"fit-content"}
             borderRadius={"md"}
           >
@@ -41,6 +41,7 @@ const ProjectDescription = (props) => {
           </Button>
           <ProjectDescriptionModal isOpen={isProjectDescModalOpen} onClose={onProjectDescModalClose}/>
               </HStack>
+            <VStack spacing={6} marginTop={0} alignItems="unset">
                 <Heading
             color="zing"
                     fontSize={"36px"}

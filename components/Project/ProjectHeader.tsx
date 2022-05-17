@@ -35,8 +35,6 @@ const ProjectHeader = (props) => {
             margin={"0px"}
             mx={"0px"}
             pos={"relative"}
-            top={"-45px !important"}
-            left={"16px"}
             width={"fit-content"}
             borderRadius={"md"}
           >

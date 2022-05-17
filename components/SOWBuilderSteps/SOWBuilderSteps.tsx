@@ -207,7 +207,7 @@ const SOWBuilderSteps = () => {
       >
         Build your werk.
       </Heading>
-      <Steps activeStep={activeStep}>
+      <Steps activeStep={activeStep} width="720px">
         {steps.map(({ label, content }) => (
           <Step label={label} key={label}>
             {content}

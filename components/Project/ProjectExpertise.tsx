@@ -16,14 +16,13 @@ const ProjectExpertise = (props) => {
     return (
         <>
         <Container
-              maxW="100%"
+              maxW="500px"
               p={4}
               marginLeft="2rem"
               marginTop={"0 !important"}
               backgroundColor={"inverse"}
         >
-            <VStack paddingRight={12} paddingTop={4}>
-            <HStack alignSelf="flex-end">
+                      <HStack alignSelf="flex-end" flexDirection="row-reverse">
                 <Button
             onClick={onProjectExpertiseModalOpen}
             alignSelf="flex-end"
@@ -32,8 +31,6 @@ const ProjectExpertise = (props) => {
             margin={"0px"}
             mx={"0px"}
             pos={"relative"}
-            top={"-45px !important"}
-            left={"16px"}
             width={"fit-content"}
             borderRadius={"md"}
           >
@@ -45,6 +42,7 @@ const ProjectExpertise = (props) => {
           </Button>
           <ProjectExpertiseModal isOpen={isProjectExpertiseModalOpen} onClose={onProjectExpertiseModalClose}/>
           </HStack>
+            <VStack paddingRight={12} paddingTop={4}>
         <Text alignSelf="flex-start" fontSize="sm" marginTop={12} marginBottom={6}>Industry</Text>
         <Flex
           flexDir={"row"}

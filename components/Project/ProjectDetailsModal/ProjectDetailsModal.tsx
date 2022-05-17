@@ -18,7 +18,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
-const ProjectDescriptionModal = (props) => {
+const ProjectDetailsModal = (props) => {
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -135,4 +135,4 @@ const ProjectDescriptionModal = (props) => {
   );
 };
 
-export default ProjectDescriptionModal;
+export default ProjectDetailsModal;

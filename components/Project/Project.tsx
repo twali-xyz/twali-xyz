@@ -33,29 +33,27 @@ const Project = (props) => {
               backgroundColor={"inverse"}
               paddingRight={24}
             >
-      <Steps activeStep={props.activeStep}>
-        {props.steps.map(({ label, content }) => (
-          <Step label={label} key={label}>
-            {content}
-          </Step>
-        ))}
-      </Steps>
+      <HStack className="testing-steps" maxWidth="720px" paddingLeft="52px" paddingTop="36px">
+        <Steps activeStep={props.activeStep}>
+          {props.steps.map(({ label, content }) => (
+            <Step label={label} key={label}>
+              {content}
+            </Step>
+          ))}
+        </Steps>
+      </HStack>
       <Box
         w="6xl"
         h="1257px"
-        // w="xl"
         marginLeft="54px"
         marginTop="4rem"
         marginBottom="4rem"
         borderWidth="1px"
         borderRadius="lg"
-        borderColor="#F2F2F2"
+        borderColor="#C7F83C"
         overflow="hidden"
         cursor="pointer"
         alignSelf={"center"}
-        // backgroundColor={"n6"}
-        // opacity={"90%"}
-        // boxShadow={"8px 16px 24px 0px #062B2A8F"}
       >
         <Box p="4">
           <Box
@@ -66,14 +64,14 @@ const Project = (props) => {
             isTruncated
           >
       <ProjectHeader/>
-      <HStack>
+      <Flex flexDirection="row">
       <Flex flexDirection="column" width="100%" maxWidth="550px">
         <ProjectExpertise />
         <ProjectDetails/>
       </Flex>
       <div className= "twali-vertical-line"></div>
       <ProjectDescription/>
-      </HStack>
+      </Flex>
       </Box>
       </Box>
       </Box>
