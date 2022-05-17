@@ -72,7 +72,7 @@ const setMenuSelection = (tokenName, imgSrc) => {
           border={"1px solid rgba(88, 112, 112, 1)"}
           fontFamily={"PP Telegraf Light"}
         >
-        <ModalHeader mt={"20px"}>Statement of Werk</ModalHeader>
+        <ModalHeader mt={"20px"}>Dates & Pricing</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
                 <FormControl p={2} id="werk-date-range">
