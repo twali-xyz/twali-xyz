@@ -27,7 +27,7 @@ try:
             "token": "ETH",
             "contract_amount": 6,
             "converted_amount": 18000,
-            "due_date": 1665014400,
+            "application_deadline": 1665014400,
             "contract_industry": "Micro Lending",
             "contract_expertise": ["Media & Comms", "Operations"],
             "contract_status": "closed",
