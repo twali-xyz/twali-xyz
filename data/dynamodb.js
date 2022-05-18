@@ -14,7 +14,7 @@ const getDynamoDBClient = () => {
     // accessKeyId: "xxxx",
     // secretAccessKey: "xxxx",
     region: "us-east-1",
-    endpoint: "http://localhost:8000",
+    // endpoint: "http://localhost:8000",
   });
 
   const options = {
@@ -127,7 +127,6 @@ module.exports = {
    * @returns Returns a user as and object.
    **/
   getUser: async (userName) => {
-    console.log("LOG>>>>>", userName);
     const dbUser = await getDynamoDBClient()
       .query({
         TableName,
@@ -139,10 +138,7 @@ module.exports = {
         },
       })
       .promise()
-      .then((data) => {
-        console.log(data.Items[0]);
-        return data.Items[0];
-      })
+      .then((data) => data.Items[0])
       .catch(console.error);
     return dbUser;
   },

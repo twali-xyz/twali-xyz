@@ -17,7 +17,6 @@ const UserPermissionsRestricted: React.FunctionComponent<Props> = ({
 }) => {
   // We "connect" to the provider thanks to the PermissionContext
   const [loading, allowed] = enablePermission(to);
-  console.log(loading, allowed, to);
 
   if (loading) {
     return <>{loadingComponent}</>;
