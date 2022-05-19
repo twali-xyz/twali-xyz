@@ -28,6 +28,8 @@ export default function marketplace() {
     let tempFilter = {};
 
     Object.entries(router.query).forEach((filterData) => {
+      console.log(filterData);
+
       let filterObjectArray = {};
       let [filterType, filterValues] = filterData;
 
@@ -116,11 +118,11 @@ export default function marketplace() {
     };
     let sortName;
     if (sortParams.includes("Freshness")) {
-      sortName = "created_on";
+      sortName = "contract_created_on";
     } else if (sortParams.includes("Amount")) {
       sortName = "converted_amount";
     } else if (sortParams.includes("Duration")) {
-      sortName = "duration";
+      sortName = "contract_duration";
     }
 
     if (options[sortParams] === "ascending") {

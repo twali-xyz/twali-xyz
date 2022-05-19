@@ -6,7 +6,6 @@ interface BountyList {
   contracts: JSON;
   error: string;
   sortParams: string;
-  compare: Function;
 }
 
 /**
@@ -16,7 +15,6 @@ interface BountyList {
  * @param {JSON} contracts contracts to display
  * @param {string} error error when fetching contracts
  * @param {string} sortParams name of the active sort parameter
- * @param {function} compare compare function for sorting bounty list
  *
  * @returns JSX BountyList element
  *
@@ -51,17 +49,17 @@ export const BountyList = ({ contracts, error, sortParams, compare }) => {
           .map(
             (
               {
-                title,
-                description,
-                type,
-                created_on,
-                status,
+                contract_title,
+                contract_description,
+                contract_type,
+                contract_created_on,
+                contract_status,
                 token,
-                amount,
+                contract_amount,
                 converted_amount,
                 contract_id,
-                due_date,
-                start_date,
+                application_deadline,
+                contract_start_date,
               },
               idx
             ) => {
@@ -77,16 +75,16 @@ export const BountyList = ({ contracts, error, sortParams, compare }) => {
                 >
                   <BountyCard
                     my={"8px"}
-                    type={type}
-                    title={title}
-                    body={description}
-                    img={`https://via.placeholder.com/290?text=${status}`}
-                    amount={amount}
+                    type={contract_type}
+                    title={contract_title}
+                    body={contract_description}
+                    img={`https://via.placeholder.com/290?text=${contract_status}`}
+                    amount={contract_amount}
                     token={token}
-                    status={status}
-                    created_on={created_on}
-                    due_date={due_date}
-                    start_date={start_date}
+                    status={contract_status}
+                    created_on={contract_created_on}
+                    application_deadline={application_deadline}
+                    start_date={contract_start_date}
                     converted_amount={converted_amount}
                   />
                 </Link>
