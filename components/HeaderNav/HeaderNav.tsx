@@ -72,7 +72,7 @@ const HeaderNav = (props) => {
           userWallet && (
             <>
               <HStack mr={10}>
-                <Link href={"marketplace"}>
+                <Link href={"/marketplace"}>
                   <Text
                     fontSize={"14px"}
                     letterSpacing={"2%"}

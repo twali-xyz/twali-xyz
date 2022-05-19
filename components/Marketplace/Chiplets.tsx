@@ -1,6 +1,23 @@
 import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 import { Chip } from "../reusable/Chip";
+
+interface Chiplets {
+  handleRemove: Function;
+  filterParams: Object;
+  props;
+}
+
+/**
+ * Individual bounty card component
+ *
+ *
+ * @param {function} handleRemove remove chiplet from filter parameter function
+ * @param {object} filterParams filter parameter object
+ *
+ * @returns JSX chiplets elements displaying active filters
+ *
+ */
 export const Chiplets = ({ handleRemove, filterParams, ...props }) => {
   var formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
