@@ -1,75 +1,80 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
-    FormControl,
-    Input,
-    Box,
-    FormLabel,
-    HStack,
-    Img,
-    Menu,
-    MenuButton,
-    Button,
-    MenuItem,
-    MenuList,
-    Select,
-    Text,
-    VStack,
-  } from "@chakra-ui/react";
-  import { ChevronDownIcon} from '@chakra-ui/icons'
+  Button,
+  CircularProgress,
+  Modal,
+  ModalHeader,
+  ModalOverlay,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  ModalContent,
+  FormLabel,
+  FormControl,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  HStack,
+  Text,
+  Img,
+  Input,
+  Textarea,
+  Heading,
+  VStack,
+} from "@chakra-ui/react";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
-  import DatePicker from "react-date-picker/dist/entry.nostyle";
-  import DateRangePicker from "@wojtekmaj/react-daterange-picker/dist/entry.nostyle";
-  import { functionalExpertiseList } from "../../utils/functionalExpertiseConstants";
-  import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
-  import { setEventArray } from "../../utils/setEventArray";
-  import { MultiSelect } from "../reusable/MultiSelect";
-  import IconOption from "./IconOption";
+import { UserData } from "../../../utils/interfaces";
+import useUser from "../../../context/TwaliContext";
+import DatePicker from "react-date-picker/dist/entry.nostyle";
+import DateRangePicker from "@wojtekmaj/react-daterange-picker/dist/entry.nostyle";
+
+const ProjectDetailsModal = (props) => {
+  const finalRef = useRef();
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const { setData, ...userState } = useUser();
+  const [userData, setUserData] = useState<UserData>({
+    ...userState,
+    userName: "",
+    userWallet: "",
+    uuid: "",
+    setData,
+  });
+  const [dueDate, setDueDate] = useState(new Date());
+  const [dateRange, setDateRange] = useState([new Date(), new Date()]);
+  const [tokenName, setTokenName] = useState('Token');
+  const [imgSrc, setImgSrc] = useState('');
+
+  const handleChange = (evt) => {
+    evt.persist();
+
+    // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
+    // setEventArray({ evt, setValues, values });
+  };
+
+const setMenuSelection = (tokenName, imgSrc) => {
+    setTokenName(tokenName);
+    setImgSrc(imgSrc);
+}
   
-  export const datesAndPricing = ({ values }) => {
-    const [dueDate, setDueDate] = useState(new Date());
-    const [dateRange, setDateRange] = useState([new Date(), new Date()]);
-    const [tokenName, setTokenName] = useState('Token');
-    const [imgSrc, setImgSrc] = useState('');
-    // const [values, setValues] = useState<UserData>();
-
-    const handleChange = (evt) => {
-        evt.persist();
-    
-        // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
-        // setEventArray({ evt, setValues, values });
-      };
-
-    const setMenuSelection = (tokenName, imgSrc) => {
-        setTokenName(tokenName);
-        setImgSrc(imgSrc);
-    }
-
-    return (
-        <form 
-        style={{ alignSelf: "start" }}
-        >
-    <HStack spacing={24}>
-        <Box
-          maxWidth={"496px"}
-        //   h="100%"
-          height="450px"
-          w="xl"
-          borderWidth="1px"
-          borderRadius="lg"
-        //   overflow="hidden"
-          cursor="pointer"
+  return (
+    <>
+      <Modal
+        finalFocusRef={finalRef}
+        isOpen={props.isOpen}
+        onClose={props.onClose}
+      >
+        <ModalOverlay />
+        <ModalContent
           backgroundColor={"n6"}
-          opacity={"90%"}
           boxShadow={"8px 16px 24px 0px #062B2A8F"}
+          border={"1px solid rgba(88, 112, 112, 1)"}
+          fontFamily={"PP Telegraf Light"}
         >
-          <Box p="4">
-            <Box
-              mt="1"
-              fontWeight="semibold"
-              as="h4"
-              lineHeight="tight"
-            //   isTruncated
-            >
+        <ModalHeader mt={"20px"}>Dates & Pricing</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
                 <FormControl p={2} id="werk-date-range">
                 <VStack alignItems="start" m={0} p={0}>
                         <FormLabel
@@ -246,55 +251,25 @@ import {
                             onChange={handleChange}
                             />
                     </FormControl>
-            </Box>
-          </Box>
-        </Box>
-      {/* </form>
-      <form 
-      style={{ alignSelf: "start" }}
-      > */}
-        <Box
-          maxWidth={"496px"}
-          h="450px"
-          w="xl"
-          borderWidth="1px"
-          borderRadius="lg"
-        //   overflow="hidden"
-          cursor="pointer"
-          backgroundColor={"n6"}
-          opacity={"90%"}
-          boxShadow={"8px 16px 24px 0px #062B2A8F"}
-        >
-          <Box p="4">
-            <Box
-              mt="1"
-              fontWeight="semibold"
-              as="h4"
-              lineHeight="tight"
-            //   isTruncated
-            >
-              <MultiSelect
-                name={"functionalExpertise"}
-                formLabel={"Superpowers"}
-                handleChange={handleChange}
-                options={functionalExpertiseList}
-                maxSelections={3}
-                defaultValues={values?.functionalExpertise || []}
-              />
+          </ModalBody>
 
-              <MultiSelect
-                name={"industryExpertise"}
-                formLabel={"Industry expertise"}
-                handleChange={handleChange}
-                defaultValues={values?.industryExpertise || []}
-                options={industryExpertiseList}
-                maxSelections={3}
-              />
-            </Box>
-          </Box>
-        </Box>
-        </HStack>
-      </form>
-    );
-  };
-  
+          <ModalFooter>
+            <Button variant="primary" size={"sm"} onClick={() => console.log('project sow modal save')}>
+              Save{" "}
+              {isSubmitted ? (
+                <CircularProgress
+                  size="22px"
+                  thickness="4px"
+                  isIndeterminate
+                  color="#3C2E26"
+                />
+              ) : null}
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+};
+
+export default ProjectDetailsModal;

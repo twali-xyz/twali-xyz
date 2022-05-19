@@ -97,9 +97,16 @@ DATE PICKER CSS */
     display: none;
   }
   .react-date-picker__calendar .react-calendar {
-    background-color: rgb(4, 26, 25);
+    background-color: #1F3535;
     padding: 10px;
     border-width: thin;
+    box-shadow: 8px 8px 24px rgb(2 28 27 / 56%);
+    width: 377px;
+    height: 367px;
+    border: 1px solid #587070;
+    box-sizing: border-box;
+    font-family: 'PP Telegraf';
+    border-radius: 12px;
   }
   .react-calendar__tile:hover {
     color: #c7f83c;

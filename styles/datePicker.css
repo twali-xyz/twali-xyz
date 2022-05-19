@@ -71,7 +71,9 @@ DATE PICKER CSS */
 .react-date-picker__button {
   border: 0;
   background: transparent;
-  padding: 4px 6px;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-bottom: 2px;
 }
 .react-date-picker__button:enabled {
   cursor: pointer;
@@ -101,31 +103,103 @@ DATE PICKER CSS */
   display: none;
 }
 .react-date-picker__calendar .react-calendar {
-  background-color: rgb(4, 26, 25);
-  border: 1px solid #c7f83c;
+  background-color: #1F3535;
   padding: 10px;
   border-width: thin;
-  margin-top: 16px;
-
+  box-shadow: 8px 8px 24px rgb(2 28 27 / 56%);
+  width: 377px;
+  height: 367px;
+  border: 1px solid #587070;
+  box-sizing: border-box;
+  font-family: 'PP Telegraf';
+  border-radius: 12px;
 }
 .react-calendar__tile:hover {
   color: #c7f83c;
 }
 
-.react-calendar__tile--rangeStart {
+.react-calendar__tile--active {
   background-color: #c7f83c;
-  color: #6d6d6d;
+  color: #98B2B2;
+}
+
+.react-calendar__tile--rangeStart {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  color: #0A1313;
 }
 
 .react-calendar__tile--rangeEnd {
-  background-color: #c7f83c;
-  color: #6d6d6d;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  color: #0A1313;
 }
 
-.react-calendar__tile--active {
-  background-color: #c7f83c;
-  color: #6d6d6d;
+.react-calendar__navigation {
+  display: flex;
+  padding-bottom: 14px;
+  padding-top: 10px;
+  font-size: 18px;
+  line-height: 18px;
+  margin-bottom: 14px;
 }
+
+.react-calendar__navigation__arrow.react-calendar__navigation__prev2-button {
+  display: none;
+}
+
+.react-calendar__navigation__arrow.react-calendar__navigation__next2-button {
+  display: none;
+}
+
+.react-calendar__navigation__arrow.react-calendar__navigation__prev-button {
+  background-image: url("/twali-assets/leftArrow.svg");
+  width: 16px !important;
+  height: 16px !important;
+  color: transparent;
+  margin-top: 4px;
+}
+
+.react-calendar__navigation__arrow.react-calendar__navigation__next-button {
+  background-image: url("/twali-assets/rightArrow.svg");
+  width: 16px !important;
+  height: 16px !important;
+  color: transparent;
+  margin-top: 4px;
+}
+
+.react-calendar__month-view__weekdays abbr[title] {
+  text-decoration: none;
+  padding-left: 8px;
+}
+
+.react-calendar__month-view__weekdays {
+  padding-bottom: 8px;
+  text-transform: uppercase;
+  font-family: 'PP Telegraf';
+  font-size: 12px;
+  font-weight: 500;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.react-calendar__month-view__days {
+  line-height: 24px;
+  font-size: 14px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.react-calendar__tile.react-calendar__month-view__days__day {
+  height: 42px;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: #98B2B2;
+}
+
 .market-cal {
   display: none;
 }
