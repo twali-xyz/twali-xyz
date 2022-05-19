@@ -1,10 +1,10 @@
-twali-xyz-staging:
+twali-xyz-production:
   component: "@sls-next/serverless-component@3.7.0-alpha.11"
   inputs:
-    roleArn: "arn:aws:iam::517934542124:role/deploy-dev"
+    roleArn: "arn:aws:iam::517934542124:role/isdq5cs-qxf7o2s"
     build:
       env:
-        TABLE_NAME: "dev_staging_user_profile_test"
+        TABLE_NAME: "main_user_profiles_db"
     cloudfront:
-      distributionId: EHZYCKLX3TYQ4
-    bucketName: pxn4tf-zy2dp9
+      distributionId: E1N063HBIE24ZH
+    bucketName: twali-production

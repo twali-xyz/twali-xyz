@@ -1,5 +1,5 @@
 import { AccountSelection } from "./accountSelection";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Step, Steps, useSteps } from "chakra-ui-steps";
 import { connect } from "../../utils/walletUtils";
 import background from "../../public/twali-assets/backgroundscreen.png";
@@ -41,6 +41,7 @@ const SignUpSteps = () => {
   const [accType, setAccType] = useState("");
   const [btnActive, setBtnActive] = useState(0);
   const [isDisabled, setIsDisabled] = useState(false);
+  const firstRender = useRef(true);
   const toast = useToast()
 
   const [userData, setUserData] = useState<UserData>({
@@ -118,13 +119,16 @@ const SignUpSteps = () => {
   };
 
   useEffect(() => {
-    const handler = setTimeout(() => {
+    const handler = setTimeout(() => {  
+      if (firstRender.current) {
+        firstRender.current = false;
+        return
+      }
       setErrors(validate(userData));
     }, 500);
 
-    return () => {
-      clearTimeout(handler);
-    };
+    return () => 
+      clearTimeout(handler)
   }, [userData, 500]);
 
   const steps = [

@@ -15,7 +15,7 @@ let dynamodb = new AWS.DynamoDB();
  *
  * **/
 let params = {
-  TableName: "dev_staging_user_profile_test",
+  TableName: "main_user_profiles_db",
   KeySchema: [
     { AttributeName: "userWallet", KeyType: "HASH" }, // Partition Key
     { AttributeName: "userName", KeyType: "RANGE" }, // Sort Ket

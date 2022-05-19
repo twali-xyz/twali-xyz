@@ -7,26 +7,66 @@ import { UserData } from "../utils/interfaces";
  *  walletUtils.tsx contains util methods for wallet connection
  */
 
-// Get user's eth address
-export async function connect() {
-  const { ethereum } = window;
-  let account;
-
-  if (!ethereum) {
-    console.log("Connect your ethereum wallet!");
-    return;
-  }
-
-  await ethereum.request({ method: "eth_requestAccounts" }).then((accounts) => {
-    if (accounts.length !== 0) {
-      account = accounts[0];
-      console.log("Found an authorized account: ", account);
-    } else {
-      console.log("No authorized account found!");
-    }
-  });
-  return account;
+export async function connect() { 
+    let account;
+    await window.ethereum
+      .request({ method: "eth_requestAccounts" })
+      .then((accounts) => {
+        if (accounts.length !== 0) {
+          account = accounts[0];
+          console.log("Found an authorized account: ", account);
+        } else {
+          console.log("No authorized account found!");
+        }
+      });
+    return account;
 }
+
+export const handleWalletConnectOnLogin = async (
+  setIsSubmitted,
+  setLoaded,
+  router
+) => {
+
+   const web3Modal = new Web3Modal({
+    disableInjectedProvider: false,
+    network: "rinkeby",
+    cacheProvider: false,
+    providerOptions: {
+      walletconnect: {
+        package: WalletConnectProvider,
+        options: {
+          rpc: {
+            1: "https://eth-rinkeby.alchemyapi.io/v2/QtLM8rW9nB6DobDu8KQx-7fYMS2rBlky",
+          },
+        },
+      },
+    },
+  });
+  const provider = await web3Modal.connect();
+  const web3 = new Web3(provider);
+  const accounts = await web3.eth.getAccounts();
+  const currAccount = accounts[0];
+
+  setIsSubmitted(true);
+  try {
+    let userData: UserData = await getUserByWallet(currAccount);
+
+    if (userData && userData.userName && userData.userWallet) {
+      router.push(`/${userData.userName}`);
+      setIsSubmitted(false);
+    } else {
+      console.log("No profile, pls create one...");
+      router.push("/steps");
+    }
+  } catch (err) {
+    console.log("error: ", err);
+    router.push("/steps");
+    setLoaded(true);
+  }
+};
+
+
 
 export const handleWalletConnect = async (
   userPage,
@@ -35,6 +75,7 @@ export const handleWalletConnect = async (
   router
 ) => {
   try {
+    
     const web3Modal = new Web3Modal({
       disableInjectedProvider: false,
       network: "rinkeby",
@@ -51,6 +92,7 @@ export const handleWalletConnect = async (
       },
     });
     web3Modal.clearCachedProvider();
+
     const provider = await web3Modal.connect();
     const web3 = new Web3(provider);
     const accounts = await web3.eth.getAccounts();
