@@ -26,7 +26,7 @@ export const BountyCard = ({
   amount,
   status,
   created_on,
-  due_date,
+  application_deadline,
   start_date,
   token,
   ...props

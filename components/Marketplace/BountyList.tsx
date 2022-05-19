@@ -81,7 +81,7 @@ export const BountyList = ({ contracts, error, sortParams }) => {
                 contract_amount,
                 converted_amount,
                 contract_id,
-                due_date,
+                application_deadline,
                 contract_start_date,
               },
               idx
@@ -101,12 +101,12 @@ export const BountyList = ({ contracts, error, sortParams }) => {
                     type={contract_type}
                     title={contract_title}
                     body={contract_description}
-                    img={`https://via.placeholder.com/290?text=${status}`}
+                    img={`https://via.placeholder.com/290?text=${contract_status}`}
                     amount={contract_amount}
                     token={token}
                     status={contract_status}
                     created_on={contract_created_on}
-                    due_date={due_date}
+                    application_deadline={application_deadline}
                     start_date={contract_start_date}
                     converted_amount={converted_amount}
                   />
