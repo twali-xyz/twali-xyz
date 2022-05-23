@@ -15,8 +15,10 @@ import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { UserData } from "../utils/interfaces";
 import { getUserByWallet } from "../utils/walletUtils";
+import useUser from "../context/TwaliContext";
 
 const LoginPage = (props) => {
+  const { ...userState } = useUser();
   useEffect(() => {
     setLoaded(!props.loaded);
   }, []);
@@ -48,7 +50,9 @@ const LoginPage = (props) => {
     const web3 = new Web3(provider);
     const accounts = await web3.eth.getAccounts();
     const currAccount = accounts[0];
+    console.log(currAccount);
 
+    userState.setData({ ...userState, userWallet: currAccount });
     setIsSubmitted(true);
 
     try {
