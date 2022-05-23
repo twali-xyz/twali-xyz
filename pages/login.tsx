@@ -25,8 +25,9 @@ const LoginPage = (props) => {
   const toggleMenu = () => setShow(!show);
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [loaded, setLoaded] = useState(false);
-  const router = useRouter();
+  const [whiteListed, setWhiteListed] = useState(false);
 
+  const router = useRouter();
   const handleWalletConnectOnLogin = async () => {
     const web3Modal = new Web3Modal({
       disableInjectedProvider: false,
@@ -49,15 +50,31 @@ const LoginPage = (props) => {
     const currAccount = accounts[0];
 
     setIsSubmitted(true);
-    try {
-      let userData: UserData = await getUserByWallet(currAccount);
 
-      if (userData && userData.userName && userData.userWallet) {
-        router.push(`/${userData.userName}`);
-        setIsSubmitted(false);
-      } else {
-        console.log("No profile, pls create one...");
-        router.push("/steps");
+    try {
+      // TODO
+      //
+      // check if user is on whiteList
+      //
+      // const userWhiteListStatus = await getUserWhiteListStatus;
+      // setWhiteListed(userWhiteListStatus);
+      //
+
+      if (!whiteListed) {
+        // if not on whiteList send user to form
+        router.push("/whitelist");
+      }
+      // if user is on whiteList, check if profile has been created
+      else {
+        let userData: UserData = await getUserByWallet(currAccount);
+
+        if (userData && userData.userName && userData.userWallet) {
+          router.push(`/${userData.userName}`);
+          setIsSubmitted(false);
+        } else {
+          console.log("No profile, pls create one...");
+          router.push("/steps");
+        }
       }
     } catch (err) {
       console.log("error: ", err);
