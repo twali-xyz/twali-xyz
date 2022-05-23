@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import PermissionContext from "./UserPermissionsContext";
 import { Permission } from "../../utils/PermissionTypes";
 
@@ -8,10 +8,12 @@ const enablePermission = (permission: Permission) => {
 
   const { isAllowedTo } = useContext(PermissionContext);
 
-  isAllowedTo(permission).then((allowed) => {
-    setLoading(false);
-    setAllowed(allowed);
-  });
+  useEffect(() => {
+    isAllowedTo(permission).then((allowed) => {
+      setLoading(false);
+      setAllowed(allowed);
+    });
+  }, [isAllowedTo])
   return [loading, allowed];
 };
 
