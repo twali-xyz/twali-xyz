@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     FormControl,
     Input,
@@ -24,6 +24,10 @@ import {
   import { setEventArray } from "../../utils/setEventArray";
   import { MultiSelect } from "../reusable/MultiSelect";
   import IconOption from "./IconOption";
+  import axios from 'axios'
+  import { TokenState } from "../../context/TokenContext";
+  import { tokenConstants } from "../../utils/tokenConstants";
+  import { TokenPriceList } from '../../utils/coingeckoEndpoints';
   
   export const datesAndPricing = ({ values }) => {
     const [dueDate, setDueDate] = useState(new Date());
@@ -32,6 +36,11 @@ import {
     const [imgSrc, setImgSrc] = useState('');
     // const [values, setValues] = useState<UserData>();
 
+    const [data, setData] = useState(null);
+    const [calculatedUSD, setCalculatedUSD] = useState(null);
+    const { token, setToken, tokenIcon, tokenID } = TokenState();
+    console.log('initial', token);
+
     const handleChange = (evt) => {
         evt.persist();
     
@@ -39,9 +48,25 @@ import {
         // setEventArray({ evt, setValues, values });
       };
 
-    const setMenuSelection = (tokenName, imgSrc) => {
-        setTokenName(tokenName);
-        setImgSrc(imgSrc);
+    const handleMenuSelection = (token) => {
+      if (token !== 'Token') {
+        setToken(token.symbol.toUpperCase())
+      } else {
+        setToken('Token');
+      }
+      console.log('token', token);
+    }
+
+
+    const handleAmountChange = (evt) => {
+      axios.get(TokenPriceList(tokenID, 'usd')).then((response) => {
+        console.log(response.data);
+        setData(response.data[tokenID].usd);
+        const value = +(Math.round(response.data[tokenID].usd*evt.target.value * 100) / 100).toFixed(2);
+        setCalculatedUSD(value);
+    }).catch((error) => {
+        console.log(error)
+    });
     }
 
     return (
@@ -69,9 +94,8 @@ import {
               as="h4"
               lineHeight="tight"
             //   isTruncated
-            >
+            >                <VStack alignItems="start" m={0} p={0}>
                 <FormControl p={2} id="werk-date-range">
-                <VStack alignItems="start" m={0} p={0}>
                         <FormLabel
                         fontSize={"16px"}
                         lineHeight={"24px"}
@@ -97,7 +121,6 @@ import {
                       selectRange={true}
                       value={dateRange ? [new Date(dateRange[0]), new Date(dateRange[1])]: undefined}
                     />
-                </VStack>
                     {/* {errors.companyStart && !companyData.companyStart && (
                       <Text fontSize="xs" fontWeight="400" color="red.500">
                         {errors.companyStart}
@@ -126,7 +149,7 @@ import {
                             value={dueDate ? new Date(dueDate): undefined}
                         />
                     </FormControl>
-                    <FormControl p={2} id="werk-amount">
+                    <FormControl p={2} id="werk-token">
                             {/* <Text
                             fontSize="xs"
                             height={"20.5px"}
@@ -158,9 +181,9 @@ import {
                                 fontFamily="PP Telegraf light"
                                 textTransform="capitalize"
                                 textAlign="start"
-                                as={Button} rightIcon={ tokenName === 'Token' ? <ChevronDownIcon 
+                                as={Button} rightIcon={ token === 'Token' ? <ChevronDownIcon 
                                 width="1.3rem" height="100%" 
-                                color={tokenName === 'Token' ? "subtle !important" : 'fresh !important'}
+                                color={token === 'Token' ? "subtle !important" : 'fresh !important'}
                                 right="0.5rem"
                                 position="absolute"
                                 fontSize="1.25rem"
@@ -174,10 +197,10 @@ import {
                                 borderRadius="full"
                                 backgroundColor="transparent"
                                 width="16px"
-                                src={imgSrc}
+                                src={tokenIcon}
                                 alt="add img"
                                 />}>
-                                {tokenName}
+                                {token}
                             </MenuButton>
                             <MenuList
                                 minWidth="9rem"
@@ -185,38 +208,38 @@ import {
                                 background="rgb(4, 26, 25)"
                             >
                              <MenuItem minH='48px'
-                                onClick={() => setMenuSelection("Token", '')}
+                                onClick={() => handleMenuSelection('Token')}
                                 >
                                 <span className="werk-token-name">Token</span>
                                 </MenuItem>
-                                <MenuItem minH='48px'
-                                onClick={() => setMenuSelection("ETH", "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png")}
-                                >
-                                <Img
-                                borderRadius="full"
-                                backgroundColor="transparent"
-                                width="16px"
-                                src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png"
-                                alt="add img"
-                                />
-                                <span className="werk-token-name">ETH</span>
-                                </MenuItem>
-                                <MenuItem minH='40px'
-                                onClick={() => setMenuSelection("USDC", "https://assets.trustwalletapp.com/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png")}
-                                >
-                                <Img
-                                borderRadius="full"
-                                backgroundColor="transparent"
-                                width="16px"
-                                src="https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
-                                alt="add img"
-                                />
-                                <span className="werk-token-name">USDC</span>
-                                </MenuItem>
+                               {
+                                 tokenConstants.map((token, idx) => {
+                                  return (
+                                    <MenuItem minH='48px'
+                                    key={`token-menu-item--${idx}`}
+                                    onClick={() => handleMenuSelection(token)}
+                                    >
+                                    { token.icon ? (
+                                      <Img
+                                    borderRadius="full"
+                                    backgroundColor="transparent"
+                                    width="16px"
+                                    src={token.icon}
+                                    alt="add img"
+                                    />
+                                    ): null
+                                    }
+                                    <span className="werk-token-name">{token.symbol.toUpperCase()}</span>
+                                    </MenuItem>
+                                  );
+                                 })                             
+                                }
                             </MenuList>
                             </Menu>
+                            </FormControl>
                             {/* </HStack> */}
-                            <FormLabel
+                        <FormControl p={2} id="werk-amount">
+                        <FormLabel
                         fontSize={"16px"}
                         lineHeight={"24px"}
                         fontWeight={"400"}
@@ -224,7 +247,7 @@ import {
                         >
                         Amount
                         </FormLabel>
-                        {/* <HStack> */}
+                        <HStack>
                         <Input
                             px={2}
                             fontSize="16px"
@@ -243,9 +266,13 @@ import {
                             fontFamily={"PP Telegraf light"}
                             _placeholder={{ color: "subtle" }}
                             // value={values?.firstName || ""}
-                            onChange={handleChange}
+                            onChange={handleAmountChange}
                             />
+                            <Text fontWeight="400" color="subtle" fontSize="3xl" fontFamily="GrandSlang">=</Text>
+                            <Text fontSize="sm" fontWeight="300" color="zing">${calculatedUSD}</Text>
+                            </HStack>
                     </FormControl>
+                    </VStack>
             </Box>
           </Box>
         </Box>

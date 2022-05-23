@@ -9,18 +9,16 @@ import { tokenConstants } from '../utils/tokenConstants';
 
 export interface Token {
     token: string;
-    symbol: string;
+    tokenID: string;
     setToken: Function;
     tokenIcon: string;
-    setTokenIcon: Function;
 }
 
 export const initialState = {
-    token: '',
-    symbol: '',
+    token: 'Token',
+    tokenID: '',
     setToken: Function(),
     tokenIcon: '',
-    setTokenIcon: Function(),
   };
 
 const Token = createContext<Token>(initialState);
@@ -28,19 +26,24 @@ const Token = createContext<Token>(initialState);
 const TokenContext = ({ children }) => {
     const [token, setToken] = useState('Token');
     const [tokenIcon, setTokenIcon] = useState('');
-    const [symbol, setSymbol] = useState('');
-    
+    const [tokenID, setTokenID] = useState('');
+    console.log('context token:', token);
+
+
     useEffect(() => {
+        console.log('WOOO');
         tokenConstants.forEach((coin) => {
+            console.log('COIN', coin);
+            console.log(token);
             if (token === coin.symbol.toUpperCase()) {
-                setSymbol(coin.symbol.toUpperCase());
+                setTokenID(coin.id);
                 setTokenIcon(coin.icon);
             }
         })
-    })
+    }, [token])
 
     return (
-        <Token.Provider value={{ token, symbol, setToken, tokenIcon, setTokenIcon }}>
+        <Token.Provider value={{ token, tokenID, setToken, tokenIcon }}>
             {children}
         </Token.Provider>
     )
@@ -54,6 +57,6 @@ export const TokenState = () => {
     if (context === undefined) {
         throw new Error("TokenState must be used with TokenContext");
       }
-      return context;
+    return context;
 }
 
