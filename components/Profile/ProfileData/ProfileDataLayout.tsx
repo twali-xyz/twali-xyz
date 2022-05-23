@@ -11,7 +11,7 @@ export function ProfileDataLayout({
 }) {
   const {
     isOpen: isProfileModalOpen,
-    onOpen: onProfileModalOpen,
+    onToggle: onProfileModalOpen,
     onClose: onProfileModalClose,
   } = useDisclosure();
   const { ...userState } = useUser();

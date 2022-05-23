@@ -6,6 +6,7 @@ import {
   HStack,
   Text,
   useDisclosure,
+  useOutsideClick,
   VStack,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
@@ -17,31 +18,34 @@ import DatePicker from "react-date-picker/dist/entry.nostyle";
 import Router from "next/router";
 
 export const FilterInputs = ({ filterParams, setFilterParams }) => {
-  const { isOpen, onToggle } = useDisclosure();
+  const { isOpen, onClose, onToggle } = useDisclosure();
   const [dateSelected, setDateSelected] = useState(null);
+
+  // name: "exampleName", options: [exampleOptions]
+  const dropdowns = [
+    { name: "industry", options: industryExpertiseList },
+    { name: "expertise", options: functionalExpertiseList },
+    // { name: "type", options: industryExpertiseList },
+  ];
+
   const rangeSliders = [
-    { name: "duration", symbol: "days", min: 1, max: 30 },
+    { name: "duration", symbol: "days", min: 1, max: 90 },
     { name: "budget", symbol: "$", min: 0, max: 50000 },
   ];
 
   useEffect(() => {
+    if (!document.querySelector(".react-date-picker__wrapper")) return;
     document
       .querySelector(".react-date-picker__wrapper")
       .classList.add("market-cal");
 
+    if (!document.querySelector(".react-calendar")) return;
     document
       .querySelector(".react-calendar")
       .classList.add("market-date-picker__calendar");
 
     return () => {};
   }, [isOpen]);
-
-  // name: "exampleName", options: [exampleOptions]
-  const dropdowns = [
-    { name: "industry", options: industryExpertiseList },
-    { name: "functional", options: functionalExpertiseList },
-    // { name: "type", options: industryExpertiseList },
-  ];
 
   function handleRemove(e) {
     // without this an error is thrown when the svg within the chip button is clicked
@@ -97,6 +101,11 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
     });
   }
 
+  const ref = React.useRef();
+  useOutsideClick({
+    ref: ref,
+    handler: onClose,
+  });
   return (
     <VStack
       width={"25vw"}
@@ -139,8 +148,9 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
         paddingX={"54px"}
       >
         <FormControl>
-          <Box onClick={onToggle}>
+          <Box ref={ref}>
             <Box
+              onClick={onToggle}
               pos={"relative"}
               zIndex={1}
               _hover={{ borderColor: "zing", cursor: "pointer" }}
@@ -173,8 +183,11 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
             </Box>
             <DatePicker
               name="startDate"
-              isOpen={isOpen}
-              onChange={(val) => handleSelectDate(val)}
+              isOpen={isOpen || null}
+              onChange={(val) => {
+                handleSelectDate(val);
+                onClose();
+              }}
               value={dateSelected}
             />
           </Box>

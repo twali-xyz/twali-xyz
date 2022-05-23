@@ -33,7 +33,7 @@ const EditExpertiseModal = (props) => {
   });
 
   useEffect(() => {
-    if (!props.isOpen) return;
+    if (props.isOpen) return;
     setValues({
       ...userState,
       functionalExpertise: userState.functionalExpertise,

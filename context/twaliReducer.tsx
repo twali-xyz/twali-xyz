@@ -1,4 +1,6 @@
 export const initialState = {
+  PK: "",
+  SK: "",
   userName: "",
   userWallet: "",
   accType: "",
