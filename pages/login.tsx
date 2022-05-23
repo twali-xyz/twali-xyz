@@ -62,7 +62,7 @@ const LoginPage = (props) => {
 
       if (!whiteListed) {
         // if not on whiteList send user to form
-        router.push("/whitelist");
+        router.push("/whitelist/application");
       }
       // if user is on whiteList, check if profile has been created
       else {
