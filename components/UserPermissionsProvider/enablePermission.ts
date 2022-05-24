@@ -7,15 +7,14 @@ const enablePermission = (permission: Permission) => {
   const [allowed, setAllowed] = useState<boolean>();
 
   const { isAllowedTo } = useContext(PermissionContext);
-useEffect(() => {
-  isAllowedTo(permission).then((allowed) => {
-    setLoading(false);
-    setAllowed(allowed);
-  });
-  
-}, [])
 
-  
+  useEffect(() => {
+    isAllowedTo(permission).then((allowed) => {
+      setLoading(false);
+      setAllowed(allowed);
+    });
+  }, [isAllowedTo])
+
   return [loading, allowed];
 };
 

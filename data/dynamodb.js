@@ -9,6 +9,7 @@ const getDynamoDBClient = () => {
     : "us-east-2";
 
   // Only needed with local development.
+
   AWS.config.update({
     // accessKeyId: "xxxx",
     // secretAccessKey: "xxxx",
@@ -155,6 +156,7 @@ module.exports = {
       .query({
         TableName,
         // ProjectionExpression: "userWallet",
+
         KeyConditionExpression: "PK = :PK",
         ExpressionAttributeValues: {
           ":PK": `USER#${userWallet}`,

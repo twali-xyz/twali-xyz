@@ -16,6 +16,7 @@ interface IMultiContainerProps extends BoxProps {
     | "bounty"
     | "status"
     | "created"
+    | "type"
     | undefined;
   colorScheme?: string;
   size?: "prose" | "1/4" | "2/4" | "3/4" | "full";
@@ -35,7 +36,7 @@ export const Chip: React.FC<IMultiContainerProps> = ({
   const styles = useMultiStyleConfig(`Chip`, {
     variant,
     colorScheme,
-    size,
+    size
   });
   const btnRef = useRef(null);
 

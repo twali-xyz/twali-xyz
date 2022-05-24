@@ -1,4 +1,6 @@
 export interface UserData {
+  PK: string,
+  SK: string,
   userName: string;
   userWallet: string;
   accType: string;
