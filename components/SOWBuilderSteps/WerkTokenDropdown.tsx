@@ -1,7 +1,6 @@
 import {
     FormControl,
     Input,
-    Box,
     FormLabel,
     HStack,
     Img,
@@ -10,12 +9,10 @@ import {
     Button,
     MenuItem,
     MenuList,
-    Select,
     Text,
-    VStack,
   } from "@chakra-ui/react";
   import { ChevronDownIcon} from '@chakra-ui/icons'
-  import React, { useEffect, useState } from "react";
+  import React, { useState } from "react";
   import { tokenConstants } from "../../utils/tokenConstants";
   import { TokenPriceList } from '../../utils/coingeckoEndpoints';
   import { TokenState } from "../../context/TokenContext";

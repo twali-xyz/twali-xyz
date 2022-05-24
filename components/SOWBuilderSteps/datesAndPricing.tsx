@@ -1,17 +1,10 @@
 import { useState, useEffect } from "react";
 import {
     FormControl,
-    Input,
     Box,
     FormLabel,
     HStack,
     Img,
-    Menu,
-    MenuButton,
-    Button,
-    MenuItem,
-    MenuList,
-    Select,
     Text,
     VStack,
   } from "@chakra-ui/react";
@@ -22,14 +15,12 @@ import {
   import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
   import { setEventArray } from "../../utils/setEventArray";
   import { MultiSelect } from "../reusable/MultiSelect";
-  import { TokenState } from "../../context/TokenContext";
   import { WerkTokenDropdown } from "./WerkTokenDropdown";
 
   export const datesAndPricing = ({ values }) => {
     const [dueDate, setDueDate] = useState(new Date());
     const [dateRange, setDateRange] = useState([new Date(), new Date()]);
     // const [values, setValues] = useState<UserData>();
-    const { token } = TokenState();
 
     const handleChange = (evt) => {
         evt.persist();
