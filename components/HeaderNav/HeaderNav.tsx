@@ -14,6 +14,7 @@ import Link from "next/link";
 const HeaderNav = (props) => {
   const whichPage = props.whichPage;
   const isConnectWalletBtn = props.isConnectWalletBtn;
+  const setUserData = props.setUserData;
   const userPage = props.userPage;
   const userWallet = props.userWallet;
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -39,7 +40,7 @@ const HeaderNav = (props) => {
         src="/twali-assets/navbar_logo.png"
       />
       <HStack>
-        {isConnectWalletBtn ? (
+        {isConnectWalletBtn && !userWallet ? (
           <>
             <HStack alignItems="center">
               <Button
@@ -51,7 +52,8 @@ const HeaderNav = (props) => {
                     userPage,
                     setIsSubmitted,
                     setLoaded,
-                    router
+                    router,
+                    setUserData,
                   )
                 }
               >

@@ -149,17 +149,6 @@ const SelectWerkModal = (props) => {
         >
           Group Werk (coming soon)
         </Text>
-        <Link
-          _hover={{ textDecoration: "none" }}
-          textDecoration={"none"}
-          target="_blank"
-          rel="noopener noreferrer"
-          href="mailto:degen@twali.xyz?subject=Twali client application"
-          onClick={() => {
-            console.log('click');
-          }}
-        >
-        </Link>
       </VStack>
     </Flex>
         </ModalContent>
