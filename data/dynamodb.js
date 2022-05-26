@@ -157,9 +157,10 @@ module.exports = {
         TableName,
         // ProjectionExpression: "userWallet",
 
-        KeyConditionExpression: "PK = :PK",
+        KeyConditionExpression: "PK = :PK and SK = :SK",
         ExpressionAttributeValues: {
           ":PK": `USER#${userWallet}`,
+          ":SK": `USER#${userWallet}`,
         },
       })
       .promise()
