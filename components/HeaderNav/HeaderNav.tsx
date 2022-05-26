@@ -71,7 +71,7 @@ const HeaderNav = (props) => {
         ) : (
           userWallet && (
             <>
-              {/* <HStack mr={10}>
+              <HStack mr={10}>
                 <Link href={"admindash"}>
                   <Text
                     fontSize={"14px"}
@@ -83,7 +83,7 @@ const HeaderNav = (props) => {
                     admindash
                   </Text>
                 </Link>
-              </HStack> */}
+              </HStack>
               <HStack mr={10}>
                 <Link href={"/marketplace"}>
                   <Text

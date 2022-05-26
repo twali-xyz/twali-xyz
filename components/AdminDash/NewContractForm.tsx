@@ -10,11 +10,10 @@ import {
 import { useState, useEffect } from "react";
 import { createContract } from "../../utils/contractCreateInterface";
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
-const contractABI = require("../../utils/twaliCloneAbi");
-// require("dotenv").config();
+const contractABI = require("../../utils/twaliCloneContractAbi");
 
 const contractAddress = "0xB2ba74534dEb6e71170751322132167B1Faee0DD";
-const devKey = process.env.ALCHEMY_KEY;
+const devKey = process.env.ALCHEMY_DEV_KEY;
 console.log(devKey);
 const web3 = createAlchemyWeb3(`wss://eth-rinkeby.ws.alchemyapi.io/v2/${devKey}`);
 

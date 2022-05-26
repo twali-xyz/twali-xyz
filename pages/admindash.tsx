@@ -14,7 +14,7 @@ const AdminDashBoard = () => {
     const [ latest, setLatest ] = useState([]);
 
     const adminAddress = userState.userWallet;
-
+    console.log(adminAddress);
 
     useEffect(()=> {
         latestClone();
@@ -26,6 +26,8 @@ const AdminDashBoard = () => {
      */
     const allClonedContracts = async()=> {
         let allClones = await loadCloneContracts(adminAddress);
+        console.log("all clones loading....", allClones);
+        console.log(clones);
         setClones(allClones);
     }
 

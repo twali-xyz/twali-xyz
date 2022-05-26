@@ -1,9 +1,9 @@
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
-const alchemyDevKey = process.env.ALCHEMY_KEY;
+const alchemyDevKey = process.env.ALCHEMY_DEV_KEY;
 
 const web3 = createAlchemyWeb3(`wss://eth-rinkeby.ws.alchemyapi.io/v2/${alchemyDevKey}`);
 
-const contractABI = require("./twaliCloneAbi");
+const contractABI = require("./twaliCloneContractAbi");
 const contractAddress = "0xB2ba74534dEb6e71170751322132167B1Faee0DD";
 
 export const twaliCloneFactory = new web3.eth.Contract(contractABI.ABI, contractAddress);
@@ -23,7 +23,7 @@ export const loadLatestContract = async (address) => {
   const latest = await twaliCloneFactory.getPastEvents("TwaliCloneCreated",options, function(error, events){console.log(events)});
   console.log(latest);
   return latest;
-};
+};     
 
 
 export const createContract = async (address, sowMetaData) => {

@@ -14,7 +14,7 @@ const getDynamoDBClient = () => {
     // accessKeyId: "xxxx",
     // secretAccessKey: "xxxx",
     region: "us-east-1",
-    // endpoint: "http://localhost:8000",
+    endpoint: "http://localhost:8000",
   });
 
   const options = {
@@ -144,7 +144,7 @@ module.exports = {
   },
 
   /**
-   * @desc Directly access a user in the table by primary key `userWallet`.
+   * @desc Directly access a user in the table by primary key `USER#<userWallet>`.
    * @param {string} - function takes in a input string of the users userWallet
    * @dev This can be altered to included any additional attributes with 'ProjectionExpression'.
    * @example See docs to add additonal attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property
@@ -157,14 +157,16 @@ module.exports = {
         TableName,
         // ProjectionExpression: "userWallet",
 
-        KeyConditionExpression: "PK = :PK",
+        KeyConditionExpression: "PK = :PK and SK = :SK",
         ExpressionAttributeValues: {
           ":PK": `USER#${userWallet}`,
+          ":SK": `USER#${userWallet}`
         },
       })
       .promise()
       .then((data) => data.Items[0])
       .catch(console.error);
+      console.log('login user', dbUser);
     return dbUser;
   },
 

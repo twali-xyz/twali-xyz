@@ -7,26 +7,26 @@ import { useRouter } from "next/router";
 
 const ContractPage = () => {
     const router = useRouter();
-    const { contract } = router.query
+    console.log(router.query);
+    const { contract } = router.query;
     console.log(contract);
     return (
-        <>
+      <>
         <title>Twali.xyz - Contracts </title>
         <HeaderNav />
         <Flex flexDir={"row"} pos={"absolute"} top={0} width="100%" zIndex={-1}>
-          <ContractInterfaceForm  />
+          <ContractInterfaceForm />
           <VStack
             paddingTop={"90px"}
             height={"100vh"}
             width={"100%"}
             background="n4"
           >
-        <ContractDetails contract={contract}/>
-        </VStack>
+            <ContractDetails contract={contract} />
+          </VStack>
         </Flex>
-        </>
-    )
-
+      </>
+    );
 };
 
 
