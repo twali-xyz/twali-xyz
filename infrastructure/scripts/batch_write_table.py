@@ -2,7 +2,7 @@ import json
 # Python AWS SDK is boto3
 import boto3
 # Gets the service resource we want to use
-dynamodb = boto3.resource('dynamodb')
+dynamodb = boto3.resource('dynamodb', endpoint_url='http://localhost:8000')
 table = dynamodb.Table('Twali-core-test')
 
 items = []

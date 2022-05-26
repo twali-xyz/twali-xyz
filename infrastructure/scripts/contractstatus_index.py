@@ -1,23 +1,26 @@
 import boto3
 
-dynamodb = boto3.client('dynamodb')
+dynamodb = boto3.client('dynamodb', endpoint_url='http://localhost:8000')
 
 try:
     dynamodb.update_table(
-        TableName='Twali-core-test',   # Table Name to update (can be changed for a created Table)
+        # Table Name to update (can be changed for a created Table)
+        TableName='Twali-core-test',
         AttributeDefinitions=[
             {
-                "AttributeName": "contract_status",  #Attribute that becomes a Global Secondary Index needs to be defined.
+                # Attribute that becomes a Global Secondary Index needs to be defined.
+                "AttributeName": "contract_status",
                 "AttributeType": "S"
             }
         ],
         GlobalSecondaryIndexUpdates=[
             {
                 "Create": {
-                    "IndexName": "contract_statusIndex",   #Global secondary index name 
+                    "IndexName": "contract_statusIndex",  # Global secondary index name
                     "KeySchema": [
                         {
-                            "AttributeName": "contract_status",  #Attribute we defined will be set as the key look up in table.
+                            # Attribute we defined will be set as the key look up in table.
+                            "AttributeName": "contract_status",
                             "KeyType": "HASH"
                         },
                     ],

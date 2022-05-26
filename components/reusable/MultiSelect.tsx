@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 
-export function MultiSelect({
+export const MultiSelect = ({
   formLabel,
   name,
   handleChange,
@@ -17,7 +17,7 @@ export function MultiSelect({
   defaultValues,
   maxSelections,
   ...props
-}) {
+}) => {
   // maxDisplayIndex tracks the index of the last element in the array that contains data
   const [maxDisplayIndex, setMaxDisplayIndex] = useState(0);
   const [count, setCount] = useState(
@@ -118,7 +118,7 @@ export function MultiSelect({
       ) : null}
     </FormControl>
   );
-}
+};
 
 function Selector({ splitLabel, handleChange, options, idx, defaultValue }) {
   const [color, setColor] = useState("subtle");

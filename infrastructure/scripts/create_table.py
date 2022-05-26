@@ -1,6 +1,6 @@
 import boto3
 
-dynamodb = boto3.client('dynamodb')
+dynamodb = boto3.client('dynamodb', endpoint_url='http://localhost:8000')
 
 try:
     dynamodb.create_table(
@@ -17,8 +17,8 @@ try:
         ],
         KeySchema=[
             {
-               "AttributeName": "PK",
-               "KeyType": "HASH"  
+                "AttributeName": "PK",
+                "KeyType": "HASH"
             },
             {
                 "AttributeName": "SK",

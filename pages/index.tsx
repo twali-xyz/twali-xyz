@@ -9,7 +9,7 @@ import {
   Container,
 } from "@chakra-ui/react";
 import handAnimation from "../animations/twali-hand-2.json";
-import LottieAnimation from "../components/reusable/LottieAnimation";
+import { LottieAnimation } from "../components/reusable/LottieAnimation";
 import bodyAnimation from "../animations/twali-lottie-desktop.json";
 import ScrollingHeader from "../components/Landing/ScrollingHeader";
 

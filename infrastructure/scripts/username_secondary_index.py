@@ -1,19 +1,12 @@
 import boto3
 
-dynamodb = boto3.client('dynamodb')
+dynamodb = boto3.client('dynamodb', endpoint_url='http://localhost:8000')
 
 try:
     dynamodb.update_table(
-        TableName='Twali-core-test',    # Table Name to update (can be changed for a created Table)
+        # Table Name to update (can be changed for a created Table)
+        TableName='Twali-core-test',
         AttributeDefinitions=[
-            {
-                "AttributeName":"PK",
-                "AttributeType":"S",
-            },
-            {
-                "AttributeName":"SK",
-                "AttributeType":"S"
-            },
             {
                 "AttributeName": "userName",
                 "AttributeType": "S"

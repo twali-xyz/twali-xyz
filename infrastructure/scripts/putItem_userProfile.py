@@ -6,7 +6,7 @@ import time
 useruuid = str(uuid.uuid4())
 # getting current time to create a unix timestamp for DB when it was created.
 now = int(time.time())
-dynamodb = boto3.resource('dynamodb')
+dynamodb = boto3.resource('dynamodb', endpoint_url='http://localhost:8000')
 
 table = dynamodb.Table('Twali-core-test')
 
@@ -15,29 +15,29 @@ table = dynamodb.Table('Twali-core-test')
 try:
     table.put_item(
         Item={
-            "PK":"USER#0x3e1d10cf0af0386f03faa1db1b4e62a6752795d0",
-            "SK":"USER#0x3e1d10cf0af0386f03faa1db1b4e62a6752795d0",
-            "userWallet":"0x3e1d10cf0af0386f03faa1db1b4e62a6752795d0",
-            "userName":"NickGonzalezz__",
-            "accType":"Expert",
-            "business":"",
-            "bio":"booiiiiiiiii this faastttt",
-            "Location":"",
-            "businessName":"",
-            "businessType":"",
+            "PK": "USER#0x3e1d10cf0af0386f03faa1db1b4e62a6752795d0",
+            "SK": "USER#0x3e1d10cf0af0386f03faa1db1b4e62a6752795d0",
+            "userWallet": "0x3e1d10cf0af0386f03faa1db1b4e62a6752795d0",
+            "userName": "NickGonzalezz__",
+            "accType": "Expert",
+            "business": "",
+            "bio": "booiiiiiiiii this faastttt",
+            "Location": "",
+            "businessName": "",
+            "businessType": "",
             "companyInfo": "",
-            "createdAt":now,
-            "currLocation":"",
-            "currTitle":"Software Engineer",
-            "email":"gonzaleznick5@gmail.com",
-            "firstName":"Nicholas Gonzalez",
-            "lastName":"Gonzalez",
-            "functionalExpertise":"",
-            "industryExpertise":"",
-            "linkedIn":"",
-            "twitter":"https://twitter.com/nickgonzalez__",
-            "uuid":useruuid,
-            "website":"https://memes.net"
+            "createdAt": now,
+            "currLocation": "",
+            "currTitle": "Software Engineer",
+            "email": "gonzaleznick5@gmail.com",
+            "firstName": "Nicholas Gonzalez",
+            "lastName": "Gonzalez",
+            "functionalExpertise": "",
+            "industryExpertise": "",
+            "linkedIn": "",
+            "twitter": "https://twitter.com/nickgonzalez__",
+            "uuid": useruuid,
+            "website": "https://memes.net"
         }
     )
     print("User created successfully.")

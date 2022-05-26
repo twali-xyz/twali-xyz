@@ -50,6 +50,41 @@ select:focus {
   box-shadow: none !important;
 }
 
+.werk-token-name {
+  padding-left: 14px;
+}
+
+.chakra-menu__menu-button:focus {
+  border-color: #c7f83c !important;
+  box-shadow: none !important;
+}
+
+/* start date in marketplace calendar */
+.start-date {
+  color: #98B2B2
+}
+
+.sort-dropdown > button {
+  background-color: transparent;
+}
+
+.twali-horizontal-line {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  padding-right: 100%;
+  margin-left: -1rem;
+  background-color: rgb(88, 112, 112);
+}
+
+.twali-vertical-line {
+  border-left-width: 1px;
+  border-left-style: solid;
+  border-left-color: rgb(88, 112, 112);
+  height: 830px;
+  position: relative;
+}
+
 @font-face {
   font-family: "GrandSlang Italic";
   src: url("../public/fonts/GrandSlang-Italic.eot");
@@ -153,3 +188,5 @@ select:focus {
   font-style: normal;
   font-display: swap;
 }
+
+

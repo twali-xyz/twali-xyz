@@ -1,7 +1,6 @@
 module.exports = {
   env: {
-    TABLE_NAME: "dev_staging_user_profile_test",
-    ALCHEMY_KEY: process.env.ALCHEMY_DEV_KEY
+    TABLE_NAME: "Twali-core-test",
   },
   webpack: (config) => {
     if (!process.env.BUNDLE_AWS_SDK) {
