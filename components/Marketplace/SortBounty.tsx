@@ -1,11 +1,21 @@
-import { FormControl, HStack, Text } from "@chakra-ui/react";
+import { FormControl, HStack, Button, Text, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import { Dropdown } from "../reusable/Dropdown";
+import SelectWerkModal from './SelectWerkModal/SelectWerkModal'
+
 export const SortBounty = ({ contracts, onChange }) => {
+
+  const {
+    isOpen: isSelectWerkModalOpen,
+    onOpen: onSelectWerkModalOpen,
+    onClose: onSelectWerkModalClose,
+  } = useDisclosure();
+
+  
   const options = ["title", "date created", "amount"];
   return (
-    <HStack width={"300px"} alignSelf={"flex-start"} marginLeft={"48px"}>
-      <FormControl>
+    <HStack width={"100%"} alignSelf={"flex-start"} marginLeft={"48px"}>
+      <FormControl width="unset">
         <Dropdown
           className={"sort-dropdown"}
           multiSelect={false}
@@ -37,18 +47,27 @@ export const SortBounty = ({ contracts, onChange }) => {
       </FormControl>
 
       <Text
-        textAlign={"end"}
         width={"100%"}
         height={"100%"}
         fontFamily={"PP Telegraf Light"}
         fontSize={"16px"}
         display={"flex"}
-        marginBottom={"8px !important"}
-        alignItems={"flex-end"}
-        justifyContent={"flex-end"}
+        marginBottom={"-12px !important"}
       >
         {contracts?.length || 0} results
       </Text>
+
+      <Button
+              alignSelf="flex-end" 
+              marginRight="84px !important"
+                variant={"primary"}
+                size={"lg"}
+                width={"309px"}
+                onClick={onSelectWerkModalOpen}
+              >
+                <Text>Post a job</Text>
+              </Button>
+              <SelectWerkModal isOpen={isSelectWerkModalOpen} onClose={onSelectWerkModalClose}/>
     </HStack>
   );
 };

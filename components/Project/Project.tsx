@@ -20,12 +20,6 @@ const Project = (props) => {
   const router = useRouter();
     return (
         <>
-            <HeaderNav
-              whichPage="profile"
-            //   isConnectWalletBtn={isConnectWalletBtn}
-            //   userPage={userState}
-            //   userWallet={loggedInUserAddress}
-            />
             <Container
               maxW="100%"
               p={4}

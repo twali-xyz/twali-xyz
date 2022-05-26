@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Step, Steps, useSteps } from "chakra-ui-steps";
+import { Step, Steps } from "chakra-ui-steps";
 import Project from "../Project/Project";
 import background from "../../public/twali-assets/backgroundscreen.png";
 import HeaderNav from "../../components/HeaderNav/HeaderNav";
@@ -30,7 +30,7 @@ import { submissionOfWerk } from "./submissionOfWerk";
 
 import useUser from "../../context/TwaliContext";
 
-const SOWBuilderSteps = () => {
+const SOWBuilderSteps = (props) => {
   const router = useRouter();
   const { setData, ...userState } = useUser();
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -38,6 +38,9 @@ const SOWBuilderSteps = () => {
   const [isConnectWalletBtn, setIsConnectWalletBtn] = useState(false);
   const [loggedInUserAddress, setLoggedInUserAddress] = useState("");
   const [loaded, setLoaded] = useState(false);
+  let activeStep = props.activeStep;
+  let nextStep = props.nextStep;
+  let prevStep = props.prevStep;
 
   const [userData, setUserData] = useState<UserData>({
     ...userState,
@@ -146,10 +149,6 @@ const SOWBuilderSteps = () => {
     },
   ];
 
-  const { nextStep, prevStep, setStep, reset, activeStep } = useSteps({
-    initialStep: 0,
-  });
-
   return (
     <>
                 {/* <Button
@@ -177,17 +176,6 @@ const SOWBuilderSteps = () => {
         <Project activeStep={activeStep} prevStep={prevStep} nextStep={nextStep} steps={steps}/>
       ): (
         <>
-      <Container
-        width="100%"
-        minHeight="100vh"
-        maxW={"100%"}
-        pos={"relative"}
-        bgSize={"cover"}
-        bgPosition={"center"}
-        bgImg={`url(${background.src})`}
-        px={0}
-      >
-        <HeaderNav whichPage="werk"/>
         <Container
           maxW="container.xl"
           pb="inherit"
@@ -270,7 +258,6 @@ const SOWBuilderSteps = () => {
       </VStack>
         </Flex>
         </Container>
-      </Container>
       </>
       )
       }

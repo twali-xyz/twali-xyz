@@ -92,7 +92,7 @@ export const statementOfWerk = ({ values }) => {
                 px={2}
                 fontSize="16px"
                 borderColor={"n3"}
-                height={"250px"}
+                height={"249px"}
                 borderRadius={"4px"}
                 marginBottom={"4px"}
                 // isInvalid={errors.currTitle}

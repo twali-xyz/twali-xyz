@@ -1,51 +1,46 @@
 
-import { Container, Flex, VStack } from "@chakra-ui/react";
+import { Container } from "@chakra-ui/react";
 import SOWBuilderSteps from "../components/SOWBuilderSteps/SOWBuilderSteps";
-import { useRouter } from "next/router";
-import useSWR from "swr";
-import LoginPage from "./login";
-
-const fetcher = (...args: Parameters<typeof fetch>) =>
-  fetch(...args).then((res) => res.json());
+import HeaderNav from "../components/HeaderNav/HeaderNav";
+import useUser from "../context/TwaliContext";
+import background from "../public/twali-assets/backgroundscreen.png";
+import { useSteps } from "chakra-ui-steps";
 
 const WerkSteps = () => {
-  // const router = useRouter();
-  // const currentUserName = router.query;
-  // let userData;
-  // if (currentUserName.userName !== "undefined") {
-  //   const { data, error } = useSWR(
-  //     `/api/users/${currentUserName.userName}`,
-  //     fetcher
-  //   );
-  //   userData = data;
-  //   }
-  //   // if (error) return <div>failed to load</div>
-  // if (!userData) return <LoginPage loaded={!userData} />;
+  const { ...userState } = useUser();
+  const { nextStep, prevStep, setStep, reset, activeStep } = useSteps({
+    initialStep: 0,
+  });
+
   return (
-      // <Container
-      //   width="100%"
-      //   minHeight="100vh"
-      //   maxW={"100%"}
-      //   pos={"relative"}
-      //   bgSize={"cover"}
-      //   bgPosition={"center"}
-      //   bgImg={`url(${background.src})`}
-      //   px={0}
-      // >
-      //   <HeaderNav whichPage="werk"/>
-      //   <Container
-      //     maxW="container.xl"
-      //     pb="inherit"
-      //     px={0}
-      //     m="inherit"
-      //   >
-      //   <Flex h="full">
-      //       <VStack w="full" h="full" spacing={8} alignItems="flex-start">
-                <SOWBuilderSteps />
-      //       </VStack>
-      //   </Flex>
-      //   </Container>
-      // </Container>
+    <>
+    <title>twali.xyz - marketplace</title>
+    <Container
+        width="100%"
+        minHeight="100vh"
+        maxW={"100%"}
+        pos={"relative"}
+        bgSize={"cover"}
+        bgPosition={"center"}
+        bgImg={activeStep === 2 ? 'inverse' : `url(${background.src})`}
+        px={0}
+        pb={4}
+      >
+    <HeaderNav 
+        whichPage={activeStep === 2 ? "profile" : "create-werk"}
+        userPage={userState}
+        userWallet={userState.userWallet}
+        isConnectWalletBtn={!userState.userWallet}
+        />
+      <SOWBuilderSteps 
+      nextStep={nextStep}
+      prevStep={prevStep}
+      setStep={setStep}
+      reset={reset}
+      activeStep={activeStep}
+       />
+      </Container>
+    </>
   );
 };
 
