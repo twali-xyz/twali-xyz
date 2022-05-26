@@ -23,7 +23,6 @@ import {
   import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
   import { setEventArray } from "../../utils/setEventArray";
   import { MultiSelect } from "../reusable/MultiSelect";
-  import IconOption from "./IconOption";
   
   export const datesAndPricing = ({ values }) => {
     const [dueDate, setDueDate] = useState(new Date());
