@@ -28,6 +28,8 @@ export default function marketplace() {
     let tempFilter = {};
 
     Object.entries(router.query).forEach((filterData) => {
+      console.log(filterData);
+
       let filterObjectArray = {};
       let [filterType, filterValues] = filterData;
 
@@ -104,6 +106,44 @@ export default function marketplace() {
     return () => {};
   }, [query]);
 
+  // sort function for the bounty list
+  function compare(a, b, sortParams) {
+    const options = {
+      "Freshness - new to old": "descending",
+      "Freshness - old to new": "ascending",
+      "Amount - low to high": "ascending",
+      "Amount - high to low": "descending",
+      "Duration - long to short": "ascending",
+      "Duration - short to long": "descending",
+    };
+    let sortName;
+    if (sortParams.includes("Freshness")) {
+      sortName = "contract_created_on";
+    } else if (sortParams.includes("Amount")) {
+      sortName = "converted_amount";
+    } else if (sortParams.includes("Duration")) {
+      sortName = "contract_duration";
+    }
+
+    if (options[sortParams] === "ascending") {
+      if (a[sortName] < b[sortName]) {
+        return -1;
+      }
+      if (a[sortName] > b[sortName]) {
+        return 1;
+      }
+      return 0;
+    } else if (options[sortParams] === "descending") {
+      if (a[sortName] > b[sortName]) {
+        return -1;
+      }
+      if (a[sortName] < b[sortName]) {
+        return 1;
+      }
+      return 0;
+    }
+  }
+
   return (
     <>
       <title>twali.xyz - marketplace</title>
@@ -119,7 +159,6 @@ export default function marketplace() {
           filterParams={filterParams}
           setFilterParams={setFilterParams}
         />
-
         <VStack
           paddingTop={"90px"}
           height={"100vh"}
@@ -129,7 +168,12 @@ export default function marketplace() {
           }
         >
           <SortBounty contracts={data} onChange={(val) => setSortParams(val)} />
-          <BountyList contracts={data} error={error} sortParams={sortParams} />
+          <BountyList
+            contracts={data}
+            error={error}
+            sortParams={sortParams}
+            compare={compare}
+          />
         </VStack>
       </Flex>
     </>
