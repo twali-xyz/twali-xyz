@@ -169,7 +169,7 @@ const whitelist = () => {
   }
   return (
     <>
-      <HeaderNav whichPage="steps" step={0} />
+      <HeaderNav whichPage="whitelist" step={0} userWallet={userWallet} />
       <Box onKeyPress={handleEnterPressed}>
         {whiteListStatus === null ||
         whiteListStatus === "" ||

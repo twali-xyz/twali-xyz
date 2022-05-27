@@ -39,6 +39,23 @@ const HeaderNav = (props) => {
         src="/twali-assets/navbar_logo.png"
       />
       <HStack>
+        {whichPage !== "whitelist" &&
+          whichPage !== "steps" &&
+          whichPage !== "index" && (
+            <HStack mr={10}>
+              <Link href={"/marketplace"}>
+                <Text
+                  fontSize={"14px"}
+                  letterSpacing={"2%"}
+                  textTransform={"uppercase"}
+                  cursor={"pointer"}
+                  color={whichPage === "marketplace" ? "zing" : "fresh"}
+                >
+                  marketplace
+                </Text>
+              </Link>
+            </HStack>
+          )}
         {isConnectWalletBtn ? (
           <>
             <HStack alignItems="center">
@@ -71,19 +88,6 @@ const HeaderNav = (props) => {
         ) : (
           userWallet && (
             <>
-              <HStack mr={10}>
-                <Link href={"/marketplace"}>
-                  <Text
-                    fontSize={"14px"}
-                    letterSpacing={"2%"}
-                    textTransform={"uppercase"}
-                    cursor={"pointer"}
-                    color={whichPage === "marketplace" ? "zing" : "fresh"}
-                  >
-                    marketplace
-                  </Text>
-                </Link>
-              </HStack>
               <HStack
                 alignItems="center"
                 justify={"space-between"}
