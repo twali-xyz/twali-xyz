@@ -27,7 +27,7 @@ const LoginPage = (props) => {
   const toggleMenu = () => setShow(!show);
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [loaded, setLoaded] = useState(false);
-  const [whiteListed, setWhiteListed] = useState(false);
+  const [whiteListedStatus, setWhiteListedStatus] = useState(""); // use ""/rejected/pending/approved here to test different UX/UI paths
 
   const router = useRouter();
   const handleWalletConnectOnLogin = async () => {
@@ -64,9 +64,18 @@ const LoginPage = (props) => {
       // setWhiteListed(userWhiteListStatus);
       //
 
-      if (!whiteListed) {
-        // if not on whiteList send user to form
-        router.push("/whitelist/application");
+      if (
+        whiteListedStatus === null ||
+        whiteListedStatus === "" ||
+        whiteListedStatus === "pending" ||
+        whiteListedStatus === "rejected"
+      ) {
+        // if not approved on the whiteList send user to application form,
+        // pending page, or rejected page
+        router.push(
+          `/whitelist/application?status=${whiteListedStatus} `,
+          "whitelist/application"
+        );
       }
       // if user is on whiteList, check if profile has been created
       else {
