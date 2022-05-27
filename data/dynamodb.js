@@ -14,7 +14,7 @@ const getDynamoDBClient = () => {
     // accessKeyId: "xxxx",
     // secretAccessKey: "xxxx",
     region: "us-east-1",
-    // endpoint: "http://localhost:8000",
+    endpoint: "http://localhost:8000",
   });
 
   const options = {
@@ -157,9 +157,10 @@ module.exports = {
         TableName,
         // ProjectionExpression: "userWallet",
 
-        KeyConditionExpression: "PK = :PK",
+        KeyConditionExpression: "PK = :PK and SK = :SK",
         ExpressionAttributeValues: {
           ":PK": `USER#${userWallet}`,
+          ":SK": `USER#${userWallet}`,
         },
       })
       .promise()
