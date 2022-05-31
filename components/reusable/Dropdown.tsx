@@ -56,6 +56,8 @@ export const Dropdown = ({
   });
 
   function handleSelect(event) {
+    if (!event.target.name) return;
+
     if (selected && Object.values(selected).includes(event.target.value)) {
       delete selected[event.target.value];
       setSelected({
@@ -64,10 +66,12 @@ export const Dropdown = ({
       return;
     }
     setSelected({
-      [event.target.value]: event.target.value,
+      [event?.target?.value]: event?.target?.value,
     });
   }
   function handleMultiSelect(event) {
+    if (!event.target.name) return;
+
     if (selected && Object.values(selected).includes(event.target.value)) {
       delete selected[event.target.value];
       setSelected({
@@ -80,6 +84,14 @@ export const Dropdown = ({
       [event.target.value]: event.target.value,
     });
     return;
+  }
+
+  function handleChange(event) {
+    if (multiSelect) {
+      handleMultiSelect(event);
+      return;
+    }
+    handleSelect(event);
   }
 
   useEffect(() => {
@@ -145,15 +157,13 @@ export const Dropdown = ({
           background={"n6"}
         >
           {options?.map((option, idx) => {
-            const buttonRef = useRef(null);
             return (
               <Button
-                ref={buttonRef}
                 variant={"dropdown"}
                 value={option}
                 name={name}
                 width={"100%"}
-                onClick={multiSelect ? handleMultiSelect : handleSelect}
+                onClick={handleChange}
                 key={idx}
                 justifyContent={"flex-start"}
                 background={selected && selected[option] ? "#1F353580" : "n6"}
@@ -161,7 +171,9 @@ export const Dropdown = ({
                 {selected && selected[option] ? (
                   <svg
                     onClick={() => {
-                      buttonRef.current.click();
+                      handleChange({
+                        target: { name: name, value: option },
+                      });
                     }}
                     width="14"
                     height="14"
@@ -177,7 +189,9 @@ export const Dropdown = ({
                 ) : (
                   <svg
                     onClick={() => {
-                      buttonRef.current.click();
+                      handleChange({
+                        target: { name: name, value: option },
+                      });
                     }}
                     width="14"
                     height="14"
@@ -193,7 +207,9 @@ export const Dropdown = ({
                 )}
                 <Text
                   onClick={() => {
-                    buttonRef.current.click();
+                    handleChange({
+                      target: { name: name, value: option },
+                    });
                   }}
                   ml={"8px"}
                 >
