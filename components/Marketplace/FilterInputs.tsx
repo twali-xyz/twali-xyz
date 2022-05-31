@@ -30,7 +30,7 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
 
   const rangeSliders = [
     { name: "duration", symbol: "days", min: 1, max: 90 },
-    { name: "budget", symbol: "$", min: 0, max: 50000 },
+    { name: "budget", symbol: "$", min: 0, max: 100000 },
   ];
 
   useEffect(() => {
@@ -115,7 +115,19 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
       height={"calc(100vh)"}
       paddingTop={"90px"}
     >
-      <VStack paddingX={"54px"}>
+      <Text
+        paddingX={"54px"}
+        fontFamily={"PP Telegraf"}
+        fontSize={"24px"}
+        fontWeight={"500"}
+        lineHeight={"40px"}
+        letterSpacing={"0.02em"}
+        textAlign={"left"}
+        width={"100%"}
+      >
+        Filters
+      </Text>
+      <VStack marginTop={"34.5px !important"} paddingX={"54px"}>
         {Object.entries(dropdowns).map((dropdownObj, idx) => {
           const { name, options } = dropdownObj[1];
           return (

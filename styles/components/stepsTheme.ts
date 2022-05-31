@@ -22,7 +22,7 @@ export const customSteps: ComponentStyleConfig = {
       fontFamily: "PP Telegraf",
       fontSize: "16px",
       lineHeight: "24px",
-      width: "600px",
+      width: "100%",
       listStyleType: "none",
     },
     connector: {

@@ -2,9 +2,16 @@ import { FormControl, HStack, Text } from "@chakra-ui/react";
 import React from "react";
 import { Dropdown } from "../reusable/Dropdown";
 export const SortBounty = ({ contracts, onChange }) => {
-  const options = ["title", "date created", "amount"];
+  const options = [
+    "Freshness - new to old",
+    "Freshness - old to new",
+    "Amount - low to high",
+    "Amount - high to low",
+    "Duration - long to short",
+    "Duration - short to long",
+  ];
   return (
-    <HStack width={"300px"} alignSelf={"flex-start"} marginLeft={"48px"}>
+    <HStack width={"375px"} alignSelf={"flex-start"} marginLeft={"48px"}>
       <FormControl>
         <Dropdown
           className={"sort-dropdown"}
@@ -12,7 +19,7 @@ export const SortBounty = ({ contracts, onChange }) => {
           values={""}
           name={"sort"}
           options={options}
-          width={"200px"}
+          width={"270px"}
           height={"40px"}
           maxW={"297px"}
           borderRadius={"4px"} //styleName: Body/body16;
@@ -24,12 +31,12 @@ export const SortBounty = ({ contracts, onChange }) => {
           _active={{
             borderColor: "zing",
           }}
-          placeholder={"sort by"}
           fontSize="16px"
           fontWeight="300"
           lineHeight="24px"
           letterSpacing="0.02em"
           textAlign="left"
+          placeholder="sort by"
           onChange={(e) => {
             e && onChange(Object.keys(e)[0]);
           }}

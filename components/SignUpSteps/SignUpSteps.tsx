@@ -275,7 +275,7 @@ const SignUpSteps = () => {
                   >
                     Set up my Twali
                   </Heading>
-                  <Steps activeStep={activeStep}>
+                  <Steps activeStep={activeStep} width="600px">
                     {steps.map(({ label, content }) => (
                       <Step label={label} key={label}>
                         {content}

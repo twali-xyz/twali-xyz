@@ -1,5 +1,6 @@
 import HeaderNav from "../HeaderNav/HeaderNav";
 import { 
+  Box,
   Container,
   Button,
   HStack,
@@ -8,6 +9,7 @@ import {
   VStack,
   Flex
  } from '@chakra-ui/react';
+ import { Step, Steps, useSteps } from "chakra-ui-steps";
  import { useRouter } from "next/router";
 import ProjectHeader from './ProjectHeader';
 import ProjectExpertise from "./ProjectExpertise";
@@ -31,7 +33,49 @@ const Project = (props) => {
               backgroundColor={"inverse"}
               paddingRight={24}
             >
-        <HStack width={"100%"} justifyContent={"flex-end"}>
+      <HStack className="testing-steps" maxWidth="720px" paddingLeft="52px" paddingTop="36px">
+        <Steps activeStep={props.activeStep}>
+          {props.steps.map(({ label, content }) => (
+            <Step label={label} key={label}>
+              {content}
+            </Step>
+          ))}
+        </Steps>
+      </HStack>
+      <Box
+        w="6xl"
+        h="1257px"
+        marginLeft="54px"
+        marginTop="4rem"
+        marginBottom="4rem"
+        borderWidth="1px"
+        borderRadius="lg"
+        borderColor="#C7F83C"
+        overflow="hidden"
+        cursor="pointer"
+        alignSelf={"center"}
+      >
+        <Box p="4">
+          <Box
+            mt="1"
+            fontWeight="semibold"
+            as="h4"
+            lineHeight="tight"
+            isTruncated
+          >
+      <ProjectHeader/>
+      <Flex flexDirection="row">
+      <Flex flexDirection="column" width="100%" maxWidth="550px">
+        <ProjectExpertise />
+        <ProjectDetails/>
+      </Flex>
+      <div className= "twali-vertical-line"></div>
+      <ProjectDescription/>
+      </Flex>
+      </Box>
+      </Box>
+      </Box>
+      <HStack width={"100%"} justifyContent={"flex-end"}>
         <Button
           alignSelf="left"
           mr={"24px"}
@@ -83,14 +127,6 @@ const Project = (props) => {
             />
           ) : null} */}
         </Button>{" "}
-      </HStack>
-      <ProjectHeader/>
-      <HStack>
-      <Flex flexDirection="column" width="100%">
-        <ProjectExpertise />
-        <ProjectDetails/>
-      </Flex>
-      <ProjectDescription/>
       </HStack>
             </Container>
         </>
