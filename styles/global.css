@@ -68,6 +68,11 @@ select:focus {
   background-color: transparent;
 }
 
+.bounty-sort-dropdown > button {
+  background-color: transparent;
+  width: 240px;
+}
+
 .twali-horizontal-line {
   width: 100%;
   margin: 0;
