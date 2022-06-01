@@ -5,6 +5,7 @@ import { ButtonStyle as Button } from "./components/buttonTheme";
 import { ChipStyle as Chip } from "./components/chipTheme";
 import { SelectStyle as Select} from "./components/selectTheme";
 import { SliderStyle as Slider } from "./components/sliderTheme";
+import { ModalStyle as Modal } from './components/modalTheme';
 
 const config: ThemeConfig = {
   initialColorMode: "dark",
@@ -65,6 +66,7 @@ export const twaliTheme = extendTheme({
     Button: Button,
     Chip: Chip,
     Select: Select,
-    TwaliSlider: Slider
+    TwaliSlider: Slider,
+    Modal: Modal,
   },
 });

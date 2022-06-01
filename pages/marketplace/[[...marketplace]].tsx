@@ -7,13 +7,18 @@ import HeaderNav from "../../components/HeaderNav/HeaderNav";
 import { FilterInputs } from "../../components/Marketplace/FilterInputs";
 import { SortBounty } from "../../components/Marketplace/SortBounty";
 import { BountyList } from "../../components/Marketplace/BountyList";
+import { UserData } from "../../utils/interfaces";
+import UserPermissionsProvider from "../../components/UserPermissionsProvider/UserPermissionsProvider";
+import UserPermissionsRestricted from "../../components/UserPermissionsProvider/UserPermissionsRestricted";
+import { fetchPagePermission, pageDisconnectedFallback } from "../../utils/walletUtils";
 
 const fetcher = (...args: Parameters<typeof fetch>) =>
   fetch(...args).then((res) => res.json());
 
 export default function marketplace() {
   const router = useRouter();
-  const { ...userState } = useUser();
+  const { setData, ...userState } = useUser();
+  const [userData, setUserData] = useState<UserData>();
   const [filterParams, setFilterParams] = useState({});
   const [sortParams, setSortParams] = useState();
   const [query, setQuery] = useState("");
@@ -56,6 +61,10 @@ export default function marketplace() {
     }
     return () => {};
   }, [router.asPath]);
+
+  useEffect(() => {
+    userData && setData(JSON.parse(JSON.stringify(userData)));
+  }, [userData]);
 
   const { data, error } = useSWR(`api/marketplace/contracts${query}`, fetcher);
 
@@ -147,13 +156,22 @@ export default function marketplace() {
   return (
     <>
       <title>twali.xyz - marketplace</title>
-
+      <UserPermissionsProvider
+      fetchPermission={fetchPagePermission(
+        userState.userWallet ? userState.userWallet : null
+    )}>
       <HeaderNav
         userPage={userState}
         whichPage="marketplace"
         userWallet={userState.userWallet}
         isConnectWalletBtn={!userState.userWallet}
+        setUserData={setUserData}
       />
+            <UserPermissionsRestricted
+            to="edit"
+            key={`--SOW-builder-usr-permission`}
+            fallback={pageDisconnectedFallback()}
+          >
       <Flex flexDir={"row"} pos={"absolute"} top={0} width="100%" zIndex={-1}>
         <FilterInputs
           filterParams={filterParams}
@@ -176,6 +194,8 @@ export default function marketplace() {
           />
         </VStack>
       </Flex>
+      </UserPermissionsRestricted>
+      </UserPermissionsProvider>
     </>
   );
 }
