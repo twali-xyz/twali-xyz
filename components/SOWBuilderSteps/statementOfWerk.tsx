@@ -58,7 +58,7 @@ export const statementOfWerk = ({ handleChange, bountyData }) => {
                 errorBorderColor="red.300"
                 fontFamily={"PP Telegraf light"}
                 _placeholder={{ color: "subtle" }}
-                // value={values?.contractTitle || ""}
+                value={bountyData?.contractTitle || ""}
                 required
                 placeholder="Project Title"
                 name="contractTitle"
@@ -99,7 +99,7 @@ export const statementOfWerk = ({ handleChange, bountyData }) => {
                 errorBorderColor="red.300"
                 fontFamily={"PP Telegraf light"}
                 _placeholder={{ color: "subtle" }}
-                // value={values?.contractDescription || ""}
+                value={bountyData?.contractDescription || ""}
                 required
                 placeholder="Max Word Limit"
                 name="contractDescription"

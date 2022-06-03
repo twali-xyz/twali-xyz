@@ -19,7 +19,7 @@ import {
   import axios from 'axios'
   
   export const WerkTokenDropdown = () => {
-    const { token, setToken, tokenIcon, tokenID, setTokenAmount, calculatedUSD, setCalculatedUSD } = TokenState();
+    const { token, setToken, tokenIcon, tokenID, tokenAmount, setTokenAmount, calculatedUSD, setCalculatedUSD } = TokenState();
 
     const handleMenuSelection = (token) => {
         if (token !== 'Token') {
@@ -33,9 +33,9 @@ import {
   
       const handleAmountChange = (evt) => {
         axios.get(TokenPriceList(tokenID, 'usd')).then((response) => {
-          console.log(response.data);
           setTokenAmount(evt.target.value);
           const value = +(Math.round(response.data[tokenID].usd*evt.target.value * 100) / 100).toFixed(2);
+          console.log(value);
           setCalculatedUSD(value);
       }).catch((error) => {
           console.log(error)
@@ -160,7 +160,7 @@ import {
             name="firstName"
             fontFamily={"PP Telegraf light"}
             _placeholder={{ color: "subtle" }}
-            // value={values?.firstName || ""}
+            value={tokenAmount ? tokenAmount: ""}
             onChange={handleAmountChange}
             />
             <Text fontWeight="400" color="subtle" fontSize="3xl" fontFamily="GrandSlang">=</Text>

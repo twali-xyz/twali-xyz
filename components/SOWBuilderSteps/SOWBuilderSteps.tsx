@@ -151,27 +151,27 @@ const SOWBuilderSteps = (props) => {
       nextStep();
     } else if (activeStep === 3) {
       console.log('submitting!');
-      // let bounty = {
-      //   userWallet: userData.userWallet,
-      //   contractID: uuidv4(),
-      //   contractCreatedOn: 1651968000,
-      //   contractOwnerUserName: userData.userName,
-      //   contractTitle: bountyData.contractTitle,
-      //   contractDescription: bountyData.contractDescription,
-      //   contractStartDate:  bountyData.contractStartDate,
-      //   contractEndDate: bountyData.contractEndDate,
-      //   contractDuration: bountyData.contractDuration,
-      //   tokenName: token,
-      //   contractAmount: tokenAmount,
-      //   convertedAmount: calculatedUSD,
-      //   applicationDeadline: bountyData.applicationDeadline,
-      //   contractIndustry: bountyData.contractIndustry,
-      //   contractExpertise: bountyData.contractExpertise,
-      //   contractStatus: "live",
-      //   attachedFiles: [],
-      // }
-      console.log('real bounty', bountyData);
-      submitSOW(bountyData);
+      let bounty = {
+        userWallet: userData.userWallet,
+        contractID: uuidv4(),
+        contractCreatedOn: 1651968000,
+        contractOwnerUserName: userData.userName,
+        contractTitle: bountyData.contractTitle,
+        contractDescription: bountyData.contractDescription,
+        contractStartDate:  bountyData.contractStartDate,
+        contractEndDate: bountyData.contractEndDate,
+        contractDuration: bountyData.contractDuration,
+        tokenName: token,
+        contractAmount: tokenAmount,
+        convertedAmount: calculatedUSD,
+        applicationDeadline: bountyData.applicationDeadline,
+        contractIndustry: bountyData.contractIndustry,
+        contractExpertise: bountyData.contractExpertise,
+        contractStatus: "live",
+        attachedFiles: [],
+      }
+      console.log('real bounty', bounty);
+      submitSOW(bounty);
       getUserByWallet(userData.userWallet)
     } else {
       nextStep()

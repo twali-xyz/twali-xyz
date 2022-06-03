@@ -1,9 +1,5 @@
-import HeaderNav from "../HeaderNav/HeaderNav";
-import { Container, Text, Button, HStack, Heading, Box, Img, Flex, useDisclosure, VStack } from '@chakra-ui/react';
+import { Container, Text, Button, HStack, Img, Flex, useDisclosure, VStack } from '@chakra-ui/react';
 import { Chip } from '../reusable/Chip';
-import { Avatar } from '@chakra-ui/react'
-import { functionalExpertiseList } from "../../utils/functionalExpertiseConstants";
-import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
 import ProjectExpertiseModal from "./ProjectExpertiseModal/ProjectExpertiseModal";
 
 const ProjectExpertise = (props) => {
@@ -51,15 +47,19 @@ const ProjectExpertise = (props) => {
           m={0}
           flexFlow={"wrap"}
         >
-            <Chip variant="button"
+          {props?.bounty?.contractIndustry?.map((industry, idx) => {
+            if (idx == 0) {
+              return (
+                <Chip variant="button"
                 marginBottom={4}
-            >Industry</Chip>
-            <Chip variant="button"
+            >{industry}</Chip>
+              )} else {
+              return (
+                <Chip variant="button"
                 marginBottom={4} marginLeft={4}
-            >Industry</Chip>
-            <Chip variant="button"
-                marginBottom={4} marginLeft={4}
-            >Industry</Chip>
+            >{industry}</Chip>
+              )}
+          })}
         </Flex>
         <Text alignSelf="flex-start" fontSize="sm" marginTop={6} marginBottom={6}>Expertise</Text>
         <Flex
@@ -69,15 +69,19 @@ const ProjectExpertise = (props) => {
           m={0}
           flexFlow={"wrap"}
         >
-            <Chip variant="button"
+        {props?.bounty?.contractExpertise?.map((expertise, idx) => {
+            if (idx == 0) {
+              return (
+                <Chip variant="button"
                 marginBottom={4}
-            >Expertise</Chip>
-            <Chip variant="button"
+            >{expertise}</Chip>
+              )} else {
+              return (
+                <Chip variant="button"
                 marginBottom={4} marginLeft={4}
-            >Expertise</Chip>
-            <Chip variant="button"
-                marginBottom={4} marginLeft={4}
-            >Expertise</Chip>
+            >{expertise}</Chip>
+              )}
+          })}
         </Flex>
         </VStack>
         </Container>
