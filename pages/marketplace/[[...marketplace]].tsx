@@ -17,6 +17,7 @@ export default function marketplace() {
   const [filterParams, setFilterParams] = useState({});
   const [sortParams, setSortParams] = useState();
   const [query, setQuery] = useState("");
+  const [isConnectWalletBtn, setIsConnectWalletBtn] = useState(false);
 
   // set the filterParams based on the URL query params
   // needed to set filters when user goes to marketplace from a URL that contains a query
@@ -149,11 +150,17 @@ export default function marketplace() {
       <title>twali.xyz - marketplace</title>
 
       <HeaderNav
+        whichPage="marketplace"
+        isConnectWalletBtn={!userState.userWallet}
+        userPage={userState}
+        userWallet={userState.userWallet}
+      />
+      {/* <HeaderNav
         userPage={userState}
         whichPage="marketplace"
         userWallet={userState.userWallet}
         isConnectWalletBtn={!userState.userWallet}
-      />
+      /> */}
       <Flex flexDir={"row"} pos={"absolute"} top={0} width="100%" zIndex={-1}>
         <FilterInputs
           filterParams={filterParams}

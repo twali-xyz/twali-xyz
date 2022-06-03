@@ -14,7 +14,7 @@ import Web3 from "web3";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { UserData } from "../utils/interfaces";
-import { getUserByWallet } from "../utils/walletUtils";
+import { getUserByWallet, getUserWhitelistStatus } from "../utils/walletUtils";
 import useUser from "../context/TwaliContext";
 
 const LoginPage = (props) => {
@@ -27,7 +27,6 @@ const LoginPage = (props) => {
   const toggleMenu = () => setShow(!show);
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [loaded, setLoaded] = useState(false);
-  const [whiteListedStatus, setWhiteListedStatus] = useState(""); // use ""/rejected/pending/approved here to test different UX/UI paths
 
   const router = useRouter();
   const handleWalletConnectOnLogin = async () => {
@@ -50,48 +49,49 @@ const LoginPage = (props) => {
     const web3 = new Web3(provider);
     const accounts = await web3.eth.getAccounts();
     const currAccount = accounts[0];
-    console.log(currAccount);
 
     userState.setData({ ...userState, userWallet: currAccount });
     setIsSubmitted(true);
 
     try {
-      // TODO
-      //
-      // check if user is on whiteList
-      //
-      // const userWhiteListStatus = await getUserWhiteListStatus;
-      // setWhiteListed(userWhiteListStatus);
-      //
-
-      if (
-        whiteListedStatus === null ||
-        whiteListedStatus === "" ||
-        whiteListedStatus === "pending" ||
-        whiteListedStatus === "rejected"
-      ) {
-        // if not approved on the whiteList send user to application form,
-        // pending page, or rejected page
-        router.push(
-          `/whitelist/application?status=${whiteListedStatus} `,
-          "whitelist/application"
-        );
-      }
-      // if user is on whiteList, check if profile has been created
-      else {
+      try {
         let userData: UserData = await getUserByWallet(currAccount);
 
         if (userData && userData.userName && userData.userWallet) {
           router.push(`/${userData.userName}`);
           setIsSubmitted(false);
-        } else {
-          console.log("No profile, pls create one...");
-          router.push("/steps");
+          return;
         }
+      } catch (err) {
+        console.log("error: ", err);
+        router.push("/steps");
+        setLoaded(true);
+      }
+      let userWhiteList = await getUserWhitelistStatus(currAccount);
+      console.log("DATA: ", userWhiteList["whitelistStatus"]);
+      if (
+        userWhiteList["whitelistStatus"] === null ||
+        userWhiteList["whitelistStatus"] === "" ||
+        userWhiteList["whitelistStatus"] === undefined ||
+        userWhiteList["whitelistStatus"] === "pending" ||
+        userWhiteList["whitelistStatus"] === "rejected"
+      ) {
+        // if not approved on the whiteList send user to application form,
+        // pending page, or rejected page
+        router.push(
+          `/whitelist/application?status=${userWhiteList["whitelistStatus"]} `,
+          "whitelist/application"
+        );
+        return;
+      }
+      if (userWhiteList["whitelistStatus"] === "approved") {
+        console.log("No profile, pls create one...");
+        router.push("/steps");
+        return;
       }
     } catch (err) {
       console.log("error: ", err);
-      router.push("/steps");
+      router.push("/whitelist/application");
       setLoaded(true);
     }
   };

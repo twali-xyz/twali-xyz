@@ -71,7 +71,7 @@ export const handleWalletConnect = async (
         await router.push(`/${userData.userName}`);
         router.reload(); // reloads the profile page after changing the shallow route
       } else {
-        router.reload(); // reloads the profile page upon login
+        // router.reload(); // reloads the profile page upon login
       }
 
       setIsSubmitted(false);
@@ -89,6 +89,17 @@ export const handleWalletConnect = async (
 export const getUserByWallet = async (userWallet) => {
   let lowerCaseWallet = userWallet.toLowerCase();
   const res = await fetch(`/api/users/wallet/${lowerCaseWallet}`);
+
+  const data: any = await res.json();
+
+  console.log("RETRIEVE USER BY WALLET YO");
+  return data;
+};
+
+export const getUserWhitelistStatus = async (userWallet) => {
+  let lowerCaseWallet = userWallet.toLowerCase();
+  const res = await fetch(`/api/users/whitelist/${lowerCaseWallet}`);
+  console.log(res.json);
 
   const data: any = await res.json();
 
