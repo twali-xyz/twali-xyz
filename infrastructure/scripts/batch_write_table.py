@@ -7,7 +7,7 @@ table = dynamodb.Table('Twali-core-test')
 
 items = []
 # open Json file to parse and load into rows for dynamoDb table
-with open('items.json', 'r') as f:
+with open('infrastructure/scripts/items.json', 'r') as f:
     for row in f:
         items.append(json.loads(row))
     print(items)
