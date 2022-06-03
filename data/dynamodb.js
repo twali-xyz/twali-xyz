@@ -562,4 +562,15 @@ module.exports = {
       .catch(console.error);
     return dbUser;
   },
+
+  getWhitelist: async () => {
+    const whitelist = await getDynamoDBClient()
+      .scan({
+        TableName: "whitelist_table",
+      })
+      .promise()
+      .then((data) => data.Items)
+      .catch(console.error);
+    return whitelist;
+  },
 };
