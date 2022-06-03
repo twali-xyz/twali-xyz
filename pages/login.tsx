@@ -88,6 +88,14 @@ const LoginPage = (props) => {
       }
       if (userWhiteList["whitelistStatus"] === "approved") {
         console.log("No profile, pls create one...");
+        userState.setData({
+          ...userState,
+          firstName: userWhiteList["firstName"],
+          lastName: userWhiteList["lastName"],
+          email: userWhiteList["email"],
+          linkedIn: userWhiteList["linkedIn"],
+          discord: userWhiteList["discord"],
+        });
         router.push("/steps");
         return;
 

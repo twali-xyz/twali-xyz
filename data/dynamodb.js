@@ -557,7 +557,6 @@ module.exports = {
       })
       .promise()
       .then((data) => {
-        console.log("ITEMS: ", data.Items[0]);
         return data.Items[0];
       })
       .catch(console.error);
