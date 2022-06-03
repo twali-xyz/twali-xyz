@@ -18,12 +18,8 @@ import {
   import { TokenState } from "../../context/TokenContext";
   import axios from 'axios'
   
-  export const WerkTokenDropdown = ({
-
-    ...props
-  }) => {
-    const [calculatedUSD, setCalculatedUSD] = useState(null);
-    const { token, setToken, tokenIcon, tokenID } = TokenState();
+  export const WerkTokenDropdown = () => {
+    const { token, setToken, tokenIcon, tokenID, setTokenAmount, calculatedUSD, setCalculatedUSD } = TokenState();
 
     const handleMenuSelection = (token) => {
         if (token !== 'Token') {
@@ -38,6 +34,7 @@ import {
       const handleAmountChange = (evt) => {
         axios.get(TokenPriceList(tokenID, 'usd')).then((response) => {
           console.log(response.data);
+          setTokenAmount(evt.target.value);
           const value = +(Math.round(response.data[tokenID].usd*evt.target.value * 100) / 100).toFixed(2);
           setCalculatedUSD(value);
       }).catch((error) => {

@@ -9,7 +9,7 @@ import {
     Text,
   } from "@chakra-ui/react";
   
-  export const submissionOfWerk = ({ values }) => {
+  export const submissionOfWerk = ({ handleChange, bountyData }) => {
     return (
       <form style={{ alignSelf: "center" }}>
         <HStack spacing={24}>

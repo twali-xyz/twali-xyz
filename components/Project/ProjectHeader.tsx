@@ -4,8 +4,10 @@ import { Chip } from '../reusable/Chip';
 import { Avatar } from '@chakra-ui/react'
 // import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import ProjectHeaderModal from "./ProjectHeaderModal/ProjectHeaderModal";
+import { TokenState } from "../../context/TokenContext";
 
 const ProjectHeader = (props) => {
+  const { token, tokenAmount } = TokenState();
   const {
     isOpen: isProjectHeaderModalOpen,
     onOpen: onProjectHeaderModalOpen,
@@ -23,10 +25,16 @@ const ProjectHeader = (props) => {
               backgroundColor={"inverse"}
         >
         <HStack marginTop={9}>
-        <Chip variant="created">Listed 24d ago</Chip>
-        <Chip variant="status">Status</Chip>
-        <Chip variant="type">Solo Project</Chip>
-        <Chip variant="bounty">30,000 MATIC</Chip>
+        <Chip variant="created">Listed{" "}
+            {Math.ceil(
+              (new Date(Date.now()).getTime() -
+                new Date(Number(props.bounty.contractCreatedOn) * 1000).getTime()) /
+                (1000 * 3600 * 24)
+            )}
+            d ago</Chip>
+        <Chip variant="status">{props.bounty.contractStatus}</Chip>
+        <Chip variant="type">{new Date(props.bounty.contractStartDate * 1000).toLocaleDateString("us-en")}</Chip>
+        <Chip variant="bounty">{tokenAmount} {token}</Chip>
         <Button
             onClick={onProjectHeaderModalOpen}
             alignSelf="flex-end"
@@ -56,7 +64,7 @@ const ProjectHeader = (props) => {
                     fontFamily={"Scope Light"}
                     fontWeight={"400"}
                   >
-                    Project Title
+                    {props.bounty.contractTitle}
                   </Heading>
 
           <HStack marginTop={9} spacing={4}>
@@ -65,7 +73,7 @@ const ProjectHeader = (props) => {
               src="step1_background.png"
             /> */}
           </Box>
-          <Text fontSize="sm">Created by Nick Cooke</Text>
+          <Text fontSize="sm">Created by {props.bounty.contractOwnerUserName}</Text>
           {/* <UserPermissionsRestricted to="edit" key={`--edit-project-header-permission`}> */}
                     {/* </UserPermissionsRestricted> */}
         </HStack>

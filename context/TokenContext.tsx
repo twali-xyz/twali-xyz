@@ -1,3 +1,4 @@
+import { float } from 'aws-sdk/clients/lightsail';
 import React, {
     createContext,
     useContext,
@@ -12,6 +13,10 @@ export interface Token {
     tokenID: string;
     setToken: Function;
     tokenIcon: string;
+    tokenAmount: number;
+    setTokenAmount: Function;
+    calculatedUSD: number;
+    setCalculatedUSD: Function;
 }
 
 export const initialState = {
@@ -19,6 +24,10 @@ export const initialState = {
     tokenID: '',
     setToken: Function(),
     tokenIcon: '',
+    tokenAmount: 0,
+    setTokenAmount: Function(),
+    calculatedUSD: 0,
+    setCalculatedUSD: Function(),
   };
 
 const Token = createContext<Token>(initialState);
@@ -27,6 +36,9 @@ const TokenContext = ({ children }) => {
     const [token, setToken] = useState('Token');
     const [tokenIcon, setTokenIcon] = useState('');
     const [tokenID, setTokenID] = useState('');
+    const [tokenAmount, setTokenAmount] = useState(0);
+    const [calculatedUSD, setCalculatedUSD] = useState(0);
+
     console.log('context token:', token);
 
 
@@ -43,7 +55,15 @@ const TokenContext = ({ children }) => {
     }, [token])
 
     return (
-        <Token.Provider value={{ token, tokenID, setToken, tokenIcon }}>
+        <Token.Provider value={{ 
+            token, 
+            tokenID, 
+            setToken, 
+            tokenIcon, 
+            tokenAmount, 
+            setTokenAmount, 
+            calculatedUSD, 
+            setCalculatedUSD }}>
             {children}
         </Token.Provider>
     )

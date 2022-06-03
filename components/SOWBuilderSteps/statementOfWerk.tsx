@@ -9,7 +9,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-export const statementOfWerk = ({ values }) => {
+export const statementOfWerk = ({ handleChange, bountyData }) => {
   return (
     <form style={{ alignSelf: "start" }}>
       <HStack spacing={24}>
@@ -54,24 +54,24 @@ export const statementOfWerk = ({ values }) => {
                 height={"40px"}
                 borderRadius={"4px"}
                 marginBottom={"4px"}
-                // isInvalid={errors.currTitle}
+                // isInvalid={errors.contractTitle}
                 errorBorderColor="red.300"
                 fontFamily={"PP Telegraf light"}
                 _placeholder={{ color: "subtle" }}
-                // value={values?.currTitle || ""}
+                // value={values?.contractTitle || ""}
                 required
                 placeholder="Project Title"
-                name="currTitle"
-                // onChange={handleChange}
+                name="contractTitle"
+                onChange={handleChange}
               />
               {/* <Text
                 fontSize="xs"
                 height={"20.5px"}
                 fontWeight="400"
                 color="red.500"
-                visibility={errors.currTitle ? "visible" : "hidden"}
+                visibility={errors.contractTitle ? "visible" : "hidden"}
               >
-                {errors.currTitle}
+                {errors.contractTitle}
               </Text> */}
             </FormControl>
             <FormControl p={2} pb={0} id="statement-of-werk" isRequired>
@@ -95,24 +95,24 @@ export const statementOfWerk = ({ values }) => {
                 height={"249px"}
                 borderRadius={"4px"}
                 marginBottom={"4px"}
-                // isInvalid={errors.currTitle}
+                // isInvalid={errors.contractDescription}
                 errorBorderColor="red.300"
                 fontFamily={"PP Telegraf light"}
                 _placeholder={{ color: "subtle" }}
-                // value={values?.currTitle || ""}
+                // value={values?.contractDescription || ""}
                 required
                 placeholder="Max Word Limit"
-                name="currTitle"
-                // onChange={handleChange}
+                name="contractDescription"
+                onChange={handleChange}
               />
               {/* <Text
                 fontSize="xs"
                 height={"20.5px"}
                 fontWeight="400"
                 color="red.500"
-                visibility={errors.currTitle ? "visible" : "hidden"}
+                visibility={errors.contractDescription ? "visible" : "hidden"}
               >
-                {errors.currTitle}
+                {errors.contractDescription}
               </Text> */}
             </FormControl>
           </Box>
@@ -160,14 +160,14 @@ export const statementOfWerk = ({ values }) => {
                 height={"40px"}
                 borderRadius={"4px"}
                 marginBottom={"4px"}
-                // isInvalid={errors.currTitle}
+                // isInvalid={errors.attachedFiles}
                 errorBorderColor="red.300"
                 fontFamily={"PP Telegraf light"}
                 _placeholder={{ color: "subtle" }}
-                // value={values?.currTitle || ""}
+                // value={values?.attachedFiles || ""}
                 required
                 placeholder=".pdf, .word, .zip, .png, .jpeg"
-                name="currTitle"
+                name="attachedFiles"
                 // onChange={handleChange}
               />
               {/* <Text
@@ -175,9 +175,9 @@ export const statementOfWerk = ({ values }) => {
                 height={"20.5px"}
                 fontWeight="400"
                 color="red.500"
-                visibility={errors.currTitle ? "visible" : "hidden"}
+                visibility={errors.attachedFiles ? "visible" : "hidden"}
               >
-                {errors.currTitle}
+                {errors.attachedFiles}
               </Text> */}
             </FormControl>
           </Box>

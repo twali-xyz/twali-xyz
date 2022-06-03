@@ -17,6 +17,7 @@ import ProjectDetails from "./ProjectDetails";
 import ProjectDescription from "./ProjectDescription";
 
 const Project = (props) => {
+  console.log('PROJECT', props.bounty)
   const router = useRouter();
     return (
         <>
@@ -57,11 +58,11 @@ const Project = (props) => {
             lineHeight="tight"
             isTruncated
           >
-      <ProjectHeader/>
+      <ProjectHeader bounty={props.bounty}/>
       <Flex flexDirection="row">
       <Flex flexDirection="column" width="100%" maxWidth="550px">
-        <ProjectExpertise />
-        <ProjectDetails/>
+        <ProjectExpertise bounty={props.bounty}/>
+        <ProjectDetails />
       </Flex>
       <div className= "twali-vertical-line"></div>
       <ProjectDescription/>
