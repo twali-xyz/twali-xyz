@@ -197,8 +197,6 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
               name="startDate"
               isOpen={isOpen || null}
               onChange={(val) => {
-                console.log(val);
-
                 handleSelectDate(val);
                 onClose();
               }}
