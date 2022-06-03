@@ -148,6 +148,7 @@ const whitelist = () => {
     }
   }
   function submitApplication() {
+
     // validate inputs
     // if inputs are missing, return user to step of first missing input
     if (validateInputs()) {
@@ -176,6 +177,7 @@ const whitelist = () => {
     }
     return true;
   }
+
 
   function handleEnterPressed(event) {
     if (event.key === "Enter" && step < 2) {
