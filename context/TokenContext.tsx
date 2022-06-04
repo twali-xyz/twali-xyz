@@ -36,8 +36,8 @@ const TokenContext = ({ children }) => {
     const [token, setToken] = useState('Token');
     const [tokenIcon, setTokenIcon] = useState('');
     const [tokenID, setTokenID] = useState('');
-    const [tokenAmount, setTokenAmount] = useState(0);
-    const [calculatedUSD, setCalculatedUSD] = useState(0);
+    const [tokenAmount, setTokenAmount] = useState(null);
+    const [calculatedUSD, setCalculatedUSD] = useState(null);
 
     console.log('context token:', token);
 

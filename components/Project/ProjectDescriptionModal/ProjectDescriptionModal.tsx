@@ -60,6 +60,7 @@ const ProjectDescriptionModal = (props) => {
                 fontFamily={"PP Telegraf light"}
                 _placeholder={{ color: "subtle" }}
                 // value={values?.currTitle || ""}
+                defaultValue={props.bounty.contractDescription ? props.bounty.contractDescription : ''}
                 required
                 placeholder="Max Word Limit"
                 name="currTitle"

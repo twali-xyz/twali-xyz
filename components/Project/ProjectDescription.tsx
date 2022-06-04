@@ -39,7 +39,7 @@ const ProjectDescription = (props) => {
               src={"twali-assets/editicon.png"}
             />
           </Button>
-          <ProjectDescriptionModal isOpen={isProjectDescModalOpen} onClose={onProjectDescModalClose}/>
+          <ProjectDescriptionModal isOpen={isProjectDescModalOpen} onClose={onProjectDescModalClose} bounty={props.bounty}/>
               </HStack>
             <VStack spacing={6} marginTop={0} alignItems="unset">
                 <Heading

@@ -33,7 +33,9 @@ import {
   
       const handleAmountChange = (evt) => {
         axios.get(TokenPriceList(tokenID, 'usd')).then((response) => {
+          console.log(evt.target.value);
           setTokenAmount(evt.target.value);
+          console.log(tokenAmount);
           const value = +(Math.round(response.data[tokenID].usd*evt.target.value * 100) / 100).toFixed(2);
           console.log(value);
           setCalculatedUSD(value);
@@ -160,7 +162,7 @@ import {
             name="firstName"
             fontFamily={"PP Telegraf light"}
             _placeholder={{ color: "subtle" }}
-            value={tokenAmount ? tokenAmount: ""}
+            defaultValue={tokenAmount ? tokenAmount: ""}
             onChange={handleAmountChange}
             />
             <Text fontWeight="400" color="subtle" fontSize="3xl" fontFamily="GrandSlang">=</Text>

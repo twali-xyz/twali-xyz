@@ -26,7 +26,6 @@ import {
 const ProjectExpertiseModal = (props) => {
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [values, setValues] = useState<UserData>();
 
   const handleChange = (evt) => {
     console.log(evt);
@@ -51,19 +50,19 @@ const ProjectExpertiseModal = (props) => {
           <ModalBody>
             <form style={{ alignSelf: "center" }}>
             <MultiSelect
-                name={"functionalExpertise"}
+                name={"contractExpertise"}
                 formLabel={"Superpowers"}
                 handleChange={handleChange}
                 options={functionalExpertiseList}
                 maxSelections={3}
-                defaultValues={values?.functionalExpertise || []}
+                defaultValues={props?.bounty?.contractExpertise || []}
               />
 
               <MultiSelect
-                name={"industryExpertise"}
+                name={"contractIndustry"}
                 formLabel={"Industry expertise"}
                 handleChange={handleChange}
-                defaultValues={values?.industryExpertise || []}
+                defaultValues={props?.bounty?.contractIndustry || []}
                 options={industryExpertiseList}
                 maxSelections={3}
               />

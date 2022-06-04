@@ -20,7 +20,7 @@ import {
 const ProjectHeaderModal = (props) => {
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+  console.log(props);
   return (
     <>
       <Modal
@@ -54,9 +54,9 @@ const ProjectHeaderModal = (props) => {
                 //     (!userState.firstName || !values.firstName)
                 //   }
                   errorBorderColor="red.300"
-                  placeholder="First name"
-                  name="firstName"
-                //   defaultValue={userState.firstName || ""}
+                  placeholder="Title"
+                  name="contractTitle"
+                  defaultValue={props.bounty.contractTitle || ""}
                 //   onChange={handleChange}
                 />
                 {/* {errors.firstName &&

@@ -36,7 +36,7 @@ const ProjectExpertise = (props) => {
               src={"twali-assets/editicon.png"}
             />
           </Button>
-          <ProjectExpertiseModal isOpen={isProjectExpertiseModalOpen} onClose={onProjectExpertiseModalClose}/>
+          <ProjectExpertiseModal isOpen={isProjectExpertiseModalOpen} onClose={onProjectExpertiseModalClose} bounty={props.bounty}/>
           </HStack>
             <VStack paddingRight={12} paddingTop={4}>
         <Text alignSelf="flex-start" fontSize="sm" marginTop={12} marginBottom={6}>Industry</Text>

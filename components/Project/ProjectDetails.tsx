@@ -61,7 +61,7 @@ const ProjectDetails = (props) => {
               src={"twali-assets/editicon.png"}
             />
           </Button>
-          <ProjectDetailsModal isOpen={isProjectDetailsModalOpen} onClose={onProjectDetailsModalClose}/>
+          <ProjectDetailsModal isOpen={isProjectDetailsModalOpen} onClose={onProjectDetailsModalClose} bounty={props.bounty}/>
           </HStack>
             <HStack paddingTop="20px" paddingBottom="20px">
             <Text marginRight={4} fontSize="sm" color="subtle">Duration</Text>

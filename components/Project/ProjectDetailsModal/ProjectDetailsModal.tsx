@@ -34,8 +34,8 @@ const ProjectDetailsModal = (props) => {
     uuid: "",
     setData,
   });
-  const [dueDate, setDueDate] = useState(new Date());
-  const [dateRange, setDateRange] = useState([new Date(), new Date()]);
+  const [dueDate, setDueDate] = useState(new Date(props?.bounty?.applicationDeadline*1000));
+  const [dateRange, setDateRange] = useState([new Date(props?.bounty?.contractStartDate*1000), new Date(props?.bounty?.contractEndDate*1000)]);
 
   const handleChange = (evt) => {
     evt.persist();
@@ -86,6 +86,7 @@ const ProjectDetailsModal = (props) => {
                         />}
                       onChange={setDateRange}
                       selectRange={true}
+                      // defaultValue={props?.bounty?.contractStartDate && props?.bounty?.contractEndDate ? [new Date(props.bounty.contractStartDate * 1000),new Date(props.bounty.contractEndDate * 1000)]: ''}
                       value={dateRange ? [new Date(dateRange[0]), new Date(dateRange[1])]: undefined}
                     />
                 </VStack>

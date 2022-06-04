@@ -5,8 +5,6 @@ import {
   FormLabel,
   Textarea,
   HStack,
-  Select,
-  Text,
 } from "@chakra-ui/react";
 
 export const statementOfWerk = ({ handleChange, bountyData }) => {
