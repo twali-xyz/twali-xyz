@@ -21,21 +21,29 @@ import DatePicker from "react-date-picker/dist/entry.nostyle";
 import DateRangePicker from "@wojtekmaj/react-daterange-picker/dist/entry.nostyle";
 import { WerkTokenDropdown } from '../../SOWBuilderSteps/WerkTokenDropdown';
 import { useBounty } from "../../../context/BountyContext";
+import { convertDateToUnix } from "../../../utils/marketplaceUtils";
 
 const ProjectDetailsModal = (props) => {
   const finalRef = useRef();
-  const { setBounty, ...bountyState} = useBounty();
+  const { editBountyDetails, ...bountyState} = useBounty();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [dueDate, setDueDate] = useState(new Date(bountyState?.applicationDeadline*1000));
   const [dateRange, setDateRange] = useState([new Date(bountyState?.contractStartDate*1000), new Date(bountyState?.contractEndDate*1000)]);
-
-  const handleChange = (evt) => {
-    evt.persist();
-
-    // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
-    // setEventArray({ evt, setValues, values });
-  };
   
+  const handleDates = (dateRange, dueDate) => {
+    console.log('SOW builder handleDates - name: ', dateRange);
+    console.log('SOW builder handleDates - name: ', dueDate);
+    if (dateRange && dueDate) {
+      editBountyDetails(
+        convertDateToUnix(dateRange[0]),
+        convertDateToUnix(dateRange[1]),
+        convertDateToUnix(dateRange[1]) - convertDateToUnix(dateRange[0]),
+        convertDateToUnix(dueDate),
+      );
+      console.log('SOW bounty data handled date: ', bountyState);
+    }
+  };
+
   return (
     <>
       <Modal
@@ -114,7 +122,12 @@ const ProjectDetailsModal = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="primary" size={"sm"} onClick={() => console.log('project sow modal save')}>
+          <Button variant="primary" size={"sm"} onClick={() => {
+              setIsSubmitted(true);
+              handleDates(dateRange, dueDate);
+              props.onClose();
+              setIsSubmitted(false);
+              }}>
               Save{" "}
               {isSubmitted ? (
                 <CircularProgress

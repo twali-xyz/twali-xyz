@@ -24,6 +24,7 @@ import { useBounty } from "../../context/BountyContext";
 
 import useUser from "../../context/TwaliContext";
 import { getUserByWallet } from "../../data";
+import { convertDateToUnix } from "../../utils/marketplaceUtils";
 
 const SOWBuilderSteps = (props) => {
   const router = useRouter();
@@ -88,9 +89,7 @@ const SOWBuilderSteps = (props) => {
     }
   };
 
-  const convertDateToUnix = (myDate) => {
-    return Math.floor(myDate.getTime() / 1000)
-  };
+
 
   const steps = [
     {

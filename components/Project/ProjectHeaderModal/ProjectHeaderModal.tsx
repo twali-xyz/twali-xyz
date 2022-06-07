@@ -16,10 +16,15 @@ import {
 import { useBounty } from "../../../context/BountyContext";
 
 const ProjectHeaderModal = (props) => {
-  const { setBounty, ...bountyState} = useBounty();
+  const { editBountyHeader, ...bountyState} = useBounty();
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  console.log(props);
+  const [contractTitle, setContractTitle] = useState('');
+
+  const handleChange = (evt) => {
+    setContractTitle(evt.target.value);
+  }
+
   return (
     <>
       <Modal
@@ -56,7 +61,7 @@ const ProjectHeaderModal = (props) => {
                   placeholder="Title"
                   name="contractTitle"
                   defaultValue={bountyState?.contractTitle || ""}
-                //   onChange={handleChange}
+                  onChange={handleChange}
                 />
                 {/* {errors.firstName &&
                   (!userState.firstName || !values.firstName) && (
@@ -69,7 +74,12 @@ const ProjectHeaderModal = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="primary" size={"sm"} onClick={() => console.log('project header modal save')}>
+            <Button variant="primary" size={"sm"} onClick={() => {
+              setIsSubmitted(true);
+              editBountyHeader(contractTitle);
+              props.onClose();
+              setIsSubmitted(false);
+              }}>
               Save{" "}
               {isSubmitted ? (
                 <CircularProgress

@@ -37,9 +37,6 @@ const BountyContext = ({ children }): JSX.Element => {
         contractStartDate: number,
         contractEndDate: number,
         contractDuration: number,
-        tokenName: string,
-        contractAmount: number,
-        convertedAmount: number,
         applicationDeadline: number,
       ) {
         dispatch({
@@ -48,9 +45,6 @@ const BountyContext = ({ children }): JSX.Element => {
             contractStartDate: contractStartDate,
             contractEndDate: contractEndDate,
             contractDuration: contractDuration,
-            tokenName: tokenName,
-            contractAmount: contractAmount,
-            convertedAmount: convertedAmount,
             applicationDeadline: applicationDeadline,
           },
         });

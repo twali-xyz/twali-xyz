@@ -14,15 +14,31 @@ import {
   ModalContent,
 } from "@chakra-ui/react";
 import { useBounty } from "../../../context/BountyContext";
+import { setEventArray } from "../../../utils/setEventArray";
 
 const ProjectExpertiseModal = (props) => {
-  const { setBounty, ...bountyState} = useBounty();
+  const { editBountyExpertise, setBounty, ...bountyState} = useBounty();
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (evt) => {
-    console.log(evt);
-  }
+    evt.persist();
+    console.log('SOW builder handleChange - name: ', evt.target.name);
+    console.log('SOW builder handleChange - value: ', evt.target.value);
+    let strippedEventName = evt.target.name.substring(
+      0,
+      evt.target.name.length - 1
+    );
+
+    if (
+      strippedEventName === "contractExpertise" ||
+      strippedEventName === "contractIndustry"
+    ) {
+      // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
+      setEventArray({ evt, setValues: setBounty, values: bountyState });
+    } 
+    console.log('SOW bounty data: ', bountyState);
+  };
 
   return (
     <>
@@ -63,7 +79,11 @@ const ProjectExpertiseModal = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="primary" size={"sm"} onClick={() => console.log('project sow modal save')}>
+          <Button variant="primary" size={"sm"} onClick={() => {
+              setIsSubmitted(true);
+              props.onClose();
+              setIsSubmitted(false);
+              }}>
               Save{" "}
               {isSubmitted ? (
                 <CircularProgress

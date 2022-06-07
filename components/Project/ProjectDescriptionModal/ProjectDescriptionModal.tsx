@@ -22,7 +22,8 @@ import { useBounty } from "../../../context/BountyContext";
 const ProjectDescriptionModal = (props) => {
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const { setBounty, ...bountyState} = useBounty();
+  const { editBountyDescription, ...bountyState} = useBounty();
+  const [contractDescription, setContractDescription] = useState('');
 
   return (
     <>
@@ -66,7 +67,7 @@ const ProjectDescriptionModal = (props) => {
                 required
                 placeholder="Max Word Limit"
                 name="currTitle"
-                // onChange={handleChange}
+                onChange={(evt) => setContractDescription(evt.target.value)}
               />
                 {/* {errors.firstName &&
                   (!userState.firstName || !values.firstName) && (
@@ -120,7 +121,12 @@ const ProjectDescriptionModal = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="primary" size={"sm"} onClick={() => console.log('project sow modal save')}>
+            <Button variant="primary" size={"sm"} onClick={() => {
+              setIsSubmitted(true);
+              editBountyDescription(contractDescription, []);
+              props.onClose();
+              setIsSubmitted(false);
+              }}>
               Save{" "}
               {isSubmitted ? (
                 <CircularProgress
