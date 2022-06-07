@@ -582,6 +582,7 @@ module.exports = {
    * @example See docs about editing existing attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#update-property
    */
   updateWhitelistStatus: async (userWallet, newStatus) => {
+    if (!userWallet) return;
     console.log("UPDATE USER WHITELIST STATUS");
     console.log(userWallet);
     console.log(newStatus);

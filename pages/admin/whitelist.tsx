@@ -23,13 +23,12 @@ const whitelist = () => {
     isError: err,
   } = useWhitelistFilter(query);
   const [state, dispatch] = useReducer(whitelistReducer, initialState);
-  console.log(query, filteredData, isLoading, err);
 
-  function handleApprove(payload) {
+  async function handleApprove(payload) {
     setLoadingWallet(payload.userWallet);
     setWhitelistApproved(payload);
   }
-  function handleReject(payload) {
+  async function handleReject(payload) {
     setLoadingWallet(payload.userWallet);
     setWhitelistRejected(payload);
   }
@@ -62,9 +61,12 @@ const whitelist = () => {
         method: "PUT",
         body: JSON.stringify({ payload }),
       });
-      console.log(payload);
 
-      await mutate("/api/admin/retrieveWhitelist");
+      if (query) {
+        await mutate("/api/admin/filterWhitelist/" + query);
+      } else {
+        await mutate("/api/admin/retrieveWhitelist");
+      }
       setLoadingWallet(null);
     };
     updateUserWhitelistStatus(state);

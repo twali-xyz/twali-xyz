@@ -2,7 +2,7 @@ import { NextApiHandler } from "next";
 import data from "../../../../data";
 
 const filterWhitelistHandler: NextApiHandler = async (req, res) => {
-  console.log("REQ: ", req.query);
+  if (!Object.keys(req.query).includes("params")) return;
   try {
     let info = await data.fitlerWhitelist(req.query.params[0]);
 
