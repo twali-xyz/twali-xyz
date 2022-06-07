@@ -14,12 +14,13 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { Bounty, UserData } from "../../utils/interfaces";
+import { UserData } from "../../utils/interfaces";
 import { statementOfWerk } from "./statementOfWerk";
 import { datesAndPricing } from "./datesAndPricing";
 import { submissionOfWerk } from "./submissionOfWerk";
 import { setEventArray } from "../../utils/setEventArray";
 import { TokenState } from "../../context/TokenContext";
+import { useBounty } from "../../context/BountyContext";
 
 import useUser from "../../context/TwaliContext";
 import { getUserByWallet } from "../../data";
@@ -31,7 +32,8 @@ const SOWBuilderSteps = (props) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [dueDate, setDueDate] = useState(new Date());
   const [dateRange, setDateRange] = useState([new Date(), new Date()]);
-  const { token, tokenAmount, calculatedUSD } = TokenState();
+  const { tokenName, tokenAmount, calculatedUSD } = TokenState();
+  const { setBounty, ...bountyState} = useBounty();
 
   let activeStep = props.activeStep;
   let nextStep = props.nextStep;
@@ -43,26 +45,6 @@ const SOWBuilderSteps = (props) => {
     // userWallet: "",
     // uuid: "",
     setData,
-  });
-
-  const [bountyData, setBountyData] = useState<Bounty>({
-    userWallet: userData.userWallet,
-    contractID: uuidv4(),
-    contractCreatedOn: 1651968000,
-    contractOwnerUserName: userData.userName,
-    contractTitle: '',
-    contractDescription: '',
-    contractStartDate: 0,
-    contractEndDate: 0,
-    contractDuration: 0,
-    tokenName: '',
-    contractAmount: 0,
-    convertedAmount: 0,
-    applicationDeadline: 0,
-    contractIndustry: [''],
-    contractExpertise: [''],
-    contractStatus: "live",
-    attachedFiles: [],
   });
 
   const handleChange = (evt) => {
@@ -79,30 +61,30 @@ const SOWBuilderSteps = (props) => {
       strippedEventName === "contractIndustry"
     ) {
       // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
-      setEventArray({ evt, setValues: setBountyData, values: bountyData });
+      setEventArray({ evt, setValues: setBounty, values: bountyState });
     } else {
       const value = evt.target.value;
-      setBountyData({
-        ...bountyData,
+      setBounty({
+        ...bountyState,
         [evt.target.name]: value,
       });
       setIsDisabled(false);
     }
-    console.log('SOW bounty data: ', bountyData);
+    console.log('SOW bounty data: ', bountyState);
   };
 
   const handleDates = (dateRange, dueDate) => {
     console.log('SOW builder handleDates - name: ', dateRange);
     console.log('SOW builder handleDates - name: ', dueDate);
     if (dateRange && dueDate) {
-      setBountyData({
-        ...bountyData,
+      setBounty({
+        ...bountyState,
         ["contractStartDate"]: convertDateToUnix(dateRange[0]),
         ["contractEndDate"]: convertDateToUnix(dateRange[1]),
         ["applicationDeadline"]: convertDateToUnix(dueDate),
         ["contractDuration"]: convertDateToUnix(dateRange[1]) - convertDateToUnix(dateRange[0])
       });
-      console.log('SOW bounty data handled date: ', bountyData);
+      console.log('SOW bounty data handled date: ', bountyState);
     }
   };
 
@@ -113,13 +95,12 @@ const SOWBuilderSteps = (props) => {
   const steps = [
     {
       label: "Statement of Werk",
-      content: statementOfWerk({ handleChange, bountyData }),
+      content: statementOfWerk({ handleChange }),
     },
     {
       label: "Dates & Pricing",
       content: datesAndPricing({ 
         handleChange, 
-        bountyData, 
         dueDate, 
         setDueDate, 
         dateRange, 
@@ -132,7 +113,7 @@ const SOWBuilderSteps = (props) => {
     {
       label: "Submission",
       content: submissionOfWerk({
-        handleChange, bountyData
+        handleChange
       }),
     },
   ];
@@ -151,27 +132,22 @@ const SOWBuilderSteps = (props) => {
       nextStep();
     } else if (activeStep === 3) {
       console.log('submitting!');
+      console.log('real bounty state', bountyState);
       let bounty = {
-        userWallet: userData.userWallet,
-        contractID: uuidv4(),
-        contractCreatedOn: 1651968000,
-        contractOwnerUserName: userData.userName,
-        contractTitle: bountyData.contractTitle,
-        contractDescription: bountyData.contractDescription,
-        contractStartDate:  bountyData.contractStartDate,
-        contractEndDate: bountyData.contractEndDate,
-        contractDuration: bountyData.contractDuration,
-        tokenName: token,
+        ...bountyState,
+        token: tokenName,
         contractAmount: tokenAmount,
         convertedAmount: calculatedUSD,
-        applicationDeadline: bountyData.applicationDeadline,
-        contractIndustry: bountyData.contractIndustry,
-        contractExpertise: bountyData.contractExpertise,
+        userWallet: userData.userWallet,
+        contractOwnerUserName: userData.userName,
+        contractID: uuidv4(),
+        contractCreatedOn: 1651968000,
         contractStatus: "live",
         attachedFiles: [],
       }
-      console.log('real bounty', bounty);
       submitSOW(bounty);
+
+      console.log('uhhhhhh', bounty);
       getUserByWallet(userData.userWallet)
     } else {
       nextStep()
@@ -181,7 +157,7 @@ const SOWBuilderSteps = (props) => {
   return (
     <>
       {activeStep === 2 ? (
-        <Project bounty={bountyData} activeStep={activeStep} prevStep={prevStep} nextStep={nextStep} steps={steps}/>
+        <Project activeStep={activeStep} prevStep={prevStep} nextStep={nextStep} steps={steps}/>
       ): (
         <>
         <Container

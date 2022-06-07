@@ -9,9 +9,9 @@ import React, {
 import { tokenConstants } from '../utils/tokenConstants';
 
 export interface Token {
-    token: string;
+    tokenName: string;
     tokenID: string;
-    setToken: Function;
+    setTokenName: Function;
     tokenIcon: string;
     tokenAmount: number;
     setTokenAmount: Function;
@@ -20,9 +20,9 @@ export interface Token {
 }
 
 export const initialState = {
-    token: 'Token',
+    tokenName: 'Token',
     tokenID: '',
-    setToken: Function(),
+    setTokenName: Function(),
     tokenIcon: '',
     tokenAmount: 0,
     setTokenAmount: Function(),
@@ -33,32 +33,32 @@ export const initialState = {
 const Token = createContext<Token>(initialState);
 
 const TokenContext = ({ children }) => {
-    const [token, setToken] = useState('Token');
+    const [tokenName, setTokenName] = useState('Token');
     const [tokenIcon, setTokenIcon] = useState('');
     const [tokenID, setTokenID] = useState('');
     const [tokenAmount, setTokenAmount] = useState(null);
     const [calculatedUSD, setCalculatedUSD] = useState(null);
 
-    console.log('context token:', token);
+    console.log('context token:', tokenName);
 
 
     useEffect(() => {
         console.log('WOOO');
         tokenConstants.forEach((coin) => {
             console.log('COIN', coin);
-            console.log(token);
-            if (token === coin.symbol.toUpperCase()) {
+            console.log(tokenName);
+            if (tokenName === coin.symbol.toUpperCase()) {
                 setTokenID(coin.id);
                 setTokenIcon(coin.icon);
             }
         })
-    }, [token])
+    }, [tokenName])
 
     return (
         <Token.Provider value={{ 
-            token, 
+            tokenName, 
             tokenID, 
-            setToken, 
+            setTokenName, 
             tokenIcon, 
             tokenAmount, 
             setTokenAmount, 

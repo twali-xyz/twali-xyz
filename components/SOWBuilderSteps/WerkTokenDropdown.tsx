@@ -19,13 +19,13 @@ import {
   import axios from 'axios'
   
   export const WerkTokenDropdown = () => {
-    const { token, setToken, tokenIcon, tokenID, tokenAmount, setTokenAmount, calculatedUSD, setCalculatedUSD } = TokenState();
+    const { tokenName, setTokenName, tokenIcon, tokenID, tokenAmount, setTokenAmount, calculatedUSD, setCalculatedUSD } = TokenState();
 
     const handleMenuSelection = (token) => {
         if (token !== 'Token') {
-          setToken(token.symbol.toUpperCase())
+          setTokenName(token.symbol.toUpperCase())
         } else {
-          setToken('Token');
+          setTokenName('Token');
         }
         console.log('token', token);
       }
@@ -78,9 +78,9 @@ import {
             fontFamily="PP Telegraf light"
             textTransform="capitalize"
             textAlign="start"
-            as={Button} rightIcon={ token === 'Token' ? <ChevronDownIcon 
+            as={Button} rightIcon={ tokenName === 'Token' ? <ChevronDownIcon 
             width="1.3rem" height="100%" 
-            color={token === 'Token' ? "subtle !important" : 'fresh !important'}
+            color={tokenName === 'Token' ? "subtle !important" : 'fresh !important'}
             right="0.5rem"
             position="absolute"
             fontSize="1.25rem"
@@ -97,7 +97,7 @@ import {
             src={tokenIcon}
             alt="add img"
             />}>
-            {token}
+            {tokenName}
         </MenuButton>
         <MenuList
             minWidth="9rem"

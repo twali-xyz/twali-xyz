@@ -17,10 +17,12 @@ import {
   Heading,
   VStack,
 } from "@chakra-ui/react";
+import { useBounty } from "../../../context/BountyContext";
 
 const ProjectDescriptionModal = (props) => {
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const { setBounty, ...bountyState} = useBounty();
 
   return (
     <>
@@ -60,7 +62,7 @@ const ProjectDescriptionModal = (props) => {
                 fontFamily={"PP Telegraf light"}
                 _placeholder={{ color: "subtle" }}
                 // value={values?.currTitle || ""}
-                defaultValue={props.bounty.contractDescription ? props.bounty.contractDescription : ''}
+                defaultValue={bountyState?.contractDescription ? bountyState?.contractDescription : ''}
                 required
                 placeholder="Max Word Limit"
                 name="currTitle"

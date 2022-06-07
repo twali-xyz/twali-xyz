@@ -1,5 +1,6 @@
 import { Container, Text, Button, HStack, Img, Flex, Heading, VStack, useDisclosure } from '@chakra-ui/react';
 import ProjectDescriptionModal from './ProjectDescriptionModal/ProjectDescriptionModal';
+import { useBounty } from "../../context/BountyContext";
 
 const ProjectDescription = (props) => {
   const {
@@ -7,6 +8,7 @@ const ProjectDescription = (props) => {
     onOpen: onProjectDescModalOpen,
     onClose: onProjectDescModalClose,
   } = useDisclosure();
+  const { setBounty, ...bountyState} = useBounty();
 
     return (
         <>
@@ -39,7 +41,7 @@ const ProjectDescription = (props) => {
               src={"twali-assets/editicon.png"}
             />
           </Button>
-          <ProjectDescriptionModal isOpen={isProjectDescModalOpen} onClose={onProjectDescModalClose} bounty={props.bounty}/>
+          <ProjectDescriptionModal isOpen={isProjectDescModalOpen} onClose={onProjectDescModalClose} />
               </HStack>
             <VStack spacing={6} marginTop={0} alignItems="unset">
                 <Heading
@@ -52,7 +54,7 @@ const ProjectDescription = (props) => {
                   >
                     Description
                   </Heading>
-                  <Text whiteSpace="pre-wrap" fontWeight="light" fontSize="sm">{props.bounty.contractDescription}</Text> 
+                  <Text whiteSpace="pre-wrap" fontWeight="light" fontSize="sm">{bountyState?.contractDescription}</Text> 
                   <Heading
             color="zing"
                     fontSize={"36px"}

@@ -56,4 +56,9 @@ export interface Bounty {
   contractExpertise: string[];
   contractStatus: string;
   attachedFiles: any[];
+  setBounty: Function,
+  editBountyExpertise: Function,
+  editBountyDetails: Function,
+  editBountyHeader: Function,
+  editBountyDescription: Function,
 }

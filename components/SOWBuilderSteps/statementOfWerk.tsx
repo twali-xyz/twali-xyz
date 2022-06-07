@@ -6,8 +6,11 @@ import {
   Textarea,
   HStack,
 } from "@chakra-ui/react";
+import { useBounty } from "../../context/BountyContext";
 
-export const statementOfWerk = ({ handleChange, bountyData }) => {
+export const statementOfWerk = ({ handleChange }) => {
+  const { setBounty, ...bountyState} = useBounty();
+
   return (
     <form style={{ alignSelf: "start" }}>
       <HStack spacing={24}>
@@ -56,7 +59,7 @@ export const statementOfWerk = ({ handleChange, bountyData }) => {
                 errorBorderColor="red.300"
                 fontFamily={"PP Telegraf light"}
                 _placeholder={{ color: "subtle" }}
-                value={bountyData?.contractTitle || ""}
+                value={bountyState?.contractTitle || ""}
                 required
                 placeholder="Project Title"
                 name="contractTitle"
@@ -97,7 +100,7 @@ export const statementOfWerk = ({ handleChange, bountyData }) => {
                 errorBorderColor="red.300"
                 fontFamily={"PP Telegraf light"}
                 _placeholder={{ color: "subtle" }}
-                value={bountyData?.contractDescription || ""}
+                value={bountyState?.contractDescription || ""}
                 required
                 placeholder="Max Word Limit"
                 name="contractDescription"

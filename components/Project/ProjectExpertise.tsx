@@ -1,6 +1,10 @@
 import { Container, Text, Button, HStack, Img, Flex, useDisclosure, VStack } from '@chakra-ui/react';
 import { Chip } from '../reusable/Chip';
 import ProjectExpertiseModal from "./ProjectExpertiseModal/ProjectExpertiseModal";
+import { useState } from "react";
+import { UserData } from "../../utils/interfaces";
+import useUser from "../../context/TwaliContext";
+import { useBounty } from "../../context/BountyContext";
 
 const ProjectExpertise = (props) => {
     const {
@@ -8,6 +12,14 @@ const ProjectExpertise = (props) => {
         onOpen: onProjectExpertiseModalOpen,
         onClose: onProjectExpertiseModalClose,
       } = useDisclosure();
+      const { ...userState } = useUser();
+      const [userData, setUserData] = useState<UserData>({
+        ...userState,
+        // userName: "",
+        // userWallet: "",
+        // uuid: "",
+      });
+      const { setBounty, ...bountyState} = useBounty();
 
     return (
         <>
@@ -36,7 +48,7 @@ const ProjectExpertise = (props) => {
               src={"twali-assets/editicon.png"}
             />
           </Button>
-          <ProjectExpertiseModal isOpen={isProjectExpertiseModalOpen} onClose={onProjectExpertiseModalClose} bounty={props.bounty}/>
+          <ProjectExpertiseModal isOpen={isProjectExpertiseModalOpen} onClose={onProjectExpertiseModalClose}/>
           </HStack>
             <VStack paddingRight={12} paddingTop={4}>
         <Text alignSelf="flex-start" fontSize="sm" marginTop={12} marginBottom={6}>Industry</Text>
@@ -47,7 +59,7 @@ const ProjectExpertise = (props) => {
           m={0}
           flexFlow={"wrap"}
         >
-          {props?.bounty?.contractIndustry?.map((industry, idx) => {
+          {bountyState?.contractIndustry?.map((industry, idx) => {
             if (idx == 0) {
               return (
                 <Chip variant="button"
@@ -69,7 +81,7 @@ const ProjectExpertise = (props) => {
           m={0}
           flexFlow={"wrap"}
         >
-        {props?.bounty?.contractExpertise?.map((expertise, idx) => {
+        {bountyState?.contractExpertise?.map((expertise, idx) => {
             if (idx == 0) {
               return (
                 <Chip variant="button"

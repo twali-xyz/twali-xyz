@@ -2,8 +2,6 @@ import { useRef, useState } from "react";
 import { MultiSelect } from "../../reusable/MultiSelect";
 import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
-import { UserData } from "../../../utils/interfaces";
-
 import {
   Button,
   CircularProgress,
@@ -14,16 +12,11 @@ import {
   ModalBody,
   ModalFooter,
   ModalContent,
-  FormLabel,
-  FormControl,
-  Img,
-  Input,
-  Textarea,
-  Heading,
-  VStack,
 } from "@chakra-ui/react";
+import { useBounty } from "../../../context/BountyContext";
 
 const ProjectExpertiseModal = (props) => {
+  const { setBounty, ...bountyState} = useBounty();
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -55,14 +48,14 @@ const ProjectExpertiseModal = (props) => {
                 handleChange={handleChange}
                 options={functionalExpertiseList}
                 maxSelections={3}
-                defaultValues={props?.bounty?.contractExpertise || []}
+                defaultValues={bountyState?.contractExpertise || []}
               />
 
               <MultiSelect
                 name={"contractIndustry"}
                 formLabel={"Industry expertise"}
                 handleChange={handleChange}
-                defaultValues={props?.bounty?.contractIndustry || []}
+                defaultValues={bountyState?.contractIndustry || []}
                 options={industryExpertiseList}
                 maxSelections={3}
               />

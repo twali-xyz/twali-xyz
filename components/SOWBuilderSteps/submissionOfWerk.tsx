@@ -8,8 +8,11 @@ import {
     Select,
     Text,
   } from "@chakra-ui/react";
+
+  import { useBounty } from "../../context/BountyContext";
   
-  export const submissionOfWerk = ({ handleChange, bountyData }) => {
+  export const submissionOfWerk = ({ handleChange }) => {
+    const { setBounty, ...bountyState } = useBounty();
     return (
       <form style={{ alignSelf: "center" }}>
         <HStack spacing={24}>

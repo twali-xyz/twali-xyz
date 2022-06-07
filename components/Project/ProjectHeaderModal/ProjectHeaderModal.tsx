@@ -11,13 +11,12 @@ import {
   ModalContent,
   FormLabel,
   FormControl,
-  Img,
   Input,
-  Heading,
-  VStack,
 } from "@chakra-ui/react";
+import { useBounty } from "../../../context/BountyContext";
 
 const ProjectHeaderModal = (props) => {
+  const { setBounty, ...bountyState} = useBounty();
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
   console.log(props);
@@ -56,7 +55,7 @@ const ProjectHeaderModal = (props) => {
                   errorBorderColor="red.300"
                   placeholder="Title"
                   name="contractTitle"
-                  defaultValue={props.bounty.contractTitle || ""}
+                  defaultValue={bountyState?.contractTitle || ""}
                 //   onChange={handleChange}
                 />
                 {/* {errors.firstName &&

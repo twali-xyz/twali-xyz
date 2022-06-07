@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import {
     FormControl,
     Box,
@@ -15,15 +14,16 @@ import {
   import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
   import { MultiSelect } from "../reusable/MultiSelect";
   import { WerkTokenDropdown } from "./WerkTokenDropdown";
+  import { useBounty } from "../../context/BountyContext";
 
   export const datesAndPricing = ({ 
-    handleChange, 
-    bountyData, 
+    handleChange,
     dueDate, 
     setDueDate, 
     dateRange, 
     setDateRange,
    }) => {
+    const { setBounty, ...bountyState} = useBounty();
 
     return (
         <form 
@@ -141,14 +141,14 @@ import {
                 handleChange={handleChange}
                 options={functionalExpertiseList}
                 maxSelections={3}
-                defaultValues={bountyData?.contractExpertise || []}
+                defaultValues={bountyState?.contractExpertise || []}
               />
 
               <MultiSelect
                 name={"contractIndustry"}
                 formLabel={"Industry expertise"}
                 handleChange={handleChange}
-                defaultValues={bountyData?.contractIndustry || []}
+                defaultValues={bountyState?.contractIndustry || []}
                 options={industryExpertiseList}
                 maxSelections={3}
               />
