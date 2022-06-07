@@ -1,6 +1,13 @@
-import { Box, Button, HStack, Img, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  HStack,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import Link from "next/link";
 import React from "react";
-import { Chip } from "../reusable/Chip";
 
 interface ApplicantCard {
   firstName: string;
@@ -11,6 +18,7 @@ interface ApplicantCard {
   applied_on: string;
   userWallet: string;
   whitelistStatus: string;
+  loaded: boolean;
 }
 
 /**
@@ -25,6 +33,7 @@ interface ApplicantCard {
  * @param {string} applied_on
  * @param {string} userWallet
  * @param {string} whitelistStatus
+ * @param {boolean} loaded
  *
  * @returns JSX ApplicantCard element
  *
@@ -38,12 +47,23 @@ export const ApplicantCard = ({
   applied_on,
   userWallet,
   whitelistStatus,
+  handleReject,
+  handleApprove,
+  loading,
   ...props
 }) => {
   // reject/approve based on userWallet
-  function handleReject() {}
+  const payload = {
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    linkedIn: linkedIn,
+    discord: discord,
+    applied_on: applied_on,
+    userWallet: userWallet,
+    whitelistStatus: whitelistStatus,
+  };
 
-  function handleApprove() {}
   return (
     <Box
       {...props}
@@ -78,11 +98,32 @@ export const ApplicantCard = ({
               <Text>Discord:</Text>
               <Text>{discord}</Text>
             </HStack>
+            <HStack>
+              <Text>linkedIn:</Text>
+              <Link href={linkedIn || ""}>
+                {linkedIn ? (
+                  <Text _hover={{ cursor: "pointer" }} color={"aqua"}>
+                    profile
+                  </Text>
+                ) : (
+                  "N/A"
+                )}
+              </Link>
+            </HStack>
           </VStack>
           <VStack alignSelf={"flex-start"} alignItems={"flex-start"}>
             <HStack>
               <Text alignSelf={"flex-start"}>Status:</Text>
-              <Text alignSelf={"flex-start"}>{whitelistStatus}</Text>
+
+              {!loading ? (
+                <Text alignSelf={"flex-start"}>{whitelistStatus}</Text>
+              ) : (
+                <CircularProgress
+                  size={"24px"}
+                  color={"zing"}
+                  trackColor={"zing"}
+                />
+              )}
             </HStack>
             <HStack>
               <Text>Applied on:</Text>
@@ -94,11 +135,22 @@ export const ApplicantCard = ({
             </HStack>
           </VStack>
         </HStack>
+
         <HStack alignSelf={"flex-end"}>
-          <Button onClick={handleReject} variant={"secondary"}>
+          <Button
+            onClick={() => {
+              handleReject(payload);
+            }}
+            variant={"secondary"}
+          >
             reject
           </Button>
-          <Button onClick={handleApprove} variant={"primary"}>
+          <Button
+            onClick={() => {
+              handleApprove(payload);
+            }}
+            variant={"primary"}
+          >
             approve
           </Button>
         </HStack>

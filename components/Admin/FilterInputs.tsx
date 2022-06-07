@@ -5,22 +5,13 @@ import {
   FormControl,
   HStack,
   Text,
-  useDisclosure,
-  useOutsideClick,
   VStack,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import { functionalExpertiseList } from "../../utils/functionalExpertiseConstants";
-import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
+import React from "react";
 import { Dropdown } from "../reusable/Dropdown";
-import { TwaliRangeSlider } from "../reusable/TwaliRangeSlider";
-import DatePicker from "react-date-picker/dist/entry.nostyle";
 import Router from "next/router";
 
-export const FilterInputs = ({ filterParams, setFilterParams }) => {
-  const { isOpen, onClose, onToggle } = useDisclosure();
-  const [dateSelected, setDateSelected] = useState(null);
-
+export const FilterInputs = ({ filterParams, setFilterParams, setQuery }) => {
   // name: "exampleName", options: [exampleOptions]
   const dropdowns = [
     {
@@ -29,52 +20,15 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
     },
   ];
 
-  useEffect(() => {
-    if (!document.querySelector(".react-date-picker__wrapper")) return;
-    document
-      .querySelector(".react-date-picker__wrapper")
-      .classList.add("market-cal");
-
-    if (!document.querySelector(".react-calendar")) return;
-    document
-      .querySelector(".react-calendar")
-      .classList.add("market-date-picker__calendar");
-
-    return () => {};
-  }, [isOpen]);
-
   function handleRemove(e) {
     // without this an error is thrown when the svg within the chip button is clicked
     if (!e.target.name) return;
     // when the target field is budget the whole field can be removed instead of trying to remove one value
-    if (
-      e.target.name === "budget" ||
-      e.target.name === "startDate" ||
-      e.target.name === "duration" ||
-      (Object.keys(filterParams).includes(e.target.name) &&
-        Object.keys(filterParams[e.target.name]).length <= 0)
-    ) {
-      delete filterParams[e.target.name];
-      // renders start date input with text upon clearing date
-      if (e.target.name === "startDate") {
-        setDateSelected(null);
-      }
-    } else {
-      delete filterParams[e.target.name][e.target.value];
-    }
-    setFilterParams({ ...filterParams });
-  }
 
-  function handleSelectDate(value) {
-    // value check needed to prevent invalid date chiplet appearing
-    if (!value) {
-      setDateSelected(null);
-      delete filterParams["startDate"];
-      setFilterParams({ ...filterParams });
-      return;
-    }
-    setDateSelected(value);
-    setFilterParams({ ...filterParams, ["startDate"]: { startDate: value } });
+    delete filterParams[e.target.name][e.target.value];
+
+    setFilterParams({ ...filterParams });
+    setQuery("");
   }
 
   function handleChange(val, name) {
@@ -83,25 +37,37 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
         ...filterParams,
         [name]: val,
       });
+      switch (Object.values(val)[0]) {
+        case "new applicants":
+          setQuery("pending");
+          break;
+        case "missing profile":
+          setQuery("approved");
+          break;
+        case "profile complete":
+          setQuery("complete");
+          break;
+
+        default:
+          break;
+      }
+
       return;
     } else if (!val) {
       delete filterParams[name];
       setFilterParams({ ...filterParams });
+      setQuery("");
     }
   }
 
   function resetFilter() {
     setFilterParams({});
+    setQuery("");
     Router.push({
       pathname: "/admin/whitelist",
     });
   }
 
-  const ref = React.useRef();
-  useOutsideClick({
-    ref: ref,
-    handler: onClose,
-  });
   return (
     <VStack
       width={"25vw"}
@@ -132,13 +98,8 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
                 my={"8px"}
                 name={name}
                 options={options}
-                borderColor={
-                  Object.keys(filterParams).includes(name) &&
-                  Object.keys(filterParams[name]).length
-                    ? "fresh"
-                    : "n3"
-                }
-                multiSelect={true}
+                borderColor={"fresh"}
+                multiSelect={false}
                 onChange={(val) => {
                   handleChange(val, name);
                 }}
@@ -177,7 +138,7 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
         handleRemove={handleRemove}
         filterParams={filterParams}
       />
-      {Object.entries(filterParams).length ? (
+      {filterParams && Object.entries(filterParams).length ? (
         <Box width={"100%"} padding={"0 48px"}>
           <Button
             //styleName: Label/label14;

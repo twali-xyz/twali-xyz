@@ -7,7 +7,7 @@ const retrieveWhitelist: NextApiHandler = async (req, res) => {
 
     res.status(200).json(JSON.stringify(info));
   } catch {
-    res.status(404).json("Bounties not found");
+    res.status(404).json("Whitelist not found");
   }
 };
 
