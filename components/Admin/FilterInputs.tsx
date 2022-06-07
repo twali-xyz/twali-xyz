@@ -16,7 +16,12 @@ export const FilterInputs = ({ filterParams, setFilterParams, setQuery }) => {
   const dropdowns = [
     {
       name: "filter options",
-      options: ["new applicants", "missing profile", "profile complete"],
+      options: [
+        "new applicants",
+        "missing profile",
+        "profile complete",
+        "rejected",
+      ],
     },
   ];
 
@@ -46,6 +51,9 @@ export const FilterInputs = ({ filterParams, setFilterParams, setQuery }) => {
           break;
         case "profile complete":
           setQuery("complete");
+          break;
+        case "rejected":
+          setQuery("rejected");
           break;
 
         default:

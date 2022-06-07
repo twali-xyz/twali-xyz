@@ -43,7 +43,8 @@ module.exports = {
       .get({
         TableName,
         Key: {
-          userWallet: userWallet,
+          PK: `USER#${userWallet}`,
+          SK: `USER#${userWallet}`,
         },
         ProjectionExpression: "UserNonce",
       })
@@ -283,8 +284,8 @@ module.exports = {
       .update({
         TableName: params.TableName,
         Key: {
-          userWallet: userWallet,
-          userName: userName,
+          PK: `USER#${userWallet}`,
+          SK: `USER#${userWallet}`,
         },
         UpdateExpression: params.UpdateExpression,
         ExpressionAttributeValues: params.ExpressionAttributeValues,
@@ -621,14 +622,12 @@ module.exports = {
   },
 
   fitlerWhitelist: async (whitelistStatus) => {
-    console.log("OPTIONS: ", whitelistStatus[filter]);
-    const filterStatus = whitelistStatus[filter];
     const whitelist = await getDynamoDBClient()
       .scan({
         TableName: "whitelist_table",
         FilterExpression: "#whitelistStatus = :whitelistStatus",
         ExpressionAttributeValues: {
-          ":whitelistStatus": filterStatus,
+          ":whitelistStatus": whitelistStatus,
         },
         ExpressionAttributeNames: {
           "#whitelistStatus": "whitelistStatus",

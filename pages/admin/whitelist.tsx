@@ -1,12 +1,12 @@
-import { filter, Flex, VStack } from "@chakra-ui/react";
-import Router, { useRouter } from "next/router";
+import { Flex, VStack } from "@chakra-ui/react";
 import React, { useEffect, useReducer, useState } from "react";
 import useSWR, { mutate } from "swr";
-
 import { ApplicantList } from "../../components/Admin/ApplicantList";
 import { FilterInputs } from "../../components/Admin/FilterInputs";
 import { SortApplicants } from "../../components/Admin/SortApplicants";
 import whitelistReducer, { initialState } from "../../context/WhitelistReducer";
+import { useWhitelist } from "../../hooks/useWhitelist";
+import { useWhitelistFilter } from "../../hooks/useWhitelistFilter";
 
 const fetcher = (...args: Parameters<typeof fetch>) =>
   fetch(...args).then((res) => res.json());
@@ -16,9 +16,14 @@ const whitelist = () => {
   const [query, setQuery] = useState();
   const [loadingWallet, setLoadingWallet] = useState(null);
   const [loadingIDX, setLoadingIDX] = useState(null);
-  const { data, error } = useSWR(`/api/admin/retrieveWhitelist`, fetcher);
-
+  const { data, isError } = useWhitelist();
+  const {
+    data: filteredData,
+    isLoading,
+    isError: err,
+  } = useWhitelistFilter(query);
   const [state, dispatch] = useReducer(whitelistReducer, initialState);
+  console.log(query, filteredData, isLoading, err);
 
   function handleApprove(payload) {
     setLoadingWallet(payload.userWallet);
@@ -98,12 +103,6 @@ const whitelist = () => {
     }
   }
 
-  useEffect(() => {
-    async () => {
-      const info = await fetch(``);
-    };
-  }, [query]);
-
   return (
     <Flex flexDir={"row"} pos={"absolute"} top={0} width="100%" zIndex={-1}>
       <FilterInputs
@@ -120,12 +119,12 @@ const whitelist = () => {
         }
       >
         <SortApplicants
-          contracts={data}
+          contracts={filteredData || data}
           onChange={(val) => setSortParams(val)}
         />
         <ApplicantList
-          whitelistApplicants={data}
-          error={error}
+          whitelistApplicants={filteredData || data}
+          error={isError}
           sortParams={sortParams}
           compare={compare}
           setLoadingIDX={setLoadingIDX}

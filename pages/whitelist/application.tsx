@@ -4,7 +4,7 @@ import { Box, Fade, Flex, Link, Text } from "@chakra-ui/react";
 import React, { useEffect, useReducer, useState } from "react";
 import HeaderNav from "../../components/HeaderNav/HeaderNav";
 import useUser from "../../context/TwaliContext";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import whitelistReducer, { initialState } from "../../context/WhitelistReducer";
 
 const whitelist = () => {
