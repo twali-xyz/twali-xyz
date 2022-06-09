@@ -6,6 +6,7 @@ import {
   FormLabel,
   HStack,
   Input,
+  Select,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -145,23 +146,15 @@ export const AddUserCard = ({ onClose, ...props }) => {
             <FormControl>
               <HStack>
                 <FormLabel width={"100px"}>Status:</FormLabel>
-                <Input
-                  width={"80%"}
-                  name="status"
-                  onChange={(e) => handleChange(e)}
-                />
+                <Select width={"80%"}>
+                  <option>select one</option>
+                  <option value={"completed"}>completed</option>
+                  <option value={"approved"}>approved</option>
+                  <option value={"rejected"}>rejected</option>
+                </Select>
               </HStack>
             </FormControl>
-            <FormControl>
-              <HStack>
-                <FormLabel width={"100px"}>Applied on:</FormLabel>
-                <Input
-                  width={"80%"}
-                  name="applied_on"
-                  onChange={(e) => handleChange(e)}
-                />
-              </HStack>
-            </FormControl>
+
             <FormControl>
               <HStack>
                 <FormLabel width={"100px"}>Wallet:</FormLabel>
