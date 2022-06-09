@@ -1,11 +1,11 @@
 import { 
     Button, Img, Container, Text, HStack, Flex, useDisclosure, VStack } from '@chakra-ui/react';
 import ProjectDetailsModal from './ProjectDetailsModal/ProjectDetailsModal';
-import { TokenState } from "../../context/TokenContext";
+import { useToken } from "../../context/TokenContext";
 import { useBounty } from "../../context/BountyContext";
 
 const ProjectDetails = (props) => {
-  const { tokenName, tokenAmount } = TokenState();
+  const { tokenName, tokenAmount } = useToken();
   const { setBounty, ...bountyState} = useBounty();
 
   const formatDateToMonthDayYear = (originalDate) => {

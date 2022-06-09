@@ -19,7 +19,7 @@ import { statementOfWerk } from "./statementOfWerk";
 import { datesAndPricing } from "./datesAndPricing";
 import { submissionOfWerk } from "./submissionOfWerk";
 import { setEventArray } from "../../utils/setEventArray";
-import { TokenState } from "../../context/TokenContext";
+import { useToken } from "../../context/TokenContext";
 import { useBounty } from "../../context/BountyContext";
 
 import useUser from "../../context/TwaliContext";
@@ -33,7 +33,7 @@ const SOWBuilderSteps = (props) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [dueDate, setDueDate] = useState(new Date());
   const [dateRange, setDateRange] = useState([new Date(), new Date()]);
-  const { tokenName, tokenAmount, calculatedUSD } = TokenState();
+  const { tokenName, tokenAmount, calculatedUSD } = useToken();
   const { setBounty, ...bountyState} = useBounty();
 
   let activeStep = props.activeStep;

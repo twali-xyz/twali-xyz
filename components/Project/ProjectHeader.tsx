@@ -1,14 +1,14 @@
 import { Container, Text, Button, HStack, Heading, Box, Img, useDisclosure } from '@chakra-ui/react';
 import { Chip } from '../reusable/Chip';
 import ProjectHeaderModal from "./ProjectHeaderModal/ProjectHeaderModal";
-import { TokenState } from "../../context/TokenContext";
+import { useToken } from "../../context/TokenContext";
 import { useState } from "react";
 import { Bounty, UserData } from "../../utils/interfaces";
 import useUser from "../../context/TwaliContext";
 import { useBounty } from "../../context/BountyContext";
 
 const ProjectHeader = (props) => {
-  const { tokenName, tokenAmount } = TokenState();
+  const { tokenName, tokenAmount } = useToken();
   const { ...userState } = useUser();
   const [userData, setUserData] = useState<UserData>({
     ...userState,
