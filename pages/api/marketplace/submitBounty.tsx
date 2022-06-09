@@ -9,10 +9,10 @@ const submitBountyHandler: NextApiHandler = async (req, res) => {
       res.setHeader("Content-Type", "application/json");
       res.status(200).json("bounty posted");
     } catch (error) {
-      console.log(error);
+      console.log('submitBounty related error: ', error);
     }
   } else {
-    console.log("error");
+    console.log('submitBounty related error');
   }
 };
 
