@@ -1,13 +1,11 @@
 import {
   Box,
   Button,
-  CircularProgress,
   FormControl,
   FormLabel,
   HStack,
   Input,
   Select,
-  Text,
   VStack,
 } from "@chakra-ui/react";
 import React, { useEffect, useReducer, useState } from "react";
