@@ -7,7 +7,7 @@ import useUser from "../context/TwaliContext";
 import background from "../public/twali-assets/backgroundscreen.png";
 import { useSteps } from "chakra-ui-steps";
 import { UserData } from "../utils/interfaces";
-import TokenContext from '../context/TokenContext';
+import TokenProvider from '../context/TokenContext';
 import BountyProvider from "../context/BountyContext";
 import UserPermissionsProvider from "../components/UserPermissionsProvider/UserPermissionsProvider";
 import UserPermissionsRestricted from "../components/UserPermissionsProvider/UserPermissionsRestricted";
@@ -27,7 +27,7 @@ const WerkSteps = () => {
 
   return (
     <>
-    <TokenContext>
+    <TokenProvider>
       <BountyProvider>
         <title>twali.xyz - marketplace</title>
         <Container
@@ -69,7 +69,7 @@ const WerkSteps = () => {
           </UserPermissionsProvider>
           </Container>
         </BountyProvider>
-      </TokenContext>
+      </TokenProvider>
     </>
   );
 };
