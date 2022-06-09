@@ -6,9 +6,9 @@ import React, {
 import { Bounty } from '../utils/interfaces';
 import bountyReducer, { initialState } from './bountyReducer';
 
-const Bounty = createContext<Bounty>(initialState);
+const BountyContext = createContext<Bounty>(initialState);
 
-const BountyContext = ({ children }): JSX.Element => {
+const BountyProvider = ({ children }): JSX.Element => {
     const [state, dispatch] = useReducer(bountyReducer, initialState);
 
     function setBounty(newState: Bounty) {
@@ -76,7 +76,7 @@ const BountyContext = ({ children }): JSX.Element => {
       }
 
     return (
-        <Bounty.Provider value={{ 
+        <BountyContext.Provider value={{ 
             ...state,
             setBounty,
             editBountyExpertise,
@@ -85,17 +85,17 @@ const BountyContext = ({ children }): JSX.Element => {
             editBountyDescription
             }}>
             {children}
-        </Bounty.Provider>
+        </BountyContext.Provider>
     )
 
 }
 
-export default BountyContext;
+export default BountyProvider;
 
 export const useBounty = () => {
-    const context = useContext(Bounty);
+    const context = useContext(BountyContext);
     if (context === undefined) {
-        throw new Error("BountyState must be used with BountyContext");
+        throw new Error("useBounty must be used with BountyContext");
       }
     return context;
 }

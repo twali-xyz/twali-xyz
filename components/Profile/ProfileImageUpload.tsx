@@ -61,7 +61,6 @@ export default function ProfileImageUpload(props) {
       setIsSelected(true);
       setIsFileTooBig(false);
     }
-    console.log(finalFile);
   };
 
   const handleOpen = () => {

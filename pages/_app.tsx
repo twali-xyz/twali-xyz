@@ -4,10 +4,7 @@ import "../styles/dateRangePicker.css";
 import { AppProps } from "next/app";
 import * as React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
-
 import { UserProvider } from "../context/TwaliContext";
-import TokenContext from '../context/TokenContext';
-import BountyContext from "../context/BountyContext";
 import { twaliTheme } from "../styles/twaliTheme";
 
 function App({ Component, pageProps }: AppProps) {
@@ -32,11 +29,7 @@ function App({ Component, pageProps }: AppProps) {
     // />
     <UserProvider>
       <ChakraProvider theme={twaliTheme}>
-      <TokenContext>
-        <BountyContext>
         <Component {...pageProps} />
-        </BountyContext>
-      </TokenContext>
       </ChakraProvider>
     </UserProvider>
     // </>

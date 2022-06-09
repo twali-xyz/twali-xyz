@@ -77,10 +77,8 @@ const SelectWerkModal = (props) => {
         backgroundPosition={"100% "}
         cursor="pointer"
         onClick={() => {
-            console.log('clci')
+            console.log('send to create-werk')
             router.push(`/create-werk`);
-        //   setBtnActive(1);
-        //   selectUserAccType("Expert");
         }}
         backgroundImage={
           btnActive == 1 || btnActive == 0
@@ -125,8 +123,6 @@ const SelectWerkModal = (props) => {
         cursor="pointer"
         onClick={() => {
             console.log('clic')
-        //   setBtnActive(2);
-        //   selectUserAccType("Client");
         }}
         backgroundImage={
           btnActive == 2 ? "/twali-assets/step1_background.png" : null

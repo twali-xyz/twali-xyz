@@ -15,11 +15,11 @@ import {
   import React, { useState } from "react";
   import { tokenConstants } from "../../utils/tokenConstants";
   import { TokenPriceList } from '../../utils/coingeckoEndpoints';
-  import { TokenState } from "../../context/TokenContext";
+  import { useToken } from "../../context/TokenContext";
   import axios from 'axios'
   
   export const WerkTokenDropdown = () => {
-    const { tokenName, setTokenName, tokenIcon, tokenID, tokenAmount, setTokenAmount, calculatedUSD, setCalculatedUSD } = TokenState();
+    const { tokenName, setTokenName, tokenIcon, tokenID, tokenAmount, setTokenAmount, calculatedUSD, setCalculatedUSD } = useToken();
 
     const handleMenuSelection = (token) => {
         if (token !== 'Token') {
@@ -27,15 +27,12 @@ import {
         } else {
           setTokenName('Token');
         }
-        console.log('token', token);
       }
   
   
       const handleAmountChange = (evt) => {
         axios.get(TokenPriceList(tokenID, 'usd')).then((response) => {
-          console.log(evt.target.value);
           setTokenAmount(evt.target.value);
-          console.log(tokenAmount);
           const value = +(Math.round(response.data[tokenID].usd*evt.target.value * 100) / 100).toFixed(2);
           console.log(value);
           setCalculatedUSD(value);
