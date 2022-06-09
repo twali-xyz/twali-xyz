@@ -38,14 +38,8 @@ const TokenProvider = ({ children }) => {
     const [tokenAmount, setTokenAmount] = useState(null);
     const [calculatedUSD, setCalculatedUSD] = useState(null);
 
-    console.log('context token:', tokenName);
-
-
     useEffect(() => {
-        console.log('WOOO');
         tokenConstants.forEach((coin) => {
-            console.log('COIN', coin);
-            console.log(tokenName);
             if (tokenName === coin.symbol.toUpperCase()) {
                 setTokenID(coin.id);
                 setTokenIcon(coin.icon);

@@ -46,7 +46,6 @@ export const BountyList = ({ contracts, error, sortParams, compare }) => {
       overflowY={"scroll"}
       scrollBehavior={"smooth"}
     >
-      {console.log(contracts)}
       {contracts?.length &&
         contracts
           .sort((a, b) => compare(a, b, sortParams || ""))

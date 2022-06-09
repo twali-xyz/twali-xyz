@@ -31,8 +31,6 @@ const ProjectDetailsModal = (props) => {
   const [dateRange, setDateRange] = useState([new Date(bountyState?.contractStartDate*1000), new Date(bountyState?.contractEndDate*1000)]);
   
   const handleDates = (dateRange, dueDate) => {
-    console.log('SOW builder handleDates - name: ', dateRange);
-    console.log('SOW builder handleDates - name: ', dueDate);
     if (dateRange && dueDate) {
       editBountyDetails(
         convertDateToUnix(dateRange[0]),
@@ -40,7 +38,6 @@ const ProjectDetailsModal = (props) => {
         convertDateToUnix(dateRange[1]) - convertDateToUnix(dateRange[0]),
         convertDateToUnix(dueDate),
       );
-      console.log('SOW bounty data handled date: ', bountyState);
     }
   };
 

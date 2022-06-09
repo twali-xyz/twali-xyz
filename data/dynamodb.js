@@ -59,7 +59,6 @@ module.exports = {
    * @example See docs about including additonal attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#put-property
    **/
   createUser: async (userData) => {
-    console.log(userData);
     const {
       userName,
       userWallet,
@@ -151,7 +150,6 @@ module.exports = {
    * @returns Returns a user as and object.
    **/
   getUserByWallet: async (userWallet) => {
-    console.log(userWallet);
     const dbUser = await getDynamoDBClient()
       .query({
         TableName,
@@ -177,10 +175,7 @@ module.exports = {
    */
   updateUserExpertise: async (userWallet, attributes) => {
     console.log("UPDATE USER EXP DYNAMO");
-    console.log(userWallet);
-    console.log(attributes);
     let { userName, functionalExpertise, industryExpertise } = attributes;
-    console.log(attributes);
     await getDynamoDBClient()
       .update({
         TableName,
@@ -208,8 +203,6 @@ module.exports = {
    */
   updateUserProfile: async (userWallet, attributes) => {
     console.log("UPDATE USER PROF DYNAMO");
-    console.log(userWallet);
-    console.log(attributes);
     let {
       userName,
       firstName,
@@ -260,7 +253,6 @@ module.exports = {
 
     let companyInfo = companyData; // to use companyInfo as the new array obj in the front-end
 
-    console.log("COMPANY INFO", companyInfo);
     const getParams = (updatedCompanyData) => {
       const params = {
         TableName,
@@ -571,8 +563,6 @@ module.exports = {
         contractStatus,
         attachedFiles,
       } = bounty;
-      console.log('Bounty dynamo', bounty);
-      console.log("TABLE", TableName);
 
       await getDynamoDBClient()
       .update({
@@ -605,7 +595,6 @@ module.exports = {
       })
       .promise()
       .then((data) => {
-        console.log('hello');
         console.log(data);
       })
       .catch(console.error);

@@ -23,8 +23,6 @@ const WerkSteps = () => {
     userData && setData(JSON.parse(JSON.stringify(userData)));
   }, [userData]);
 
-  console.log(userState);
-
   return (
     <>
     <title>twali.xyz - marketplace</title>

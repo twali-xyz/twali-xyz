@@ -23,7 +23,6 @@ import { useToken } from "../../context/TokenContext";
 import { useBounty } from "../../context/BountyContext";
 
 import useUser from "../../context/TwaliContext";
-import { getUserByWallet } from "../../data";
 import { convertDateToUnix } from "../../utils/marketplaceUtils";
 
 const SOWBuilderSteps = (props) => {
@@ -50,8 +49,6 @@ const SOWBuilderSteps = (props) => {
 
   const handleChange = (evt) => {
     evt.persist();
-    console.log('SOW builder handleChange - name: ', evt.target.name);
-    console.log('SOW builder handleChange - value: ', evt.target.value);
     let strippedEventName = evt.target.name.substring(
       0,
       evt.target.name.length - 1
@@ -71,12 +68,9 @@ const SOWBuilderSteps = (props) => {
       });
       setIsDisabled(false);
     }
-    console.log('SOW bounty data: ', bountyState);
   };
 
   const handleDates = (dateRange, dueDate) => {
-    console.log('SOW builder handleDates - name: ', dateRange);
-    console.log('SOW builder handleDates - name: ', dueDate);
     if (dateRange && dueDate) {
       setBounty({
         ...bountyState,
@@ -85,7 +79,6 @@ const SOWBuilderSteps = (props) => {
         ["applicationDeadline"]: convertDateToUnix(dueDate),
         ["contractDuration"]: convertDateToUnix(dateRange[1]) - convertDateToUnix(dateRange[0])
       });
-      console.log('SOW bounty data handled date: ', bountyState);
     }
   };
 
@@ -130,8 +123,6 @@ const SOWBuilderSteps = (props) => {
       handleDates(dateRange, dueDate);
       nextStep();
     } else if (activeStep === 3) {
-      console.log('submitting!');
-      console.log('real bounty state', bountyState);
       let bounty = {
         ...bountyState,
         token: tokenName,
@@ -145,9 +136,6 @@ const SOWBuilderSteps = (props) => {
         attachedFiles: [],
       }
       submitSOW(bounty);
-
-      console.log('uhhhhhh', bounty);
-      getUserByWallet(userData.userWallet)
     } else {
       nextStep()
     }

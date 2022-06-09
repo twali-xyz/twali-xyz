@@ -23,8 +23,6 @@ const ProjectExpertiseModal = (props) => {
 
   const handleChange = (evt) => {
     evt.persist();
-    console.log('SOW builder handleChange - name: ', evt.target.name);
-    console.log('SOW builder handleChange - value: ', evt.target.value);
     let strippedEventName = evt.target.name.substring(
       0,
       evt.target.name.length - 1
@@ -36,8 +34,7 @@ const ProjectExpertiseModal = (props) => {
     ) {
       // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
       setEventArray({ evt, setValues: setBounty, values: bountyState });
-    } 
-    console.log('SOW bounty data: ', bountyState);
+    }
   };
 
   return (
