@@ -95,3 +95,11 @@ export const getUserByWallet = async (userWallet) => {
   console.log("RETRIEVE USER BY WALLET YO");
   return data;
 };
+
+export const getUserWhitelistStatus = async (userWallet) => {
+  let lowerCaseWallet = userWallet.toLowerCase();
+  const res = await fetch(`/api/users/whitelist/${lowerCaseWallet}`);
+  console.log(res.json);
+  const data: any = await res.json();
+  return data;
+};

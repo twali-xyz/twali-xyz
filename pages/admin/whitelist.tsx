@@ -1,17 +1,16 @@
-import Router, { useRouter } from "next/router";
 import { Flex, VStack } from "@chakra-ui/react";
+import Router, { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import useSWR from "swr";
+
+import { ApplicantList } from "../../components/Admin/ApplicantList";
+import { FilterInputs } from "../../components/Admin/FilterInputs";
+import { SortApplicants } from "../../components/Admin/SortApplicants";
 import useUser from "../../context/TwaliContext";
-import HeaderNav from "../../components/HeaderNav/HeaderNav";
-import { FilterInputs } from "../../components/Marketplace/FilterInputs";
-import { SortBounty } from "../../components/Marketplace/SortBounty";
-import { BountyList } from "../../components/Marketplace/BountyList";
 
 const fetcher = (...args: Parameters<typeof fetch>) =>
   fetch(...args).then((res) => res.json());
-
-export default function marketplace() {
+const whitelist = () => {
   const router = useRouter();
   const { ...userState } = useUser();
   const [filterParams, setFilterParams] = useState({});
@@ -58,7 +57,7 @@ export default function marketplace() {
     return () => {};
   }, [router.asPath]);
 
-  const { data, error } = useSWR(`api/marketplace/contracts${query}`, fetcher);
+  const { data, error } = useSWR(`/api/admin/whitelist`, fetcher);
 
   function createURL(filterParams) {
     let urlQuery = "";
@@ -100,7 +99,7 @@ export default function marketplace() {
     });
 
     Router.push({
-      pathname: "/marketplace",
+      pathname: "/admin/whitelist",
       query: urlQuery,
     });
 
@@ -110,20 +109,12 @@ export default function marketplace() {
   // sort function for the bounty list
   function compare(a, b, sortParams) {
     const options = {
-      "Freshness - new to old": "descending",
-      "Freshness - old to new": "ascending",
-      "Amount - low to high": "ascending",
-      "Amount - high to low": "descending",
-      "Duration - long to short": "ascending",
-      "Duration - short to long": "descending",
+      "Applied on - new to old": "descending",
+      "Applied on - old to new": "ascending",
     };
     let sortName;
-    if (sortParams.includes("Freshness")) {
-      sortName = "contract_created_on";
-    } else if (sortParams.includes("Amount")) {
-      sortName = "converted_amount";
-    } else if (sortParams.includes("Duration")) {
-      sortName = "contract_duration";
+    if (sortParams.includes("Applied")) {
+      sortName = "applied_on";
     }
 
     if (options[sortParams] === "ascending") {
@@ -144,45 +135,33 @@ export default function marketplace() {
       return 0;
     }
   }
-
   return (
-    <>
-      <title>twali.xyz - marketplace</title>
-
-      <HeaderNav
-        whichPage="marketplace"
-        isConnectWalletBtn={!userState.userWallet}
-        userPage={userState}
-        userWallet={userState.userWallet}
+    <Flex flexDir={"row"} pos={"absolute"} top={0} width="100%" zIndex={-1}>
+      <FilterInputs
+        filterParams={filterParams}
+        setFilterParams={setFilterParams}
       />
-      {/* <HeaderNav
-        userPage={userState}
-        whichPage="marketplace"
-        userWallet={userState.userWallet}
-        isConnectWalletBtn={!userState.userWallet}
-      /> */}
-      <Flex flexDir={"row"} pos={"absolute"} top={0} width="100%" zIndex={-1}>
-        <FilterInputs
-          filterParams={filterParams}
-          setFilterParams={setFilterParams}
+      <VStack
+        paddingTop={"90px"}
+        height={"100vh"}
+        width={"100%"}
+        background={
+          "linear-gradient(65.14deg, #0F2922 10.35%, #1A232A 76.62%);"
+        }
+      >
+        <SortApplicants
+          contracts={data}
+          onChange={(val) => setSortParams(val)}
         />
-        <VStack
-          paddingTop={"90px"}
-          height={"100vh"}
-          width={"100%"}
-          background={
-            "linear-gradient(65.14deg, #0F2922 10.35%, #1A232A 76.62%);"
-          }
-        >
-          <SortBounty contracts={data} onChange={(val) => setSortParams(val)} />
-          <BountyList
-            contracts={data}
-            error={error}
-            sortParams={sortParams}
-            compare={compare}
-          />
-        </VStack>
-      </Flex>
-    </>
+        <ApplicantList
+          whitelistApplicants={data}
+          error={error}
+          sortParams={sortParams}
+          compare={compare}
+        />
+      </VStack>
+    </Flex>
   );
-}
+};
+
+export default whitelist;

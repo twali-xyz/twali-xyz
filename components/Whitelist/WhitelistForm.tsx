@@ -139,6 +139,7 @@ export const WhitelistForm = ({
                         borderColor: "zing",
                       }}
                       textAlign={"start"}
+                      padding={0}
                       placeholder={questions[step]["placeholder"]}
                       transitionProperty={"width"}
                       transitionDuration={"1s"}

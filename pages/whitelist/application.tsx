@@ -148,16 +148,36 @@ const whitelist = () => {
     }
   }
   function submitApplication() {
-    alert(
-      `NAME: ${name} 
-    \n EMAIL: ${email} 
-    \n LINKEDIN: ${linkedIn}
-    \n DISCORD: ${discord}
-    \n REFERREDBY: ${referredBy}`
-    );
+
+    // validate inputs
+    // if inputs are missing, return user to step of first missing input
+    if (validateInputs()) {
+      alert(
+        `NAME: ${name} 
+      \n EMAIL: ${email} 
+      \n LINKEDIN: ${linkedIn}
+      \n DISCORD: ${discord}
+      \n REFERREDBY: ${referredBy}`
+      );
+    }
   }
 
-  function validateInputs() {}
+  function validateInputs() {
+    if (name === "" || email === "" || linkedIn === "") {
+      setStep(0);
+      return false;
+    }
+    if (discord === "") {
+      setStep(1);
+      return false;
+    }
+    if (referredBy === "") {
+      setStep(2);
+      return false;
+    }
+    return true;
+  }
+
 
   function handleEnterPressed(event) {
     if (event.key === "Enter" && step < 2) {

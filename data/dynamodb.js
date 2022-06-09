@@ -14,7 +14,7 @@ const getDynamoDBClient = () => {
     // accessKeyId: "xxxx",
     // secretAccessKey: "xxxx",
     region: "us-east-1",
-    endpoint: "http://localhost:8000",
+    // endpoint: "http://localhost:8000",
   });
 
   const options = {
@@ -151,7 +151,6 @@ module.exports = {
    * @returns Returns a user as and object.
    **/
   getUserByWallet: async (userWallet) => {
-    console.log(userWallet);
     const dbUser = await getDynamoDBClient()
       .query({
         TableName,
@@ -535,5 +534,43 @@ module.exports = {
       }
     }
     return output;
+  },
+
+  /**
+   * @desc Find a user's whitelist status by primary key `userWallet`.
+   * @param {string} - function takes in a input string of the users userWallet
+   * @dev This can be altered to included any additional attributes with 'ProjectionExpression'.
+   * @example See docs to add additonal attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property
+   * @returns Returns object containing user data and whitelist status.
+   **/
+  getWhitelistStatus: async (userWallet) => {
+    console.log("USERWALLET: ", userWallet);
+    const dbUser = await getDynamoDBClient()
+      .query({
+        TableName: "whitelist_table",
+        // ProjectionExpression: "userWallet",
+
+        KeyConditionExpression: "userWallet = :PK",
+        ExpressionAttributeValues: {
+          ":PK": `${userWallet}`,
+        },
+      })
+      .promise()
+      .then((data) => {
+        return data.Items[0];
+      })
+      .catch(console.error);
+    return dbUser;
+  },
+
+  getWhitelist: async () => {
+    const whitelist = await getDynamoDBClient()
+      .scan({
+        TableName: "whitelist_table",
+      })
+      .promise()
+      .then((data) => data.Items)
+      .catch(console.error);
+    return whitelist;
   },
 };
