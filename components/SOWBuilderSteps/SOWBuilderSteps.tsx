@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Step, Steps } from "chakra-ui-steps";
 import Project from "../Project/Project";
+import { v4 as uuidv4 } from 'uuid';
 
 import {
   Heading,
@@ -17,34 +18,86 @@ import { UserData } from "../../utils/interfaces";
 import { statementOfWerk } from "./statementOfWerk";
 import { datesAndPricing } from "./datesAndPricing";
 import { submissionOfWerk } from "./submissionOfWerk";
+import { setEventArray } from "../../utils/setEventArray";
+import { useToken } from "../../context/TokenContext";
+import { useBounty } from "../../context/BountyContext";
 
 import useUser from "../../context/TwaliContext";
+import { convertDateToUnix } from "../../utils/marketplaceUtils";
 
 const SOWBuilderSteps = (props) => {
   const router = useRouter();
   const { setData, ...userState } = useUser();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [dueDate, setDueDate] = useState(new Date());
+  const [dateRange, setDateRange] = useState([new Date(), new Date()]);
+  const { tokenName, tokenAmount, calculatedUSD } = useToken();
+  const { setBounty, ...bountyState} = useBounty();
+
   let activeStep = props.activeStep;
   let nextStep = props.nextStep;
   let prevStep = props.prevStep;
 
   const [userData, setUserData] = useState<UserData>({
     ...userState,
-    userName: "",
-    userWallet: "",
-    uuid: "",
+    // userName: "",
+    // userWallet: "",
+    // uuid: "",
     setData,
   });
+
+  const handleChange = (evt) => {
+    evt.persist();
+    let strippedEventName = evt.target.name.substring(
+      0,
+      evt.target.name.length - 1
+    );
+
+    if (
+      strippedEventName === "contractExpertise" ||
+      strippedEventName === "contractIndustry"
+    ) {
+      // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
+      setEventArray({ evt, setValues: setBounty, values: bountyState });
+    } else {
+      const value = evt.target.value;
+      setBounty({
+        ...bountyState,
+        [evt.target.name]: value,
+      });
+      setIsDisabled(false);
+    }
+  };
+
+  const handleDates = (dateRange, dueDate) => {
+    if (dateRange && dueDate) {
+      setBounty({
+        ...bountyState,
+        ["contractStartDate"]: convertDateToUnix(dateRange[0]),
+        ["contractEndDate"]: convertDateToUnix(dateRange[1]),
+        ["applicationDeadline"]: convertDateToUnix(dueDate),
+        ["contractDuration"]: convertDateToUnix(dateRange[1]) - convertDateToUnix(dateRange[0])
+      });
+    }
+  };
+
+
 
   const steps = [
     {
       label: "Statement of Werk",
-      content: statementOfWerk({ values: userData }),
+      content: statementOfWerk({ handleChange }),
     },
     {
       label: "Dates & Pricing",
-      content: datesAndPricing({ values: userData }),
+      content: datesAndPricing({ 
+        handleChange, 
+        dueDate, 
+        setDueDate, 
+        dateRange, 
+        setDateRange
+       }),
     },
     {
       label: "Review",
@@ -52,10 +105,41 @@ const SOWBuilderSteps = (props) => {
     {
       label: "Submission",
       content: submissionOfWerk({
-        values: userData,
+        handleChange
       }),
     },
   ];
+
+  const submitSOW = async (bounty) => {
+    await fetch("/api/marketplace/submitBounty", {
+      method: "POST",
+      body: JSON.stringify({ bounty }),
+    });
+    console.log("BOUNTY CREATED BRUH", bounty);
+  };
+
+  const handleSubmit = () => {
+    if (activeStep === 1) {
+      handleDates(dateRange, dueDate);
+      nextStep();
+    } else if (activeStep === 3) {
+      let bounty = {
+        ...bountyState,
+        token: tokenName,
+        contractAmount: tokenAmount,
+        convertedAmount: calculatedUSD,
+        userWallet: userData.userWallet,
+        contractOwnerUserName: userData.userName,
+        contractID: uuidv4(),
+        contractCreatedOn: 1651968000,
+        contractStatus: "live",
+        attachedFiles: [],
+      }
+      submitSOW(bounty);
+    } else {
+      nextStep()
+    }
+  }
 
   return (
     <>
@@ -118,9 +202,7 @@ const SOWBuilderSteps = (props) => {
           alignSelf="center"
           variant={"primary"}
           size={"lg"}
-          onClick={() => {
-            nextStep();
-          }}
+          onClick={handleSubmit}
         >
           <Text
             display={"flex"}

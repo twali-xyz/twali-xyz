@@ -31,7 +31,6 @@ export const BountyCard = ({
   token,
   ...props
 }) => {
-  console.log();
 
   return (
     <Box

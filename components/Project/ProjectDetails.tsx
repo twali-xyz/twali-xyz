@@ -1,8 +1,18 @@
 import { 
     Button, Img, Container, Text, HStack, Flex, useDisclosure, VStack } from '@chakra-ui/react';
 import ProjectDetailsModal from './ProjectDetailsModal/ProjectDetailsModal';
+import { useToken } from "../../context/TokenContext";
+import { useBounty } from "../../context/BountyContext";
 
 const ProjectDetails = (props) => {
+  const { tokenName, tokenAmount } = useToken();
+  const { setBounty, ...bountyState} = useBounty();
+
+  const formatDateToMonthDayYear = (originalDate) => {
+    let dateOptions: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+    return new Date(originalDate * 1000).toLocaleDateString("us-en", dateOptions);
+  }
+
     const {
         isOpen: isProjectDetailsModalOpen,
         onOpen: onProjectDetailsModalOpen,
@@ -58,23 +68,27 @@ const ProjectDetails = (props) => {
           </HStack>
             <HStack paddingTop="20px" paddingBottom="20px">
             <Text marginRight={4} fontSize="sm" color="subtle">Duration</Text>
-            <Text fontSize="sm" color="primary">29 Days</Text>
+            <Text fontSize="sm" color="primary">
+            {Math.ceil(
+                new Date(Number(bountyState?.contractDuration) * 1000).getTime()/
+                (1000 * 3600 * 24)
+            )}{" "}days</Text>
             </HStack>
             <HStack marginTop={6} paddingBottom="20px">
             <Text marginRight={4} fontSize="sm" color="subtle">Date Listed</Text>
-            <Text fontSize="sm" color="primary">Aug 15, 2022</Text>
+            <Text fontSize="sm" color="primary">{formatDateToMonthDayYear(bountyState?.contractCreatedOn)}</Text>
             </HStack>
             <HStack marginTop={6} paddingBottom="20px">
             <Text marginRight={4} fontSize="sm" color="subtle">Start by</Text>
-            <Text fontSize="sm" color="primary">Nov 1, 2022</Text>
+            <Text fontSize="sm" color="primary">{formatDateToMonthDayYear(bountyState?.contractStartDate)}</Text>
             </HStack>
             <HStack marginTop={6} paddingBottom="20px">
             <Text marginRight={4} fontSize="sm" color="subtle">Finish by</Text>
-            <Text fontSize="sm" color="primary">Dec 1, 2022</Text>
+            <Text fontSize="sm" color="primary">{formatDateToMonthDayYear(bountyState?.contractEndDate)}</Text>
             </HStack>
             <HStack marginTop={6} paddingBottom="20px">
             <Text marginRight={4} fontSize="sm" color="subtle">Budget</Text>
-            <Text fontSize="sm" color="primary">$20,000</Text>
+            <Text fontSize="sm" color="primary">{tokenAmount} {tokenName}</Text>
             </HStack>
         </Flex>
         </VStack>

@@ -37,3 +37,28 @@ export interface CompanyInfo {
   logo: any;
   currentStatus: Number;
 }
+
+export interface Bounty {
+  userWallet: string;
+  contractID: string;
+  contractCreatedOn: number;
+  contractOwnerUserName: string;
+  contractTitle: string;
+  contractDescription: string;
+  contractStartDate: number;
+  contractEndDate: number;
+  contractDuration: number;
+  tokenName: string;
+  contractAmount: number;
+  convertedAmount: number;
+  applicationDeadline: number;
+  contractIndustry: string[];
+  contractExpertise: string[];
+  contractStatus: string;
+  attachedFiles: any[];
+  setBounty: Function,
+  editBountyExpertise: Function,
+  editBountyDetails: Function,
+  editBountyHeader: Function,
+  editBountyDescription: Function,
+}

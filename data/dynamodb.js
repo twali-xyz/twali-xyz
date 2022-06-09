@@ -14,7 +14,7 @@ const getDynamoDBClient = () => {
     // accessKeyId: "xxxx",
     // secretAccessKey: "xxxx",
     region: "us-east-1",
-    endpoint: "http://localhost:8000",
+    // endpoint: "http://localhost:8000",
   });
 
   const options = {
@@ -59,7 +59,6 @@ module.exports = {
    * @example See docs about including additonal attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#put-property
    **/
   createUser: async (userData) => {
-    console.log(userData);
     const {
       userName,
       userWallet,
@@ -151,7 +150,6 @@ module.exports = {
    * @returns Returns a user as and object.
    **/
   getUserByWallet: async (userWallet) => {
-    console.log(userWallet);
     const dbUser = await getDynamoDBClient()
       .query({
         TableName,
@@ -177,10 +175,7 @@ module.exports = {
    */
   updateUserExpertise: async (userWallet, attributes) => {
     console.log("UPDATE USER EXP DYNAMO");
-    console.log(userWallet);
-    console.log(attributes);
     let { userName, functionalExpertise, industryExpertise } = attributes;
-    console.log(attributes);
     await getDynamoDBClient()
       .update({
         TableName,
@@ -208,8 +203,6 @@ module.exports = {
    */
   updateUserProfile: async (userWallet, attributes) => {
     console.log("UPDATE USER PROF DYNAMO");
-    console.log(userWallet);
-    console.log(attributes);
     let {
       userName,
       firstName,
@@ -260,7 +253,6 @@ module.exports = {
 
     let companyInfo = companyData; // to use companyInfo as the new array obj in the front-end
 
-    console.log("COMPANY INFO", companyInfo);
     const getParams = (updatedCompanyData) => {
       const params = {
         TableName,
@@ -351,7 +343,7 @@ module.exports = {
 
     // Call DynamoDB's scan API
     const output = executeScan(dynamoDbClient, scanInput).then((output) => {
-      console.info("Scan API call has been executed.");
+      console.info("Scan API call has been executed.", output);
       return output;
     });
 
@@ -544,4 +536,67 @@ module.exports = {
     }
     return output;
   },
+    /**
+   * @desc Access a user in the table by primary key on a GSI using `userName`.
+   * @param {string} - function takes in a input string of the users userName
+   * @dev This can be altered to included any additional attributes with 'ProjectionExpression'.
+   * @example See docs to add additonal attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property
+   * @returns Returns a user as and object.
+   **/
+     submitBounty: async (bounty) => {
+       let {
+        userWallet,
+        contractID,
+        contractCreatedOn,
+        contractOwnerUserName,
+        contractTitle,
+        contractDescription,
+        contractStartDate,
+        contractEndDate,
+        contractDuration,
+        token,
+        contractAmount,
+        convertedAmount,
+        applicationDeadline,
+        contractIndustry,
+        contractExpertise,
+        contractStatus,
+        attachedFiles,
+      } = bounty;
+
+      await getDynamoDBClient()
+      .update({
+        TableName,
+        Key: {
+          PK: `USER#${userWallet}`,
+          SK: `CONTRACT#${contractID}`,
+        },
+        UpdateExpression:
+          "SET contract_id = :contract_id, contract_created_on = :contract_created_on, contractOwner_userName = :contractOwner_userName, contract_title = :contract_title, contract_description = :contract_description, contract_start_date = :contract_start_date, contract_end_date = :contract_end_date, contract_duration = :contract_duration, token_name = :token_name, contract_amount = :contract_amount, converted_amount = :converted_amount, application_deadline = :application_deadline, contract_industry = :contract_industry, contract_expertise = :contract_expertise, contract_status = :contract_status, attached_files = :attached_files",
+        // ConditionExpression: "",
+        ExpressionAttributeValues: {
+          ":contract_id": contractID,
+          ":contract_created_on": contractCreatedOn,
+          ":contractOwner_userName": contractOwnerUserName,
+          ":contract_title": contractTitle,
+          ":contract_description": contractDescription,
+          ":contract_start_date": contractStartDate,
+          ":contract_end_date": contractEndDate,
+          ":contract_duration": contractDuration,
+          ":token_name": token,
+          ":contract_amount": contractAmount,
+          ":converted_amount": convertedAmount,
+          ":application_deadline": applicationDeadline,
+          ":contract_industry": contractIndustry,
+          ":contract_expertise": contractExpertise,
+          ":contract_status": contractStatus,
+          ":attached_files": attachedFiles,
+        },
+      })
+      .promise()
+      .then((data) => {
+        console.log(data);
+      })
+      .catch(console.error);
+    },
 };

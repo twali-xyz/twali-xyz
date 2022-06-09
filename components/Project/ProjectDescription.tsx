@@ -1,5 +1,6 @@
 import { Container, Text, Button, HStack, Img, Flex, Heading, VStack, useDisclosure } from '@chakra-ui/react';
 import ProjectDescriptionModal from './ProjectDescriptionModal/ProjectDescriptionModal';
+import { useBounty } from "../../context/BountyContext";
 
 const ProjectDescription = (props) => {
   const {
@@ -7,6 +8,7 @@ const ProjectDescription = (props) => {
     onOpen: onProjectDescModalOpen,
     onClose: onProjectDescModalClose,
   } = useDisclosure();
+  const { setBounty, ...bountyState} = useBounty();
 
     return (
         <>
@@ -21,7 +23,7 @@ const ProjectDescription = (props) => {
               marginTop={"0 !important"}
               backgroundColor={"inverse"}
         >
-                        <HStack alignSelf="flex-end" flexDirection="row-reverse">
+            <HStack alignSelf="flex-end" flexDirection="row-reverse">
               <Button
             onClick={onProjectDescModalOpen}
             alignSelf="flex-end"
@@ -39,7 +41,7 @@ const ProjectDescription = (props) => {
               src={"twali-assets/editicon.png"}
             />
           </Button>
-          <ProjectDescriptionModal isOpen={isProjectDescModalOpen} onClose={onProjectDescModalClose}/>
+          <ProjectDescriptionModal isOpen={isProjectDescModalOpen} onClose={onProjectDescModalClose} />
               </HStack>
             <VStack spacing={6} marginTop={0} alignItems="unset">
                 <Heading
@@ -52,8 +54,7 @@ const ProjectDescription = (props) => {
                   >
                     Description
                   </Heading>
-                  <Text whiteSpace="pre-wrap" fontWeight="light" fontSize="sm">Give him a friend, we forget the trees get lonely too. Clouds are free. They just float around the sky all day and have fun. In your world you have total and absolute power. Only God can make a tree - but you can paint one. Let's give him a friend too. Everybody needs a friend. I really recommend you use odorless thinner or your spouse is gonna run you right out into the yard and you'll be working by yourself.</Text> 
-                  <Text whiteSpace="pre-wrap" fontWeight="light" fontSize="sm">Almost everything is going to happen for you automatically - you don't have to spend any time working or worrying. Little trees and bushes grow however makes them happy. Isn't that fantastic? Remember how free clouds are. They just lay around in the sky all day long. I guess that would be considered a UFO. A big cotton ball in the sky. Let's put some happy trees and bushes back in here.</Text>
+                  <Text whiteSpace="pre-wrap" fontWeight="light" fontSize="sm">{bountyState?.contractDescription}</Text> 
                   <Heading
             color="zing"
                     fontSize={"36px"}

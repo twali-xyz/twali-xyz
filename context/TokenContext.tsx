@@ -8,54 +8,67 @@ import React, {
 import { tokenConstants } from '../utils/tokenConstants';
 
 export interface Token {
-    token: string;
+    tokenName: string;
     tokenID: string;
-    setToken: Function;
+    setTokenName: Function;
     tokenIcon: string;
+    tokenAmount: number;
+    setTokenAmount: Function;
+    calculatedUSD: number;
+    setCalculatedUSD: Function;
 }
 
 export const initialState = {
-    token: 'Token',
+    tokenName: 'Token',
     tokenID: '',
-    setToken: Function(),
+    setTokenName: Function(),
     tokenIcon: '',
+    tokenAmount: 0,
+    setTokenAmount: Function(),
+    calculatedUSD: 0,
+    setCalculatedUSD: Function(),
   };
 
-const Token = createContext<Token>(initialState);
+const TokenContext = createContext<Token>(initialState);
 
-const TokenContext = ({ children }) => {
-    const [token, setToken] = useState('Token');
+const TokenProvider = ({ children }) => {
+    const [tokenName, setTokenName] = useState('Token');
     const [tokenIcon, setTokenIcon] = useState('');
     const [tokenID, setTokenID] = useState('');
-    console.log('context token:', token);
-
+    const [tokenAmount, setTokenAmount] = useState(null);
+    const [calculatedUSD, setCalculatedUSD] = useState(null);
 
     useEffect(() => {
-        console.log('WOOO');
         tokenConstants.forEach((coin) => {
-            console.log('COIN', coin);
-            console.log(token);
-            if (token === coin.symbol.toUpperCase()) {
+            if (tokenName === coin.symbol.toUpperCase()) {
                 setTokenID(coin.id);
                 setTokenIcon(coin.icon);
             }
         })
-    }, [token])
+    }, [tokenName])
 
     return (
-        <Token.Provider value={{ token, tokenID, setToken, tokenIcon }}>
+        <TokenContext.Provider value={{ 
+            tokenName, 
+            tokenID, 
+            setTokenName, 
+            tokenIcon, 
+            tokenAmount, 
+            setTokenAmount, 
+            calculatedUSD, 
+            setCalculatedUSD }}>
             {children}
-        </Token.Provider>
+        </TokenContext.Provider>
     )
 
 }
 
-export default TokenContext;
+export default TokenProvider;
 
-export const TokenState = () => {
-    const context = useContext(Token);
+export const useToken = () => {
+    const context = useContext(TokenContext);
     if (context === undefined) {
-        throw new Error("TokenState must be used with TokenContext");
+        throw new Error("useToken must be used with TokenContext");
       }
     return context;
 }

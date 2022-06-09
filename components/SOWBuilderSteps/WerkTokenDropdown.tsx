@@ -15,29 +15,24 @@ import {
   import React, { useState } from "react";
   import { tokenConstants } from "../../utils/tokenConstants";
   import { TokenPriceList } from '../../utils/coingeckoEndpoints';
-  import { TokenState } from "../../context/TokenContext";
+  import { useToken } from "../../context/TokenContext";
   import axios from 'axios'
   
-  export const WerkTokenDropdown = ({
-
-    ...props
-  }) => {
-    const [calculatedUSD, setCalculatedUSD] = useState(null);
-    const { token, setToken, tokenIcon, tokenID } = TokenState();
+  export const WerkTokenDropdown = () => {
+    const { tokenName, setTokenName, tokenIcon, tokenID, tokenAmount, setTokenAmount, calculatedUSD, setCalculatedUSD } = useToken();
 
     const handleMenuSelection = (token) => {
         if (token !== 'Token') {
-          setToken(token.symbol.toUpperCase())
+          setTokenName(token.symbol.toUpperCase())
         } else {
-          setToken('Token');
+          setTokenName('Token');
         }
-        console.log('token', token);
       }
   
   
       const handleAmountChange = (evt) => {
         axios.get(TokenPriceList(tokenID, 'usd')).then((response) => {
-          console.log(response.data);
+          setTokenAmount(evt.target.value);
           const value = +(Math.round(response.data[tokenID].usd*evt.target.value * 100) / 100).toFixed(2);
           setCalculatedUSD(value);
       }).catch((error) => {
@@ -79,9 +74,9 @@ import {
             fontFamily="PP Telegraf light"
             textTransform="capitalize"
             textAlign="start"
-            as={Button} rightIcon={ token === 'Token' ? <ChevronDownIcon 
+            as={Button} rightIcon={ tokenName === 'Token' ? <ChevronDownIcon 
             width="1.3rem" height="100%" 
-            color={token === 'Token' ? "subtle !important" : 'fresh !important'}
+            color={tokenName === 'Token' ? "subtle !important" : 'fresh !important'}
             right="0.5rem"
             position="absolute"
             fontSize="1.25rem"
@@ -98,7 +93,7 @@ import {
             src={tokenIcon}
             alt="add img"
             />}>
-            {token}
+            {tokenName}
         </MenuButton>
         <MenuList
             minWidth="9rem"
@@ -163,7 +158,7 @@ import {
             name="firstName"
             fontFamily={"PP Telegraf light"}
             _placeholder={{ color: "subtle" }}
-            // value={values?.firstName || ""}
+            defaultValue={tokenAmount ? tokenAmount: ""}
             onChange={handleAmountChange}
             />
             <Text fontWeight="400" color="subtle" fontSize="3xl" fontFamily="GrandSlang">=</Text>

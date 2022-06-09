@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import {
     FormControl,
     Box,
@@ -13,21 +12,18 @@ import {
   import DateRangePicker from "@wojtekmaj/react-daterange-picker/dist/entry.nostyle";
   import { functionalExpertiseList } from "../../utils/functionalExpertiseConstants";
   import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
-  import { setEventArray } from "../../utils/setEventArray";
   import { MultiSelect } from "../reusable/MultiSelect";
   import { WerkTokenDropdown } from "./WerkTokenDropdown";
+  import { useBounty } from "../../context/BountyContext";
 
-  export const datesAndPricing = ({ values }) => {
-    const [dueDate, setDueDate] = useState(new Date());
-    const [dateRange, setDateRange] = useState([new Date(), new Date()]);
-    // const [values, setValues] = useState<UserData>();
-
-    const handleChange = (evt) => {
-        evt.persist();
-    
-        // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
-        // setEventArray({ evt, setValues, values });
-      };
+  export const datesAndPricing = ({ 
+    handleChange,
+    dueDate, 
+    setDueDate, 
+    dateRange, 
+    setDateRange,
+   }) => {
+    const { setBounty, ...bountyState} = useBounty();
 
     return (
         <form 
@@ -54,7 +50,7 @@ import {
               as="h4"
               lineHeight="tight"
             //   isTruncated
-            >                <VStack alignItems="start" m={0} p={0}>
+            >   <VStack alignItems="start" m={0} p={0}>
                 <FormControl p={2} id="werk-date-range">
                         <FormLabel
                         fontSize={"16px"}
@@ -78,6 +74,7 @@ import {
                         alt="calendar"
                         />}
                       onChange={setDateRange}
+                    name="dateRange"
                       selectRange={true}
                       value={dateRange ? [new Date(dateRange[0]), new Date(dateRange[1])]: undefined}
                     />
@@ -109,7 +106,7 @@ import {
                             value={dueDate ? new Date(dueDate): undefined}
                         />
                     </FormControl>
-                      <WerkTokenDropdown/>
+                      <WerkTokenDropdown />
                     </VStack>
             </Box>
           </Box>
@@ -139,19 +136,19 @@ import {
             //   isTruncated
             >
               <MultiSelect
-                name={"functionalExpertise"}
+                name={"contractExpertise"}
                 formLabel={"Superpowers"}
                 handleChange={handleChange}
                 options={functionalExpertiseList}
                 maxSelections={3}
-                defaultValues={values?.functionalExpertise || []}
+                defaultValues={bountyState?.contractExpertise || []}
               />
 
               <MultiSelect
-                name={"industryExpertise"}
+                name={"contractIndustry"}
                 formLabel={"Industry expertise"}
                 handleChange={handleChange}
-                defaultValues={values?.industryExpertise || []}
+                defaultValues={bountyState?.contractIndustry || []}
                 options={industryExpertiseList}
                 maxSelections={3}
               />

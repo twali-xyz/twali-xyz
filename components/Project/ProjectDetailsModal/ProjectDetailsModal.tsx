@@ -17,33 +17,30 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
-import { UserData } from "../../../utils/interfaces";
-import useUser from "../../../context/TwaliContext";
 import DatePicker from "react-date-picker/dist/entry.nostyle";
 import DateRangePicker from "@wojtekmaj/react-daterange-picker/dist/entry.nostyle";
 import { WerkTokenDropdown } from '../../SOWBuilderSteps/WerkTokenDropdown';
+import { useBounty } from "../../../context/BountyContext";
+import { convertDateToUnix } from "../../../utils/marketplaceUtils";
 
 const ProjectDetailsModal = (props) => {
   const finalRef = useRef();
+  const { editBountyDetails, ...bountyState} = useBounty();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const { setData, ...userState } = useUser();
-  const [userData, setUserData] = useState<UserData>({
-    ...userState,
-    userName: "",
-    userWallet: "",
-    uuid: "",
-    setData,
-  });
-  const [dueDate, setDueDate] = useState(new Date());
-  const [dateRange, setDateRange] = useState([new Date(), new Date()]);
-
-  const handleChange = (evt) => {
-    evt.persist();
-
-    // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
-    // setEventArray({ evt, setValues, values });
-  };
+  const [dueDate, setDueDate] = useState(new Date(bountyState?.applicationDeadline*1000));
+  const [dateRange, setDateRange] = useState([new Date(bountyState?.contractStartDate*1000), new Date(bountyState?.contractEndDate*1000)]);
   
+  const handleDates = (dateRange, dueDate) => {
+    if (dateRange && dueDate) {
+      editBountyDetails(
+        convertDateToUnix(dateRange[0]),
+        convertDateToUnix(dateRange[1]),
+        convertDateToUnix(dateRange[1]) - convertDateToUnix(dateRange[0]),
+        convertDateToUnix(dueDate),
+      );
+    }
+  };
+
   return (
     <>
       <Modal
@@ -86,6 +83,7 @@ const ProjectDetailsModal = (props) => {
                         />}
                       onChange={setDateRange}
                       selectRange={true}
+                      // defaultValue={bountyState?.contractStartDate && bountyState?.contractEndDate ? [new Date(bountyState?.contractStartDate * 1000),new Date(bountyState?.contractEndDate * 1000)]: ''}
                       value={dateRange ? [new Date(dateRange[0]), new Date(dateRange[1])]: undefined}
                     />
                 </VStack>
@@ -121,7 +119,12 @@ const ProjectDetailsModal = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="primary" size={"sm"} onClick={() => console.log('project sow modal save')}>
+          <Button variant="primary" size={"sm"} onClick={() => {
+              setIsSubmitted(true);
+              handleDates(dateRange, dueDate);
+              props.onClose();
+              setIsSubmitted(false);
+              }}>
               Save{" "}
               {isSubmitted ? (
                 <CircularProgress

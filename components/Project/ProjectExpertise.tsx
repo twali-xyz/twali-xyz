@@ -1,10 +1,10 @@
-import HeaderNav from "../HeaderNav/HeaderNav";
-import { Container, Text, Button, HStack, Heading, Box, Img, Flex, useDisclosure, VStack } from '@chakra-ui/react';
+import { Container, Text, Button, HStack, Img, Flex, useDisclosure, VStack } from '@chakra-ui/react';
 import { Chip } from '../reusable/Chip';
-import { Avatar } from '@chakra-ui/react'
-import { functionalExpertiseList } from "../../utils/functionalExpertiseConstants";
-import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
 import ProjectExpertiseModal from "./ProjectExpertiseModal/ProjectExpertiseModal";
+import { useState } from "react";
+import { UserData } from "../../utils/interfaces";
+import useUser from "../../context/TwaliContext";
+import { useBounty } from "../../context/BountyContext";
 
 const ProjectExpertise = (props) => {
     const {
@@ -12,6 +12,14 @@ const ProjectExpertise = (props) => {
         onOpen: onProjectExpertiseModalOpen,
         onClose: onProjectExpertiseModalClose,
       } = useDisclosure();
+      const { ...userState } = useUser();
+      const [userData, setUserData] = useState<UserData>({
+        ...userState,
+        // userName: "",
+        // userWallet: "",
+        // uuid: "",
+      });
+      const { setBounty, ...bountyState} = useBounty();
 
     return (
         <>
@@ -51,15 +59,19 @@ const ProjectExpertise = (props) => {
           m={0}
           flexFlow={"wrap"}
         >
-            <Chip variant="button"
+          {bountyState?.contractIndustry?.map((industry, idx) => {
+            if (idx == 0) {
+              return (
+                <Chip variant="button"
                 marginBottom={4}
-            >Industry</Chip>
-            <Chip variant="button"
+            >{industry}</Chip>
+              )} else {
+              return (
+                <Chip variant="button"
                 marginBottom={4} marginLeft={4}
-            >Industry</Chip>
-            <Chip variant="button"
-                marginBottom={4} marginLeft={4}
-            >Industry</Chip>
+            >{industry}</Chip>
+              )}
+          })}
         </Flex>
         <Text alignSelf="flex-start" fontSize="sm" marginTop={6} marginBottom={6}>Expertise</Text>
         <Flex
@@ -69,15 +81,19 @@ const ProjectExpertise = (props) => {
           m={0}
           flexFlow={"wrap"}
         >
-            <Chip variant="button"
+        {bountyState?.contractExpertise?.map((expertise, idx) => {
+            if (idx == 0) {
+              return (
+                <Chip variant="button"
                 marginBottom={4}
-            >Expertise</Chip>
-            <Chip variant="button"
+            >{expertise}</Chip>
+              )} else {
+              return (
+                <Chip variant="button"
                 marginBottom={4} marginLeft={4}
-            >Expertise</Chip>
-            <Chip variant="button"
-                marginBottom={4} marginLeft={4}
-            >Expertise</Chip>
+            >{expertise}</Chip>
+              )}
+          })}
         </Flex>
         </VStack>
         </Container>

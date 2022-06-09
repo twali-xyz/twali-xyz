@@ -1,22 +1,23 @@
-import HeaderNav from "../HeaderNav/HeaderNav";
 import { 
   Box,
   Container,
   Button,
   HStack,
   Text,
-  CircularProgress,
-  VStack,
   Flex
  } from '@chakra-ui/react';
- import { Step, Steps, useSteps } from "chakra-ui-steps";
+ import { Step, Steps } from "chakra-ui-steps";
  import { useRouter } from "next/router";
 import ProjectHeader from './ProjectHeader';
 import ProjectExpertise from "./ProjectExpertise";
 import ProjectDetails from "./ProjectDetails";
 import ProjectDescription from "./ProjectDescription";
+import { useBounty } from "../../context/BountyContext";
 
 const Project = (props) => {
+  const { setBounty, ...bountyState} = useBounty();
+
+  console.log('PROJECT', bountyState)
   const router = useRouter();
     return (
         <>
@@ -60,11 +61,11 @@ const Project = (props) => {
       <ProjectHeader/>
       <Flex flexDirection="row">
       <Flex flexDirection="column" width="100%" maxWidth="550px">
-        <ProjectExpertise />
-        <ProjectDetails/>
+        <ProjectExpertise/>
+        <ProjectDetails />
       </Flex>
       <div className= "twali-vertical-line"></div>
-      <ProjectDescription/>
+      <ProjectDescription />
       </Flex>
       </Box>
       </Box>

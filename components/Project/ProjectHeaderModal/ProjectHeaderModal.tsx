@@ -11,15 +11,19 @@ import {
   ModalContent,
   FormLabel,
   FormControl,
-  Img,
   Input,
-  Heading,
-  VStack,
 } from "@chakra-ui/react";
+import { useBounty } from "../../../context/BountyContext";
 
 const ProjectHeaderModal = (props) => {
+  const { editBountyHeader, ...bountyState} = useBounty();
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [contractTitle, setContractTitle] = useState('');
+
+  const handleChange = (evt) => {
+    setContractTitle(evt.target.value);
+  }
 
   return (
     <>
@@ -54,10 +58,10 @@ const ProjectHeaderModal = (props) => {
                 //     (!userState.firstName || !values.firstName)
                 //   }
                   errorBorderColor="red.300"
-                  placeholder="First name"
-                  name="firstName"
-                //   defaultValue={userState.firstName || ""}
-                //   onChange={handleChange}
+                  placeholder="Title"
+                  name="contractTitle"
+                  defaultValue={bountyState?.contractTitle || ""}
+                  onChange={handleChange}
                 />
                 {/* {errors.firstName &&
                   (!userState.firstName || !values.firstName) && (
@@ -70,7 +74,12 @@ const ProjectHeaderModal = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="primary" size={"sm"} onClick={() => console.log('project header modal save')}>
+            <Button variant="primary" size={"sm"} onClick={() => {
+              setIsSubmitted(true);
+              editBountyHeader(contractTitle);
+              props.onClose();
+              setIsSubmitted(false);
+              }}>
               Save{" "}
               {isSubmitted ? (
                 <CircularProgress

@@ -1,11 +1,30 @@
-import HeaderNav from "../HeaderNav/HeaderNav";
 import { Container, Text, Button, HStack, Heading, Box, Img, useDisclosure } from '@chakra-ui/react';
 import { Chip } from '../reusable/Chip';
-import { Avatar } from '@chakra-ui/react'
-// import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import ProjectHeaderModal from "./ProjectHeaderModal/ProjectHeaderModal";
+import { useToken } from "../../context/TokenContext";
+import { useState } from "react";
+import { Bounty, UserData } from "../../utils/interfaces";
+import useUser from "../../context/TwaliContext";
+import { useBounty } from "../../context/BountyContext";
 
 const ProjectHeader = (props) => {
+  const { tokenName, tokenAmount } = useToken();
+  const { ...userState } = useUser();
+  const [userData, setUserData] = useState<UserData>({
+    ...userState,
+    // userName: "",
+    // userWallet: "",
+    // uuid: "",
+  });
+  const { setBounty, ...bountyState} = useBounty();
+  const [bountyData, setBountyData] = useState<Bounty>({
+    ...bountyState,
+    contractOwnerUserName: userData.userName,
+    contractCreatedOn: 1651968000,
+    contractStatus: "live",
+    attachedFiles: [],
+    setBounty,
+  });
   const {
     isOpen: isProjectHeaderModalOpen,
     onOpen: onProjectHeaderModalOpen,
@@ -23,10 +42,16 @@ const ProjectHeader = (props) => {
               backgroundColor={"inverse"}
         >
         <HStack marginTop={9}>
-        <Chip variant="created">Listed 24d ago</Chip>
-        <Chip variant="status">Status</Chip>
-        <Chip variant="type">Solo Project</Chip>
-        <Chip variant="bounty">30,000 MATIC</Chip>
+        <Chip variant="created">Listed{" "}
+            {Math.ceil(
+              (new Date(Date.now()).getTime() -
+                new Date(Number(bountyState?.contractCreatedOn) * 1000).getTime()) /
+                (1000 * 3600 * 24)
+            )}
+            d ago</Chip>
+        <Chip variant="status">{bountyState?.contractStatus}</Chip>
+        <Chip variant="type">{new Date(bountyState?.contractStartDate * 1000).toLocaleDateString("us-en")}</Chip>
+        <Chip variant="bounty">{tokenAmount} {tokenName}</Chip>
         <Button
             onClick={onProjectHeaderModalOpen}
             alignSelf="flex-end"
@@ -56,7 +81,7 @@ const ProjectHeader = (props) => {
                     fontFamily={"Scope Light"}
                     fontWeight={"400"}
                   >
-                    Project Title
+                    {bountyState?.contractTitle}
                   </Heading>
 
           <HStack marginTop={9} spacing={4}>
@@ -65,7 +90,7 @@ const ProjectHeader = (props) => {
               src="step1_background.png"
             /> */}
           </Box>
-          <Text fontSize="sm">Created by Nick Cooke</Text>
+          <Text fontSize="sm">Created by {bountyData?.contractOwnerUserName}</Text>
           {/* <UserPermissionsRestricted to="edit" key={`--edit-project-header-permission`}> */}
                     {/* </UserPermissionsRestricted> */}
         </HStack>

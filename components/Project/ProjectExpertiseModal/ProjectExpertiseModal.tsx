@@ -2,8 +2,6 @@ import { useRef, useState } from "react";
 import { MultiSelect } from "../../reusable/MultiSelect";
 import { functionalExpertiseList } from "../../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
-import { UserData } from "../../../utils/interfaces";
-
 import {
   Button,
   CircularProgress,
@@ -14,23 +12,30 @@ import {
   ModalBody,
   ModalFooter,
   ModalContent,
-  FormLabel,
-  FormControl,
-  Img,
-  Input,
-  Textarea,
-  Heading,
-  VStack,
 } from "@chakra-ui/react";
+import { useBounty } from "../../../context/BountyContext";
+import { setEventArray } from "../../../utils/setEventArray";
 
 const ProjectExpertiseModal = (props) => {
+  const { editBountyExpertise, setBounty, ...bountyState} = useBounty();
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [values, setValues] = useState<UserData>();
 
   const handleChange = (evt) => {
-    console.log(evt);
-  }
+    evt.persist();
+    let strippedEventName = evt.target.name.substring(
+      0,
+      evt.target.name.length - 1
+    );
+
+    if (
+      strippedEventName === "contractExpertise" ||
+      strippedEventName === "contractIndustry"
+    ) {
+      // the stripped event name should be the same as the name of the state variable that should be changed for setEventArray to function properly
+      setEventArray({ evt, setValues: setBounty, values: bountyState });
+    }
+  };
 
   return (
     <>
@@ -51,19 +56,19 @@ const ProjectExpertiseModal = (props) => {
           <ModalBody>
             <form style={{ alignSelf: "center" }}>
             <MultiSelect
-                name={"functionalExpertise"}
+                name={"contractExpertise"}
                 formLabel={"Superpowers"}
                 handleChange={handleChange}
                 options={functionalExpertiseList}
                 maxSelections={3}
-                defaultValues={values?.functionalExpertise || []}
+                defaultValues={bountyState?.contractExpertise || []}
               />
 
               <MultiSelect
-                name={"industryExpertise"}
+                name={"contractIndustry"}
                 formLabel={"Industry expertise"}
                 handleChange={handleChange}
-                defaultValues={values?.industryExpertise || []}
+                defaultValues={bountyState?.contractIndustry || []}
                 options={industryExpertiseList}
                 maxSelections={3}
               />
@@ -71,7 +76,11 @@ const ProjectExpertiseModal = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="primary" size={"sm"} onClick={() => console.log('project sow modal save')}>
+          <Button variant="primary" size={"sm"} onClick={() => {
+              setIsSubmitted(true);
+              props.onClose();
+              setIsSubmitted(false);
+              }}>
               Save{" "}
               {isSubmitted ? (
                 <CircularProgress
