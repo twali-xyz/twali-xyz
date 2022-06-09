@@ -104,7 +104,6 @@ const whitelist = () => {
       return 0;
     }
   }
-
   return (
     <Flex flexDir={"row"} pos={"absolute"} top={0} width="100%" zIndex={-1}>
       <FilterInputs
