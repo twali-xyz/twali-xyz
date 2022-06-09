@@ -50,7 +50,7 @@ export const FilterInputs = ({ filterParams, setFilterParams, setQuery }) => {
           setQuery("approved");
           break;
         case "profile complete":
-          setQuery("complete");
+          setQuery("completed");
           break;
         case "rejected":
           setQuery("rejected");
@@ -106,7 +106,6 @@ export const FilterInputs = ({ filterParams, setFilterParams, setQuery }) => {
                 my={"8px"}
                 name={name}
                 options={options}
-                borderColor={"fresh"}
                 multiSelect={false}
                 onChange={(val) => {
                   handleChange(val, name);

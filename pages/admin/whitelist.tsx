@@ -1,6 +1,14 @@
-import { Flex, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react";
 import React, { useEffect, useReducer, useState } from "react";
 import useSWR, { mutate } from "swr";
+import { AddUserCard } from "../../components/Admin/AddUserCard";
 import { ApplicantList } from "../../components/Admin/ApplicantList";
 import { FilterInputs } from "../../components/Admin/FilterInputs";
 import { SortApplicants } from "../../components/Admin/SortApplicants";
@@ -16,6 +24,7 @@ const whitelist = () => {
   const [query, setQuery] = useState();
   const [loadingWallet, setLoadingWallet] = useState(null);
   const [loadingIDX, setLoadingIDX] = useState(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { data, isError } = useWhitelist();
   const {
     data: filteredData,
@@ -120,20 +129,35 @@ const whitelist = () => {
           "linear-gradient(65.14deg, #0F2922 10.35%, #1A232A 76.62%);"
         }
       >
-        <SortApplicants
-          contracts={filteredData || data}
-          onChange={(val) => setSortParams(val)}
-        />
-        <ApplicantList
-          whitelistApplicants={filteredData || data}
-          error={isError}
-          sortParams={sortParams}
-          compare={compare}
-          setLoadingIDX={setLoadingIDX}
-          loadingWallet={loadingWallet}
-          handleApprove={handleApprove}
-          handleReject={handleReject}
-        />
+        <HStack width={"100%"} justify={"space-between"} paddingRight={"48px"}>
+          <SortApplicants
+            contracts={filteredData || data}
+            onChange={(val) => setSortParams(val)}
+          />
+          <Button variant={"primary"} onClick={onOpen}>
+            Add User
+          </Button>
+        </HStack>
+        <Box
+          overflowY={"scroll"}
+          scrollBehavior={"smooth"}
+          height={"100%"}
+          width={"100%"}
+          padding={"0px 48px"}
+          marginTop={"32px !important"}
+        >
+          {isOpen ? <AddUserCard onClose={onClose} /> : null}
+          <ApplicantList
+            whitelistApplicants={filteredData || data}
+            error={isError}
+            sortParams={sortParams}
+            compare={compare}
+            setLoadingIDX={setLoadingIDX}
+            loadingWallet={loadingWallet}
+            handleApprove={handleApprove}
+            handleReject={handleReject}
+          />
+        </Box>
       </VStack>
     </Flex>
   );

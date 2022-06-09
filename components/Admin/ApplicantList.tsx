@@ -47,14 +47,7 @@ export const ApplicantList = ({
     );
 
   return (
-    <VStack
-      width={"100%"}
-      padding={"0px 48px"}
-      marginTop={"32px !important"}
-      height={"100%"}
-      overflowY={"scroll"}
-      scrollBehavior={"smooth"}
-    >
+    <VStack>
       {whitelistApplicants?.length &&
         whitelistApplicants
           .sort((a, b) => compare(a, b, sortParams || ""))
