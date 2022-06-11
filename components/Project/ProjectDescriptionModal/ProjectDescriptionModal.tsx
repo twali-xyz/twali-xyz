@@ -18,6 +18,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useBounty } from "../../../context/BountyContext";
+import WerkFileUpload from "../../SOWBuilderSteps/WerkFileUpload/WerkFileUpload";
 
 const ProjectDescriptionModal = (props) => {
   const finalRef = useRef();
@@ -76,54 +77,14 @@ const ProjectDescriptionModal = (props) => {
                     </Text>
                   )} */}
               </FormControl>
-              <FormControl p={2} pb={0} id="werk-title" isRequired>
-              <FormLabel
-                marginBottom={1}
-                pos={"relative"}
-                fontFamily={"PP Telegraf"}
-                fontSize={"16px"}
-                fontStyle={"normal"}
-                fontWeight={"400"}
-                lineHeight={"24p"}
-                letterSpacing={"0.02em"}
-                textAlign={"left"}
-              >
-                Upload related files
-              </FormLabel>
-              <Input
-                px={2}
-                fontSize="16px"
-                borderColor={"n3"}
-                height={"40px"}
-                borderRadius={"4px"}
-                marginBottom={"4px"}
-                // isInvalid={errors.currTitle}
-                errorBorderColor="red.300"
-                fontFamily={"PP Telegraf light"}
-                _placeholder={{ color: "subtle" }}
-                // value={values?.currTitle || ""}
-                required
-                placeholder=".pdf, .word, .zip, .png, .jpeg"
-                name="currTitle"
-                // onChange={handleChange}
-              />
-              {/* <Text
-                fontSize="xs"
-                height={"20.5px"}
-                fontWeight="400"
-                color="red.500"
-                visibility={errors.currTitle ? "visible" : "hidden"}
-              >
-                {errors.currTitle}
-              </Text> */}
-            </FormControl>
+              <WerkFileUpload/>
             </form>
           </ModalBody>
 
           <ModalFooter>
             <Button variant="primary" size={"sm"} onClick={() => {
               setIsSubmitted(true);
-              editBountyDescription(contractDescription, []);
+              editBountyDescription(contractDescription, bountyState?.attachedFiles);
               props.onClose();
               setIsSubmitted(false);
               }}>
