@@ -70,7 +70,6 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
       setIsFileTooBig(false);
       setSelectedFiles(allFiles);
     }
-    console.log('Selected Files:', selectedFiles);
   };
 
   const checkIfUploadIsCompleted = (data) => {
@@ -94,8 +93,6 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
     formData.append("userWallet", userData?.userWallet);
     formData.append("contractID", bountyState?.contractID);
 
-    console.log('uploadddd formData', formData);
-    console.log('file: ', file);
     axios
       .request({
         method: "post",
@@ -130,7 +127,6 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
         data: formData,
       })
       .then((data) => {
-        console.log('handleRemoveWerkFile: ', data);
         let allFiles = selectedFiles.filter(currFile => {
           return currFile.name !== file.name;
         });

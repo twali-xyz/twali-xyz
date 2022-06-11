@@ -16,8 +16,6 @@ import { useBounty } from "../../context/BountyContext";
 
 const Project = (props) => {
   const { setBounty, ...bountyState} = useBounty();
-
-  console.log('PROJECT', bountyState)
   const router = useRouter();
     return (
         <>

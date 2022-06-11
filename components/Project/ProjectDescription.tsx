@@ -69,7 +69,6 @@ const ProjectDescription = (props) => {
                     Werk Files
                   </Heading>
                   <VStack alignSelf="flex-start">
-                  {console.log('Project Desc:', bountyState?.attachedFiles)}
                     { bountyState?.attachedFiles ? (
                     <List alignSelf="flex-start">
                   {bountyState?.attachedFiles?.map((file, idx) => {
