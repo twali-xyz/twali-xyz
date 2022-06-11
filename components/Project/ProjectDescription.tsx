@@ -1,6 +1,7 @@
-import { Container, Text, Button, HStack, Img, Flex, Heading, VStack, useDisclosure } from '@chakra-ui/react';
+import { Container, Text, Button, HStack, Img, Flex, Heading, VStack, useDisclosure, List, ListItem } from '@chakra-ui/react';
 import ProjectDescriptionModal from './ProjectDescriptionModal/ProjectDescriptionModal';
 import { useBounty } from "../../context/BountyContext";
+import { truncate } from "../../utils/marketplaceUtils";
 
 const ProjectDescription = (props) => {
   const {
@@ -68,9 +69,29 @@ const ProjectDescription = (props) => {
                     Werk Files
                   </Heading>
                   <VStack alignSelf="flex-start">
-                  <Text fontWeight="light" fontSize="sm" color="aqua" textDecoration="underline" cursor="pointer">file_final_version_02-2022.pdf</Text>
-                  <Text fontWeight="light" fontSize="sm" color="aqua" textDecoration="underline" cursor="pointer">file_final_version_02-2022.pdf</Text>
-                  <Text fontWeight="light" fontSize="sm" color="aqua" textDecoration="underline" cursor="pointer">file_final_version_02-2022.pdf</Text>
+                  {console.log('Project Desc:', bountyState?.attachedFiles)}
+                    { bountyState?.attachedFiles ? (
+                    <List alignSelf="flex-start">
+                  {bountyState?.attachedFiles?.map((file, idx) => {
+                      return (
+                      <HStack>
+                      <ListItem 
+                      fontSize='16px' 
+                      color="aqua"
+                      fontFamily="PP Telegraf"
+                      fontStyle="normal"
+                      fontWeight="300"
+                      lineHeight="24px"
+                      letterSpacing="0.02em"
+                      >
+                        {truncate(file)}
+                        </ListItem>
+                        </HStack>
+                      )
+                  })}
+                  </List>
+                ): null
+                }
                   </VStack>
                   </VStack>
         </Container>

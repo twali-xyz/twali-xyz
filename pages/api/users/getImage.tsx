@@ -11,7 +11,7 @@ function encode(data) {
   return base64;
 }
 
-const getAllUsersHandler: NextApiHandler = async (req, res) => {
+const getImageHandler: NextApiHandler = async (req, res) => {
   try {
     const s3 = new aws.S3({
       region: "us-east-1",
@@ -37,4 +37,4 @@ const getAllUsersHandler: NextApiHandler = async (req, res) => {
   }
 };
 
-export default getAllUsersHandler;
+export default getImageHandler;

@@ -7,17 +7,28 @@ import {
   Textarea,
   HStack,
   CircularProgress,
-  VStack
+  VStack,
+  Alert,
+  AlertIcon,
+  Text,
+  List,
+  ListItem,
+  ListIcon,
+  Flex,
+  Img
 } from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
 import { useState, useRef } from "react";
 import { useBounty } from "../../context/BountyContext";
 import { UserData } from "../../utils/interfaces";
 import useUser from "../../context/TwaliContext";
 import axios from "axios";
+import { truncate } from "../../utils/marketplaceUtils";
 
 export const statementOfWerk = ({ handleChange }) => {
   const { setData, ...userState } = useUser();
-  const { setBounty, ...bountyState} = useBounty();
+  // const selectedFiles = [];
+  const { setBounty, editBountyDescription, ...bountyState} = useBounty();
   const [userData, setUserData] = useState<UserData>({
     ...userState,
     // userName: "",
@@ -29,6 +40,7 @@ export const statementOfWerk = ({ handleChange }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
   const inputRef = useRef(null);
+  const [selectedFile, setSelectedFile] = useState();
   const [selectedFiles, setSelectedFiles] = useState([]);
   // const downloadImg = async () => {
   //   await fetch(`/api/users/getImage?uuid=${uuid}`, {
@@ -39,6 +51,7 @@ export const statementOfWerk = ({ handleChange }) => {
   //       setNewImg(data);
   //     });
   // };
+  const [isFileTooBig, setIsFileTooBig] = useState(false);
 
   const handleOpen = () => {
     if (inputRef.current) {
@@ -47,32 +60,26 @@ export const statementOfWerk = ({ handleChange }) => {
   };
 
   const changeHandler = (event) => {
-    const newFiles = []
-    for(let i = 0; i < event.target.files.length; i++){
-        newFiles.push(event.target.files[i])
-        const filesSize = Math.round(event.target.files[i].size / 1024);
-        console.log(filesSize);
-    }
-    // if (fileSize >= 1024) {
-    //   setIsFileTooBig(true);
-    // } else {
-      // if (imgPreview.current) {
-      //   imgPreview.current.src = URL.createObjectURL(finalFile);
-      // }
-      setSelectedFiles(newFiles);
+    let finalFile = event.target.files[0];
+    let allFiles = selectedFiles;
+    const fileSize = Math.round(finalFile.size / 1024);
+    if (fileSize >= 1024) {
+      setIsFileTooBig(true);
+    } else {
+      allFiles.push(finalFile);
+      setSelectedFile(finalFile);
       setIsSelected(true);
-      // setIsFileTooBig(false);
-    // }
-    console.log(newFiles);
+      setIsFileTooBig(false);
+      setSelectedFiles(allFiles);
+    }
+    console.log('Selected Files:', selectedFiles);
   };
 
   const checkIfUploadIsCompleted = (data) => {
     if (data) {
-      // downloadImg();
       setTimeout(function () {
         setIsSubmitted(false);
         setIsSelected(false);
-        window.location.reload();
       }, 5000);
     } else {
       console.log("error");
@@ -80,44 +87,67 @@ export const statementOfWerk = ({ handleChange }) => {
     }
   };
 
-  const uploadFiles = async (files) => {
-    // setIsSubmitted(true);
-    // const finalFiles = []
+  const uploadFile = async (file) => {
+    setIsSubmitted(true);
+    const filename = encodeURIComponent(file.name);
     const formData: any = new FormData();
+    file._name = filename;
+    formData.append("file", file);
+    formData.append("userWallet", userData?.userWallet);
+    formData.append("contractID", bountyState?.contractID);
 
-    for(let i = 0; i < files.length; i++){
-      const filename = encodeURIComponent(files[i].name);
-      files[i]._name = filename;
-      console.log('uploadddd');
-      console.log(files[i]);
-      // finalFiles.push(files[i])
-      formData.append("files", files[i]);
-  }
-    console.log('userrrrr', userData.userWallet);
-    
-    formData.append("userWallet", userData.userWallet);
-
+    console.log('uploadddd formData', formData);
+    console.log('file: ', file);
     axios
       .request({
         method: "post",
-        url: "/api/users/postWerkFiles",
+        url: "/api/users/postWerkFile",
         data: formData,
         onUploadProgress: (p) => {
-          //console.log(p);
+          console.log(p);
         },
       })
       .then((data) => {
+        console.log(data);
         setTimestamp(Date.now());
         checkIfUploadIsCompleted(data);
+        let currAttachedFiles = bountyState.attachedFiles;
+        currAttachedFiles.push(file.name);
+        setBounty({
+          ...bountyState,
+          attachedFiles: currAttachedFiles
+        });
       });
   };
 
-  const handleSubmission = (evt) => {
-    evt.preventDefault();
-    if (selectedFiles) {
-      uploadFiles(selectedFiles);
+  const handleRemoveWerkFile = (file) => {
+    const formData: any = new FormData();
+    formData.append("file", file);
+    formData.append("userWallet", userData?.userWallet);
+    formData.append("contractID", bountyState?.contractID);
+
+    axios
+      .request({
+        method: "delete",
+        url: "/api/users/removeWerkFile",
+        data: formData,
+      })
+      .then((data) => {
+        console.log('handleRemoveWerkFile: ', data);
+        let allFiles = selectedFiles.filter(currFile => {
+          return currFile.name !== file.name;
+        });
+        setSelectedFiles(allFiles);
+      });
+  }
+
+    const handleSubmission = (evt) => {
+      evt.preventDefault();
+        if (selectedFile) {
+          uploadFile(selectedFile);
+          setIsSubmitted(false);
+        }
     }
-  };
 
   return (
     <form style={{ alignSelf: "start" }}>
@@ -229,7 +259,7 @@ export const statementOfWerk = ({ handleChange }) => {
       </Box>
       <Box
         maxWidth={"496px"}
-        h="250px"
+        h="100%"
         w="xl"
         borderWidth="1px"
         borderRadius="lg"
@@ -264,7 +294,6 @@ export const statementOfWerk = ({ handleChange }) => {
               </FormLabel>
               <VStack spacing={8}>
             <input type='file'
-            multiple
 					   onChange={changeHandler}
 					  //  accept={acceptedFileTypes}
 					   name="attachedFiles"
@@ -301,7 +330,47 @@ export const statementOfWerk = ({ handleChange }) => {
               >
                 {errors.attachedFiles}
               </Text> */}
-                      {isSelected && (
+              { selectedFiles ? (
+                  <List alignSelf="flex-start">
+                {selectedFiles.map((file, idx) => {
+                    return (
+                    <HStack spacing={2}>
+                    <Img
+                    src="twali-assets/circle-tick.svg"
+                    />
+                    <ListItem 
+                    fontSize='16px' 
+                    color="aqua"
+                    fontFamily="PP Telegraf"
+                    fontStyle="normal"
+                    fontWeight="300"
+                    lineHeight="24px"
+                    letterSpacing="0.02em"
+                    >
+                      <Text>{truncate(file.name)}</Text>
+                      </ListItem>
+                      <ListIcon as={CloseIcon} color="whiteAlpha.400" fontSize="14px" onClick={() => handleRemoveWerkFile(file)}/>
+                      </HStack>
+                    )
+                })}
+                </List>
+              ): null
+              }
+          {isFileTooBig ? (
+          <Alert width={500} status="error">
+            <AlertIcon />
+            <Text
+              fontFamily={"PP Telegraf"}
+              fontSize="14px"
+              lineHeight={"24px"}
+              fontWeight={"400"}
+              pos={"relative"}
+            >
+              Oops! Your file is too big. Please upload again! (less than 1MB)
+            </Text>
+          </Alert>
+        ) : null}
+          {isSelected && (
           <Button
             variant="primary"
             size={"md"}
