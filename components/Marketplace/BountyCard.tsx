@@ -1,6 +1,8 @@
-import { Box, HStack, Img, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, HStack, Img, Link, Text, VStack } from "@chakra-ui/react";
 import React from "react";
+import useUser from "../../context/TwaliContext";
 import { Chip } from "../reusable/Chip";
+import { Referral } from "../reusable/Referral";
 
 interface BountyCard {
   title: string;
@@ -29,17 +31,16 @@ export const BountyCard = ({
   application_deadline,
   start_date,
   token,
+  contract_id,
   ...props
 }) => {
-  console.log();
-
+  const { userWallet } = useUser();
   return (
     <Box
       {...props}
       width={"100%"}
-      height={"248px"}
       background={"n6"}
-      padding={"32px"}
+      padding={"24px"}
       border={"1px"}
       borderRadius={"8px"}
       borderColor={"n3"}
@@ -70,31 +71,57 @@ export const BountyCard = ({
             {body}
           </Text>
         </Box>
-        <HStack mt={2}>
-          <Chip borderRadius={"4px"} height={"28px"} variant={"created"}>
-            Listed{" "}
-            {Math.ceil(
-              (new Date(Date.now()).getTime() -
-                new Date(Number(created_on) * 1000).getTime()) /
-                (1000 * 3600 * 24)
-            )}
-            d ago
-          </Chip>
-          <Chip borderRadius={"4px"} height={"28px"} variant={"status"}>
-            {status}
-          </Chip>
-          <Chip
-            borderRadius={"4px"}
-            height={"28px"}
-            variant={"bounty"}
-            background={"#2e165069"}
-            borderColor={"plum"}
-          >
-            {new Date(start_date * 1000).toLocaleDateString("us-en")}
-          </Chip>
-          <Chip borderRadius={"4px"} height={"28px"} variant={"bounty"}>
-            {amount} {token}
-          </Chip>
+        <HStack width={"100%"} justify={"space-between"}>
+          <HStack mt={2}>
+            <Chip borderRadius={"4px"} height={"28px"} variant={"created"}>
+              Listed{" "}
+              {Math.ceil(
+                (new Date(Date.now()).getTime() -
+                  new Date(Number(created_on) * 1000).getTime()) /
+                  (1000 * 3600 * 24)
+              )}
+              d ago
+            </Chip>
+            <Chip borderRadius={"4px"} height={"28px"} variant={"status"}>
+              {status}
+            </Chip>
+            <Chip
+              borderRadius={"4px"}
+              height={"28px"}
+              variant={"bounty"}
+              background={"#2e165069"}
+              borderColor={"plum"}
+            >
+              {new Date(start_date * 1000).toLocaleDateString("us-en")}
+            </Chip>
+            <Chip borderRadius={"4px"} height={"28px"} variant={"bounty"}>
+              {amount} {token}
+            </Chip>
+          </HStack>
+          <HStack>
+            <Referral userWallet={userWallet} contractID={contract_id}>
+              <Button
+                pos={"relative"}
+                zIndex={"1000"}
+                variant={"secondary"}
+                marginInlineStart={"auto"}
+              >
+                share job
+              </Button>
+            </Referral>
+            <Link
+              _hover={{
+                textDecor: "none",
+                cursor: "pointer",
+              }}
+              href={`/contracts/${contract_id}`}
+              width={"100%"}
+            >
+              <Button minW={"160px"} variant={"primary"}>
+                View Job
+              </Button>
+            </Link>
+          </HStack>
         </HStack>
       </VStack>
     </Box>

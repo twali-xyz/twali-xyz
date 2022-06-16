@@ -1,3 +1,4 @@
+import { Referral } from "./../reusable/Referral";
 import React, { useState } from "react";
 import {
   Button,
@@ -6,17 +7,25 @@ import {
   HStack,
   Text,
   Img,
+  Avatar,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
+import { useClipboard } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { handleWalletConnect } from "../../utils/walletUtils";
 import Link from "next/link";
+import useUser from "../../context/TwaliContext";
 
 const HeaderNav = (props) => {
   const whichPage = props.whichPage;
   const isConnectWalletBtn = props.isConnectWalletBtn;
   const setUserData = props.setUserData;
   const userPage = props.userPage;
-  const userWallet = props.userWallet;
+  const { userWallet, userName } = useUser();
+
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const router = useRouter();
@@ -53,7 +62,7 @@ const HeaderNav = (props) => {
                     setIsSubmitted,
                     setLoaded,
                     router,
-                    setUserData,
+                    setUserData
                   )
                 }
               >
@@ -121,6 +130,64 @@ const HeaderNav = (props) => {
                     {userWallet}
                   </Text>
                 </Flex>
+                <Menu>
+                  <MenuButton
+                    marginLeft={"16px !important"}
+                    height={"36px"}
+                    width={"36px"}
+                    as={Avatar}
+                    aria-label="Options"
+                    icon={<Avatar size={"sm"} src={""} />}
+                    variant="outline"
+                  />
+                  <MenuList bg={"n6"} boxShadow={"8px 16px 24px 0px #062B2A8F"}>
+                    <Link href={`/${userName}`}>
+                      <MenuItem
+                        color={"fresh"}
+                        fontFamily={"PP Telegraf Light"}
+                        textTransform={"capitalize"}
+                      >
+                        profile
+                      </MenuItem>
+                    </Link>
+                    <Link href={"/"}>
+                      <MenuItem
+                        color={"fresh"}
+                        fontFamily={"PP Telegraf Light"}
+                        textTransform={"capitalize"}
+                      >
+                        dashboard
+                      </MenuItem>
+                    </Link>
+                    <Link href={"/"}>
+                      <MenuItem
+                        color={"fresh"}
+                        fontFamily={"PP Telegraf Light"}
+                        textTransform={"capitalize"}
+                      >
+                        account settings
+                      </MenuItem>
+                    </Link>
+                    <Referral userWallet={userWallet}>
+                      <MenuItem
+                        color={"fresh"}
+                        fontFamily={"PP Telegraf Light"}
+                        textTransform={"capitalize"}
+                      >
+                        {"refer a friend"}
+                      </MenuItem>
+                    </Referral>
+                    <Link href={"/"}>
+                      <MenuItem
+                        color={"fresh"}
+                        fontFamily={"PP Telegraf Light"}
+                        textTransform={"capitalize"}
+                      >
+                        logout
+                      </MenuItem>
+                    </Link>
+                  </MenuList>
+                </Menu>
               </HStack>
             </>
           )

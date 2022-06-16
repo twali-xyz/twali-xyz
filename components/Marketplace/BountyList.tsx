@@ -44,6 +44,7 @@ export const BountyList = ({ contracts, error, sortParams, compare }) => {
       marginTop={"32px !important"}
       height={"100%"}
       overflowY={"scroll"}
+      __css={{}}
       scrollBehavior={"smooth"}
     >
       {contracts?.length &&
@@ -67,30 +68,21 @@ export const BountyList = ({ contracts, error, sortParams, compare }) => {
               idx
             ) => {
               return (
-                <Link
-                  _hover={{
-                    textDecor: "none",
-                    cursor: "pointer",
-                  }}
-                  href={`contracts/${contract_id}`}
-                  key={idx}
-                  width={"100%"}
-                >
-                  <BountyCard
-                    my={"8px"}
-                    type={contract_type}
-                    title={contract_title}
-                    body={contract_description}
-                    img={`https://via.placeholder.com/290?text=${contract_status}`}
-                    amount={contract_amount}
-                    token={token}
-                    status={contract_status}
-                    created_on={contract_created_on}
-                    application_deadline={application_deadline}
-                    start_date={contract_start_date}
-                    converted_amount={converted_amount}
-                  />
-                </Link>
+                <BountyCard
+                  my={"8px"}
+                  type={contract_type}
+                  title={contract_title}
+                  body={contract_description}
+                  img={`https://via.placeholder.com/290?text=${contract_status}`}
+                  amount={contract_amount}
+                  token={token}
+                  status={contract_status}
+                  created_on={contract_created_on}
+                  application_deadline={application_deadline}
+                  start_date={contract_start_date}
+                  converted_amount={converted_amount}
+                  contract_id={contract_id}
+                />
               );
             }
           )}
