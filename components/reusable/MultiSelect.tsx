@@ -12,7 +12,7 @@ import React, { useEffect, useState } from "react";
 export const MultiSelect = ({
   formLabel,
   name,
-  handleChange,
+  onChange,
   options,
   defaultValues,
   maxSelections,
@@ -49,7 +49,7 @@ export const MultiSelect = ({
           <Selector
             key={`${i}--selector`}
             splitLabel={splitLabel}
-            handleChange={handleChange}
+            onChange={onChange}
             options={options}
             idx={i}
             defaultValue={defaultValues?.length ? defaultValues[i - 1] : null}
@@ -120,7 +120,7 @@ export const MultiSelect = ({
   );
 };
 
-function Selector({ splitLabel, handleChange, options, idx, defaultValue }) {
+function Selector({ splitLabel, onChange, options, idx, defaultValue }) {
   const [color, setColor] = useState("subtle");
   return (
     <Select
@@ -129,7 +129,7 @@ function Selector({ splitLabel, handleChange, options, idx, defaultValue }) {
       placeholder={`Select ${splitLabel[0]} ${splitLabel[1]}`}
       name={`${splitLabel[0]}${splitLabel[1] + idx}`}
       onChange={(e) => {
-        handleChange(e);
+        onChange(e);
         if (e.target.value) {
           setColor("fresh");
         } else {

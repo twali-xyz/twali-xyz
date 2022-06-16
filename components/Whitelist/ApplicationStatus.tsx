@@ -1,4 +1,4 @@
-import { Flex, HStack, Img, Link, Text, VStack } from "@chakra-ui/react";
+import { Flex, HStack, Link, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 import background from "../../public/twali-assets/step1_background.png";
 export const ApplicationStatus = ({ whiteListStatus }) => {

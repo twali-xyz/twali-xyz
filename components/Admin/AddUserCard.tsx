@@ -11,10 +11,11 @@ import {
 import React, { useEffect, useReducer, useState } from "react";
 import { mutate } from "swr";
 import whitelistReducer, { initialState } from "../../context/WhitelistReducer";
+import { WhitelistInfo } from "../../utils/interfaces";
 
 export const AddUserCard = ({ onClose, ...props }) => {
   const [state, dispatch] = useReducer(whitelistReducer, initialState);
-  const [values, setValues] = useState({
+  const [values, setValues] = useState<WhitelistInfo>({
     firstName: "",
     lastName: "",
     email: "",
