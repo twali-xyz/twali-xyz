@@ -284,8 +284,8 @@ module.exports = {
       .update({
         TableName: params.TableName,
         Key: {
-          userWallet: userWallet,
-          userName: userName,
+          PK: `USER#${userWallet}`,
+          SK: `USER#${userWallet}`,
         },
         UpdateExpression: params.UpdateExpression,
         ExpressionAttributeValues: params.ExpressionAttributeValues,

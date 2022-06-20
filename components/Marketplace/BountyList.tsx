@@ -6,7 +6,7 @@ interface BountyList {
   contracts: JSON;
   error: string;
   sortParams: string;
-  compart: Function;
+  compare: Function;
 }
 
 /**

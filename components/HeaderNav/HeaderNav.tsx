@@ -13,7 +13,6 @@ import {
   MenuList,
   MenuItem,
 } from "@chakra-ui/react";
-import { useClipboard } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { handleWalletConnect } from "../../utils/walletUtils";
 import Link from "next/link";
@@ -24,7 +23,8 @@ const HeaderNav = (props) => {
   const isConnectWalletBtn = props.isConnectWalletBtn;
   const setUserData = props.setUserData;
   const userPage = props.userPage;
-  const { userWallet, userName } = useUser();
+  const { userName } = useUser();
+  const userWallet = props.userWallet;
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -103,33 +103,23 @@ const HeaderNav = (props) => {
                 width={"fit-content"}
                 height={"32px"}
               >
-                <Flex
-                  pl={2}
-                  mr={"0 !important"}
-                  width={"100%"}
-                  height={"100%"}
-                  maxW={"160px"}
+                <Text
                   border={"1px solid"}
                   borderColor={"fresh"}
                   alignItems={"center"}
                   justifyItems={"center"}
                   borderRadius={32}
+                  color={"fresh"}
+                  fontSize={"14px"}
+                  fontWeight={"700"}
+                  letterSpacing={"0.06em"}
+                  padding="4px 16px"
                 >
-                  <Text
-                    color={"fresh"}
-                    maxW={["80px", "190px"]}
-                    fontSize={"14px"}
-                    margin={"auto"}
-                    alignSelf={"center"}
-                    fontWeight={"700"}
-                    letterSpacing={"0.06em"}
-                    textTransform={"uppercase"}
-                    padding="4px 8px"
-                    isTruncated
-                  >
-                    {userWallet}
-                  </Text>
-                </Flex>
+                  {`${userWallet.substring(0, 5)}...${userWallet.substring(
+                    userWallet.length - 4
+                  )}`.toLowerCase()}
+                </Text>
+
                 <Menu>
                   <MenuButton
                     marginLeft={"16px !important"}

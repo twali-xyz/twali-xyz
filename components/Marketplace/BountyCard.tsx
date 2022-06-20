@@ -8,6 +8,13 @@ interface BountyCard {
   title: string;
   body: string;
   img: string;
+  amount: string;
+  status: string;
+  created_on: string;
+  application_deadline: string;
+  start_date: string;
+  token: string;
+  contract_id: string;
 }
 
 /**
@@ -17,6 +24,13 @@ interface BountyCard {
  * @param {string} title main title
  * @param {string} body description/body
  * @param {string} img src for bounty image
+ * @param {string} amount bounty payment amount
+ * @param {string} status current bounty status
+ * @param {string} create_on date bounty was created as a string
+ * @param {string} application_deadline deadline to apply for the bounty
+ * @param {string} start_date bounty start date
+ * @param {string} token token being used for payment in bounty
+ * @param {string} contract_id ID of the current bounty
  *
  * @returns JSX BountyCard element
  *

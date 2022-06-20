@@ -56,9 +56,10 @@ export const TwaliSlider = ({
     colorScheme,
     size,
   });
+
   return (
     <Slider
-      defaultValue={defaultValue || 0}
+      defaultValue={defaultValue}
       step={variant === "smooth" ? null : step}
       min={Math.min.apply(
         null,

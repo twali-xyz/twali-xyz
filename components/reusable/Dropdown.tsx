@@ -130,22 +130,6 @@ export const Dropdown = ({
           pos={"absolute"}
           boxShadow="8px 16px 24px 0px #0421208F"
           zIndex={isOpen ? 10 : -1}
-          css={{
-            "&::-webkit-scrollbar": {
-              width: "4px",
-              background: "zing",
-              color: "zing",
-            },
-            "&::-webkit-scrollbar-track": {
-              width: "6px",
-              background: "zing",
-              color: "zing",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              background: "zing",
-              borderRadius: "24px",
-            },
-          }}
           display={"block"}
           transition={"ease-in-out"}
           transform={"auto"}
