@@ -7,9 +7,10 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import { useBounty } from "../../context/BountyContext";
+import WerkFileUpload from "./WerkFileUpload/WerkFileUpload";
 
 export const statementOfWerk = ({ handleChange }) => {
-  const { setBounty, ...bountyState} = useBounty();
+  const { ...bountyState} = useBounty();
 
   return (
     <form style={{ alignSelf: "start" }}>
@@ -121,7 +122,7 @@ export const statementOfWerk = ({ handleChange }) => {
       </Box>
       <Box
         maxWidth={"496px"}
-        h="250px"
+        h="100%"
         w="xl"
         borderWidth="1px"
         borderRadius="lg"
@@ -140,47 +141,7 @@ export const statementOfWerk = ({ handleChange }) => {
             lineHeight="tight"
             isTruncated
           >
-            <FormControl p={2} pb={0} id="werk-title" isRequired>
-              <FormLabel
-                marginBottom={1}
-                pos={"relative"}
-                fontFamily={"PP Telegraf"}
-                fontSize={"16px"}
-                fontStyle={"normal"}
-                fontWeight={"400"}
-                lineHeight={"24p"}
-                letterSpacing={"0.02em"}
-                textAlign={"left"}
-              >
-                Upload related files
-              </FormLabel>
-              <Input
-                px={2}
-                fontSize="16px"
-                borderColor={"n3"}
-                height={"40px"}
-                borderRadius={"4px"}
-                marginBottom={"4px"}
-                // isInvalid={errors.attachedFiles}
-                errorBorderColor="red.300"
-                fontFamily={"PP Telegraf light"}
-                _placeholder={{ color: "subtle" }}
-                // value={values?.attachedFiles || ""}
-                required
-                placeholder=".pdf, .word, .zip, .png, .jpeg"
-                name="attachedFiles"
-                // onChange={handleChange}
-              />
-              {/* <Text
-                fontSize="xs"
-                height={"20.5px"}
-                fontWeight="400"
-                color="red.500"
-                visibility={errors.attachedFiles ? "visible" : "hidden"}
-              >
-                {errors.attachedFiles}
-              </Text> */}
-            </FormControl>
+            <WerkFileUpload/>
           </Box>
         </Box>
       </Box>

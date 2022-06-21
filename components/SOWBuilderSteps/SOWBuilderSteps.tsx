@@ -12,6 +12,7 @@ import {
   VStack,
   Flex,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { UserData } from "../../utils/interfaces";
@@ -34,6 +35,7 @@ const SOWBuilderSteps = (props) => {
   const [dateRange, setDateRange] = useState([new Date(), new Date()]);
   const { tokenName, tokenAmount, calculatedUSD } = useToken();
   const { setBounty, ...bountyState} = useBounty();
+  const toast = useToast()
 
   let activeStep = props.activeStep;
   let nextStep = props.nextStep;
@@ -111,10 +113,11 @@ const SOWBuilderSteps = (props) => {
   ];
 
   const submitSOW = async (bounty) => {
-    await fetch("/api/marketplace/submitBounty", {
+    let res = await fetch("/api/marketplace/submitBounty", {
       method: "POST",
       body: JSON.stringify({ bounty }),
     });
+    return res;
     console.log("BOUNTY CREATED BRUH", bounty);
   };
 
@@ -135,11 +138,54 @@ const SOWBuilderSteps = (props) => {
         contractStatus: "live",
         attachedFiles: [],
       }
-      submitSOW(bounty);
+      checkSubmissionValidity(bounty);
     } else {
       nextStep()
     }
   }
+
+  // Informs the user if the bounty is submitted or not
+  // Error checks for main required fields
+  const checkSubmissionValidity = (bounty) => {
+    // if (userData.userName && userData.userName !== '') {
+      // setErrors(validate(userData));
+      try {
+      let isValid = submitSOW(bounty); // checks if the user name already exists in DB
+
+      // Displays a toast alert to inform the user - need a unique user name
+      isValid.then(valid => { 
+        if (valid.status == 200) {
+          setIsDisabled(true);
+          toast({
+            title: 'Your bounty was submitted!',
+            description: `${bounty.contractTitle} is up on the marketplace`,
+            status: 'success',
+            variant: 'subtle',
+            duration: 5000,
+            isClosable: true,
+          });
+          setTimeout(function () {
+            router.push('/marketplace');
+          }, 1000);
+        }
+        // else if (activeStep <= 0 && !errors.userName && !errors.firstName && !errors.lastName && !errors.email) {
+        //   setIsDisabled(false);
+        //   nextStep();
+        // } else if (activeStep == 1 && !errors.businessType && !errors.businessName) {
+        //   setIsDisabled(false);
+        //   nextStep();
+        // } else if (activeStep > 1 && !errors.currTitle) {
+        //   setIsDisabled(false);
+        //   updateAccType();
+        // } else {
+        //   setIsDisabled(true);
+        // }    
+      });
+    } catch(err) {
+      console.log("Bounty wasn't submitted...");
+    }
+    // }
+  };
 
   return (
     <>
@@ -197,7 +243,7 @@ const SOWBuilderSteps = (props) => {
           </Text>
         </Button>
         <Button
-          disabled={isDisabled}
+          disabled={false}
           pos={"relative"}
           alignSelf="center"
           variant={"primary"}

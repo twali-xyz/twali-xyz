@@ -34,6 +34,7 @@ import {
         axios.get(TokenPriceList(tokenID, 'usd')).then((response) => {
           setTokenAmount(evt.target.value);
           const value = +(Math.round(response.data[tokenID].usd*evt.target.value * 100) / 100).toFixed(2);
+          console.log(value);
           setCalculatedUSD(value);
       }).catch((error) => {
           console.log(error)
