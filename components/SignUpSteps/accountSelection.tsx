@@ -139,7 +139,6 @@ export function AccountSelection({
               <Link
                 visibility={btnActive == 2 ? "unset" : "hidden"}
                 fontSize={"14px"}
-                _hover={{ textDecor: "none" }}
                 color={"aqua"}
               >
                 or sign-up
