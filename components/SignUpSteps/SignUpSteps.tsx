@@ -27,21 +27,19 @@ const SignUpSteps = () => {
   const router = useRouter();
   const { setData, ...userState } = useUser();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isAccTypeSelection, setIsAccTypeSelection] = useState(true);
-  const [isAccTypeSelected, setIsAccTypeSelected] = useState(false);
+  const [referredBy, setReferredBy] = useState<string | string[]>();
   const [errors, setErrors] = useState({
     userName: "",
     firstName: "",
     lastName: "",
     email: "",
-    businessName: "", 
+    businessName: "",
     businessType: "",
     currTitle: "",
   });
   const [accType, setAccType] = useState("");
-  const [btnActive, setBtnActive] = useState(0);
   const [isDisabled, setIsDisabled] = useState(false);
-  const toast = useToast()
+  const toast = useToast();
 
   const [userData, setUserData] = useState<UserData>({
     ...userState,
@@ -68,19 +66,22 @@ const SignUpSteps = () => {
 
     if (!values.userName) {
       errors.userName = "User name is required";
-    } else if (/[\s\W]/g.test(values.userName)){
-        errors.userName = "User name can only contain letters and '_'" 
-    } else if (values.userName.length >=16) {
-      errors.userName = "User name max character limit is 16"
+    } else if (/[\s\W]/g.test(values.userName)) {
+      errors.userName = "User name can only contain letters and '_'";
+    } else if (values.userName.length >= 16) {
+      errors.userName = "User name max character limit is 16";
     }
-      
+
     if (!values.email) {
       errors.email = "Email address is required";
     } else if (!/\S+@\S+\.\S+/.test(values.email)) {
       errors.email = "Email address is invalid";
-    } 
+    }
 
-    if (!values.businessName && values.businessType !== "I'm not incorporated!") {
+    if (
+      !values.businessName &&
+      values.businessType !== "I'm not incorporated!"
+    ) {
       errors.businessName = "Business name is required";
     }
 
@@ -121,7 +122,7 @@ const SignUpSteps = () => {
     const handler = setTimeout(() => {
       setErrors(validate(userData));
     }, 500);
-
+    setReferredBy(router.query["referred_by"]);
     return () => {
       clearTimeout(handler);
     };
@@ -150,11 +151,11 @@ const SignUpSteps = () => {
     userData.userName = userName;
 
     let isTaken = await fetch(`/api/users/checkIsValid?isValid=userName`, {
-    method: "POST",
-    body: JSON.stringify(userData.userName)
-      }).then((res)=> res.json());
+      method: "POST",
+      body: JSON.stringify(userData.userName),
+    }).then((res) => res.json());
     return isTaken;
-  }
+  };
 
   const createNewUser = async (address) => {
     userData.userWallet = address;
@@ -190,36 +191,39 @@ const SignUpSteps = () => {
     initialStep: 0,
   });
 
-  const selectUserAccType = (accType: string) => {
-    setAccType(accType);
-    setIsAccTypeSelected(true);
-  };
-  const [accSelectionComplete, setAccSelectionComplete] = useState(false);
-
   // Checks user input for a unique username
   // Error checks for main required fields
   const checkUserProfileStepValidity = () => {
-    if (userData.userName && userData.userName !== '') {
+    if (userData.userName && userData.userName !== "") {
       setErrors(validate(userData));
       let isValid = checkUserName(userData.userName); // checks if the user name already exists in DB
 
       // Displays a toast alert to inform the user - need a unique user name
-      isValid.then(valid => { 
+      isValid.then((valid) => {
         if (valid) {
           setIsDisabled(true);
           toast({
-            title: 'User name taken',
+            title: "User name taken",
             description: "Oops! User name is taken. Pick another one!",
-            status: 'error',
-            variant: 'subtle',
+            status: "error",
+            variant: "subtle",
             duration: 5000,
             isClosable: true,
-          })
-        } 
-        else if (activeStep <= 0 && !errors.userName && !errors.firstName && !errors.lastName && !errors.email) {
+          });
+        } else if (
+          activeStep <= 0 &&
+          !errors.userName &&
+          !errors.firstName &&
+          !errors.lastName &&
+          !errors.email
+        ) {
           setIsDisabled(false);
           nextStep();
-        } else if (activeStep == 1 && !errors.businessType && !errors.businessName) {
+        } else if (
+          activeStep == 1 &&
+          !errors.businessType &&
+          !errors.businessName
+        ) {
           setIsDisabled(false);
           nextStep();
         } else if (activeStep > 1 && !errors.currTitle) {
@@ -227,7 +231,7 @@ const SignUpSteps = () => {
           updateAccType();
         } else {
           setIsDisabled(true);
-        }    
+        }
       });
     }
   };
@@ -244,99 +248,85 @@ const SignUpSteps = () => {
         bgImg={`url(${background.src})`}
         px={0}
       >
-        <HeaderNav whichPage="steps" step={accSelectionComplete} />
-        <Container
-          maxW="container.xl"
-          pb={!accSelectionComplete ? "inherit" : 8}
-          px={0}
-          m={accSelectionComplete ? "inherit" : 0}
-        >
+        <HeaderNav whichPage="steps" />
+        <Container maxW="container.xl" pb={8} px={0} m={"auto"}>
           <Flex h="full">
             <VStack w="full" h="full" spacing={8} alignItems="flex-start">
-              {isAccTypeSelection ? (
-                <AccountSelection
-                  btnActive={btnActive}
-                  setBtnActive={setBtnActive}
-                  selectUserAccType={selectUserAccType}
-                  isAccTypeSelected={isAccTypeSelected}
-                  setIsAccTypeSelection={setIsAccTypeSelection}
-                  setAccSelectionComplete={setAccSelectionComplete}
-                />
-              ) : (
-                <>
-                  <Heading
-                    fontSize={"72px"}
-                    lineHeight={"88px"}
-                    marginTop={"24px"}
-                    marginBottom={"-8px"}
-                    alignSelf="flex-start"
-                    fontFamily={"Scope Light"}
-                    fontWeight={"400"}
+              (
+              <>
+                <Heading
+                  fontSize={"72px"}
+                  lineHeight={"88px"}
+                  marginTop={"24px"}
+                  marginBottom={"-8px"}
+                  alignSelf="flex-start"
+                  fontFamily={"Scope Light"}
+                  fontWeight={"400"}
+                >
+                  Set up my Twali {referredBy}
+                </Heading>
+                <Steps activeStep={activeStep} width="600px">
+                  {steps.map(({ label, content }) => (
+                    <Step label={label} key={label}>
+                      {content}
+                    </Step>
+                  ))}
+                </Steps>
+                <HStack spacing={2} width={"100%"} justifyContent={"flex-end"}>
+                  <Button
+                    alignSelf="left"
+                    mr={"24px"}
+                    onClick={() => {
+                      activeStep <= 0 ? router.push("/login") : prevStep();
+                    }}
+                    pos={"relative"}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                    variant={"secondary"}
+                    size={"lg"}
                   >
-                    Set up my Twali
-                  </Heading>
-                  <Steps activeStep={activeStep} width="600px">
-                    {steps.map(({ label, content }) => (
-                      <Step label={label} key={label}>
-                        {content}
-                      </Step>
-                    ))}
-                  </Steps>
-                  <HStack spacing={2} width={"100%"} justifyContent={"flex-end"}>
-                    <Button
-                      alignSelf="left"
-                      mr={"24px"}
-                      onClick={() => {
-                        activeStep <= 0 ? router.push("/login") : prevStep();
-                      }}
-                      pos={"relative"}
-                      alignItems={"center"}
+                    <Text
+                      display={"flex"}
+                      width={"100%"}
+                      height={"100%"}
                       justifyContent={"center"}
-                      variant={"secondary"}
-                      size={"lg"}
+                      alignItems={"center"}
                     >
-                      <Text
-                        display={"flex"}
-                        width={"100%"}
-                        height={"100%"}
-                        justifyContent={"center"}
-                        alignItems={"center"}
-                      >
-                        go back
-                      </Text>
-                    </Button>
-                    <Button
-                      disabled={isDisabled}
-                      pos={"relative"}
-                      alignSelf="center"
-                      variant={"primary"}
-                      size={"lg"}
-                      onClick={() => {
-                        checkUserProfileStepValidity()
-                      }}
+                      go back
+                    </Text>
+                  </Button>
+                  <Button
+                    disabled={isDisabled}
+                    pos={"relative"}
+                    alignSelf="center"
+                    variant={"primary"}
+                    size={"lg"}
+                    onClick={() => {
+                      checkUserProfileStepValidity();
+                    }}
+                  >
+                    <Text
+                      display={"flex"}
+                      width={"100%"}
+                      height={"100%"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
                     >
-                      <Text
-                        display={"flex"}
-                        width={"100%"}
-                        height={"100%"}
-                        justifyContent={"center"}
-                        alignItems={"center"}
-                      >
-                        continue
-                      </Text>
+                      continue
+                    </Text>
 
-                      {isSubmitted ? (
-                        <CircularProgress
-                          size="22px"
-                          thickness="4px"
-                          isIndeterminate
-                          color="#3C2E26"
-                        />
-                      ) : null}
-                    </Button>{" "}
-                  </HStack>
-                </>
-              )}
+                    {isSubmitted ? (
+                      <CircularProgress
+                        size="22px"
+                        thickness="4px"
+                        isIndeterminate
+                        color="#3C2E26"
+                      />
+                    ) : null}
+                  </Button>{" "}
+                </HStack>
+              </>
+              )
             </VStack>
           </Flex>
         </Container>

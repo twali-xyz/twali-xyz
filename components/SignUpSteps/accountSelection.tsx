@@ -1,6 +1,18 @@
-import { Text, VStack, Button, Flex, Link } from "@chakra-ui/react";
+import { ArrowBackIcon, ViewIcon } from "@chakra-ui/icons";
+import {
+  Text,
+  VStack,
+  Button,
+  Flex,
+  Link,
+  FormControl,
+  FormLabel,
+  Input,
+  Box,
+  IconButton,
+} from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 
 export function AccountSelection({
   btnActive,
@@ -9,8 +21,12 @@ export function AccountSelection({
   isAccTypeSelected,
   setIsAccTypeSelection,
   setAccSelectionComplete,
+  referredBy,
+  onConnectWallet,
 }) {
   const router = useRouter();
+  const [viewPass, setViewPass] = useState(false);
+  const [signUp, setSignUp] = useState(false);
   return (
     <Flex
       m={0}
@@ -34,6 +50,7 @@ export function AccountSelection({
         backgroundPosition={"100% "}
         cursor="pointer"
         onClick={() => {
+          if (signUp) return;
           setBtnActive(1);
           selectUserAccType("Expert");
         }}
@@ -44,51 +61,93 @@ export function AccountSelection({
         }
         backgroundColor={"inverse"}
       >
-        <Text
-          pos={"relative"}
-          top={"100px"}
-          fontSize={"72px"}
-          padding={"2px"}
-          px={0}
-          fontWeight={"400"}
-          lineHeight={"88px"}
-          letterSpacing={"0.04em"}
-          fontFamily={"Scope Light"}
-          color={btnActive == 1 || btnActive == 0 ? "inverse" : "zing"}
-          backgroundColor={
-            btnActive == 1 || btnActive == 0 ? "zing" : "inverse"
-          }
-        >
-          expert
-        </Text>
-        <Text
-          pos={"relative"}
-          top={"108px"}
-          color={"fresh"}
-          fontFamily={"PP Telegraf Light"}
-          fontSize={"16px"}
-          lineHeight={"24px"}
-        >
-          I want to provide my knowledge and expertise{" "}
-        </Text>
-        <Button
-          disabled={!isAccTypeSelected}
-          alignSelf="center"
-          pos={"relative"}
-          top={"200px"}
-          variant={"primary"}
-          size={"lg"}
-          padding={"16px, 24px, 13px, 24px !important"}
-          onClick={(evt) => {
-            setIsAccTypeSelection(false);
-            router.push("/steps");
-            setAccSelectionComplete(true);
-          }}
-          visibility={btnActive == 1 ? "unset" : "hidden"}
-        >
-          Continue
-        </Button>
+        {signUp === false ? (
+          <>
+            <Text
+              pos={"relative"}
+              top={"100px"}
+              fontSize={"72px"}
+              padding={"2px"}
+              px={0}
+              fontWeight={"400"}
+              lineHeight={"88px"}
+              letterSpacing={"0.04em"}
+              fontFamily={"Scope Light"}
+              color={btnActive == 1 || btnActive == 0 ? "inverse" : "zing"}
+              backgroundColor={
+                btnActive == 1 || btnActive == 0 ? "zing" : "inverse"
+              }
+            >
+              expert
+            </Text>
+            <Text
+              pos={"relative"}
+              top={"108px"}
+              color={"fresh"}
+              fontFamily={"PP Telegraf Light"}
+              fontSize={"16px"}
+              lineHeight={"24px"}
+            >
+              I want to provide my knowledge and expertise{" "}
+            </Text>
+            <Button
+              disabled={!isAccTypeSelected}
+              alignSelf="center"
+              pos={"relative"}
+              top={"200px"}
+              variant={"primary"}
+              size={"lg"}
+              padding={"16px, 24px, 13px, 24px !important"}
+              onClick={(evt) => {
+                onConnectWallet();
+                setIsAccTypeSelection(false);
+                setAccSelectionComplete(true);
+              }}
+              visibility={btnActive == 1 ? "unset" : "hidden"}
+            >
+              Connect Wallet
+            </Button>
+          </>
+        ) : (
+          <Flex flexDir={"column"}>
+            <IconButton
+              onClick={() => setSignUp(false)}
+              pos={"absolute"}
+              top={"35px"}
+              left={"35px"}
+              color={"zing"}
+              width={"35px"}
+              height={"35px"}
+              variant={"unstyled"}
+              aria-label="Back button"
+              icon={<ArrowBackIcon />}
+            />
+            <FormControl width={"200px"} mb={8}>
+              <FormLabel mb={2} color={"fresh"}>
+                user name
+              </FormLabel>
+              <Input color={"fresh"} />
+            </FormControl>
+            <FormControl width={"200px"} mb={2}>
+              <FormLabel mb={2} color={"fresh"}>
+                password
+              </FormLabel>
+              <Input color={"fresh"} type={!viewPass ? "password" : "text"} />
+            </FormControl>
+            <IconButton
+              alignSelf={"flex-end"}
+              height={"25px"}
+              width={"25px"}
+              color={"zing"}
+              variant={"unstyled"}
+              onClick={() => setViewPass(!viewPass)}
+              aria-label="view-password"
+              icon={<ViewIcon />}
+            />
+          </Flex>
+        )}
       </VStack>
+
       <VStack
         m={0}
         p={0}
@@ -133,30 +192,26 @@ export function AccountSelection({
         >
           I want to build a project
         </Text>
-
-        <Link
-          _hover={{ textDecoration: "none" }}
-          textDecoration={"none"}
-          target="_blank"
-          rel="noopener noreferrer"
-          href="mailto:degen@twali.xyz?subject=Twali client application"
-          onClick={() => {
-            router.push("/");
-          }}
-        >
+        <VStack pos={"relative"} top={"200px"}>
           <Button
             disabled={!isAccTypeSelected}
             alignSelf="center"
-            pos={"relative"}
-            top={"200px"}
             variant={"primary"}
             size={"lg"}
+            onClick={() => setSignUp(true)}
             padding={"16px, 24px, 13px, 24px !important"}
             visibility={btnActive == 2 ? "unset" : "hidden"}
           >
-            Continue
+            Sign-In
           </Button>
-        </Link>
+
+          <Link
+            visibility={btnActive == 2 ? "unset" : "hidden"}
+            color={"inverse"}
+          >
+            or sign-up
+          </Link>
+        </VStack>
       </VStack>
     </Flex>
   );

@@ -18,11 +18,11 @@ import CompanyModal from "./CompanyModal/CompanyModal";
 import UserPermissionsProvider from "../UserPermissionsProvider/UserPermissionsProvider";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import { fetchPermission } from "../../utils/profileUtils";
-import LoginPage from "../../pages/login";
 import HeaderNav from "../HeaderNav/HeaderNav";
 import { UserData } from "../../utils/interfaces";
 import { GetCompany } from "./GetCompany";
 import useUser from "../../context/TwaliContext";
+import LoadingPage from "../../pages/loading";
 
 const ProfileDetails = ({ user }) => {
   // Fallback for getStaticPaths, when fallback: true
@@ -32,7 +32,7 @@ const ProfileDetails = ({ user }) => {
   const { setData, ...userState } = useUser();
 
   if (router.isFallback) {
-    return <LoginPage loaded={router.isFallback} />;
+    return <LoadingPage loaded={router.isFallback} />;
   }
   const [userData, setUserData] = useState<UserData>();
 
@@ -291,7 +291,7 @@ const ProfileDetails = ({ user }) => {
   return (
     <>
       {!loaded ? (
-        <LoginPage loaded={!loaded} />
+        <LoadingPage loaded={!loaded} />
       ) : (
         userState &&
         userState.userName &&

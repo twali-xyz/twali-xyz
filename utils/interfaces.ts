@@ -16,6 +16,8 @@ export interface UserData {
   businessLocation: string;
   currTitle: string;
   currLocation?: string;
+  referredBy?: string;
+  referredUsers?: string[],
   functionalExpertise?: string[];
   industryExpertise?: string[];
   companyInfo?: CompanyInfo[];
