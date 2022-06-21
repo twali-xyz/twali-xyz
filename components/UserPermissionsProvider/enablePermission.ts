@@ -14,7 +14,6 @@ const enablePermission = (permission: Permission) => {
       setAllowed(allowed);
     });
   }, [isAllowedTo])
-
   return [loading, allowed];
 };
 
