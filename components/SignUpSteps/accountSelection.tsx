@@ -10,6 +10,7 @@ import {
   Input,
   Box,
   IconButton,
+  HStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -122,28 +123,41 @@ export function AccountSelection({
               aria-label="Back button"
               icon={<ArrowBackIcon />}
             />
-            <FormControl width={"200px"} mb={8}>
+            <FormControl width={"280px"} mb={4}>
               <FormLabel mb={2} color={"fresh"}>
-                user name
+                email
               </FormLabel>
-              <Input color={"fresh"} />
+              <Input placeholder="email@example.com" color={"fresh"} />
             </FormControl>
-            <FormControl width={"200px"} mb={2}>
+            <FormControl width={"280px"} mb={2}>
               <FormLabel mb={2} color={"fresh"}>
                 password
               </FormLabel>
               <Input color={"fresh"} type={!viewPass ? "password" : "text"} />
             </FormControl>
-            <IconButton
-              alignSelf={"flex-end"}
-              height={"25px"}
-              width={"25px"}
-              color={"zing"}
-              variant={"unstyled"}
-              onClick={() => setViewPass(!viewPass)}
-              aria-label="view-password"
-              icon={<ViewIcon />}
-            />
+            <HStack justifyContent={"space-between"} width={"100%"}>
+              <Link
+                visibility={btnActive == 2 ? "unset" : "hidden"}
+                fontSize={"14px"}
+                _hover={{ textDecor: "none" }}
+                color={"aqua"}
+              >
+                or sign-up
+              </Link>
+              <IconButton
+                alignSelf={"flex-end"}
+                height={"25px"}
+                width={"25px"}
+                color={"zing"}
+                variant={"unstyled"}
+                onClick={() => setViewPass(!viewPass)}
+                aria-label="view-password"
+                icon={<ViewIcon />}
+              />
+            </HStack>
+            <Button mt={8} variant={"primary"}>
+              continue
+            </Button>
           </Flex>
         )}
       </VStack>
@@ -204,13 +218,6 @@ export function AccountSelection({
           >
             Sign-In
           </Button>
-
-          <Link
-            visibility={btnActive == 2 ? "unset" : "hidden"}
-            color={"inverse"}
-          >
-            or sign-up
-          </Link>
         </VStack>
       </VStack>
     </Flex>
