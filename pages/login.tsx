@@ -56,19 +56,18 @@ const LoginPage = (props) => {
     setIsSubmitted(true);
 
     try {
-      try {
-        let userData: UserData = await getUserByWallet(currAccount);
+      let userData: UserData = await getUserByWallet(currAccount);
 
-        if (userData && userData.userName && userData.userWallet) {
-          router.push(`/${userData.userName}`);
-          setIsSubmitted(false);
-          return;
-        }
-      } catch (err) {
-        console.log("error: ", err);
-        router.push("/steps");
-        setLoaded(true);
+      if (userData && userData.userName && userData.userWallet) {
+        router.push(`/${userData.userName}`);
+        setIsSubmitted(false);
+        return;
       }
+    } catch (err) {
+      console.log("error: ", err);
+    }
+
+    try {
       let userWhiteList = await getUserWhitelistStatus(currAccount);
       console.log("DATA: ", userWhiteList["whitelistStatus"]);
       if (
@@ -98,7 +97,6 @@ const LoginPage = (props) => {
         });
         router.push("/steps");
         return;
-
       }
     } catch (err) {
       console.log("error: ", err);

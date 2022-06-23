@@ -1,110 +1,79 @@
 import { Flex, VStack } from "@chakra-ui/react";
-import Router, { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import useSWR from "swr";
-
+import React, { useEffect, useReducer, useState } from "react";
+import useSWR, { mutate } from "swr";
 import { ApplicantList } from "../../components/Admin/ApplicantList";
 import { FilterInputs } from "../../components/Admin/FilterInputs";
 import { SortApplicants } from "../../components/Admin/SortApplicants";
-import useUser from "../../context/TwaliContext";
+import whitelistReducer, { initialState } from "../../context/WhitelistReducer";
+import { useWhitelist } from "../../hooks/useWhitelist";
+import { useWhitelistFilter } from "../../hooks/useWhitelistFilter";
 
 const fetcher = (...args: Parameters<typeof fetch>) =>
   fetch(...args).then((res) => res.json());
 const whitelist = () => {
-  const router = useRouter();
-  const { ...userState } = useUser();
-  const [filterParams, setFilterParams] = useState({});
+  const [filterParams, setFilterParams] = useState();
   const [sortParams, setSortParams] = useState();
-  const [query, setQuery] = useState("");
-  const [isConnectWalletBtn, setIsConnectWalletBtn] = useState(false);
+  const [query, setQuery] = useState();
+  const [loadingWallet, setLoadingWallet] = useState(null);
+  const [loadingIDX, setLoadingIDX] = useState(null);
+  const { data, isError } = useWhitelist();
+  const {
+    data: filteredData,
+    isLoading,
+    isError: err,
+  } = useWhitelistFilter(query);
+  const [state, dispatch] = useReducer(whitelistReducer, initialState);
+
+  async function handleApprove(payload) {
+    setLoadingWallet(payload.userWallet);
+    setWhitelistApproved(payload);
+  }
+  async function handleReject(payload) {
+    setLoadingWallet(payload.userWallet);
+    setWhitelistRejected(payload);
+  }
+
+  function setWhitelistApproved(payload) {
+    dispatch({
+      type: "APPROVE_USER",
+      payload: { ...payload },
+    });
+  }
+  function setWhitelistRejected(payload) {
+    dispatch({
+      type: "REJECT_USER",
+      payload: { ...payload },
+    });
+  }
+
+  function setWhitelistPending(payload) {
+    dispatch({
+      type: "PENDING",
+      payload: { ...payload },
+    });
+  }
+
+  // useEffect hook to sync dispatching with backend
+  useEffect(() => {
+    const updateUserWhitelistStatus = async (payload) => {
+      setLoadingWallet(state.userWallet);
+      await fetch(`/api/admin/updateUser`, {
+        method: "PUT",
+        body: JSON.stringify({ payload }),
+      });
+
+      if (query) {
+        await mutate("/api/admin/filterWhitelist/" + query);
+      } else {
+        await mutate("/api/admin/retrieveWhitelist");
+      }
+      setLoadingWallet(null);
+    };
+    updateUserWhitelistStatus(state);
+  }, [state]);
 
   // set the filterParams based on the URL query params
   // needed to set filters when user goes to marketplace from a URL that contains a query
-  useEffect(() => {
-    if (!router.query) return;
-
-    // the filter query can be a string or [] when sent through router.query
-    // but we always want typeof filterValues === []
-    let tempFilter = {};
-
-    Object.entries(router.query).forEach((filterData) => {
-      console.log(filterData);
-
-      let filterObjectArray = {};
-      let [filterType, filterValues] = filterData;
-
-      if (typeof filterValues === "string") {
-        filterValues = [filterValues];
-      }
-
-      filterValues.forEach((value) => {
-        filterObjectArray[value] = value;
-      });
-      if (
-        filterType === "duration" ||
-        filterType === "budget" ||
-        filterType === "startDate"
-      ) {
-        tempFilter[filterType] = filterValues;
-      } else {
-        tempFilter[filterType] = filterObjectArray;
-      }
-    });
-
-    if (Object.entries(tempFilter).length > 0) {
-      setFilterParams(tempFilter);
-    }
-    return () => {};
-  }, [router.asPath]);
-
-  const { data, error } = useSWR(`/api/admin/whitelist`, fetcher);
-
-  function createURL(filterParams) {
-    let urlQuery = "";
-    Object.entries(filterParams).forEach((element) => {
-      if (!element[1]) return;
-      // https://en.wikipedia.org/wiki/Query_string
-      //  ?field1=value1&field1=value2&field2=value3
-      urlQuery += `${urlQuery.length === 0 ? "?" : "&"}${
-        element[0]
-      }=${Object.values(element[1]).join(`&${element[0]}=`)}`.replace(
-        / /g,
-        "+"
-      );
-    });
-    setQuery(urlQuery);
-  }
-
-  // when the filter params change a new URL is created
-  useEffect(() => {
-    createURL(filterParams);
-  }, [filterParams]);
-
-  // push to the new URL with the new query included
-  useEffect(() => {
-    if (!query) return;
-
-    let urlQuery = {};
-    Object.entries(filterParams).forEach((filter) => {
-      const [filterName, filterValues] = filter;
-
-      if (filterName === "startDate") {
-        urlQuery[filterName] = [String(Object.values(filterValues)[0])];
-      } else {
-        urlQuery[filterName] =
-          typeof filterValues === "string"
-            ? [filterValues]
-            : Object.values(filterValues);
-      }
-    });
-
-    Router.push({
-      pathname: "/admin/whitelist",
-      query: urlQuery,
-    });
-
-    return () => {};
-  }, [query]);
 
   // sort function for the bounty list
   function compare(a, b, sortParams) {
@@ -140,6 +109,7 @@ const whitelist = () => {
       <FilterInputs
         filterParams={filterParams}
         setFilterParams={setFilterParams}
+        setQuery={setQuery}
       />
       <VStack
         paddingTop={"90px"}
@@ -150,14 +120,18 @@ const whitelist = () => {
         }
       >
         <SortApplicants
-          contracts={data}
+          contracts={filteredData || data}
           onChange={(val) => setSortParams(val)}
         />
         <ApplicantList
-          whitelistApplicants={data}
-          error={error}
+          whitelistApplicants={filteredData || data}
+          error={isError}
           sortParams={sortParams}
           compare={compare}
+          setLoadingIDX={setLoadingIDX}
+          loadingWallet={loadingWallet}
+          handleApprove={handleApprove}
+          handleReject={handleReject}
         />
       </VStack>
     </Flex>

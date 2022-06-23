@@ -1,4 +1,4 @@
-import { CircularProgress, Flex, Link, Text, VStack } from "@chakra-ui/react";
+import { CircularProgress, Flex, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 import { ApplicantCard } from "./ApplicantCard";
 
@@ -27,6 +27,10 @@ export const ApplicantList = ({
   error,
   sortParams,
   compare,
+  setLoadingIDX,
+  loadingWallet,
+  handleApprove,
+  handleReject,
 }) => {
   if (error) return <Text>failed to load whitelistApplicants</Text>;
 
@@ -69,27 +73,22 @@ export const ApplicantList = ({
               idx
             ) => {
               return (
-                <Link
-                  _hover={{
-                    textDecor: "none",
-                    cursor: "pointer",
-                  }}
-                  href={`whitelist/${firstName}`}
+                <ApplicantCard
                   key={idx}
-                  width={"100%"}
-                >
-                  <ApplicantCard
-                    my={"8px"}
-                    firstName={firstName}
-                    lastName={lastName}
-                    email={email}
-                    linkedIn={linkedIn}
-                    discord={discord}
-                    applied_on={applied_on}
-                    userWallet={userWallet}
-                    whitelistStatus={whitelistStatus}
-                  />
-                </Link>
+                  setLoadingIDX={setLoadingIDX}
+                  my={"8px"}
+                  firstName={firstName}
+                  lastName={lastName}
+                  email={email}
+                  linkedIn={linkedIn}
+                  discord={discord}
+                  applied_on={applied_on}
+                  userWallet={userWallet}
+                  whitelistStatus={whitelistStatus}
+                  handleApprove={handleApprove}
+                  handleReject={handleReject}
+                  loading={loadingWallet === userWallet}
+                />
               );
             }
           )}

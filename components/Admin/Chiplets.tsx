@@ -34,59 +34,61 @@ export const Chiplets = ({ handleRemove, filterParams, ...props }) => {
       {...props}
     >
       {/* map out the headers for each filter type */}
-      {Object.entries(filterParams).map((filterObj, idx) => {
-        const [filterType, filters] = filterObj;
-        if (!filters) return;
-        if (Object.values(filters).length <= 0) return;
-        return (
-          <Box key={idx}>
-            <HStack>
-              <Text
-                textTransform={"capitalize"}
-                marginBottom={2}
-                color={"fresh"}
-                fontFamily={"PP Telegraf"}
-                fontSize={"16px"}
-              >
-                {filterType === "startDate" ? "start date" : filterType}
-              </Text>
-            </HStack>
-            <Flex flexWrap={"wrap"}>
-              {/* map out the chips within each filter type */}
-              {Object.values(filters)?.map((filter, idx) => {
-                return (
-                  ((filterType === "budget" && idx === 0) ||
-                    (filterType === "duration" && idx === 0) ||
-                    (filterType !== "budget" && filterType !== "duration")) && (
-                    <Chip
-                      pos={"relative"}
-                      zIndex={0}
-                      my={2}
-                      mr={2}
-                      variant="button"
-                      key={idx}
-                      name={filterType}
-                      onClick={handleRemove}
-                    >
-                      {filterType === "budget"
-                        ? `${formatter.format(filters[0])}-${formatter.format(
-                            filters[1]
-                          )}`
-                        : filterType === "duration"
-                        ? `${filters[0]}-${filters[1]} days`
-                        : filterType === "startDate"
-                        ? `Starts on ${new Date(filter).toLocaleDateString(
-                            "en-US"
-                          )}`
-                        : filter}
-                    </Chip>
-                  )
-                );
-              })}
-            </Flex>
-          </Box>
-        );
-      })}
+      {filterParams &&
+        Object.entries(filterParams).map((filterObj, idx) => {
+          const [filterType, filters] = filterObj;
+          if (!filters) return;
+          if (Object.values(filters).length <= 0) return;
+          return (
+            <Box key={idx}>
+              <HStack>
+                <Text
+                  textTransform={"capitalize"}
+                  marginBottom={2}
+                  color={"fresh"}
+                  fontFamily={"PP Telegraf"}
+                  fontSize={"16px"}
+                >
+                  {filterType === "startDate" ? "start date" : filterType}
+                </Text>
+              </HStack>
+              <Flex flexWrap={"wrap"}>
+                {/* map out the chips within each filter type */}
+                {Object.values(filters)?.map((filter, idx) => {
+                  return (
+                    ((filterType === "budget" && idx === 0) ||
+                      (filterType === "duration" && idx === 0) ||
+                      (filterType !== "budget" &&
+                        filterType !== "duration")) && (
+                      <Chip
+                        pos={"relative"}
+                        zIndex={0}
+                        my={2}
+                        mr={2}
+                        variant="button"
+                        key={idx}
+                        name={filterType}
+                        onClick={handleRemove}
+                      >
+                        {filterType === "budget"
+                          ? `${formatter.format(filters[0])}-${formatter.format(
+                              filters[1]
+                            )}`
+                          : filterType === "duration"
+                          ? `${filters[0]}-${filters[1]} days`
+                          : filterType === "startDate"
+                          ? `Starts on ${new Date(filter).toLocaleDateString(
+                              "en-US"
+                            )}`
+                          : filter}
+                      </Chip>
+                    )
+                  );
+                })}
+              </Flex>
+            </Box>
+          );
+        })}
     </VStack>
   );
 };

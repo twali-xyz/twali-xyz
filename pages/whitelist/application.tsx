@@ -1,10 +1,11 @@
 import { ApplicationStatus } from "./../../components/Whitelist/ApplicationStatus";
 import { WhitelistForm } from "./../../components/Whitelist/WhitelistForm";
 import { Box, Fade, Flex, Link, Text } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import HeaderNav from "../../components/HeaderNav/HeaderNav";
 import useUser from "../../context/TwaliContext";
 import { useRouter } from "next/router";
+import whitelistReducer, { initialState } from "../../context/WhitelistReducer";
 
 const whitelist = () => {
   const { userWallet } = useUser();
@@ -16,6 +17,7 @@ const whitelist = () => {
   const [linkedIn, setLinkedIn] = useState("");
   const [step, setStep] = useState(0);
   const [whiteListStatus, setWhiteListStatus] = useState(""); // "", pending, approved, rejected
+  const [state, dispatch] = useReducer(whitelistReducer, initialState);
 
   useEffect(() => {
     let status;
@@ -147,20 +149,46 @@ const whitelist = () => {
         break;
     }
   }
-  function submitApplication() {
 
+  function addUser(newState) {
+    dispatch({
+      type: "ADD_USER",
+      payload: { ...newState },
+    });
+  }
+
+  function submitApplication() {
     // validate inputs
     // if inputs are missing, return user to step of first missing input
     if (validateInputs()) {
-      alert(
-        `NAME: ${name} 
-      \n EMAIL: ${email} 
-      \n LINKEDIN: ${linkedIn}
-      \n DISCORD: ${discord}
-      \n REFERREDBY: ${referredBy}`
-      );
+      addUser({
+        userWallet: userWallet.toLocaleLowerCase(),
+        firstName: name,
+        lastName: "",
+        email: email,
+        linkedIn: linkedIn,
+        discord: discord,
+        referred_by: referredBy,
+        whitelistStatus: "pending",
+        applied_on: Date.now(),
+      });
     }
   }
+
+  useEffect(() => {
+    if (!state.userWallet) return;
+
+    const addUserToWhitelist = async (payload) => {
+      await fetch(`/api/admin/addUser`, {
+        method: "PUT",
+        body: JSON.stringify({ payload }),
+      });
+
+      console.log("USER ADDED UP TO WHITELIST");
+      setWhiteListStatus("submitted");
+    };
+    addUserToWhitelist(state);
+  }, [state]);
 
   function validateInputs() {
     if (name === "" || email === "" || linkedIn === "") {
@@ -177,7 +205,6 @@ const whitelist = () => {
     }
     return true;
   }
-
 
   function handleEnterPressed(event) {
     if (event.key === "Enter" && step < 2) {

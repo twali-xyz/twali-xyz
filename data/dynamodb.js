@@ -43,7 +43,8 @@ module.exports = {
       .get({
         TableName,
         Key: {
-          userWallet: userWallet,
+          PK: `USER#${userWallet}`,
+          SK: `USER#${userWallet}`,
         },
         ProjectionExpression: "UserNonce",
       })
@@ -283,8 +284,8 @@ module.exports = {
       .update({
         TableName: params.TableName,
         Key: {
-          userWallet: userWallet,
-          userName: userName,
+          PK: `USER#${userWallet}`,
+          SK: `USER#${userWallet}`,
         },
         UpdateExpression: params.UpdateExpression,
         ExpressionAttributeValues: params.ExpressionAttributeValues,
@@ -570,6 +571,73 @@ module.exports = {
       })
       .promise()
       .then((data) => data.Items)
+      .catch(console.error);
+    return whitelist;
+  },
+
+  /**
+   * @desc Edits an existing users item's attributes, or adds a new item to the table if it does not already exist.
+   * @param {object} - function takes an object as a the parameter with primary and attributes. Object will need to the primary key and any attributes that are being updated or created.
+   * @dev New items can be added to a user and does need to be predefined in the table. Any values in 'UpdateExpression' need to be defined will values within 'ExpressionAttributeValues'.
+   * @example See docs about editing existing attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#update-property
+   */
+  updateWhitelistStatus: async (userWallet, newStatus) => {
+    if (!userWallet) return;
+    console.log("UPDATE USER WHITELIST STATUS");
+    console.log(userWallet);
+    console.log(newStatus);
+    await getDynamoDBClient()
+      .update({
+        TableName: "whitelist_table",
+        Key: {
+          userWallet: `${userWallet}`,
+        },
+        UpdateExpression: "SET whitelistStatus = :newStatus",
+        // ConditionExpression: "",
+        ExpressionAttributeValues: {
+          ":newStatus": newStatus,
+        },
+      })
+      .promise()
+      .catch(console.error);
+  },
+
+  /**
+   * @desc Edits an existing users item's attributes, or adds a new item to the table if it does not already exist.
+   * @param {object} - function takes an object as a the parameter with primary and attributes. Object will need to the primary key and any attributes that are being updated or created.
+   * @dev New items can be added to a user and does need to be predefined in the table. Any values in 'UpdateExpression' need to be defined will values within 'ExpressionAttributeValues'.
+   * @example See docs about editing existing attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#update-property
+   */
+  addWhitelistUser: async (payload) => {
+    console.log("ADD USER TO WHITELIST");
+    console.log({ ...payload });
+
+    await getDynamoDBClient()
+      .put({
+        TableName: "whitelist_table",
+        Item: {
+          ...payload,
+        },
+      })
+      .promise();
+  },
+
+  fitlerWhitelist: async (whitelistStatus) => {
+    const whitelist = await getDynamoDBClient()
+      .scan({
+        TableName: "whitelist_table",
+        FilterExpression: "#whitelistStatus = :whitelistStatus",
+        ExpressionAttributeValues: {
+          ":whitelistStatus": whitelistStatus,
+        },
+        ExpressionAttributeNames: {
+          "#whitelistStatus": "whitelistStatus",
+        },
+      })
+      .promise()
+      .then((data) => {
+        return data.Items;
+      })
       .catch(console.error);
     return whitelist;
   },
