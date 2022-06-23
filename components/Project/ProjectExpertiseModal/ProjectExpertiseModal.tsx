@@ -30,7 +30,7 @@ const ProjectExpertiseModal = (props) => {
 
   const handleChange = (evt) => {
     console.log(evt);
-  }
+  };
 
   return (
     <>
@@ -46,14 +46,14 @@ const ProjectExpertiseModal = (props) => {
           border={"1px solid rgba(88, 112, 112, 1)"}
           fontFamily={"PP Telegraf Light"}
         >
-        <ModalHeader mt={"20px"}>Expertise</ModalHeader>
+          <ModalHeader mt={"20px"}>Expertise</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form style={{ alignSelf: "center" }}>
-            <MultiSelect
+              <MultiSelect
                 name={"functionalExpertise"}
                 formLabel={"Superpowers"}
-                handleChange={handleChange}
+                onChange={handleChange}
                 options={functionalExpertiseList}
                 maxSelections={3}
                 defaultValues={values?.functionalExpertise || []}
@@ -62,7 +62,7 @@ const ProjectExpertiseModal = (props) => {
               <MultiSelect
                 name={"industryExpertise"}
                 formLabel={"Industry expertise"}
-                handleChange={handleChange}
+                onChange={handleChange}
                 defaultValues={values?.industryExpertise || []}
                 options={industryExpertiseList}
                 maxSelections={3}
@@ -71,7 +71,11 @@ const ProjectExpertiseModal = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="primary" size={"sm"} onClick={() => console.log('project sow modal save')}>
+            <Button
+              variant="primary"
+              size={"sm"}
+              onClick={() => console.log("project sow modal save")}
+            >
               Save{" "}
               {isSubmitted ? (
                 <CircularProgress

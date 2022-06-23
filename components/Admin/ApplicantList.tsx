@@ -36,25 +36,18 @@ export const ApplicantList = ({
 
   if (!whitelistApplicants)
     return (
-      <Flex height={"100%"} alignItems={"center"}>
-        <CircularProgress
-          justifySelf={"center"}
-          thickness="4px"
-          isIndeterminate
-          color="#3C2E26"
-        />
+      <Flex
+        height={"100%"}
+        width={"100%"}
+        alignItems={"center"}
+        justifyContent={"center"}
+      >
+        <CircularProgress thickness="4px" isIndeterminate color="#3C2E26" />
       </Flex>
     );
 
   return (
-    <VStack
-      width={"100%"}
-      padding={"0px 48px"}
-      marginTop={"32px !important"}
-      height={"100%"}
-      overflowY={"scroll"}
-      scrollBehavior={"smooth"}
-    >
+    <VStack>
       {whitelistApplicants?.length &&
         whitelistApplicants
           .sort((a, b) => compare(a, b, sortParams || ""))

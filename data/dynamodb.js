@@ -564,7 +564,16 @@ module.exports = {
     return dbUser;
   },
 
-  getWhitelist: async () => {
+  getWhitelist: async (userId) => {
+    const authorizedUsers = [
+      "0x7a7f59056dc2d5116e07e0fbaf6a71bd77b326af",
+      "0xf34ddaf8984e115700aef4efdc5cb1bec69785d3",
+      "0x500e9cc58ffe0d590dfabcc62ea1bf737f243890",
+      "0xeba4797ce6d748fc67fa8448610934a0413cc3b9",
+    ];
+    if (!authorizedUsers.includes(String(userId)?.toLowerCase())) {
+      return;
+    }
     const whitelist = await getDynamoDBClient()
       .scan({
         TableName: "whitelist_table",

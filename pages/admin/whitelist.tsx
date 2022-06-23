@@ -1,12 +1,24 @@
-import { Flex, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Text,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react";
 import React, { useEffect, useReducer, useState } from "react";
-import useSWR, { mutate } from "swr";
+import { mutate } from "swr";
+import { AddUserCard } from "../../components/Admin/AddUserCard";
 import { ApplicantList } from "../../components/Admin/ApplicantList";
 import { FilterInputs } from "../../components/Admin/FilterInputs";
 import { SortApplicants } from "../../components/Admin/SortApplicants";
 import whitelistReducer, { initialState } from "../../context/WhitelistReducer";
 import { useWhitelist } from "../../hooks/useWhitelist";
 import { useWhitelistFilter } from "../../hooks/useWhitelistFilter";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { InjectedConnector } from "wagmi/connectors/injected";
+import HeaderNav from "../../components/HeaderNav/HeaderNav";
 
 const fetcher = (...args: Parameters<typeof fetch>) =>
   fetch(...args).then((res) => res.json());
@@ -16,7 +28,10 @@ const whitelist = () => {
   const [query, setQuery] = useState();
   const [loadingWallet, setLoadingWallet] = useState(null);
   const [loadingIDX, setLoadingIDX] = useState(null);
-  const { data, isError } = useWhitelist();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { data: accountData } = useAccount();
+
+  const { data, isError } = useWhitelist(accountData?.address);
   const {
     data: filteredData,
     isLoading,
@@ -104,37 +119,97 @@ const whitelist = () => {
       return 0;
     }
   }
-  return (
-    <Flex flexDir={"row"} pos={"absolute"} top={0} width="100%" zIndex={-1}>
-      <FilterInputs
-        filterParams={filterParams}
-        setFilterParams={setFilterParams}
-        setQuery={setQuery}
-      />
-      <VStack
-        paddingTop={"90px"}
-        height={"100vh"}
+
+
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  });
+  const { disconnect } = useDisconnect();
+
+  if (!accountData)
+    return (
+      <Flex
+
         width={"100%"}
-        background={
-          "linear-gradient(65.14deg, #0F2922 10.35%, #1A232A 76.62%);"
-        }
+        height={"100vh"}
+        justify={"center"}
+        alignItems={"center"}
       >
-        <SortApplicants
-          contracts={filteredData || data}
-          onChange={(val) => setSortParams(val)}
+        {accountData && `Connected to ${accountData?.address}`}
+        <Button size={"lg"} variant={"primary"} onClick={() => connect()}>
+          Connect Wallet
+        </Button>
+        <br />
+      </Flex>
+    );
+
+  if (!data) {
+    return (
+      <>
+        <Flex
+          width={"100%"}
+          height={"100vh"}
+          justify={"center"}
+          alignItems={"center"}
+        >
+          <Text>USER NOT AUTHORIZED</Text>
+        </Flex>
+      </>
+    );
+  }
+  return (
+    <>
+      <HeaderNav userWallet={accountData.address} />
+      <Flex flexDir={"row"} pos={"absolute"} top={0} width="100%" zIndex={-1}>
+        <FilterInputs
+          filterParams={filterParams}
+          setFilterParams={setFilterParams}
+          setQuery={setQuery}
         />
-        <ApplicantList
-          whitelistApplicants={filteredData || data}
-          error={isError}
-          sortParams={sortParams}
-          compare={compare}
-          setLoadingIDX={setLoadingIDX}
-          loadingWallet={loadingWallet}
-          handleApprove={handleApprove}
-          handleReject={handleReject}
-        />
-      </VStack>
-    </Flex>
+        <VStack
+          paddingTop={"90px"}
+          height={"100vh"}
+          width={"100%"}
+          background={
+            "linear-gradient(65.14deg, #0F2922 10.35%, #1A232A 76.62%);"
+          }
+        >
+          <HStack
+            width={"100%"}
+            justify={"space-between"}
+            paddingRight={"48px"}
+          >
+            <SortApplicants
+              contracts={filteredData || data}
+              onChange={(val) => setSortParams(val)}
+            />
+            <Button variant={"primary"} onClick={onOpen}>
+              Add User
+            </Button>
+          </HStack>
+          <Box
+            overflowY={"scroll"}
+            scrollBehavior={"smooth"}
+            height={"100%"}
+            width={"100%"}
+            padding={"0px 48px"}
+            marginTop={"32px !important"}
+          >
+            {isOpen ? <AddUserCard onClose={onClose} /> : null}
+            <ApplicantList
+              whitelistApplicants={filteredData || data}
+              error={isError}
+              sortParams={sortParams}
+              compare={compare}
+              setLoadingIDX={setLoadingIDX}
+              loadingWallet={loadingWallet}
+              handleApprove={handleApprove}
+              handleReject={handleReject}
+            />
+          </Box>
+        </VStack>
+      </Flex>
+    </>
   );
 };
 

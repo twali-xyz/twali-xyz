@@ -1,6 +1,6 @@
 import { ApplicationStatus } from "./../../components/Whitelist/ApplicationStatus";
 import { WhitelistForm } from "./../../components/Whitelist/WhitelistForm";
-import { Box, Fade, Flex, Link, Text } from "@chakra-ui/react";
+import { Box, Fade, Flex, Link, Text, useToast } from "@chakra-ui/react";
 import React, { useEffect, useReducer, useState } from "react";
 import HeaderNav from "../../components/HeaderNav/HeaderNav";
 import useUser from "../../context/TwaliContext";
@@ -8,14 +8,15 @@ import { useRouter } from "next/router";
 import whitelistReducer, { initialState } from "../../context/WhitelistReducer";
 
 const whitelist = () => {
-  const { userWallet } = useUser();
+  const toast = useToast();
   const router = useRouter();
+  const { userWallet } = useUser();
+  const [step, setStep] = useState(0);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [discord, setDiscord] = useState("");
-  const [referredBy, setReferredBy] = useState("");
   const [linkedIn, setLinkedIn] = useState("");
-  const [step, setStep] = useState(0);
+  const [referredBy, setReferredBy] = useState("");
   const [whiteListStatus, setWhiteListStatus] = useState(""); // "", pending, approved, rejected
   const [state, dispatch] = useReducer(whitelistReducer, initialState);
 
@@ -171,6 +172,15 @@ const whitelist = () => {
         referred_by: referredBy,
         whitelistStatus: "pending",
         applied_on: Date.now(),
+      });
+    } else {
+      toast({
+        title: "Invalid",
+        description: "Oops! Please fill out all required fields!",
+        status: "error",
+        variant: "subtle",
+        duration: 5000,
+        isClosable: true,
       });
     }
   }
