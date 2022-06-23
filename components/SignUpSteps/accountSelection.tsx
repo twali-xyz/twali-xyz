@@ -27,7 +27,7 @@ export function AccountSelection({
 }) {
   const router = useRouter();
   const [viewPass, setViewPass] = useState(false);
-  const [signUp, setSignUp] = useState(false);
+  const [signIn, setSignIn] = useState(false);
   return (
     <Flex
       m={0}
@@ -51,7 +51,7 @@ export function AccountSelection({
         backgroundPosition={"100% "}
         cursor="pointer"
         onClick={() => {
-          if (signUp) return;
+          if (signIn) return;
           setBtnActive(1);
           selectUserAccType("Expert");
         }}
@@ -62,7 +62,7 @@ export function AccountSelection({
         }
         backgroundColor={"inverse"}
       >
-        {signUp === false ? (
+        {signIn === false ? (
           <>
             <Text
               pos={"relative"}
@@ -112,7 +112,7 @@ export function AccountSelection({
         ) : (
           <Flex flexDir={"column"}>
             <IconButton
-              onClick={() => setSignUp(false)}
+              onClick={() => setSignIn(false)}
               pos={"absolute"}
               top={"35px"}
               left={"35px"}
@@ -211,7 +211,7 @@ export function AccountSelection({
             alignSelf="center"
             variant={"primary"}
             size={"lg"}
-            onClick={() => setSignUp(true)}
+            onClick={() => setSignIn(true)}
             padding={"16px, 24px, 13px, 24px !important"}
             visibility={btnActive == 2 ? "unset" : "hidden"}
           >
