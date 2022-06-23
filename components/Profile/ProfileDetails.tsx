@@ -248,7 +248,7 @@ const ProfileDetails = ({ user }) => {
             onCompanyModalOpen={onCompanyModalOpen}
           />
         );
-      } else {
+      } else if (i === userState.companyInfo.length) {
         elements.push(
           <UserPermissionsRestricted
             to="edit"
@@ -300,8 +300,9 @@ const ProfileDetails = ({ user }) => {
             <HeaderNav
               whichPage="profile"
               isConnectWalletBtn={isConnectWalletBtn}
-              userPage={userState}
+              userPage={userData}
               userWallet={loggedInUserAddress}
+              userName={userData.userName}
             />
             <Container
               maxW="100%"

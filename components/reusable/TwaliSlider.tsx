@@ -56,6 +56,7 @@ export const TwaliSlider = ({
     colorScheme,
     size,
   });
+
   return (
     <Slider
       defaultValue={defaultValue || 0}

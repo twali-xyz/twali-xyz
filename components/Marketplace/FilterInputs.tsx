@@ -18,14 +18,18 @@ import DatePicker from "react-date-picker/dist/entry.nostyle";
 import Router from "next/router";
 
 export const FilterInputs = ({ filterParams, setFilterParams }) => {
-  const { isOpen, onClose, onToggle } = useDisclosure();
+  const {
+    isOpen: datePickerIsOpen,
+    onClose: datePickerOnclose,
+    onToggle: datePickerToggle,
+  } = useDisclosure();
   const [dateSelected, setDateSelected] = useState(null);
 
-  // name: "exampleName", options: [exampleOptions]
+  // name: "", options: []
   const dropdowns = [
     { name: "industry", options: industryExpertiseList },
     { name: "expertise", options: functionalExpertiseList },
-    // { name: "type", options: industryExpertiseList },
+    // { name: "type", options: [solo, group] },
   ];
 
   const rangeSliders = [
@@ -45,7 +49,7 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
       .classList.add("market-date-picker__calendar");
 
     return () => {};
-  }, [isOpen]);
+  }, [datePickerIsOpen]);
 
   function handleRemove(e) {
     // without this an error is thrown when the svg within the chip button is clicked
@@ -104,7 +108,7 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
   const ref = React.useRef();
   useOutsideClick({
     ref: ref,
-    handler: onClose,
+    handler: datePickerOnclose,
   });
   return (
     <VStack
@@ -162,7 +166,7 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
         <FormControl>
           <Box ref={ref}>
             <Box
-              onClick={onToggle}
+              onClick={datePickerToggle}
               pos={"relative"}
               zIndex={1}
               _hover={{ borderColor: "zing", cursor: "pointer" }}
@@ -195,10 +199,10 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
             </Box>
             <DatePicker
               name="startDate"
-              isOpen={isOpen || null}
+              isOpen={datePickerIsOpen || null}
               onChange={(val) => {
                 handleSelectDate(val);
-                onClose();
+                datePickerOnclose();
               }}
               value={dateSelected}
             />
@@ -231,22 +235,6 @@ export const FilterInputs = ({ filterParams, setFilterParams }) => {
         maxH={"70vh"}
         flexWrap={"noWrap"}
         overflowY={"scroll"}
-        css={{
-          "&::-webkit-scrollbar": {
-            width: "4px",
-            background: "zing",
-            color: "zing",
-          },
-          "&::-webkit-scrollbar-track": {
-            width: "6px",
-            background: "zing",
-            color: "zing",
-          },
-          "&::-webkit-scrollbar-thumb": {
-            background: "zing",
-            borderRadius: "24px",
-          },
-        }}
         pos={"relative"}
         padding={"48px"}
         pb={2}

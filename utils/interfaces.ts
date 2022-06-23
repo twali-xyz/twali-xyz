@@ -35,5 +35,5 @@ export interface CompanyInfo {
   companyIndustry: string;
   companyDescription: string;
   logo: any;
-  currentStatus: Number;
+  currentStatus: number;
 }
