@@ -120,6 +120,7 @@ const whitelist = () => {
     }
   }
 
+
   const { connect } = useConnect({
     connector: new InjectedConnector(),
   });
@@ -128,6 +129,7 @@ const whitelist = () => {
   if (!accountData)
     return (
       <Flex
+
         width={"100%"}
         height={"100vh"}
         justify={"center"}
