@@ -45,16 +45,13 @@ const uploadContractToS3 = async (bounty) => {
   // Setting up S3 upload parameters
   const params = {
     Bucket: ContractBucket,
-    Key: bounty.contractID, // File name you want to save as in S3
-    Body: JSON.stringify(bounty).toString("utf8"),
-    ContentType: "application/json",
+    Key: "test.json", // File name you want to save as in S3
+    Body: JSON.stringify(bounty),
+    s3ForcePathStyle: true,
   };
 
   // Uploading files to the bucket
-  s3.putObject(params, function (err, data) {
-    console.log(JSON.stringify(err) + " " + JSON.stringify(data));
-    URL = data.location;
-  });
+  s3.putObject(params).promise();
   return URL;
 };
 module.exports = {
@@ -590,7 +587,7 @@ module.exports = {
       attachedFiles,
     } = bounty;
 
-    await uploadContractToS3(bounty);
+    // await uploadContractToS3(bounty);
 
     await getDynamoDBClient()
       .update({

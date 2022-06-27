@@ -111,6 +111,13 @@ const SOWBuilderSteps = (props) => {
     },
   ];
 
+  const uploadToS3 = async (bounty) => {
+    let res = await fetch("/api/users/postSOW", {
+      method: "POST",
+      body: JSON.stringify({ bounty }),
+    });
+    return res;
+  };
   const submitSOW = async (bounty) => {
     let res = await fetch("/api/marketplace/submitBounty", {
       method: "POST",
@@ -149,36 +156,43 @@ const SOWBuilderSteps = (props) => {
     // if (userData.userName && userData.userName !== '') {
     // setErrors(validate(userData));
     try {
-      let isValid = submitSOW(bounty); // checks if the user name already exists in DB
+      let s3Success = uploadToS3(bounty);
+      s3Success.then((valid) => {
+        console.log(valid);
 
-      // Displays a toast alert to inform the user - need a unique user name
-      isValid.then((valid) => {
-        if (valid.status == 200) {
-          setIsDisabled(true);
-          toast({
-            title: "Your bounty was submitted!",
-            description: `${bounty.contractTitle} is up on the marketplace`,
-            status: "success",
-            variant: "subtle",
-            duration: 5000,
-            isClosable: true,
+        if (valid.status === 200) {
+          let isValid = submitSOW(bounty); // checks if the user name already exists in DB
+
+          // Displays a toast alert to inform the user - need a unique user name
+          isValid.then((valid) => {
+            if (valid.status == 200) {
+              setIsDisabled(true);
+              toast({
+                title: "Your bounty was submitted!",
+                description: `${bounty.contractTitle} is up on the marketplace`,
+                status: "success",
+                variant: "subtle",
+                duration: 5000,
+                isClosable: true,
+              });
+              setTimeout(function () {
+                router.push("/marketplace");
+              }, 1000);
+            }
+            // else if (activeStep <= 0 && !errors.userName && !errors.firstName && !errors.lastName && !errors.email) {
+            //   setIsDisabled(false);
+            //   nextStep();
+            // } else if (activeStep == 1 && !errors.businessType && !errors.businessName) {
+            //   setIsDisabled(false);
+            //   nextStep();
+            // } else if (activeStep > 1 && !errors.currTitle) {
+            //   setIsDisabled(false);
+            //   updateAccType();
+            // } else {
+            //   setIsDisabled(true);
+            // }
           });
-          setTimeout(function () {
-            router.push("/marketplace");
-          }, 1000);
         }
-        // else if (activeStep <= 0 && !errors.userName && !errors.firstName && !errors.lastName && !errors.email) {
-        //   setIsDisabled(false);
-        //   nextStep();
-        // } else if (activeStep == 1 && !errors.businessType && !errors.businessName) {
-        //   setIsDisabled(false);
-        //   nextStep();
-        // } else if (activeStep > 1 && !errors.currTitle) {
-        //   setIsDisabled(false);
-        //   updateAccType();
-        // } else {
-        //   setIsDisabled(true);
-        // }
       });
     } catch (err) {
       console.log("Bounty wasn't submitted...");
