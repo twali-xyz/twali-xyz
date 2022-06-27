@@ -1,6 +1,7 @@
 module.exports = {
   env: {
     TABLE_NAME: "Twali-core-test",
+    CONTRACT_BUCKET: "twali-contracts-bucket",
   },
   webpack: (config) => {
     if (!process.env.BUNDLE_AWS_SDK) {
