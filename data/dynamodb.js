@@ -14,7 +14,7 @@ const getDynamoDBClient = () => {
     // accessKeyId: "xxxx",
     // secretAccessKey: "xxxx",
     region: "us-east-1",
-    // endpoint: "http://localhost:8000",
+    endpoint: "http://localhost:8000",
   });
 
   const options = {
@@ -536,35 +536,35 @@ module.exports = {
     }
     return output;
   },
-    /**
+  /**
    * @desc Access a user in the table by primary key on a GSI using `userName`.
    * @param {string} - function takes in a input string of the users userName
    * @dev This can be altered to included any additional attributes with 'ProjectionExpression'.
    * @example See docs to add additonal attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property
    * @returns Returns a user as and object.
    **/
-     submitBounty: async (bounty) => {
-       let {
-        userWallet,
-        contractID,
-        contractCreatedOn,
-        contractOwnerUserName,
-        contractTitle,
-        contractDescription,
-        contractStartDate,
-        contractEndDate,
-        contractDuration,
-        token,
-        contractAmount,
-        convertedAmount,
-        applicationDeadline,
-        contractIndustry,
-        contractExpertise,
-        contractStatus,
-        attachedFiles,
-      } = bounty;
+  submitBounty: async (bounty) => {
+    let {
+      userWallet,
+      contractID,
+      contractCreatedOn,
+      contractOwnerUserName,
+      contractTitle,
+      contractDescription,
+      contractStartDate,
+      contractEndDate,
+      contractDuration,
+      token,
+      contractAmount,
+      convertedAmount,
+      applicationDeadline,
+      contractIndustry,
+      contractExpertise,
+      contractStatus,
+      attachedFiles,
+    } = bounty;
 
-      await getDynamoDBClient()
+    await getDynamoDBClient()
       .update({
         TableName,
         Key: {
@@ -598,5 +598,5 @@ module.exports = {
         console.log(data);
       })
       .catch(console.error);
-    },
+  },
 };

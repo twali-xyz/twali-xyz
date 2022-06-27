@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Step, Steps } from "chakra-ui-steps";
 import Project from "../Project/Project";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 import {
   Heading,
   Button,
   HStack,
   CircularProgress,
-  Container, 
+  Container,
   VStack,
   Flex,
   Text,
@@ -34,8 +34,8 @@ const SOWBuilderSteps = (props) => {
   const [dueDate, setDueDate] = useState(new Date());
   const [dateRange, setDateRange] = useState([new Date(), new Date()]);
   const { tokenName, tokenAmount, calculatedUSD } = useToken();
-  const { setBounty, ...bountyState} = useBounty();
-  const toast = useToast()
+  const { setBounty, ...bountyState } = useBounty();
+  const toast = useToast();
 
   let activeStep = props.activeStep;
   let nextStep = props.nextStep;
@@ -79,12 +79,11 @@ const SOWBuilderSteps = (props) => {
         ["contractStartDate"]: convertDateToUnix(dateRange[0]),
         ["contractEndDate"]: convertDateToUnix(dateRange[1]),
         ["applicationDeadline"]: convertDateToUnix(dueDate),
-        ["contractDuration"]: convertDateToUnix(dateRange[1]) - convertDateToUnix(dateRange[0])
+        ["contractDuration"]:
+          convertDateToUnix(dateRange[1]) - convertDateToUnix(dateRange[0]),
       });
     }
   };
-
-
 
   const steps = [
     {
@@ -93,13 +92,13 @@ const SOWBuilderSteps = (props) => {
     },
     {
       label: "Dates & Pricing",
-      content: datesAndPricing({ 
-        handleChange, 
-        dueDate, 
-        setDueDate, 
-        dateRange, 
-        setDateRange
-       }),
+      content: datesAndPricing({
+        handleChange,
+        dueDate,
+        setDueDate,
+        dateRange,
+        setDateRange,
+      }),
     },
     {
       label: "Review",
@@ -107,7 +106,7 @@ const SOWBuilderSteps = (props) => {
     {
       label: "Submission",
       content: submissionOfWerk({
-        handleChange
+        handleChange,
       }),
     },
   ];
@@ -137,35 +136,35 @@ const SOWBuilderSteps = (props) => {
         contractCreatedOn: 1651968000,
         contractStatus: "live",
         attachedFiles: [],
-      }
+      };
       checkSubmissionValidity(bounty);
     } else {
-      nextStep()
+      nextStep();
     }
-  }
+  };
 
   // Informs the user if the bounty is submitted or not
   // Error checks for main required fields
   const checkSubmissionValidity = (bounty) => {
     // if (userData.userName && userData.userName !== '') {
-      // setErrors(validate(userData));
-      try {
+    // setErrors(validate(userData));
+    try {
       let isValid = submitSOW(bounty); // checks if the user name already exists in DB
 
       // Displays a toast alert to inform the user - need a unique user name
-      isValid.then(valid => { 
+      isValid.then((valid) => {
         if (valid.status == 200) {
           setIsDisabled(true);
           toast({
-            title: 'Your bounty was submitted!',
+            title: "Your bounty was submitted!",
             description: `${bounty.contractTitle} is up on the marketplace`,
-            status: 'success',
-            variant: 'subtle',
+            status: "success",
+            variant: "subtle",
             duration: 5000,
             isClosable: true,
           });
           setTimeout(function () {
-            router.push('/marketplace');
+            router.push("/marketplace");
           }, 1000);
         }
         // else if (activeStep <= 0 && !errors.userName && !errors.firstName && !errors.lastName && !errors.email) {
@@ -179,9 +178,9 @@ const SOWBuilderSteps = (props) => {
         //   updateAccType();
         // } else {
         //   setIsDisabled(true);
-        // }    
+        // }
       });
-    } catch(err) {
+    } catch (err) {
       console.log("Bounty wasn't submitted...");
     }
     // }
@@ -190,92 +189,97 @@ const SOWBuilderSteps = (props) => {
   return (
     <>
       {activeStep === 2 ? (
-        <Project activeStep={activeStep} prevStep={prevStep} nextStep={nextStep} steps={steps}/>
-      ): (
+        <Project
+          activeStep={activeStep}
+          prevStep={prevStep}
+          nextStep={nextStep}
+          steps={steps}
+        />
+      ) : (
         <>
-        <Container
-          maxW="container.xl"
-          pb="inherit"
-          px={0}
-          m="inherit"
-        >
-        <Flex h="full">
-            <VStack w="full" h="full" spacing={8} alignItems="flex-start">
-      <Heading
-        fontSize={"72px"}
-        lineHeight={"88px"}
-        marginTop={"24px"}
-        marginBottom={"-8px"}
-        alignSelf="flex-start"
-        fontFamily={"Scope Light"}
-        fontWeight={"400"}
-      >
-        Build your werk.
-      </Heading>
-      <Steps activeStep={activeStep} width="720px">
-        {steps.map(({ label, content }) => (
-          <Step label={label} key={label}>
-            {content}
-          </Step>
-        ))}
-      </Steps>
-      <HStack width={"100%"} justifyContent={"flex-end"}>
-        <Button
-          alignSelf="left"
-          mr={"24px"}
-          onClick={() => {
-            activeStep <= 0 ? router.push("/marketplace") : prevStep();
-          }}
-          pos={"relative"}
-          alignItems={"center"}
-          justifyContent={"center"}
-          variant={"secondary"}
-          size={"lg"}
-        >
-          <Text
-            display={"flex"}
-            width={"100%"}
-            height={"100%"}
-            justifyContent={"center"}
-            alignItems={"center"}
-          >
-            go back
-          </Text>
-        </Button>
-        <Button
-          disabled={false}
-          pos={"relative"}
-          alignSelf="center"
-          variant={"primary"}
-          size={"lg"}
-          onClick={handleSubmit}
-        >
-          <Text
-            display={"flex"}
-            width={"100%"}
-            height={"100%"}
-            justifyContent={"center"}
-            alignItems={"center"}
-          >
-            { activeStep === 1 ? 'preview': activeStep === 3 ? 'submit': 'continue'}
-          </Text>
+          <Container maxW="container.xl" pb="inherit" px={0} m="inherit">
+            <Flex h="full">
+              <VStack w="full" h="full" spacing={8} alignItems="flex-start">
+                <Heading
+                  fontSize={"72px"}
+                  lineHeight={"88px"}
+                  marginTop={"24px"}
+                  marginBottom={"-8px"}
+                  alignSelf="flex-start"
+                  fontFamily={"Scope Light"}
+                  fontWeight={"400"}
+                >
+                  Build your werk.
+                </Heading>
+                <Steps activeStep={activeStep} width="720px">
+                  {steps.map(({ label, content }) => (
+                    <Step label={label} key={label}>
+                      {content}
+                    </Step>
+                  ))}
+                </Steps>
+                <HStack width={"100%"} justifyContent={"flex-end"}>
+                  <Button
+                    alignSelf="left"
+                    mr={"24px"}
+                    onClick={() => {
+                      activeStep <= 0
+                        ? router.push("/marketplace")
+                        : prevStep();
+                    }}
+                    pos={"relative"}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                    variant={"secondary"}
+                    size={"lg"}
+                  >
+                    <Text
+                      display={"flex"}
+                      width={"100%"}
+                      height={"100%"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                    >
+                      go back
+                    </Text>
+                  </Button>
+                  <Button
+                    disabled={false}
+                    pos={"relative"}
+                    alignSelf="center"
+                    variant={"primary"}
+                    size={"lg"}
+                    onClick={handleSubmit}
+                  >
+                    <Text
+                      display={"flex"}
+                      width={"100%"}
+                      height={"100%"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                    >
+                      {activeStep === 1
+                        ? "preview"
+                        : activeStep === 3
+                        ? "submit"
+                        : "continue"}
+                    </Text>
 
-          {isSubmitted ? (
-            <CircularProgress
-              size="22px"
-              thickness="4px"
-              isIndeterminate
-              color="#3C2E26"
-            />
-          ) : null}
-        </Button>{" "}
-      </HStack>
-      </VStack>
-        </Flex>
-        </Container>
-      </>
-      )
-      }
+                    {isSubmitted ? (
+                      <CircularProgress
+                        size="22px"
+                        thickness="4px"
+                        isIndeterminate
+                        color="#3C2E26"
+                      />
+                    ) : null}
+                  </Button>{" "}
+                </HStack>
+              </VStack>
+            </Flex>
+          </Container>
+        </>
+      )}
     </>
   );
 };

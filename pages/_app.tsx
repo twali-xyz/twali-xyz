@@ -6,7 +6,13 @@ import * as React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
 import { UserProvider } from "../context/TwaliContext";
 import { twaliTheme } from "../styles/twaliTheme";
+import { WagmiConfig, createClient } from "wagmi";
+import { getDefaultProvider } from "ethers";
 
+const client = createClient({
+  autoConnect: true,
+  provider: getDefaultProvider(),
+});
 function App({ Component, pageProps }: AppProps) {
   return (
     // <>
@@ -27,11 +33,13 @@ function App({ Component, pageProps }: AppProps) {
     //   `,
     // }}
     // />
-    <UserProvider>
-      <ChakraProvider theme={twaliTheme}>
-        <Component {...pageProps} />
-      </ChakraProvider>
-    </UserProvider>
+    <WagmiConfig client={client}>
+      <UserProvider>
+        <ChakraProvider theme={twaliTheme}>
+          <Component {...pageProps} />
+        </ChakraProvider>
+      </UserProvider>
+    </WagmiConfig>
     // </>
   );
 }

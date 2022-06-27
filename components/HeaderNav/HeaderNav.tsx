@@ -53,7 +53,7 @@ const HeaderNav = (props) => {
                     setIsSubmitted,
                     setLoaded,
                     router,
-                    setUserData,
+                    setUserData
                   )
                 }
               >
