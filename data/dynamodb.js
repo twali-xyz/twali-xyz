@@ -32,28 +32,6 @@ const getDynamoDBClient = () => {
   return client;
 };
 
-const uploadContractToS3 = async (bounty) => {
-  let URL;
-  const s3 = new AWS.S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  });
-
-  console.log("BIG BOUNTY BOY: ", JSON.stringify(bounty));
-  // // Read content from the file
-
-  // Setting up S3 upload parameters
-  const params = {
-    Bucket: ContractBucket,
-    Key: "test.json", // File name you want to save as in S3
-    Body: JSON.stringify(bounty),
-    s3ForcePathStyle: true,
-  };
-
-  // Uploading files to the bucket
-  s3.putObject(params).promise();
-  return URL;
-};
 module.exports = {
   /**
    * @desc Gets a users nonce from database that is generated upon user creation to authenticate user that is accessing database.
