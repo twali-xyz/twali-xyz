@@ -1,8 +1,9 @@
 const { v4 } = require("uuid");
 const TableName = process.env.TABLE_NAME;
+const ContractBucket = process.env.CONTRACT_BUCKET;
+const AWS = require("aws-sdk");
 
 const getDynamoDBClient = () => {
-  const AWS = require("aws-sdk");
   const edgeRegion = process.env.CURRENT_AWS_REGION || "us-east-1";
   const dynamoDBRegion = edgeRegion.startsWith("us")
     ? "us-east-1"
@@ -31,6 +32,31 @@ const getDynamoDBClient = () => {
   return client;
 };
 
+const uploadContractToS3 = async (bounty) => {
+  let URL;
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  });
+
+  console.log("BIG BOUNTY BOY: ", JSON.stringify(bounty));
+  // // Read content from the file
+
+  // Setting up S3 upload parameters
+  const params = {
+    Bucket: ContractBucket,
+    Key: bounty.contractID, // File name you want to save as in S3
+    Body: JSON.stringify(bounty).toString("utf8"),
+    ContentType: "application/json",
+  };
+
+  // Uploading files to the bucket
+  s3.putObject(params, function (err, data) {
+    console.log(JSON.stringify(err) + " " + JSON.stringify(data));
+    URL = data.location;
+  });
+  return URL;
+};
 module.exports = {
   /**
    * @desc Gets a users nonce from database that is generated upon user creation to authenticate user that is accessing database.
@@ -343,7 +369,6 @@ module.exports = {
 
     // Call DynamoDB's scan API
     const output = executeScan(dynamoDbClient, scanInput).then((output) => {
-      console.info("Scan API call has been executed.", output);
       return output;
     });
 
@@ -536,6 +561,7 @@ module.exports = {
     }
     return output;
   },
+
   /**
    * @desc Access a user in the table by primary key on a GSI using `userName`.
    * @param {string} - function takes in a input string of the users userName
@@ -563,6 +589,8 @@ module.exports = {
       contractStatus,
       attachedFiles,
     } = bounty;
+
+    await uploadContractToS3(bounty);
 
     await getDynamoDBClient()
       .update({
