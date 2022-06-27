@@ -585,8 +585,9 @@ module.exports = {
   },
 
   /**
-   * @desc Edits an existing users item's attributes, or adds a new item to the table if it does not already exist.
-   * @param {object} - function takes an object as a the parameter with primary and attributes. Object will need to the primary key and any attributes that are being updated or created.
+   * @desc Gives admin ability to edit user whitelist status
+   * @param {string} userWallet - wallet address for user being updated
+   * @param {string} newStatus - the new status for the user whitelist
    * @dev New items can be added to a user and does need to be predefined in the table. Any values in 'UpdateExpression' need to be defined will values within 'ExpressionAttributeValues'.
    * @example See docs about editing existing attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#update-property
    */
@@ -612,10 +613,8 @@ module.exports = {
   },
 
   /**
-   * @desc Edits an existing users item's attributes, or adds a new item to the table if it does not already exist.
+   * @desc Allows admin to add user to the whitelist table
    * @param {object} - function takes an object as a the parameter with primary and attributes. Object will need to the primary key and any attributes that are being updated or created.
-   * @dev New items can be added to a user and does need to be predefined in the table. Any values in 'UpdateExpression' need to be defined will values within 'ExpressionAttributeValues'.
-   * @example See docs about editing existing attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#update-property
    */
   addWhitelistUser: async (payload) => {
     console.log("ADD USER TO WHITELIST");
