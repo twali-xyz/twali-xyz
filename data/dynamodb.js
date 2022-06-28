@@ -10,24 +10,25 @@ const getDynamoDBClient = () => {
 
   // Only needed with local development.
 
-  AWS.config.update({
-    // accessKeyId: "xxxx",
-    // secretAccessKey: "xxxx",
-    region: "us-east-1",
-    endpoint: "http://localhost:8000",
-  });
+  // AWS.config.update({
+  //   // accessKeyId: "xxxx",
+  //   // secretAccessKey: "xxxx",
+  //   region: "us-east-1",
+  // });
 
   const options = {
     convertEmptyValues: true,
-    region: dynamoDBRegion,
+    region: "us-east-1",
   };
 
-  const client = process.env.LOCAL_DYNAMO_DB_ENDPOINT
-    ? new AWS.DynamoDB.DocumentClient()
-    : // ...options,
-      // process.env.LOCAL_DYNAMO_DB_ENDPOINT
-      new AWS.DynamoDB.DocumentClient(options);
+  const client = !process.env.LOCAL_DYNAMO_DB_ENDPOINT
+    ? new AWS.DynamoDB.DocumentClient({
+      region: "us-east-1",
+      endpoint: "http://localhost:8000"
+    })
+    : new AWS.DynamoDB.DocumentClient(options);
 
+  console.log(client);
   return client;
 };
 

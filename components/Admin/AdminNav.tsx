@@ -68,7 +68,8 @@ const AdminNav = (props) => {
                     userPage,
                     setIsSubmitted,
                     setLoaded,
-                    router
+                    router,
+                    userWallet
                   )
                 }
               >
