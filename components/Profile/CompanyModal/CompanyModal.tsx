@@ -46,12 +46,13 @@ const CompanyModal = (props) => {
     companyEnd: "",
     companyFunc: "",
     companyIndustry: "",
+    currCompany: props.currCompany,
     logo: false,
   };
   const [compStart, setCompStart] = useState(undefined);
   const [compEnd, setCompEnd] = useState(undefined);
   const [companyData, setCompanyData] = useState<any>();
-  const [currentStatus, setCurrentStatus] = useState(0);
+  const [currentStatus, setCurrentStatus] = useState<number>(0);
   useEffect(() => {
     if (!props.isOpen) {
       setlogo(false);
@@ -70,7 +71,7 @@ const CompanyModal = (props) => {
       setCompStart(userState?.companyInfo[props.currCompany]?.companyStart);
       setCompEnd(userState?.companyInfo[props.currCompany]?.companyEnd);
       setCurrentStatus(
-        Number(userState?.companyInfo[props.currCompany]?.currentStatus) || 0
+        userState?.companyInfo[props.currCompany]?.currentStatus
       );
     }
   }, [props.isOpen]);
@@ -122,6 +123,25 @@ const CompanyModal = (props) => {
       companyData.companyStart,
       companyData.companyEnd
     );
+  }
+
+  async function deleteCompanyInfo(currCompany: number) {
+    if (userState.userWallet && userState.userName && companyData) {
+      userState.companyInfo.splice(currCompany, 1);
+
+      let companyAttributes = {
+        companyData: userState.companyInfo,
+        userName: userState.userName,
+        currCompany: props.currCompany,
+      };
+      updateUserCompanyData(userState.userWallet, companyAttributes);
+      editCompany(companyAttributes.companyData);
+      props.onClose();
+      setlogo(false);
+      setCompanyData(emptyCompanyInfo);
+      setShouldFetch(false);
+      setIsSubmitted(false);
+    }
   }
 
   async function updateCompanyInfo() {
@@ -313,6 +333,7 @@ const CompanyModal = (props) => {
                       <>
                         <CompanyInfoData
                           companyName={companyData.companyName}
+                          currCompany={props.currCompany}
                           isDisabled={setDisabled}
                           logo={logo}
                           setlogo={setlogo}
@@ -329,7 +350,10 @@ const CompanyModal = (props) => {
                       </Box>
                     ) : companyData.companyName ? (
                       <>
-                        <LogoFallBack companyName={companyData.companyName} />
+                        <LogoFallBack
+                          companyName={companyData.companyName}
+                          currCompany={props.currCompany}
+                        />
                       </>
                     ) : null}
                     <FormLabel
@@ -472,7 +496,9 @@ const CompanyModal = (props) => {
                     <TwaliSlider
                       setCurrentStatus={setCurrentStatus}
                       currentStatus={currentStatus}
-                      defaultValue={companyData.currentStatus || 0}
+                      defaultValue={
+                        userState?.companyInfo[props.currCompany]?.currentStatus
+                      }
                       marks={[
                         { mark: "No", value: 0 },
                         { mark: "yes", value: 1 },
@@ -531,7 +557,30 @@ const CompanyModal = (props) => {
             </ModalBody>
             <ModalFooter>
               <Button
+                mr={2}
                 isDisabled={isDisabled}
+                onClick={() => {
+                  userState.companyInfo.length === props.currCompany
+                    ? props.onClose()
+                    : deleteCompanyInfo(props.currCompany);
+                }}
+                variant="secondary"
+                size={"sm"}
+              >
+                {userState.companyInfo.length === props.currCompany
+                  ? "Cancel"
+                  : "Delete"}
+                {isSubmitted ? (
+                  <CircularProgress
+                    size="22px"
+                    thickness="4px"
+                    isIndeterminate
+                    color="#3C2E26"
+                  />
+                ) : null}
+              </Button>
+              <Button
+                isDisabled={companyData?.companyName === "" || isDisabled}
                 onClick={() => {
                   updateCompanyInfo();
                 }}
@@ -600,7 +649,10 @@ function CompanyInfoData(props) {
         <>
           {props.companyName !== "" && (
             <>
-              <LogoFallBack companyName={props.companyName} />
+              <LogoFallBack
+                companyName={props.companyName}
+                currCompany={props.currCompany}
+              />
             </>
           )}
         </>
@@ -618,7 +670,11 @@ function LogoFallBack(props) {
           h={"1.75rem"}
           justifyContent={"center"}
           alignItems={"center"}
-          bgGradient="linear-gradient(to right, #d1913c, #ffd194)"
+          background={
+            props.currCompany < 5
+              ? `gradient${props.currCompany + 1}`
+              : "gradient2"
+          }
           borderRadius={"50%"}
         >
           <Text

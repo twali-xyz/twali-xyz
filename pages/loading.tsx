@@ -1,4 +1,11 @@
-import { Container, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  CircularProgress,
+  Container,
+  Img,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import background from "../public/twali-assets/backgroundscreen.png";
 import HeaderNav from "../components/HeaderNav/HeaderNav";
 import React, { useEffect, useState } from "react";
@@ -8,19 +15,17 @@ import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { UserData } from "../utils/interfaces";
 import { getUserByWallet } from "../utils/walletUtils";
-import { AccountSelection } from "../components/SignUpSteps/accountSelection";
 
-const LoginPage = (props) => {
+const LoadingPage = (props) => {
+  useEffect(() => {
+    setLoaded(!props.loaded);
+  }, []);
+
+  const [show, setShow] = useState(false);
+  const toggleMenu = () => setShow(!show);
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [loaded, setLoaded] = useState(false);
   const router = useRouter();
-
-  const [referredBy, setReferredBy] = useState<string | string[]>();
-  console.log("ROUTER: ", router.query["referred_by"]);
-  useEffect(() => {
-    setLoaded(!props.loaded);
-    setReferredBy(router.query["referred_by"]);
-  }, [router.query]);
 
   const handleWalletConnectOnLogin = async () => {
     const web3Modal = new Web3Modal({
@@ -50,41 +55,23 @@ const LoginPage = (props) => {
       if (userData && userData.userName && userData.userWallet) {
         router.push(`/${userData.userName}`);
         setIsSubmitted(false);
-      } else if (referredBy) {
-        console.log("No profile, pls create one...");
-        router.push(`/steps?referred_by?${referredBy}`);
       } else {
         console.log("No profile, pls create one...");
-        router.push(`/steps`);
+        router.push("/steps");
       }
     } catch (err) {
       console.log("error: ", err);
-      if (referredBy) {
-        console.log("No profile, pls create one...");
-        router.push(`/steps?referred_by?${referredBy}`);
-      } else {
-        console.log("No profile, pls create one...");
-        router.push(`/steps`);
-      }
+      router.push("/steps");
       setLoaded(true);
     }
   };
-  const [accType, setAccType] = useState("");
-  const [btnActive, setBtnActive] = useState(0);
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [isAccTypeSelection, setIsAccTypeSelection] = useState(true);
-  const [isAccTypeSelected, setIsAccTypeSelected] = useState(false);
-  const [accSelectionComplete, setAccSelectionComplete] = useState(false);
-  const selectUserAccType = (accType: string) => {
-    setAccType(accType);
-    setIsAccTypeSelected(true);
-  };
+
   return (
     <>
       <title>twali.xyz - login</title>
       <Container
         width="100%"
-        height="100%"
+        height="1024px"
         minH={"100vh"}
         maxW={"100%"}
         pos={"relative"}
@@ -92,27 +79,64 @@ const LoginPage = (props) => {
         bgPosition={"center"}
         bgImg={`url(${background.src})`}
       >
+        <HeaderNav whichPage="index" />
         <VStack
           width="100%"
+          minH={"100vh"}
           maxW={"100%"}
+          pos={"absolute"}
+          right={"1.9%"}
+          bottom={"4.5%"}
+          display={"flex"}
           flexDir={"column"}
           alignItems={"center"}
           justifyContent={"center"}
         >
-          <AccountSelection
-            btnActive={btnActive}
-            referredBy={referredBy}
-            setBtnActive={setBtnActive}
-            selectUserAccType={selectUserAccType}
-            isAccTypeSelected={isAccTypeSelected}
-            onConnectWallet={handleWalletConnectOnLogin}
-            setIsAccTypeSelection={setIsAccTypeSelection}
-            setAccSelectionComplete={setAccSelectionComplete}
+          <Text
+            alignSelf={"center"}
+            fontFamily={"GrandSlang"}
+            fontSize={"40px"}
+            lineHeight={"56px"}
+            letterSpacing={"wide"}
+          >
+            welcome to
+          </Text>
+          <Img
+            src="twali-assets/twali_rainbow.png"
+            width={"300px"}
+            height={"64.38px"}
+            marginTop={"49px !important"}
           />
+          {!loaded ? (
+            <CircularProgress
+              marginTop={"109px !important"}
+              size="32px"
+              thickness="4px"
+              isIndeterminate
+              color="#3C2E26"
+            />
+          ) : (
+            <Button
+              marginTop={"96px !important"}
+              variant={"primary"}
+              size={"lg"}
+              onClick={handleWalletConnectOnLogin}
+            >
+              Connect Wallet{" "}
+              {isSubmitted ? (
+                <CircularProgress
+                  size="22px"
+                  thickness="4px"
+                  isIndeterminate
+                  color="#3C2E26"
+                />
+              ) : null}
+            </Button>
+          )}
         </VStack>
       </Container>
     </>
   );
 };
 
-export default LoginPage;
+export default LoadingPage;

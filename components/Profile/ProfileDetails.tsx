@@ -18,21 +18,28 @@ import CompanyModal from "./CompanyModal/CompanyModal";
 import UserPermissionsProvider from "../UserPermissionsProvider/UserPermissionsProvider";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import { fetchPermission } from "../../utils/profileUtils";
-import LoginPage from "../../pages/login";
 import HeaderNav from "../HeaderNav/HeaderNav";
 import { UserData } from "../../utils/interfaces";
 import { GetCompany } from "./GetCompany";
 import useUser from "../../context/TwaliContext";
+import LoadingPage from "../../pages/loading";
+import useFetchUser from "../../hooks/useFetchUser";
 
 const ProfileDetails = ({ user }) => {
   // Fallback for getStaticPaths, when fallback: true
   // Useful for an app that has a large number of static pages, and this prevents the build time from slowing down
   // More info in Nextjs docs here: https://nextjs.org/docs/api-reference/data-fetching/get-static-paths#fallback-true
   const router = useRouter();
-  const { setData, ...userState } = useUser();
+  const { setData } = useUser();
+  const {
+    user: userState,
+    isLoading,
+    isError,
+  } = useFetchUser(router.query.userName);
+  console.log(router.query.userName, userState);
 
   if (router.isFallback) {
-    return <LoginPage loaded={router.isFallback} />;
+    return <LoadingPage loaded={router.isFallback} />;
   }
   const [userData, setUserData] = useState<UserData>();
 
@@ -248,7 +255,7 @@ const ProfileDetails = ({ user }) => {
             onCompanyModalOpen={onCompanyModalOpen}
           />
         );
-      } else {
+      } else if (i === userState.companyInfo.length) {
         elements.push(
           <UserPermissionsRestricted
             to="edit"
@@ -291,7 +298,7 @@ const ProfileDetails = ({ user }) => {
   return (
     <>
       {!loaded ? (
-        <LoginPage loaded={!loaded} />
+        <LoadingPage loaded={!loaded} />
       ) : (
         userState &&
         userState.userName &&
@@ -300,8 +307,9 @@ const ProfileDetails = ({ user }) => {
             <HeaderNav
               whichPage="profile"
               isConnectWalletBtn={isConnectWalletBtn}
-              userPage={userState}
+              userPage={userData}
               userWallet={loggedInUserAddress}
+              userName={userData.userName}
             />
             <Container
               maxW="100%"
