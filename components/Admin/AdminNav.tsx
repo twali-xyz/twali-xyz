@@ -11,10 +11,9 @@ import { useRouter } from "next/router";
 import { handleWalletConnect } from "../../utils/walletUtils";
 import Link from "next/link";
 
-const HeaderNav = (props) => {
+const AdminNav = (props) => {
   const whichPage = props.whichPage;
   const isConnectWalletBtn = props.isConnectWalletBtn;
-  const setUserData = props.setUserData;
   const userPage = props.userPage;
   const userWallet = props.userWallet;
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -70,7 +69,7 @@ const HeaderNav = (props) => {
                     setIsSubmitted,
                     setLoaded,
                     router,
-                    setUserData
+                    userWallet
                   )
                 }
               >
@@ -134,4 +133,4 @@ const HeaderNav = (props) => {
   );
 };
 
-export default HeaderNav;
+export default AdminNav;

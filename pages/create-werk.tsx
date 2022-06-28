@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Container } from "@chakra-ui/react";
 import SOWBuilderSteps from "../components/SOWBuilderSteps/SOWBuilderSteps";
@@ -10,6 +9,7 @@ import { UserData } from "../utils/interfaces";
 import UserPermissionsProvider from "../components/UserPermissionsProvider/UserPermissionsProvider";
 import UserPermissionsRestricted from "../components/UserPermissionsProvider/UserPermissionsRestricted";
 import { fetchPagePermission, pageDisconnectedFallback } from "../utils/walletUtils";
+
 
 const WerkSteps = () => {
   const { setData, ...userState } = useUser();
@@ -26,8 +26,9 @@ const WerkSteps = () => {
   console.log(userState);
 
   return (
+
     <>
-    <title>twali.xyz - marketplace</title>
+    <title>twali.xyz - create werk</title>
     <Container
         width="100%"
         minHeight="100vh"
