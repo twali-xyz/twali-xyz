@@ -10,8 +10,8 @@ const uploadSOWHandler: NextApiHandler = async (req, res) => {
     let result;
     try {
       const s3 = new aws.S3({
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        // accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        // secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
         region: "us-east-1",
       });
       const params = {
@@ -20,6 +20,8 @@ const uploadSOWHandler: NextApiHandler = async (req, res) => {
           JSON.parse(req.body)["bounty"]["contractID"]
         }.json`, // File name you want to save as in S3
         Body: JSON.stringify(JSON.parse(req.body)["bounty"]),
+        ContentType: 'application/json', // need this set as json. Had to manual change this in S3 console.
+        // ACL: 'public-read', // Will need to configure what is the read access for these objects by editing bucket policy permissions
         s3ForcePathStyle: true,
       };
 

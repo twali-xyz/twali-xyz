@@ -5,7 +5,8 @@
     "dev": "BUNDLE_AWS_SDK=1 AWS_ACCESS_KEY_ID=1 AWS_SECRET_ACCESS_KEY=1 LOCAL_DYNAMO_DB_ENDPOINT=\"http://localhost:8000\" next dev",
     "infra": "node infrastructure/provisionTable",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "dev-build": "serverless"
   },
   "dependencies": {
     "@3id/connect": "^0.2.5",
