@@ -111,6 +111,56 @@ const LoginPage = (props) => {
     }
   };
 
+  const connectWallet = async () => {
+    if (typeof window.ethereum !== "undefined") {
+      return {
+        status: (
+          <Button
+            disabled={isDisabled}
+            marginTop={"96px !important"}
+            variant={"primary"}
+            size={"lg"}
+            onClick={(event: any) =>
+              handleWalletConnectOnLogin()
+            }
+          >
+            Connect Wallet{" "}
+            {isSubmitted ? (
+              <CircularProgress
+                size="22px"
+                thickness="4px"
+                isIndeterminate
+                color="#3C2E26"
+              />
+            ) : null}
+          </Button>
+        ),
+      };
+    } else {
+      setIsDisabled(true);
+      return {
+        status: (
+          <VStack>
+            <Text marginTop={"48px !important"} fontSize={"20px"}>
+              {" "}
+              🦊{" "}
+              <Link target="_blank" href={`https://metamask.io/download.html`}>
+                You must install Metamask in your browser.
+              </Link>
+            </Text>
+            <Button
+              disabled={isDisabled}
+              marginTop={"24px !important"}
+              variant={"primary"}
+              size={"lg"}
+            >
+              Connect Wallet{" "}
+            </Button>
+          </VStack>
+        ),
+      };
+    }
+  };
 
 const checkForWallet = async () => { 
   const { status } = await connectWallet();

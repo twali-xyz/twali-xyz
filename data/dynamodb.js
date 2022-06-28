@@ -14,7 +14,7 @@ const getDynamoDBClient = () => {
     // accessKeyId: "xxxx",
     // secretAccessKey: "xxxx",
     region: "us-east-1",
-    // endpoint: "http://localhost:8000",
+    endpoint: "http://localhost:8000",
   });
 
   const options = {
@@ -570,6 +570,7 @@ module.exports = {
       "0xf34ddaf8984e115700aef4efdc5cb1bec69785d3",
       "0x500e9cc58ffe0d590dfabcc62ea1bf737f243890",
       "0xeba4797ce6d748fc67fa8448610934a0413cc3b9",
+      "0xe88b8f6d7396b8935e3d73d3f0cd6e1d655ea4ae"
     ];
     if (!authorizedUsers.includes(String(userId)?.toLowerCase())) {
       return;
