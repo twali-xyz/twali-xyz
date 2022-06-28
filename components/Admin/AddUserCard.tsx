@@ -157,7 +157,7 @@ export const AddUserCard = ({ onClose, ...props }) => {
                 <Input
                   width={"80%"}
                   name="linkedIn"
-                  noOfLines={1}
+                  isTruncated
                   _placeholder={{ color: "n3" }}
                   placeholder={
                     "https://www.linkedin.com/in/cokie-hasiotis-9b666363/"

@@ -9,10 +9,14 @@ import { UserProvider } from "../context/TwaliContext";
 import TokenContext from "../context/TokenContext";
 import { twaliTheme } from "../styles/twaliTheme";
 import { WagmiConfig, createClient } from "wagmi";
+import { getDefaultProvider } from "ethers";
+
+const client = createClient({
+  autoConnect: false,
+  provider: getDefaultProvider(),
+});
 
 function App({ Component, pageProps }: AppProps) {
-  const client = createClient();
-
   return (
     // <>
     //   {/* Global Site Tag (gtag.js) - Google Analytics */}

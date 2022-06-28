@@ -32,7 +32,7 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
             fontWeight="semibold"
             as="h4"
             lineHeight="tight"
-            noOfLines={1}
+            isTruncated
           >
             <FormControl p={2} pb={0} id="current-company-title" isRequired>
               <FormLabel

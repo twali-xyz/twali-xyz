@@ -119,7 +119,7 @@ const AdminNav = (props) => {
                     letterSpacing={"0.06em"}
                     textTransform={"uppercase"}
                     padding="4px 8px"
-                    noOfLines={1}
+                    isTruncated
                   >
                     {userWallet}
                   </Text>
