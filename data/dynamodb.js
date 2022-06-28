@@ -8,24 +8,17 @@ const getDynamoDBClient = () => {
     ? "us-east-1"
     : "us-east-2";
 
-  // Only needed with local development.
-
-  // AWS.config.update({
-  //   // accessKeyId: "xxxx",
-  //   // secretAccessKey: "xxxx",
-  //   region: "us-east-1",
-  // });
-
   const options = {
     convertEmptyValues: true,
     region: "us-east-1",
   };
 
-  const client = !process.env.LOCAL_DYNAMO_DB_ENDPOINT
+  const client = process.env.LOCAL_DYNAMO_DB_ENDPOINT
     ? new AWS.DynamoDB.DocumentClient({
-      region: "us-east-1",
-      endpoint: "http://localhost:8000"
-    })
+        region: "us-east-1",
+        // Only needed with local development.
+        endpoint: "http://localhost:8000",
+      })
     : new AWS.DynamoDB.DocumentClient(options);
 
   console.log(client);
@@ -571,7 +564,7 @@ module.exports = {
       "0xf34ddaf8984e115700aef4efdc5cb1bec69785d3",
       "0x500e9cc58ffe0d590dfabcc62ea1bf737f243890",
       "0xeba4797ce6d748fc67fa8448610934a0413cc3b9",
-      "0xe88b8f6d7396b8935e3d73d3f0cd6e1d655ea4ae"
+      "0xe88b8f6d7396b8935e3d73d3f0cd6e1d655ea4ae",
     ];
     if (!authorizedUsers.includes(String(userId)?.toLowerCase())) {
       return;

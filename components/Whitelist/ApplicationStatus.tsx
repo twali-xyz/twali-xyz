@@ -182,7 +182,7 @@ export const ApplicationStatus = ({ whiteListStatus }) => {
             letterSpacing={"0.02em"}
             textAlign={"left"}
             margin={"0 !important"}
-            href=""
+            href="https://twali.substack.com/"
           >
             Twali Wrapped
           </Link>
@@ -195,7 +195,7 @@ export const ApplicationStatus = ({ whiteListStatus }) => {
             letterSpacing={"0.02em"}
             textAlign={"left"}
             margin={"0 !important"}
-            href=""
+            href="https://twitter.com/twalixyz"
           >
             Twitter
           </Link>
@@ -208,7 +208,7 @@ export const ApplicationStatus = ({ whiteListStatus }) => {
             letterSpacing={"0.02em"}
             textAlign={"left"}
             margin={"0 !important"}
-            href=""
+            href="/"
           >
             Website
           </Link>

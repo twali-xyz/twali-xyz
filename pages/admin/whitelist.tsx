@@ -76,11 +76,12 @@ const whitelist = () => {
         method: "PUT",
         body: JSON.stringify({ payload }),
       });
+      console.log(query);
 
       if (query) {
         await mutate("/api/admin/filterWhitelist/" + query);
       } else {
-        await mutate("/api/admin/retrieveWhitelist");
+        await mutate("/api/admin/retrieveWhitelist/" + accountData?.address);
       }
       setLoadingWallet(null);
     };
@@ -120,7 +121,6 @@ const whitelist = () => {
     }
   }
 
-
   const { connect } = useConnect({
     connector: new InjectedConnector(),
   });
@@ -129,7 +129,6 @@ const whitelist = () => {
   if (!accountData)
     return (
       <Flex
-
         width={"100%"}
         height={"100vh"}
         justify={"center"}
