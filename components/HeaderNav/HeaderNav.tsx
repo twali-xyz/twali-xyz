@@ -14,6 +14,7 @@ import Link from "next/link";
 const HeaderNav = (props) => {
   const whichPage = props.whichPage;
   const isConnectWalletBtn = props.isConnectWalletBtn;
+  const setUserData = props.setUserData;
   const userPage = props.userPage;
   const userWallet = props.userWallet;
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -57,6 +58,7 @@ const HeaderNav = (props) => {
             </HStack>
           )}
         {isConnectWalletBtn ? (
+
           <>
             <HStack alignItems="center">
               <Button
@@ -68,7 +70,8 @@ const HeaderNav = (props) => {
                     userPage,
                     setIsSubmitted,
                     setLoaded,
-                    router
+                    router,
+                    setUserData,
                   )
                 }
               >

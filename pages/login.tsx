@@ -2,6 +2,7 @@ import {
   Button,
   CircularProgress,
   Container,
+  Link,
   Img,
   Text,
   VStack,
@@ -14,20 +15,24 @@ import Web3 from "web3";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { UserData } from "../utils/interfaces";
-import { getUserByWallet, getUserWhitelistStatus } from "../utils/walletUtils";
-
 import useUser from "../context/TwaliContext";
+import { getUserByWallet, getUserWhitelistStatus, handleWalletConnectOnLogin } from "../utils/walletUtils";
+
 
 const LoginPage = (props) => {
   const { ...userState } = useUser();
   useEffect(() => {
     setLoaded(!props.loaded);
+    checkForWallet();
   }, []);
 
   const [show, setShow] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [status, setStatus] = useState<string | JSX.Element>();
   const toggleMenu = () => setShow(!show);
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [loaded, setLoaded] = useState(false);
+
 
   const router = useRouter();
   const handleWalletConnectOnLogin = async () => {
@@ -102,8 +107,16 @@ const LoginPage = (props) => {
       console.log("error: ", err);
       router.push("/whitelist/application");
       setLoaded(true);
+
     }
   };
+
+
+const checkForWallet = async () => { 
+  const { status } = await connectWallet();
+  setStatus(status);
+};
+
 
   return (
     <>
@@ -153,25 +166,9 @@ const LoginPage = (props) => {
               thickness="4px"
               isIndeterminate
               color="#3C2E26"
-            />
-          ) : (
-            <Button
-              marginTop={"96px !important"}
-              variant={"primary"}
-              size={"lg"}
-              onClick={handleWalletConnectOnLogin}
-            >
-              Connect Wallet{" "}
-              {isSubmitted ? (
-                <CircularProgress
-                  size="22px"
-                  thickness="4px"
-                  isIndeterminate
-                  color="#3C2E26"
-                />
-              ) : null}
-            </Button>
-          )}
+            />) : 
+            <Text>{status}</Text>         
+        }
         </VStack>
       </Container>
     </>

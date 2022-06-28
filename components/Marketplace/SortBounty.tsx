@@ -1,7 +1,15 @@
-import { FormControl, HStack, Text } from "@chakra-ui/react";
+import { FormControl, HStack, Button, Text, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import { Dropdown } from "../reusable/Dropdown";
+import SelectWerkModal from './SelectWerkModal/SelectWerkModal'
+
 export const SortBounty = ({ contracts, onChange }) => {
+  const {
+    isOpen: isSelectWerkModalOpen,
+    onOpen: onSelectWerkModalOpen,
+    onClose: onSelectWerkModalClose,
+  } = useDisclosure();
+  
   const options = [
     "Freshness - new to old",
     "Freshness - old to new",
@@ -11,17 +19,18 @@ export const SortBounty = ({ contracts, onChange }) => {
     "Duration - short to long",
   ];
   return (
-    <HStack width={"375px"} alignSelf={"flex-start"} marginLeft={"48px"}>
-      <FormControl>
+    <HStack width={"100%"} alignSelf={"flex-start"} marginLeft={"48px"}>
+      {/* <FormControl> */}
         <Dropdown
-          className={"sort-dropdown"}
+        alignSelf={"flex-start"} 
+          className={"bounty-sort-dropdown"}
           multiSelect={false}
           values={""}
           name={"sort"}
           options={options}
-          width={"270px"}
+          width={"320px"}
           height={"40px"}
-          maxW={"297px"}
+          marginRight={"12px"}
           borderRadius={"4px"} //styleName: Body/body16;
           fontFamily="PP Telegraf Light"
           borderColor={"n3"}
@@ -41,21 +50,33 @@ export const SortBounty = ({ contracts, onChange }) => {
             e && onChange(Object.keys(e)[0]);
           }}
         />
-      </FormControl>
+      {/* </FormControl> */}
 
       <Text
-        textAlign={"end"}
+
+      alignSelf={"flex-start"} 
         width={"100%"}
         height={"100%"}
         fontFamily={"PP Telegraf Light"}
         fontSize={"16px"}
         display={"flex"}
-        marginBottom={"8px !important"}
-        alignItems={"flex-end"}
-        justifyContent={"flex-end"}
+        marginTop={"10px !important"}
       >
         {contracts?.length || 0} results
       </Text>
+
+      <Button
+              className="marketplace-post-job-btn"
+              alignSelf="flex-end" 
+              marginRight="84px !important"
+                variant={"primary"}
+                size={"lg"}
+                width={"309px"}
+                onClick={onSelectWerkModalOpen}
+              >
+                <Text>Post a job</Text>
+              </Button>
+              <SelectWerkModal isOpen={isSelectWerkModalOpen} onClose={onSelectWerkModalClose}/>
     </HStack>
   );
 };
