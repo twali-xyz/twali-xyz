@@ -9,7 +9,7 @@ const filterWhitelistHandler: NextApiHandler = async (req, res) => {
   try {
     let info = await data.fitlerWhitelist(req.query.params[0]);
 
-    res.status(200).json(JSON.stringify(info));
+    res.status(200).json(info);
   } catch {
     res.status(404).json("Whitelist Filter broke");
   }

@@ -21,7 +21,6 @@ const getDynamoDBClient = () => {
       })
     : new AWS.DynamoDB.DocumentClient(options);
 
-  console.log(client);
   return client;
 };
 

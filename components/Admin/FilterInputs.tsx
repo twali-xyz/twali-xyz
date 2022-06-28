@@ -10,9 +10,12 @@ import {
 import React from "react";
 import { Dropdown } from "../reusable/Dropdown";
 import Router from "next/router";
+import { mutate } from "swr";
+import useUser from "../../context/TwaliContext";
 
 export const FilterInputs = ({ filterParams, setFilterParams, setQuery }) => {
   // name: "exampleName", options: [exampleOptions]
+  const { userWallet } = useUser();
   const dropdowns = [
     {
       name: "filter options",
@@ -34,6 +37,7 @@ export const FilterInputs = ({ filterParams, setFilterParams, setQuery }) => {
 
     setFilterParams({ ...filterParams });
     setQuery("");
+    mutate("/api/admin/retrieveWhitelist/" + userWallet);
   }
 
   function handleChange(val, name) {
@@ -68,12 +72,9 @@ export const FilterInputs = ({ filterParams, setFilterParams, setQuery }) => {
     }
   }
 
-  function resetFilter() {
+  async function resetFilter() {
     setFilterParams({});
     setQuery("");
-    Router.push({
-      pathname: "/admin/whitelist",
-    });
   }
 
   return (

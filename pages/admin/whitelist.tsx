@@ -20,8 +20,6 @@ import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import HeaderNav from "../../components/HeaderNav/HeaderNav";
 
-const fetcher = (...args: Parameters<typeof fetch>) =>
-  fetch(...args).then((res) => res.json());
 const whitelist = () => {
   const [filterParams, setFilterParams] = useState();
   const [sortParams, setSortParams] = useState();

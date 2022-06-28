@@ -76,8 +76,7 @@ export const AddUserCard = ({ onClose, ...props }) => {
         body: JSON.stringify({ payload }),
       });
 
-      console.log("USER ADDED UP TO WHITELIST");
-      mutate("/api/admin/retrieveWhitelist");
+      await mutate("/api/admin/retrieveWhitelist/" + state.userWallet);
     };
     addUserToWhitelist(state);
   }, [state]);
