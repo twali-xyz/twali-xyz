@@ -19,6 +19,7 @@ import { useWhitelistFilter } from "../../hooks/useWhitelistFilter";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import HeaderNav from "../../components/HeaderNav/HeaderNav";
+import LoginPage from "../login";
 
 const whitelist = () => {
   const [filterParams, setFilterParams] = useState();
@@ -29,7 +30,11 @@ const whitelist = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: accountData } = useAccount();
 
-  const { data, isError } = useWhitelist(accountData?.address);
+  const {
+    data,
+    isLoading: loadingWhitelist,
+    isError,
+  } = useWhitelist(accountData?.address);
   const {
     data: filteredData,
     isLoading,
@@ -78,6 +83,7 @@ const whitelist = () => {
 
       if (query) {
         await mutate("/api/admin/filterWhitelist/" + query);
+        await mutate("/api/admin/retrieveWhitelist/" + accountData?.address);
       } else {
         await mutate("/api/admin/retrieveWhitelist/" + accountData?.address);
       }
@@ -139,7 +145,13 @@ const whitelist = () => {
         <br />
       </Flex>
     );
-
+  if (loadingWhitelist) {
+    return (
+      <>
+        <LoginPage loaded={loadingWhitelist} />
+      </>
+    );
+  }
   if (!data) {
     return (
       <>

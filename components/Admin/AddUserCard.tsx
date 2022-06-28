@@ -9,12 +9,12 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React, { useEffect, useReducer, useState } from "react";
-import { mutate } from "swr";
+
 import whitelistReducer, { initialState } from "../../context/WhitelistReducer";
 import { WhitelistInfo } from "../../utils/interfaces";
 
 export const AddUserCard = ({ onClose, ...props }) => {
-  const [state, dispatch] = useReducer(whitelistReducer, initialState);
+  const [whiteListState, dispatch] = useReducer(whitelistReducer, initialState);
   const [values, setValues] = useState<WhitelistInfo>({
     firstName: "",
     lastName: "",
@@ -68,18 +68,16 @@ export const AddUserCard = ({ onClose, ...props }) => {
   }
 
   useEffect(() => {
-    if (!state.userWallet) return;
+    if (!whiteListState.userWallet) return;
 
     const addUserToWhitelist = async (payload) => {
       await fetch(`/api/admin/addUser`, {
         method: "PUT",
         body: JSON.stringify({ payload }),
       });
-
-      await mutate("/api/admin/retrieveWhitelist/" + state.userWallet);
     };
-    addUserToWhitelist(state);
-  }, [state]);
+    addUserToWhitelist(whiteListState);
+  }, [whiteListState]);
   return (
     <Box
       {...props}
@@ -184,6 +182,9 @@ export const AddUserCard = ({ onClose, ...props }) => {
                   width={"80%"}
                   color={values.status ? "fresh" : "n3"}
                   placeholder={"select one"}
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
                 >
                   <option value={"completed"}>completed</option>
                   <option value={"approved"}>approved</option>

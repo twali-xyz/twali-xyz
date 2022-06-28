@@ -9,7 +9,6 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { Dropdown } from "../reusable/Dropdown";
-import Router from "next/router";
 import { mutate } from "swr";
 import useUser from "../../context/TwaliContext";
 
