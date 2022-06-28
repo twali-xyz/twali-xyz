@@ -1,18 +1,18 @@
 import {
-    FormControl,
-    Input,
-    Box,
-    FormLabel,
-    Textarea,
-    HStack,
-    Select,
-    Text,
-  } from "@chakra-ui/react";
-  
-  export const submissionOfWerk = ({ values }) => {
-    return (
-      <form style={{ alignSelf: "center" }}>
-        <HStack spacing={24}>
+  FormControl,
+  Input,
+  Box,
+  FormLabel,
+  Textarea,
+  HStack,
+  Select,
+  Text,
+} from "@chakra-ui/react";
+
+export const submissionOfWerk = ({ values }) => {
+  return (
+    <form style={{ alignSelf: "center" }}>
+      <HStack spacing={24}>
         <Box
           h="450px"
           w="xl"
@@ -30,7 +30,7 @@ import {
               fontWeight="semibold"
               as="h4"
               lineHeight="tight"
-              isTruncated
+              noOfLines={1}
               overflow="scroll"
             >
               <FormControl p={2} pb={0} id="statement-of-werk" isRequired>
@@ -47,37 +47,101 @@ import {
                 >
                   DSA
                 </FormLabel>
-              <Box height="320px" color="subtle" fontSize="sm" fontWeight="light" borderWidth={1} padding={4} whiteSpace="pre-wrap" overflowY="scroll">
-              <Text padding={2}>Terms and Conditions General Site Usage Last Revised: December 16, 2013 Welcome to www.lorem-ipsum.info.
-                This site is provided as a service to our visitors and may be used for informational purposes only. Because the Terms and Conditions contain legal obligations, please read them carefully.</Text>
-                <Text padding={2}>1. YOUR AGREEMENT By using this Site, you agree to be bound by, and to comply with, these Terms and Conditions. If you do not agree to these Terms and Conditions, please do not use this site.</Text>
-                <Text padding={2}>conditions.</Text>
-                <Text padding={2}>Terms and Conditions General Site Usage Last Revised: December 16, 2013 Welcome to www.lorem-ipsum.info.</Text>
+                <Box
+                  height="320px"
+                  color="subtle"
+                  fontSize="sm"
+                  fontWeight="light"
+                  borderWidth={1}
+                  padding={4}
+                  whiteSpace="pre-wrap"
+                  overflowY="scroll"
+                >
+                  <Text padding={2}>
+                    Terms and Conditions General Site Usage Last Revised:
+                    December 16, 2013 Welcome to www.lorem-ipsum.info. This site
+                    is provided as a service to our visitors and may be used for
+                    informational purposes only. Because the Terms and
+                    Conditions contain legal obligations, please read them
+                    carefully.
+                  </Text>
+                  <Text padding={2}>
+                    1. YOUR AGREEMENT By using this Site, you agree to be bound
+                    by, and to comply with, these Terms and Conditions. If you
+                    do not agree to these Terms and Conditions, please do not
+                    use this site.
+                  </Text>
+                  <Text padding={2}>conditions.</Text>
+                  <Text padding={2}>
+                    Terms and Conditions General Site Usage Last Revised:
+                    December 16, 2013 Welcome to www.lorem-ipsum.info.
+                  </Text>
 
-                <Text padding={2}>Terms and Conditions General Site Usage Last Revised: December 16, 2013 Welcome to www.lorem-ipsum.info.
-                This site is provided as a service to our visitors and may be used for informational purposes only. Because the Terms and Conditions contain legal obligations, please read them carefully.</Text>
-                <Text padding={2}>1. YOUR AGREEMENT By using this Site, you agree to be bound by, and to comply with, these Terms and Conditions. If you do not agree to these Terms and Conditions, please do not use this site.</Text>
-                <Text padding={2}>conditions.</Text>
-                <Text padding={2}>Terms and Conditions General Site Usage Last Revised: December 16, 2013 Welcome to www.lorem-ipsum.info.</Text>
+                  <Text padding={2}>
+                    Terms and Conditions General Site Usage Last Revised:
+                    December 16, 2013 Welcome to www.lorem-ipsum.info. This site
+                    is provided as a service to our visitors and may be used for
+                    informational purposes only. Because the Terms and
+                    Conditions contain legal obligations, please read them
+                    carefully.
+                  </Text>
+                  <Text padding={2}>
+                    1. YOUR AGREEMENT By using this Site, you agree to be bound
+                    by, and to comply with, these Terms and Conditions. If you
+                    do not agree to these Terms and Conditions, please do not
+                    use this site.
+                  </Text>
+                  <Text padding={2}>conditions.</Text>
+                  <Text padding={2}>
+                    Terms and Conditions General Site Usage Last Revised:
+                    December 16, 2013 Welcome to www.lorem-ipsum.info.
+                  </Text>
 
-                <Text padding={2}>Terms and Conditions General Site Usage Last Revised: December 16, 2013 Welcome to www.lorem-ipsum.info.
-                This site is provided as a service to our visitors and may be used for informational purposes only. Because the Terms and Conditions contain legal obligations, please read them carefully.</Text>
-                <Text padding={2}>1. YOUR AGREEMENT By using this Site, you agree to be bound by, and to comply with, these Terms and Conditions. If you do not agree to these Terms and Conditions, please do not use this site.</Text>
-                <Text padding={2}>conditions.</Text>
-                <Text padding={2}>Terms and Conditions General Site Usage Last Revised: December 16, 2013 Welcome to www.lorem-ipsum.info.</Text>
+                  <Text padding={2}>
+                    Terms and Conditions General Site Usage Last Revised:
+                    December 16, 2013 Welcome to www.lorem-ipsum.info. This site
+                    is provided as a service to our visitors and may be used for
+                    informational purposes only. Because the Terms and
+                    Conditions contain legal obligations, please read them
+                    carefully.
+                  </Text>
+                  <Text padding={2}>
+                    1. YOUR AGREEMENT By using this Site, you agree to be bound
+                    by, and to comply with, these Terms and Conditions. If you
+                    do not agree to these Terms and Conditions, please do not
+                    use this site.
+                  </Text>
+                  <Text padding={2}>conditions.</Text>
+                  <Text padding={2}>
+                    Terms and Conditions General Site Usage Last Revised:
+                    December 16, 2013 Welcome to www.lorem-ipsum.info.
+                  </Text>
 
-                <Text padding={2}>Terms and Conditions General Site Usage Last Revised: December 16, 2013 Welcome to www.lorem-ipsum.info.
-                This site is provided as a service to our visitors and may be used for informational purposes only. Because the Terms and Conditions contain legal obligations, please read them carefully.</Text>
-                <Text padding={2}>1. YOUR AGREEMENT By using this Site, you agree to be bound by, and to comply with, these Terms and Conditions. If you do not agree to these Terms and Conditions, please do not use this site.</Text>
-                <Text padding={2}>conditions.</Text>
-                <Text padding={2}>Terms and Conditions General Site Usage Last Revised: December 16, 2013 Welcome to www.lorem-ipsum.info.</Text>
-              </Box>
+                  <Text padding={2}>
+                    Terms and Conditions General Site Usage Last Revised:
+                    December 16, 2013 Welcome to www.lorem-ipsum.info. This site
+                    is provided as a service to our visitors and may be used for
+                    informational purposes only. Because the Terms and
+                    Conditions contain legal obligations, please read them
+                    carefully.
+                  </Text>
+                  <Text padding={2}>
+                    1. YOUR AGREEMENT By using this Site, you agree to be bound
+                    by, and to comply with, these Terms and Conditions. If you
+                    do not agree to these Terms and Conditions, please do not
+                    use this site.
+                  </Text>
+                  <Text padding={2}>conditions.</Text>
+                  <Text padding={2}>
+                    Terms and Conditions General Site Usage Last Revised:
+                    December 16, 2013 Welcome to www.lorem-ipsum.info.
+                  </Text>
+                </Box>
               </FormControl>
             </Box>
           </Box>
         </Box>
-        </HStack>
-      </form>
-    );
-  };
-  
+      </HStack>
+    </form>
+  );
+};

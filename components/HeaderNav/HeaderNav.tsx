@@ -58,7 +58,6 @@ const HeaderNav = (props) => {
             </HStack>
           )}
         {isConnectWalletBtn ? (
-
           <>
             <HStack alignItems="center">
               <Button
@@ -71,7 +70,7 @@ const HeaderNav = (props) => {
                     setIsSubmitted,
                     setLoaded,
                     router,
-                    setUserData,
+                    setUserData
                   )
                 }
               >
@@ -121,7 +120,7 @@ const HeaderNav = (props) => {
                     letterSpacing={"0.06em"}
                     textTransform={"uppercase"}
                     padding="4px 8px"
-                    isTruncated
+                    noOfLines={1}
                   >
                     {userWallet}
                   </Text>

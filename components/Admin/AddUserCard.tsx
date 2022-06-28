@@ -160,7 +160,7 @@ export const AddUserCard = ({ onClose, ...props }) => {
                 <Input
                   width={"80%"}
                   name="linkedIn"
-                  isTruncated
+                  noOfLines={1}
                   _placeholder={{ color: "n3" }}
                   placeholder={
                     "https://www.linkedin.com/in/cokie-hasiotis-9b666363/"
@@ -201,7 +201,6 @@ export const AddUserCard = ({ onClose, ...props }) => {
                 <Input
                   width={"80%"}
                   name="userWallet"
-                  isTruncated
                   placeholder={"0x54eb82e4ec25eb173e1668dd5ab0943904d87331"}
                   _placeholder={{ color: "n3" }}
                   onChange={(e) => handleChange(e)}
