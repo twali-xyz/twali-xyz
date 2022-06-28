@@ -12,8 +12,4 @@ module.exports = {
     }
     return config;
   },
-<<<<<<< HEAD
 };
-=======
-};
->>>>>>> 663420c (fixed user whitelist status not updating on the card after selection)
