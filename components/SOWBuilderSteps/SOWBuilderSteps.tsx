@@ -33,7 +33,6 @@ const SOWBuilderSteps = (props) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [dueDate, setDueDate] = useState(new Date());
   const [dateRange, setDateRange] = useState([new Date(), new Date()]);
-  const [hash, setHash] = useState<string>();
   const { tokenName, tokenAmount, calculatedUSD } = useToken();
   const { setBounty, editBountyURI, ...bountyState } = useBounty();
 
@@ -73,7 +72,7 @@ const SOWBuilderSteps = (props) => {
       if (contractData && !error) {
         toast({
           title: "Your bounty was submitted!",
-          description: `${bountyState.contractTitle} is up on the marketplace. ${bountyState.contractURI}`,
+          description: `${bountyState.contractTitle} is up on the marketplace.`,
           status: "success",
           variant: "subtle",
           duration: 5000,
