@@ -7,16 +7,22 @@ import HeaderNav from "../../components/HeaderNav/HeaderNav";
 import { FilterInputs } from "../../components/Marketplace/FilterInputs";
 import { SortBounty } from "../../components/Marketplace/SortBounty";
 import { BountyList } from "../../components/Marketplace/BountyList";
+import { UserData } from "../../utils/interfaces";
+import UserPermissionsProvider from "../../components/UserPermissionsProvider/UserPermissionsProvider";
+import UserPermissionsRestricted from "../../components/UserPermissionsProvider/UserPermissionsRestricted";
+import { fetchPagePermission, pageDisconnectedFallback } from "../../utils/walletUtils";
 
 const fetcher = (...args: Parameters<typeof fetch>) =>
   fetch(...args).then((res) => res.json());
 
 export default function marketplace() {
   const router = useRouter();
-  const { ...userState } = useUser();
+  const { setData, ...userState } = useUser();
+  const [userData, setUserData] = useState<UserData>();
   const [filterParams, setFilterParams] = useState({});
   const [sortParams, setSortParams] = useState();
   const [query, setQuery] = useState("");
+  const [isConnectWalletBtn, setIsConnectWalletBtn] = useState(false);
 
   // set the filterParams based on the URL query params
   // needed to set filters when user goes to marketplace from a URL that contains a query
@@ -28,6 +34,8 @@ export default function marketplace() {
     let tempFilter = {};
 
     Object.entries(router.query).forEach((filterData) => {
+      console.log(filterData);
+
       let filterObjectArray = {};
       let [filterType, filterValues] = filterData;
 
@@ -54,6 +62,10 @@ export default function marketplace() {
     }
     return () => {};
   }, [router.asPath]);
+
+  useEffect(() => {
+    userData && setData(JSON.parse(JSON.stringify(userData)));
+  }, [userData]);
 
   const { data, error } = useSWR(`api/marketplace/contracts${query}`, fetcher);
 
@@ -104,22 +116,74 @@ export default function marketplace() {
     return () => {};
   }, [query]);
 
+  // sort function for the bounty list
+  function compare(a, b, sortParams) {
+    const options = {
+      "Freshness - new to old": "descending",
+      "Freshness - old to new": "ascending",
+      "Amount - low to high": "ascending",
+      "Amount - high to low": "descending",
+      "Duration - long to short": "ascending",
+      "Duration - short to long": "descending",
+    };
+    let sortName;
+    if (sortParams.includes("Freshness")) {
+      sortName = "contract_created_on";
+    } else if (sortParams.includes("Amount")) {
+      sortName = "converted_amount";
+    } else if (sortParams.includes("Duration")) {
+      sortName = "contract_duration";
+    }
+
+    if (options[sortParams] === "ascending") {
+      if (a[sortName] < b[sortName]) {
+        return -1;
+      }
+      if (a[sortName] > b[sortName]) {
+        return 1;
+      }
+      return 0;
+    } else if (options[sortParams] === "descending") {
+      if (a[sortName] > b[sortName]) {
+        return -1;
+      }
+      if (a[sortName] < b[sortName]) {
+        return 1;
+      }
+      return 0;
+    }
+  }
+
   return (
     <>
       <title>twali.xyz - marketplace</title>
-
+      <UserPermissionsProvider
+      fetchPermission={fetchPagePermission(
+        userState.userWallet ? userState.userWallet : null
+    )}>
       <HeaderNav
+        whichPage="marketplace"
+        isConnectWalletBtn={!userState.userWallet}
+        userPage={userState}
+        userWallet={userState.userWallet}
+      />
+      {/* <HeaderNav
         userPage={userState}
         whichPage="marketplace"
         userWallet={userState.userWallet}
         isConnectWalletBtn={!userState.userWallet}
-      />
+      /> */}
+            <UserPermissionsRestricted
+            to="edit"
+            key={`--SOW-builder-usr-permission`}
+            fallback={pageDisconnectedFallback()}
+          >
+
       <Flex flexDir={"row"} pos={"absolute"} top={0} width="100%" zIndex={-1}>
         <FilterInputs
           filterParams={filterParams}
           setFilterParams={setFilterParams}
         />
-
         <VStack
           paddingTop={"90px"}
           height={"100vh"}
@@ -129,9 +193,16 @@ export default function marketplace() {
           }
         >
           <SortBounty contracts={data} onChange={(val) => setSortParams(val)} />
-          <BountyList contracts={data} error={error} sortParams={sortParams} />
+          <BountyList
+            contracts={data}
+            error={error}
+            sortParams={sortParams}
+            compare={compare}
+          />
         </VStack>
       </Flex>
+      </UserPermissionsRestricted>
+      </UserPermissionsProvider>
     </>
   );
 }

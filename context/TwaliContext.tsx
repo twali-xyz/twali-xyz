@@ -1,6 +1,9 @@
-import { createContext, useReducer, useContext } from "react";
+import { createContext, useReducer, useContext, useEffect } from "react";
 import { UserData } from "../utils/interfaces";
 import userReducer, { initialState } from "./twaliReducer";
+import Web3Modal from "web3modal";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import Web3 from "web3";
 
 const UserContext = createContext<UserData>(initialState);
 

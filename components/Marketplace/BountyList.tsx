@@ -6,6 +6,7 @@ interface BountyList {
   contracts: JSON;
   error: string;
   sortParams: string;
+  compart: Function;
 }
 
 /**
@@ -15,35 +16,13 @@ interface BountyList {
  * @param {JSON} contracts contracts to display
  * @param {string} error error when fetching contracts
  * @param {string} sortParams name of the active sort parameter
+ * @param {Function} compare function to compare and sort list
  *
  * @returns JSX BountyList element
  *
  */
 
-export const BountyList = ({ contracts, error, sortParams }) => {
-  function compare(a, b, sortParams) {
-    if (sortParams === "title") {
-      if (a[sortParams] < b[sortParams]) {
-        return -1;
-      }
-      if (a[sortParams] > b[sortParams]) {
-        return 1;
-      }
-      return 0;
-    }
-    if (sortParams === "date created" || sortParams === "amount") {
-      const key =
-        sortParams === "date created" ? "created_on" : "converted_amount";
-      if (a[key] > b[key]) {
-        return -1;
-      }
-      if (a[key] < b[key]) {
-        return 1;
-      }
-      return 0;
-    }
-  }
-
+export const BountyList = ({ contracts, error, sortParams, compare }) => {
   if (error) return <Text>failed to load contracts</Text>;
 
   if (!contracts)
@@ -61,7 +40,8 @@ export const BountyList = ({ contracts, error, sortParams }) => {
   return (
     <VStack
       width={"100%"}
-      padding={"5%"}
+      padding={"0px 48px"}
+      marginTop={"32px !important"}
       height={"100%"}
       overflowY={"scroll"}
       scrollBehavior={"smooth"}

@@ -11,7 +11,6 @@ interface Chiplets {
 /**
  * Individual bounty card component
  *
- *
  * @param {function} handleRemove remove chiplet from filter parameter function
  * @param {object} filterParams filter parameter object
  *
@@ -19,7 +18,7 @@ interface Chiplets {
  *
  */
 export const Chiplets = ({ handleRemove, filterParams, ...props }) => {
-  var formatter = new Intl.NumberFormat("en-US", {
+  const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
     minimumFractionDigits: 0,
@@ -35,7 +34,6 @@ export const Chiplets = ({ handleRemove, filterParams, ...props }) => {
       {...props}
     >
       {/* map out the headers for each filter type */}
-
       {Object.entries(filterParams).map((filterObj, idx) => {
         const [filterType, filters] = filterObj;
         if (!filters) return;
@@ -54,34 +52,36 @@ export const Chiplets = ({ handleRemove, filterParams, ...props }) => {
               </Text>
             </HStack>
             <Flex flexWrap={"wrap"}>
+              {/* map out the chips within each filter type */}
               {Object.values(filters)?.map((filter, idx) => {
-                return (filterType === "budget" && idx === 0) ||
-                  (filterType === "duration" && idx === 0) ||
-                  (filterType !== "budget" && filterType !== "duration") ? (
-                  <Chip
-                    pos={"relative"}
-                    zIndex={0}
-                    my={2}
-                    mr={2}
-                    variant="button"
-                    key={idx}
-                    name={filterType}
-                    onClick={handleRemove}
-                  >
-                    {filterType === "budget"
-                      ? idx === 0 &&
-                        `${formatter.format(filters[0])}-${formatter.format(
-                          filters[1]
-                        )}`
-                      : filterType === "duration"
-                      ? `${filters[0]}-${filters[1]} days`
-                      : filterType === "startDate"
-                      ? `Starts on ${new Date(filter).toLocaleDateString(
-                          "en-US"
-                        )}`
-                      : filter}
-                  </Chip>
-                ) : null;
+                return (
+                  ((filterType === "budget" && idx === 0) ||
+                    (filterType === "duration" && idx === 0) ||
+                    (filterType !== "budget" && filterType !== "duration")) && (
+                    <Chip
+                      pos={"relative"}
+                      zIndex={0}
+                      my={2}
+                      mr={2}
+                      variant="button"
+                      key={idx}
+                      name={filterType}
+                      onClick={handleRemove}
+                    >
+                      {filterType === "budget"
+                        ? `${formatter.format(filters[0])}-${formatter.format(
+                            filters[1]
+                          )}`
+                        : filterType === "duration"
+                        ? `${filters[0]}-${filters[1]} days`
+                        : filterType === "startDate"
+                        ? `Starts on ${new Date(filter).toLocaleDateString(
+                            "en-US"
+                          )}`
+                        : filter}
+                    </Chip>
+                  )
+                );
               })}
             </Flex>
           </Box>

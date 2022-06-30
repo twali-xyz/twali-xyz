@@ -46,3 +46,15 @@ export interface SmartContractData {
   contract_start_date: Number,
   contract_end_date: Number
 }
+
+export interface WhitelistInfo {
+    firstName: "";
+    lastName: "";
+    email: "";
+    discord: "";
+    linkedIn: "";
+    referredBy: "";
+    applied_on: null;
+    userWallet: "";
+    status: "";
+}

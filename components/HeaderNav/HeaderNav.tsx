@@ -14,6 +14,7 @@ import Link from "next/link";
 const HeaderNav = (props) => {
   const whichPage = props.whichPage;
   const isConnectWalletBtn = props.isConnectWalletBtn;
+  const setUserData = props.setUserData;
   const userPage = props.userPage;
   const userWallet = props.userWallet;
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -39,6 +40,23 @@ const HeaderNav = (props) => {
         src="/twali-assets/navbar_logo.png"
       />
       <HStack>
+        {whichPage !== "whitelist" &&
+          whichPage !== "steps" &&
+          whichPage !== "index" && (
+            <HStack mr={10}>
+              <Link href={"/marketplace"}>
+                <Text
+                  fontSize={"14px"}
+                  letterSpacing={"2%"}
+                  textTransform={"uppercase"}
+                  cursor={"pointer"}
+                  color={whichPage === "marketplace" ? "zing" : "fresh"}
+                >
+                  marketplace
+                </Text>
+              </Link>
+            </HStack>
+          )}
         {isConnectWalletBtn ? (
           <>
             <HStack alignItems="center">
@@ -51,7 +69,8 @@ const HeaderNav = (props) => {
                     userPage,
                     setIsSubmitted,
                     setLoaded,
-                    router
+                    router,
+                    setUserData
                   )
                 }
               >
@@ -71,32 +90,6 @@ const HeaderNav = (props) => {
         ) : (
           userWallet && (
             <>
-              <HStack mr={10}>
-                <Link href={"/client-dashboard"}>
-                  <Text
-                    fontSize={"14px"}
-                    letterSpacing={"2%"}
-                    textTransform={"uppercase"}
-                    cursor={"pointer"}
-                    color={whichPage === "client-dashboard" ? "zing" : "fresh"}
-                  >
-                    Client Dashboard
-                  </Text>
-                </Link>
-              </HStack>
-              <HStack mr={10}>
-                <Link href={"/marketplace"}>
-                  <Text
-                    fontSize={"14px"}
-                    letterSpacing={"2%"}
-                    textTransform={"uppercase"}
-                    cursor={"pointer"}
-                    color={whichPage === "marketplace" ? "zing" : "fresh"}
-                  >
-                    marketplace
-                  </Text>
-                </Link>
-              </HStack>
               <HStack
                 alignItems="center"
                 justify={"space-between"}
@@ -127,7 +120,7 @@ const HeaderNav = (props) => {
                     letterSpacing={"0.06em"}
                     textTransform={"uppercase"}
                     padding="4px 8px"
-                    isTruncated
+                    noOfLines={1}
                   >
                     {userWallet}
                   </Text>
