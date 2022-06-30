@@ -8,25 +8,18 @@ const getDynamoDBClient = () => {
     ? "us-east-1"
     : "us-east-2";
 
-  // Only needed with local development.
-
-  AWS.config.update({
-    // accessKeyId: "xxxx",
-    // secretAccessKey: "xxxx",
-    region: "us-east-1",
-    endpoint: "http://localhost:8000",
-  });
-
   const options = {
     convertEmptyValues: true,
-    region: dynamoDBRegion,
+    region: "us-east-1",
   };
 
   const client = process.env.LOCAL_DYNAMO_DB_ENDPOINT
-    ? new AWS.DynamoDB.DocumentClient()
-    : // ...options,
-      // process.env.LOCAL_DYNAMO_DB_ENDPOINT
-      new AWS.DynamoDB.DocumentClient(options);
+    ? new AWS.DynamoDB.DocumentClient({
+        region: "us-east-1",
+        // Only needed with local development.
+        // endpoint: "http://localhost:8000",
+      })
+    : new AWS.DynamoDB.DocumentClient(options);
 
   return client;
 };
@@ -43,7 +36,8 @@ module.exports = {
       .get({
         TableName,
         Key: {
-          userWallet: userWallet,
+          PK: `USER#${userWallet}`,
+          SK: `USER#${userWallet}`,
         },
         ProjectionExpression: "UserNonce",
       })
@@ -144,14 +138,13 @@ module.exports = {
   },
 
   /**
-   * @desc Directly access a user in the table by primary key `userWallet`.
+   * @desc Directly access a user in the table by primary key `USER#<userWallet>`.
    * @param {string} - function takes in a input string of the users userWallet
    * @dev This can be altered to included any additional attributes with 'ProjectionExpression'.
    * @example See docs to add additonal attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property
    * @returns Returns a user as and object.
    **/
   getUserByWallet: async (userWallet) => {
-    console.log(userWallet);
     const dbUser = await getDynamoDBClient()
       .query({
         TableName,
@@ -166,6 +159,7 @@ module.exports = {
       .promise()
       .then((data) => data.Items[0])
       .catch(console.error);
+      console.log('login user', dbUser);
     return dbUser;
   },
 
@@ -284,8 +278,8 @@ module.exports = {
       .update({
         TableName: params.TableName,
         Key: {
-          userWallet: userWallet,
-          userName: userName,
+          PK: `USER#${userWallet}`,
+          SK: `USER#${userWallet}`,
         },
         UpdateExpression: params.UpdateExpression,
         ExpressionAttributeValues: params.ExpressionAttributeValues,
@@ -354,14 +348,6 @@ module.exports = {
       console.info("Scan API call has been executed.");
       return output;
     });
-
-    function createDynamoDbClient(regionName) {
-      // Set the region
-      AWS.config.update({ region: regionName });
-      // Use the following config instead when using DynamoDB Local
-      // AWS.config.update({region: 'localhost', endpoint: 'http://localhost:8000', accessKeyId: 'access_key_id', secretAccessKey: 'secret_access_key'});
-      return new AWS.DynamoDB();
-    }
 
     function createScanInput(query) {
       // marketplace starts filterExpression with Status = Open
@@ -543,5 +529,119 @@ module.exports = {
       }
     }
     return output;
+  },
+
+  /**
+   * @desc Find a user's whitelist status by primary key `userWallet`.
+   * @param {string} - function takes in a input string of the users userWallet
+   * @dev This can be altered to included any additional attributes with 'ProjectionExpression'.
+   * @example See docs to add additonal attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property
+   * @returns Returns object containing user data and whitelist status.
+   **/
+  getWhitelistStatus: async (userWallet) => {
+    console.log("USERWALLET: ", userWallet);
+    const dbUser = await getDynamoDBClient()
+      .query({
+        TableName: "whitelist_table",
+        // ProjectionExpression: "userWallet",
+
+        KeyConditionExpression: "userWallet = :PK",
+        ExpressionAttributeValues: {
+          ":PK": `${userWallet}`,
+        },
+      })
+      .promise()
+      .then((data) => {
+        return data.Items[0];
+      })
+      .catch(console.error);
+    return dbUser;
+  },
+
+  getWhitelist: async (userId) => {
+    const authorizedUsers = [
+      "0x7a7f59056dc2d5116e07e0fbaf6a71bd77b326af",
+      "0xf34ddaf8984e115700aef4efdc5cb1bec69785d3",
+      "0x500e9cc58ffe0d590dfabcc62ea1bf737f243890",
+      "0xeba4797ce6d748fc67fa8448610934a0413cc3b9",
+      "0xe88b8f6d7396b8935e3d73d3f0cd6e1d655ea4ae",
+    ];
+    if (!authorizedUsers.includes(String(userId)?.toLowerCase())) {
+      return;
+    }
+    const whitelist = await getDynamoDBClient()
+      .scan({
+        TableName: "whitelist_table",
+      })
+      .promise()
+      .then((data) => data.Items)
+      .catch(console.error);
+    return whitelist;
+  },
+
+  /**
+   * @desc Gives admin ability to edit user whitelist status
+   * @param {string} userWallet - wallet address for user being updated
+   * @param {string} newStatus - the new status for the user whitelist
+   * @dev New items can be added to a user and does need to be predefined in the table. Any values in 'UpdateExpression' need to be defined will values within 'ExpressionAttributeValues'.
+   * @example See docs about editing existing attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#update-property
+   */
+  updateWhitelistStatus: async (userWallet, newStatus) => {
+    if (!userWallet) return;
+    console.log("UPDATE USER WHITELIST STATUS");
+    console.log(userWallet);
+    console.log(newStatus);
+    await getDynamoDBClient()
+      .update({
+        TableName: "whitelist_table",
+        Key: {
+          userWallet: `${userWallet}`,
+        },
+        UpdateExpression: "SET whitelistStatus = :newStatus",
+        // ConditionExpression: "",
+        ExpressionAttributeValues: {
+          ":newStatus": newStatus,
+        },
+      })
+      .promise()
+      .catch(console.error);
+  },
+
+  /**
+   * @desc Allows admin to add user to the whitelist table
+   * @param {object} - function takes an object as a the parameter with primary and attributes. Object will need to the primary key and any attributes that are being updated or created.
+   */
+  addWhitelistUser: async (payload) => {
+    console.log("ADD USER TO WHITELIST");
+    console.log({ ...payload });
+
+    await getDynamoDBClient()
+      .put({
+        TableName: "whitelist_table",
+        Item: {
+          ...payload,
+        },
+      })
+      .promise();
+  },
+
+  fitlerWhitelist: async (whitelistStatus) => {
+    const whitelist = await getDynamoDBClient()
+      .scan({
+        TableName: "whitelist_table",
+        FilterExpression: "#whitelistStatus = :whitelistStatus",
+        ExpressionAttributeValues: {
+          ":whitelistStatus": whitelistStatus,
+        },
+        ExpressionAttributeNames: {
+          "#whitelistStatus": "whitelistStatus",
+        },
+      })
+      .promise()
+      .then((data) => {
+        return data.Items;
+      })
+      .catch(console.error);
+    return whitelist;
   },
 };

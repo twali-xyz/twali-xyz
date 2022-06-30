@@ -21,7 +21,7 @@
     "**/*.tsx",
     "next.config.js",
     "infrastructure/provisionTable.js"
-  ],
+, "utils/twaliAbi.json"  ],
   "exclude": ["node_modules"],
   "baseUrl": ".",
   "paths": {

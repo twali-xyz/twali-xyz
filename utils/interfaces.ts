@@ -37,3 +37,24 @@ export interface CompanyInfo {
   logo: any;
   currentStatus: Number;
 }
+
+export interface SmartContractData {
+  contract_id: string,
+  client: string,
+  sowURI: string,
+  contract_amount: Number,
+  contract_start_date: Number,
+  contract_end_date: Number
+}
+
+export interface WhitelistInfo {
+    firstName: "";
+    lastName: "";
+    email: "";
+    discord: "";
+    linkedIn: "";
+    referredBy: "";
+    applied_on: null;
+    userWallet: "";
+    status: "";
+}

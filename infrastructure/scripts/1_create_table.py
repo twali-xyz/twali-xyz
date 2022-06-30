@@ -4,7 +4,7 @@ dynamodb = boto3.client('dynamodb', endpoint_url='http://localhost:8000')
 
 try:
     dynamodb.create_table(
-        TableName="Twali-core-test",
+        TableName="Twali-core-test-3",
         AttributeDefinitions=[
             {
                 "AttributeName": "PK",

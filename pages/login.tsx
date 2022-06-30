@@ -15,9 +15,12 @@ import Web3 from "web3";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { UserData } from "../utils/interfaces";
-import { getUserByWallet, handleWalletConnectOnLogin } from "../utils/walletUtils";
+import useUser from "../context/TwaliContext";
+import { getUserByWallet, getUserWhitelistStatus, handleWalletConnectOnLogin } from "../utils/walletUtils";
+
 
 const LoginPage = (props) => {
+  const { ...userState } = useUser();
   useEffect(() => {
     setLoaded(!props.loaded);
     checkForWallet();
@@ -29,8 +32,84 @@ const LoginPage = (props) => {
   const toggleMenu = () => setShow(!show);
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [loaded, setLoaded] = useState(false);
-  const router = useRouter();
 
+
+  const router = useRouter();
+  const handleWalletConnectOnLogin = async () => {
+    const web3Modal = new Web3Modal({
+      disableInjectedProvider: false,
+      network: "rinkeby",
+      cacheProvider: false,
+      providerOptions: {
+        walletconnect: {
+          package: WalletConnectProvider,
+          options: {
+            rpc: {
+              1: "https://eth-rinkeby.alchemyapi.io/v2/QtLM8rW9nB6DobDu8KQx-7fYMS2rBlky",
+            },
+          },
+        },
+      },
+    });
+    const provider = await web3Modal.connect();
+    const web3 = new Web3(provider);
+    const accounts = await web3.eth.getAccounts();
+    const currAccount = accounts[0];
+    console.log(currAccount);
+
+    userState.setData({ ...userState, userWallet: currAccount });
+    setIsSubmitted(true);
+
+    try {
+      let userData: UserData = await getUserByWallet(currAccount);
+
+      if (userData && userData.userName && userData.userWallet) {
+        router.push(`/${userData.userName}`);
+        setIsSubmitted(false);
+        return;
+      }
+    } catch (err) {
+      console.log("error: ", err);
+    }
+
+    try {
+      let userWhiteList = await getUserWhitelistStatus(currAccount);
+      console.log("DATA: ", userWhiteList["whitelistStatus"]);
+      if (
+        userWhiteList["whitelistStatus"] === null ||
+        userWhiteList["whitelistStatus"] === "" ||
+        userWhiteList["whitelistStatus"] === undefined ||
+        userWhiteList["whitelistStatus"] === "pending" ||
+        userWhiteList["whitelistStatus"] === "rejected"
+      ) {
+        // if not approved on the whiteList send user to application form,
+        // pending page, or rejected page
+        router.push(
+          `/whitelist/application?status=${userWhiteList["whitelistStatus"]} `,
+          "whitelist/application"
+        );
+        return;
+      }
+      if (userWhiteList["whitelistStatus"] === "approved") {
+        console.log("No profile, pls create one...");
+        userState.setData({
+          ...userState,
+          firstName: userWhiteList["firstName"],
+          lastName: userWhiteList["lastName"],
+          email: userWhiteList["email"],
+          linkedIn: userWhiteList["linkedIn"],
+          discord: userWhiteList["discord"],
+        });
+        router.push("/steps");
+        return;
+      }
+    } catch (err) {
+      console.log("error: ", err);
+      router.push("/whitelist/application");
+      setLoaded(true);
+
+    }
+  };
 
   const connectWallet = async () => {
     if (typeof window.ethereum !== "undefined") {
@@ -42,7 +121,7 @@ const LoginPage = (props) => {
             variant={"primary"}
             size={"lg"}
             onClick={(event: any) =>
-              handleWalletConnectOnLogin(setIsSubmitted, setLoaded, router)
+              handleWalletConnectOnLogin()
             }
           >
             Connect Wallet{" "}
@@ -82,7 +161,6 @@ const LoginPage = (props) => {
       };
     }
   };
-
 
 const checkForWallet = async () => { 
   const { status } = await connectWallet();
