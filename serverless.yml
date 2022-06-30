@@ -7,4 +7,4 @@ twali-xyz-staging:
         TABLE_NAME: "dev_staging_user_profile_test"
     cloudfront:
       distributionId: EHZYCKLX3TYQ4
-    bucketName: pxn4tf-zy2dp9
+    bucketName: pxn4tf-zy2dp9       

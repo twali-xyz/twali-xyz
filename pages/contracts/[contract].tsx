@@ -1,19 +1,26 @@
 import { Flex, VStack, Text } from "@chakra-ui/react";
+
+import { useRouter } from "next/router";
+import  useUser from "../../context/TwaliContext";
+// Components
 import HeaderNav from "../../components/HeaderNav/HeaderNav";
 import ContractDetails from "../../components/AdminDash/ContractDetails";
 import ContractInterfaceForm from "../../components/AdminDash/ContractInterfaceForm";
-import { useRouter } from "next/router";
-
 
 const ContractPage = () => {
     const router = useRouter();
-    console.log(router.query);
     const { contract } = router.query;
-    console.log(contract);
+    const { ...userState } = useUser();
+
     return (
       <>
-        <title>Twali.xyz - Contracts </title>
-        <HeaderNav />
+        <title>Twali.xyz - contracts </title>
+        <HeaderNav
+        userPage={userState}
+        whichPage="contracts"
+        userWallet={userState.userWallet}
+        isConnectWalletBtn={!userState.userWallet}
+        />
         <Flex flexDir={"row"} pos={"absolute"} top={0} width="100%" zIndex={-1}>
           <ContractInterfaceForm />
           <VStack
@@ -22,6 +29,12 @@ const ContractPage = () => {
             width={"100%"}
             background="n4"
           >
+          <Text 
+            width={"90%"}
+            fontFamily={"GrandSlang"}
+            fontSize={"48px"}
+            lineHeight={"64px"}
+            letterSpacing={"wide"}>Project Updates</Text>
             <ContractDetails contract={contract} />
           </VStack>
         </Flex>

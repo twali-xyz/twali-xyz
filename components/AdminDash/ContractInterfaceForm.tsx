@@ -37,7 +37,7 @@ export default function ContractInterfaceForm() {
             placeholder="expert address, duration, payment amount"
             name="activateContract"
             marginBottom={"8px !important"}
-            value={""}
+            // value={""}
             // onChange={handleChange}
           />
           <Button
@@ -69,7 +69,7 @@ export default function ContractInterfaceForm() {
             placeholder="payable amount (Ether)"
             name="activateContract"
             marginBottom={"8px !important"}
-            value={""}
+            // value={""}
           />
           <Button
             pos={"relative"}

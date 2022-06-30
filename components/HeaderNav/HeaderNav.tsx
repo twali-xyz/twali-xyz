@@ -72,15 +72,15 @@ const HeaderNav = (props) => {
           userWallet && (
             <>
               <HStack mr={10}>
-                <Link href={"admindash"}>
+                <Link href={"/client-dashboard"}>
                   <Text
                     fontSize={"14px"}
                     letterSpacing={"2%"}
                     textTransform={"uppercase"}
                     cursor={"pointer"}
-                    color={whichPage === "admindash" ? "zing" : "fresh"}
+                    color={whichPage === "client-dashboard" ? "zing" : "fresh"}
                   >
-                    admindash
+                    Client Dashboard
                   </Text>
                 </Link>
               </HStack>

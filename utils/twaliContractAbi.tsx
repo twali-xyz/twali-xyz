@@ -1,4 +1,4 @@
-export const BASEABI = [[
+export const BASEABI = [
   {
     "inputs":[],
     "name":"InvalidCurrentStatus",
@@ -334,5 +334,4 @@ export const BASEABI = [[
     "stateMutability":"payable",
     "type":"receive"
   }
-  ]
 ];

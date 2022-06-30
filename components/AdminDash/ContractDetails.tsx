@@ -1,65 +1,76 @@
-import { Box, HStack, Img, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, HStack, Img, Text, VStack } from "@chakra-ui/react";
+import { useEffect } from "react";
 import { Chip } from "../reusable/Chip";
-
-export default function ContractDetails(
-    contract
-) {
+import { setTwaliClone, getTwaliCloneStorage } from "../../utils/contractBaseInterface";
 
 
+export default function ContractDetails({contract}) {
+  console.log(contract)
+  
+useEffect(() => {
+  getContractDetails();
 
+}, []);
+
+const getContractDetails = async () => {
+  await getTwaliCloneStorage(contract);
+  // Contract Details are single items
+
+  // let metadata = await setTwaliClone(contract).methods.contract_sowMetaData().call();
+  //   console.log('contract metadata:', metadata);
+  //   let metadata2 = await setTwaliClone(contract).methods.contract_start_date().call();
+  //   console.log('contract metadata:', metadata2);
+  //   let metadata3 = await setTwaliClone(contract).methods.contract_end_date().call();
+  //   console.log('contract metadata:', metadata3);
+  // return metadata;
+};
+
+
+
+
+if(!contract) return <Text>Loading...</Text>
     return (
+
         <Box
         //   {...props}
           width={"90%"}
-          height={"90%"}
+          height={"45%"}
+          alignItems={"center"}
           background={"n6"}
           padding={"32px"}
           border={"1px"}
           borderRadius={"8px"}
           borderColor={"n3"}
           boxShadow="8px 8px 24px 0px #00000026"
-          _hover={{ boxShadow: "8px 8px 32px 8px #00000026" }}
-        >    
+          _hover={{ boxShadow: "8px 8px 32px 8px #00000026" }}>    
         <VStack alignItems={"flex-start"}>
-        <HStack>
-          {/* <Img
-            width={"75px"}
-            height={"75px"}
-            background={"n3"}
-            borderRadius={"full"}
-            src={img}
-            alt={`bounty image`}
-          ></Img> */}
-          <Text color={"zing"}>Contract Address - {"contract"}</Text>
-        </HStack>
-        {/* <Box mt={"32px !important"} width={"100%"}>
-          <Text
-            fontFamily={"PP Telegraf Light"}
-            fontSize={"16px"}
-            width={"100%"}
-            noOfLines={2}
-          >
-            {body}
-          </Text>*/}
-          <HStack>
-              <Chip borderRadius={"4px"} height={"28px"} variant={"status"}>
-               {"2 Days Remain"}
-              </Chip>
-              <Chip borderRadius={"4px"} height={"28px"} variant={"status"}>
-               {"Active"}
-              </Chip>
-              <Chip borderRadius={"4px"} height={"28px"} variant={"status"}>
-               {"1 ETH"}
-              </Chip>
-            </HStack>
-            <Text color={"subtle"}>Client - {"cloneAddress"}</Text>
-            <Text color={"subtle"}>Expert - {"cloneAddress"}</Text>
-            <Text color={"subtle"}>SOW Metadata - {"sow url here"}</Text>
-            <Text color={"subtle"}>Werk Approved</Text>
-            <Text color={"subtle"}>Werk Paid</Text>
-            <Text color={"subtle"}>Werk Refunded</Text>
+        
+          <Text color={"zing"}>Contract Address - {contract}</Text>
+    
+            <Text color={"zing"}>Client - {"cloneAddress"}</Text>
+            <Text color={"zing"}>Expert - {"cloneAddress"}</Text>
+            <Text color={"zing"}>SOW Metadata - {"sow url here"}</Text>
+            <Text>Status</Text>
+            <Button
+            // pos={"relative"}
+            // alignSelf="center"
+            variant={"secondary"}
+            size={"lg"}
+            borderColor={"primary"}>
+              <Text>Live</Text></Button>
+
+            <HStack>
+            <Button
+            variant={"primary"}
+            size={"md"}
+            borderColor={"primary"}>
+              <Text>Archive</Text></Button>
+              <Button
+            variant={"secondary"}
+            size={"md"}>
+              <Text>Edit</Text></Button>
+              </HStack>
         </VStack>
         </Box> 
-    
         )
 };
