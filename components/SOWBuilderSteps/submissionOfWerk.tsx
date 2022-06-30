@@ -11,7 +11,7 @@ import {
 
 import { useBounty } from "../../context/BountyContext";
 
-export const submissionOfWerk = ({ handleChange, isLoading }) => {
+export const submissionOfWerk = ({ handleChange, txIsLoading }) => {
   const { setBounty, ...bountyState } = useBounty();
   return (
     <form style={{ alignSelf: "center" }}>
@@ -60,8 +60,10 @@ export const submissionOfWerk = ({ handleChange, isLoading }) => {
                   whiteSpace="pre-wrap"
                   overflowY="scroll"
                 >
-                  {isLoading ? (
-                    <></>
+                  {txIsLoading ? (
+                    <>
+                      <Text>Tx is processing....</Text>
+                    </>
                   ) : (
                     <>
                       <Text padding={2}>

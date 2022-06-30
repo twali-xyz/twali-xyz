@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Step, Steps } from "chakra-ui-steps";
 import Project from "../Project/Project";
-import { v4 as uuidv4 } from "uuid";
 
 import {
   Heading,
@@ -25,7 +24,7 @@ import { useBounty } from "../../context/BountyContext";
 import { ABI } from "../../utils/twaliContractABI";
 import useUser from "../../context/TwaliContext";
 import { convertDateToUnix } from "../../utils/marketplaceUtils";
-import { useContractWrite, useProvider } from "wagmi";
+import { useContractWrite, useProvider, useWaitForTransaction } from "wagmi";
 
 const SOWBuilderSteps = (props) => {
   const router = useRouter();
@@ -33,10 +32,11 @@ const SOWBuilderSteps = (props) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [dueDate, setDueDate] = useState(new Date());
-  const [bountySent, setBountySent] = useState(false);
   const [dateRange, setDateRange] = useState([new Date(), new Date()]);
+  const [hash, setHash] = useState<string>();
   const { tokenName, tokenAmount, calculatedUSD } = useToken();
   const { setBounty, editBountyURI, ...bountyState } = useBounty();
+
   const toast = useToast();
   // contract factory to create clone contracts
   //   MetaData: String ,
@@ -44,7 +44,12 @@ const SOWBuilderSteps = (props) => {
   // startDate (unix): unit256 ,
   // endDate(unix): unit256
   const provider = useProvider();
-  const { data, isError, isLoading, write } = useContractWrite({
+  const {
+    data: contractData,
+    isError,
+    isLoading,
+    write,
+  } = useContractWrite({
     addressOrName: "0xD31766Bba01E3cAA21D8eb2Db8830C78940Feb26",
     contractInterface: ABI,
     signerOrProvider: provider,
@@ -55,9 +60,17 @@ const SOWBuilderSteps = (props) => {
       bountyState.contractStartDate,
       bountyState.contractEndDate,
     ],
-    onSettled(data, error) {
-      console.log("Settled", { data, error });
-      if (data && !error) {
+  });
+
+  const {
+    data: txData,
+    isError: isTxError,
+    isLoading: txIsLoading,
+  } = useWaitForTransaction({
+    hash: contractData?.hash,
+    onSettled(contractData, error) {
+      console.log("Settled", { contractData, error });
+      if (contractData && !error) {
         toast({
           title: "Your bounty was submitted!",
           description: `${bountyState.contractTitle} is up on the marketplace. ${bountyState.contractURI}`,
@@ -66,9 +79,30 @@ const SOWBuilderSteps = (props) => {
           duration: 5000,
           isClosable: true,
         });
-        setTimeout(() => {
-          Router.push("/marketplace");
-        }, 1000);
+        let bounty = {
+          ...bountyState,
+          token: tokenName,
+          contractAmount: tokenAmount,
+          convertedAmount: calculatedUSD,
+          userWallet: userData.userWallet,
+          contractOwnerUserName: userData.userName,
+          contractID: bountyState.contractID,
+          contractCreatedOn: 1651968000,
+          contractStatus: "live",
+          attachedFiles: [],
+        };
+        const isValid = uploadSOWToDynamoDB(bounty);
+        if (isValid) {
+          isValid.then((valid) => {
+            console.log(valid.status);
+
+            if (valid.status === 200) {
+              setTimeout(() => {
+                Router.push("/marketplace");
+              }, 4000);
+            }
+          });
+        }
       }
       if (error) {
         toast({
@@ -153,7 +187,7 @@ const SOWBuilderSteps = (props) => {
       label: "Submission",
       content: submissionOfWerk({
         handleChange,
-        isLoading,
+        txIsLoading,
       }),
     },
   ];
@@ -181,7 +215,7 @@ const SOWBuilderSteps = (props) => {
     if (activeStep === 1) {
       handleDates(dateRange, dueDate);
       nextStep();
-    } else if (activeStep === 3) {
+    } else if (activeStep === 2) {
       let bounty = {
         ...bountyState,
         token: tokenName,
@@ -189,13 +223,15 @@ const SOWBuilderSteps = (props) => {
         convertedAmount: calculatedUSD,
         userWallet: userData.userWallet,
         contractOwnerUserName: userData.userName,
-        contractURI: bountyState.contractURI,
         contractID: bountyState.contractID,
         contractCreatedOn: 1651968000,
         contractStatus: "live",
         attachedFiles: [],
       };
       checkSubmissionValidity(bounty);
+      nextStep();
+    } else if (activeStep === 3) {
+      write();
     } else {
       nextStep();
     }
@@ -207,23 +243,12 @@ const SOWBuilderSteps = (props) => {
     // if (userData.userName && userData.userName !== '') {
     // setErrors(validate(userData));
     try {
-      let isValid = uploadSOWToDynamoDB(bounty);
       let isPostedToS3 = submitSOWToS3(bounty); // POST CONTRACT TO S3 BUCKET
-
       // Displays a toast alert to inform the user - contract created
       isPostedToS3.then(async (posted) => {
         if (posted.status == 200) {
-          setBounty({ ...bountyState, contractURI: await posted.json() });
-
-          isValid.then(async (valid) => {
-            if (valid.status == 200) {
-              setIsDisabled(true);
-              if (bountyState.contractURI !== "" && !bountySent) {
-                console.log(bountyState);
-                write();
-              }
-            }
-          });
+          let s3URL = await posted.json();
+          setBounty({ ...bountyState, contractURI: s3URL });
         }
         // else if (activeStep <= 0 && !errors.userName && !errors.firstName && !errors.lastName && !errors.email) {
         //   setIsDisabled(false);
@@ -237,6 +262,7 @@ const SOWBuilderSteps = (props) => {
         // } else {
         //   setIsDisabled(true);
         // }
+        console.log("S3 submitted");
       });
     } catch (err) {
       console.log("Bounty wasn't submitted...");
@@ -250,7 +276,7 @@ const SOWBuilderSteps = (props) => {
         <Project
           activeStep={activeStep}
           prevStep={prevStep}
-          nextStep={nextStep}
+          nextStep={handleSubmit}
           steps={steps}
         />
       ) : (
