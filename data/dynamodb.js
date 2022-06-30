@@ -12,10 +12,10 @@ const getDynamoDBClient = () => {
   // Only needed with local development.
 
   AWS.config.update({
-    // accessKeyId: "xxxx",
-    // secretAccessKey: "xxxx",
+    accessKeyId: "xxxx",
+    secretAccessKey: "xxxx",
     region: "us-east-1",
-    // endpoint: "http://localhost:8000",
+    endpoint: "http://localhost:8000",
   });
 
   const options = {
@@ -151,11 +151,11 @@ module.exports = {
    * @returns Returns a user as and object.
    **/
   getUserByWallet: async (userWallet) => {
+    console.log("USERWALLET: ", userWallet);
     const dbUser = await getDynamoDBClient()
       .query({
         TableName,
         // ProjectionExpression: "userWallet",
-
         KeyConditionExpression: "PK = :PK and SK = :SK",
         ExpressionAttributeValues: {
           ":PK": `USER#${userWallet}`,
@@ -163,7 +163,10 @@ module.exports = {
         },
       })
       .promise()
-      .then((data) => data.Items[0])
+      .then((data) => {
+        console.log(data.Items[0]);
+        return data.Items[0];
+      })
       .catch(console.error);
     return dbUser;
   },

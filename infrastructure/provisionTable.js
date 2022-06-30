@@ -5,7 +5,7 @@ require("dotenv").config();
 // Only used in local development
 AWS.config.update({
   region: "us-east-1",
-  // endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT,
+  endpoint: process.env.LOCAL_DYNAMO_DB_ENDPOINT,
 });
 
 let dynamodb = new AWS.DynamoDB();
@@ -47,7 +47,7 @@ let params = {
 
 // Deploying the dynamoDB table instance
 (async function () {
-  await dynamodb.createTable(params).promise();
+  await dynamodb.deleteTable({ TableName: "Twali-core-test" }).promise();
 
   console.log("Twali-core-test");
 
@@ -57,7 +57,7 @@ let params = {
 
     dynamodb = new AWS.DynamoDB();
 
-    await dynamodb.createTable(params).promise();
+    await dynamodb.deleteTable({ TableName: "Twali-core-test" }).promise();
 
     console.log("Created table in us-east-1");
 

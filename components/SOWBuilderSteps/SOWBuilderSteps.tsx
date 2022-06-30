@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Step, Steps } from "chakra-ui-steps";
 import Project from "../Project/Project";
 import { v4 as uuidv4 } from "uuid";
@@ -14,7 +14,7 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import { UserData } from "../../utils/interfaces";
 import { statementOfWerk } from "./statementOfWerk";
 import { datesAndPricing } from "./datesAndPricing";
@@ -22,9 +22,10 @@ import { submissionOfWerk } from "./submissionOfWerk";
 import { setEventArray } from "../../utils/setEventArray";
 import { useToken } from "../../context/TokenContext";
 import { useBounty } from "../../context/BountyContext";
-
+import { ABI } from "../../utils/twaliContractABI";
 import useUser from "../../context/TwaliContext";
 import { convertDateToUnix } from "../../utils/marketplaceUtils";
+import { useContractWrite, useProvider } from "wagmi";
 
 const SOWBuilderSteps = (props) => {
   const router = useRouter();
@@ -32,10 +33,55 @@ const SOWBuilderSteps = (props) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [dueDate, setDueDate] = useState(new Date());
+  const [bountySent, setBountySent] = useState(false);
   const [dateRange, setDateRange] = useState([new Date(), new Date()]);
   const { tokenName, tokenAmount, calculatedUSD } = useToken();
-  const { setBounty, ...bountyState } = useBounty();
+  const { setBounty, editBountyURI, ...bountyState } = useBounty();
   const toast = useToast();
+  // contract factory to create clone contracts
+  //   MetaData: String ,
+  // PaymentAmount(In WEI): uint256 ,
+  // startDate (unix): unit256 ,
+  // endDate(unix): unit256
+  const provider = useProvider();
+  const { data, isError, isLoading, write } = useContractWrite({
+    addressOrName: "0xD31766Bba01E3cAA21D8eb2Db8830C78940Feb26",
+    contractInterface: ABI,
+    signerOrProvider: provider,
+    functionName: "createTwaliClone",
+    args: [
+      bountyState.contractURI,
+      bountyState.contractAmount,
+      bountyState.contractStartDate,
+      bountyState.contractEndDate,
+    ],
+    onSettled(data, error) {
+      console.log("Settled", { data, error });
+      if (data && !error) {
+        toast({
+          title: "Your bounty was submitted!",
+          description: `${bountyState.contractTitle} is up on the marketplace. ${bountyState.contractURI}`,
+          status: "success",
+          variant: "subtle",
+          duration: 5000,
+          isClosable: true,
+        });
+        setTimeout(() => {
+          Router.push("/marketplace");
+        }, 1000);
+      }
+      if (error) {
+        toast({
+          title: "Your bounty was not created due to an error!",
+          description: `${error}`,
+          status: "error",
+          variant: "subtle",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+    },
+  });
 
   let activeStep = props.activeStep;
   let nextStep = props.nextStep;
@@ -107,17 +153,28 @@ const SOWBuilderSteps = (props) => {
       label: "Submission",
       content: submissionOfWerk({
         handleChange,
+        isLoading,
       }),
     },
   ];
 
-  const submitSOW = async (bounty) => {
+  const submitSOWToS3 = async (bounty) => {
+    // post the SOW object to an S3 bucket
     let res = await fetch("/api/users/postSOW", {
       method: "POST",
       body: JSON.stringify({ bounty }),
     });
     return res;
-    console.log("BOUNTY CREATED BRUH", bounty);
+  };
+
+  const uploadSOWToDynamoDB = async (bounty) => {
+    // post the SOW object to an S3 bucket
+    let res = await fetch("/api/marketplace/submitBounty", {
+      method: "POST",
+      body: JSON.stringify({ bounty }),
+    });
+
+    return res;
   };
 
   const handleSubmit = () => {
@@ -132,7 +189,8 @@ const SOWBuilderSteps = (props) => {
         convertedAmount: calculatedUSD,
         userWallet: userData.userWallet,
         contractOwnerUserName: userData.userName,
-        contractID: uuidv4(),
+        contractURI: bountyState.contractURI,
+        contractID: bountyState.contractID,
         contractCreatedOn: 1651968000,
         contractStatus: "live",
         attachedFiles: [],
@@ -145,27 +203,27 @@ const SOWBuilderSteps = (props) => {
 
   // Informs the user if the bounty is submitted or not
   // Error checks for main required fields
-  const checkSubmissionValidity = (bounty) => {
+  const checkSubmissionValidity = async (bounty) => {
     // if (userData.userName && userData.userName !== '') {
     // setErrors(validate(userData));
     try {
-      let isValid = submitSOW(bounty); // checks if the user name already exists in DB
+      let isValid = uploadSOWToDynamoDB(bounty);
+      let isPostedToS3 = submitSOWToS3(bounty); // POST CONTRACT TO S3 BUCKET
 
-      // Displays a toast alert to inform the user - need a unique user name
-      isValid.then((valid) => {
-        if (valid.status == 200) {
-          setIsDisabled(true);
-          toast({
-            title: "Your bounty was submitted!",
-            description: `${bounty.contractTitle} is up on the marketplace`,
-            status: "success",
-            variant: "subtle",
-            duration: 5000,
-            isClosable: true,
+      // Displays a toast alert to inform the user - contract created
+      isPostedToS3.then(async (posted) => {
+        if (posted.status == 200) {
+          setBounty({ ...bountyState, contractURI: await posted.json() });
+
+          isValid.then(async (valid) => {
+            if (valid.status == 200) {
+              setIsDisabled(true);
+              if (bountyState.contractURI !== "" && !bountySent) {
+                console.log(bountyState);
+                write();
+              }
+            }
           });
-          setTimeout(function () {
-            router.push("/marketplace");
-          }, 1000);
         }
         // else if (activeStep <= 0 && !errors.userName && !errors.firstName && !errors.lastName && !errors.email) {
         //   setIsDisabled(false);

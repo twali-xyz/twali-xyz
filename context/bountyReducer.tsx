@@ -17,12 +17,14 @@ export const initialState = {
   contractIndustry: [""],
   contractExpertise: [""],
   contractStatus: "live",
+  contractURI: "",
   attachedFiles: [],
   setBounty: Function,
   editBountyExpertise: Function,
   editBountyDetails: Function,
   editBountyHeader: Function,
   editBountyDescription: Function,
+  editBountyURI: Function,
 };
 
 const bountyReducer = (state, action) => {
@@ -32,6 +34,12 @@ const bountyReducer = (state, action) => {
     case "SET_BOUNTYDATA":
       return {
         ...payload,
+      };
+
+    case "EDIT_BOUNTYURI":
+      return {
+        ...state,
+        contractURI: payload.contractURI,
       };
 
     case "EDIT_BOUNTYEXPERTISE":
