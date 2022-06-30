@@ -26,7 +26,7 @@ export function AccountSelection({
   onConnectWallet,
 }) {
   const router = useRouter();
-  const [viewPass, setViewPass] = useState(false);
+  const [viewPassword, setViewPassword] = useState(false);
   const [signIn, setSignIn] = useState(false);
   return (
     <Flex
@@ -133,7 +133,10 @@ export function AccountSelection({
               <FormLabel mb={2} color={"fresh"}>
                 password
               </FormLabel>
-              <Input color={"fresh"} type={!viewPass ? "password" : "text"} />
+              <Input
+                color={"fresh"}
+                type={!viewPassword ? "password" : "text"}
+              />
             </FormControl>
             <HStack justifyContent={"space-between"} width={"100%"}>
               <Link
@@ -149,7 +152,7 @@ export function AccountSelection({
                 width={"25px"}
                 color={"zing"}
                 variant={"unstyled"}
-                onClick={() => setViewPass(!viewPass)}
+                onClick={() => setViewPassword(!viewPassword)}
                 aria-label="view-password"
                 icon={<ViewIcon />}
               />
