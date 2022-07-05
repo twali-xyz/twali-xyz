@@ -1,4 +1,3 @@
-
 import {
   Button,
   CircularProgress,
@@ -22,10 +21,9 @@ import { getUserByWallet } from "../utils/walletUtils";
 import { AccountSelection } from "../components/SignUpSteps/accountSelection";
 
 const LoginPage = (props) => {
-
+  const router = useRouter();
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [loaded, setLoaded] = useState(false);
-
 
   const [referredBy, setReferredBy] = useState<string | string[]>();
   console.log("ROUTER: ", router.query["referred_by"]);
@@ -56,7 +54,6 @@ const LoginPage = (props) => {
     const currAccount = accounts[0];
     console.log(currAccount);
 
-    userState.setData({ ...userState, userWallet: currAccount });
     setIsSubmitted(true);
 
     try {
@@ -82,7 +79,6 @@ const LoginPage = (props) => {
         router.push(`/steps`);
       }
       setLoaded(true);
-
     }
   };
 
@@ -95,9 +91,7 @@ const LoginPage = (props) => {
             marginTop={"96px !important"}
             variant={"primary"}
             size={"lg"}
-            onClick={(event: any) =>
-              handleWalletConnectOnLogin()
-            }
+            onClick={(event: any) => handleWalletConnectOnLogin()}
           >
             Connect Wallet{" "}
             {isSubmitted ? (
@@ -148,13 +142,6 @@ const LoginPage = (props) => {
     setIsAccTypeSelected(true);
   };
 
-
-const checkForWallet = async () => { 
-  const { status } = await connectWallet();
-  setStatus(status);
-};
-
-
   return (
     <>
       <title>twali.xyz - login</title>
@@ -192,9 +179,10 @@ const checkForWallet = async () => {
               thickness="4px"
               isIndeterminate
               color="#3C2E26"
-            />) : 
-            <Text>{status}</Text>         
-        }
+            />
+          ) : (
+            <Text>{status}</Text>
+          )}
         </VStack>
       </Container>
     </>

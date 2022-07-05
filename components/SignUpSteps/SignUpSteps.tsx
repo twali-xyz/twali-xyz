@@ -40,11 +40,8 @@ const SignUpSteps = () => {
   const [accType, setAccType] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
 
-  const toast = useToast();
-
   const firstRender = useRef(true);
-  const toast = useToast()
-
+  const toast = useToast();
 
   const [userData, setUserData] = useState<UserData>({
     ...userState,
@@ -124,10 +121,10 @@ const SignUpSteps = () => {
   };
 
   useEffect(() => {
-    const handler = setTimeout(() => {  
+    const handler = setTimeout(() => {
       if (firstRender.current) {
         firstRender.current = false;
-        return
+        return;
       }
       setErrors(validate(userData));
     }, 500);
@@ -135,7 +132,6 @@ const SignUpSteps = () => {
     return () => {
       clearTimeout(handler);
     };
-
   }, [userData, 500]);
 
   const steps = [
