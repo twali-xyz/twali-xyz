@@ -28,9 +28,13 @@ const whitelist = () => {
   const [loadingWallet, setLoadingWallet] = useState(null);
   const [loadingIDX, setLoadingIDX] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { address } = useAccount();
+  const { data: accountData } = useAccount();
 
-  const { data, isLoading: loadingWhitelist, isError } = useWhitelist(address);
+  const {
+    data,
+    isLoading: loadingWhitelist,
+    isError,
+  } = useWhitelist(accountData?.address);
   const {
     data: filteredData,
     isLoading,
@@ -79,9 +83,9 @@ const whitelist = () => {
 
       if (query) {
         await mutate("/api/admin/filterWhitelist/" + query);
-        await mutate("/api/admin/retrieveWhitelist/" + address);
+        await mutate("/api/admin/retrieveWhitelist/" + accountData?.address);
       } else {
-        await mutate("/api/admin/retrieveWhitelist/" + address);
+        await mutate("/api/admin/retrieveWhitelist/" + accountData?.address);
       }
       setLoadingWallet(null);
     };
@@ -126,7 +130,7 @@ const whitelist = () => {
   });
   const { disconnect } = useDisconnect();
 
-  if (!address)
+  if (!accountData)
     return (
       <Flex
         width={"100%"}
@@ -134,7 +138,7 @@ const whitelist = () => {
         justify={"center"}
         alignItems={"center"}
       >
-        {address && `Connected to ${address}`}
+        {accountData && `Connected to ${accountData?.address}`}
         <Button size={"lg"} variant={"primary"} onClick={() => connect()}>
           Connect Wallet
         </Button>
@@ -164,7 +168,7 @@ const whitelist = () => {
   }
   return (
     <>
-      <HeaderNav userWallet={address} />
+      <HeaderNav userWallet={accountData.address} />
       <Flex flexDir={"row"} pos={"absolute"} top={0} width="100%" zIndex={-1}>
         <FilterInputs
           filterParams={filterParams}
