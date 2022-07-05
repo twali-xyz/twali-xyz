@@ -122,7 +122,7 @@ const ProfileDetails = ({ user }) => {
         }
       } catch (err) {
         console.log("error: ", err);
-          setLoaded(false);
+        setLoaded(false);
       }
     }
 

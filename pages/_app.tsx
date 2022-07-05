@@ -3,7 +3,7 @@ import "../styles/datePicker.css";
 import "../styles/dateRangePicker.css";
 import { AppProps } from "next/app";
 import * as React from "react";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, StylesProvider } from "@chakra-ui/react";
 
 import { UserProvider } from "../context/TwaliContext";
 import TokenContext from "../context/TokenContext";

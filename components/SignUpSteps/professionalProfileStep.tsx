@@ -27,13 +27,7 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
         boxShadow={"8px 16px 24px 0px #062B2A8F"}
       >
         <Box p="4">
-          <Box
-            mt="1"
-            fontWeight="semibold"
-            as="h4"
-            lineHeight="tight"
-            noOfLines={1}
-          >
+          <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight">
             <FormControl p={2} pb={0} id="current-company-title" isRequired>
               <FormLabel
                 marginBottom={1}

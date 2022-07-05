@@ -28,13 +28,7 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
         marginBottom={"180px"}
       >
         <Box p="4">
-          <Box
-            mt="1"
-            fontWeight="semibold"
-            as="h4"
-            lineHeight="tight"
-            noOfLines={1}
-          >
+          <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight">
             <FormControl p={2} id="business-type" isRequired>
               <HStack justifyContent="space-between">
                 <FormLabel
