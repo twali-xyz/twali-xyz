@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import {
   Button,
-  Input,
   Modal,
   ModalOverlay,
   ModalHeader,
@@ -131,7 +130,7 @@ const EditExpertiseModal = (props) => {
               <MultiSelect
                 name={"functionalExpertise"}
                 formLabel={"Superpowers"}
-                handleChange={handleChange}
+                onChange={handleChange}
                 options={functionalExpertiseList}
                 maxSelections={3}
                 defaultValues={values?.functionalExpertise || []}
@@ -140,7 +139,7 @@ const EditExpertiseModal = (props) => {
               <MultiSelect
                 name={"industryExpertise"}
                 formLabel={"Industry expertise"}
-                handleChange={handleChange}
+                onChange={handleChange}
                 defaultValues={values?.industryExpertise || []}
                 options={industryExpertiseList}
                 maxSelections={3}

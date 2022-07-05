@@ -39,3 +39,15 @@ export interface CompanyInfo {
   logo: any;
   currentStatus: number;
 }
+
+export interface WhitelistInfo {
+    firstName: "";
+    lastName: "";
+    email: "";
+    discord: "";
+    linkedIn: "";
+    referredBy: "";
+    applied_on: null;
+    userWallet: "";
+    status: "";
+}

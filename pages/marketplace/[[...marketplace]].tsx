@@ -25,6 +25,7 @@ export default function marketplace() {
   const [filterParams, setFilterParams] = useState({});
   const [sortParams, setSortParams] = useState();
   const [query, setQuery] = useState("");
+  const [isConnectWalletBtn, setIsConnectWalletBtn] = useState(false);
 
   // set the filterParams based on the URL query params
   // needed to set filters when user goes to marketplace from a URL that contains a query

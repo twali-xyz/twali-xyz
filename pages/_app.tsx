@@ -6,8 +6,15 @@ import * as React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
 
 import { UserProvider } from "../context/TwaliContext";
-import TokenContext from '../context/TokenContext';
+import TokenContext from "../context/TokenContext";
 import { twaliTheme } from "../styles/twaliTheme";
+import { WagmiConfig, createClient } from "wagmi";
+import { getDefaultProvider } from "ethers";
+
+const client = createClient({
+  autoConnect: false,
+  provider: getDefaultProvider(),
+});
 
 function App({ Component, pageProps }: AppProps) {
   return (
@@ -30,11 +37,13 @@ function App({ Component, pageProps }: AppProps) {
     // }}
     // />
     <UserProvider>
-      <ChakraProvider theme={twaliTheme}>
-      <TokenContext>
-        <Component {...pageProps} />
-      </TokenContext>
-      </ChakraProvider>
+      <WagmiConfig client={client}>
+        <ChakraProvider theme={twaliTheme}>
+          <TokenContext>
+            <Component {...pageProps} />
+          </TokenContext>
+        </ChakraProvider>
+      </WagmiConfig>
     </UserProvider>
     // </>
   );

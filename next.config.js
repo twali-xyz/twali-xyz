@@ -1,6 +1,7 @@
 module.exports = {
   env: {
     TABLE_NAME: "Twali-core-test",
+    WHITELIST_TABLE: "whitelist_table",
   },
   webpack: (config) => {
     if (!process.env.BUNDLE_AWS_SDK) {

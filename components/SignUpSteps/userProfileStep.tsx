@@ -29,7 +29,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
             fontWeight="semibold"
             as="h4"
             lineHeight="tight"
-            isTruncated
+            noOfLines={1}
           >
             <HStack height={"90px"} spacing={2}>
               <FormControl px={2} py={1} mx={1} id="first-name" isRequired>

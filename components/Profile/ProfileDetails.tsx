@@ -122,7 +122,7 @@ const ProfileDetails = ({ user }) => {
         }
       } catch (err) {
         console.log("error: ", err);
-        setLoaded(false);
+          setLoaded(false);
       }
     }
 
@@ -223,7 +223,6 @@ const ProfileDetails = ({ user }) => {
       }
 
       let resArr: any = [];
-
       finalData.forEach(function (item) {
         var i = resArr.findIndex((x) => x.spaceID == item.spaceID);
         if (i <= -1) {
