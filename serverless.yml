@@ -1,10 +1,11 @@
-twali-xyz-staging:
+twali-xyz-production:
   component: "@sls-next/serverless-component@3.7.0-alpha.11"
   inputs:
     roleArn: "arn:aws:iam::517934542124:role/deploy-dev"
     build:
       env:
-        TABLE_NAME: "dev_staging_user_profile_test"
+        TABLE_NAME: "Twali-core-test"
+        WHITELIST_TABLE: "whitelist_table"
     cloudfront:
-      distributionId: EHZYCKLX3TYQ4
-    bucketName: pxn4tf-zy2dp9
+      distributionId: E3D09AH5621VQX  # for Staging env only, change for local testing
+    bucketName: yxv8apc-0cmrlof # for Staging env only, change for local testing

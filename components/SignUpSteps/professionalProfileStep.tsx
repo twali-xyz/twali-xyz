@@ -32,7 +32,7 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
             fontWeight="semibold"
             as="h4"
             lineHeight="tight"
-            isTruncated
+            noOfLines={1}
           >
             <FormControl p={2} pb={0} id="current-company-title" isRequired>
               <FormLabel
@@ -103,7 +103,7 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
             <MultiSelect
               name={"functionalExpertise"}
               formLabel={"What's your superpower? (select max 3)"}
-              handleChange={handleChange}
+              onChange={handleChange}
               defaultValues={[]}
               options={functionalExpertiseList}
               maxSelections={3}
@@ -112,7 +112,7 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
             <MultiSelect
               name={"industryExpertise"}
               formLabel={"Industry expertise (select max 3)"}
-              handleChange={handleChange}
+              onChange={handleChange}
               defaultValues={[]}
               options={industryExpertiseList}
               maxSelections={3}

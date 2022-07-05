@@ -2,6 +2,7 @@ import {
   Button,
   CircularProgress,
   Container,
+  Link,
   Img,
   Text,
   VStack,
@@ -14,19 +15,26 @@ import Web3 from "web3";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { UserData } from "../utils/interfaces";
-import { getUserByWallet } from "../utils/walletUtils";
+import useUser from "../context/TwaliContext";
+import { getUserByWallet, getUserWhitelistStatus, handleWalletConnectOnLogin } from "../utils/walletUtils";
+
 
 const LoginPage = (props) => {
+  const { ...userState } = useUser();
   useEffect(() => {
     setLoaded(!props.loaded);
+    checkForWallet();
   }, []);
 
   const [show, setShow] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [status, setStatus] = useState<string | JSX.Element>();
   const toggleMenu = () => setShow(!show);
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [loaded, setLoaded] = useState(false);
-  const router = useRouter();
 
+
+  const router = useRouter();
   const handleWalletConnectOnLogin = async () => {
     const web3Modal = new Web3Modal({
       disableInjectedProvider: false,
@@ -47,24 +55,118 @@ const LoginPage = (props) => {
     const web3 = new Web3(provider);
     const accounts = await web3.eth.getAccounts();
     const currAccount = accounts[0];
+    console.log(currAccount);
 
+    userState.setData({ ...userState, userWallet: currAccount });
     setIsSubmitted(true);
+
     try {
       let userData: UserData = await getUserByWallet(currAccount);
 
       if (userData && userData.userName && userData.userWallet) {
         router.push(`/${userData.userName}`);
         setIsSubmitted(false);
-      } else {
-        console.log("No profile, pls create one...");
-        router.push("/steps");
+        return;
       }
     } catch (err) {
       console.log("error: ", err);
-      router.push("/steps");
+    }
+
+    try {
+      let userWhiteList = await getUserWhitelistStatus(currAccount);
+      console.log("DATA: ", userWhiteList["whitelistStatus"]);
+      if (
+        userWhiteList["whitelistStatus"] === null ||
+        userWhiteList["whitelistStatus"] === "" ||
+        userWhiteList["whitelistStatus"] === undefined ||
+        userWhiteList["whitelistStatus"] === "pending" ||
+        userWhiteList["whitelistStatus"] === "rejected"
+      ) {
+        // if not approved on the whiteList send user to application form,
+        // pending page, or rejected page
+        router.push(
+          `/whitelist/application?status=${userWhiteList["whitelistStatus"]} `,
+          "whitelist/application"
+        );
+        return;
+      }
+      if (userWhiteList["whitelistStatus"] === "approved") {
+        console.log("No profile, pls create one...");
+        userState.setData({
+          ...userState,
+          firstName: userWhiteList["firstName"],
+          lastName: userWhiteList["lastName"],
+          email: userWhiteList["email"],
+          linkedIn: userWhiteList["linkedIn"],
+          discord: userWhiteList["discord"],
+        });
+        router.push("/steps");
+        return;
+      }
+    } catch (err) {
+      console.log("error: ", err);
+      router.push("/whitelist/application");
       setLoaded(true);
+
     }
   };
+
+  const connectWallet = async () => {
+    if (typeof window.ethereum !== "undefined") {
+      return {
+        status: (
+          <Button
+            disabled={isDisabled}
+            marginTop={"96px !important"}
+            variant={"primary"}
+            size={"lg"}
+            onClick={(event: any) =>
+              handleWalletConnectOnLogin()
+            }
+          >
+            Connect Wallet{" "}
+            {isSubmitted ? (
+              <CircularProgress
+                size="22px"
+                thickness="4px"
+                isIndeterminate
+                color="#3C2E26"
+              />
+            ) : null}
+          </Button>
+        ),
+      };
+    } else {
+      setIsDisabled(true);
+      return {
+        status: (
+          <VStack>
+            <Text marginTop={"48px !important"} fontSize={"20px"}>
+              {" "}
+              🦊{" "}
+              <Link target="_blank" href={`https://metamask.io/download.html`}>
+                You must install Metamask in your browser.
+              </Link>
+            </Text>
+            <Button
+              disabled={isDisabled}
+              marginTop={"24px !important"}
+              variant={"primary"}
+              size={"lg"}
+            >
+              Connect Wallet{" "}
+            </Button>
+          </VStack>
+        ),
+      };
+    }
+  };
+
+const checkForWallet = async () => { 
+  const { status } = await connectWallet();
+  setStatus(status);
+};
+
 
   return (
     <>
@@ -114,25 +216,9 @@ const LoginPage = (props) => {
               thickness="4px"
               isIndeterminate
               color="#3C2E26"
-            />
-          ) : (
-            <Button
-              marginTop={"96px !important"}
-              variant={"primary"}
-              size={"lg"}
-              onClick={handleWalletConnectOnLogin}
-            >
-              Connect Wallet{" "}
-              {isSubmitted ? (
-                <CircularProgress
-                  size="22px"
-                  thickness="4px"
-                  isIndeterminate
-                  color="#3C2E26"
-                />
-              ) : null}
-            </Button>
-          )}
+            />) : 
+            <Text>{status}</Text>         
+        }
         </VStack>
       </Container>
     </>
