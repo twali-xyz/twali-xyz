@@ -1,8 +1,9 @@
 const { v4 } = require("uuid");
 const TableName = process.env.TABLE_NAME;
+const ContractBucket = process.env.CONTRACT_BUCKET;
+const AWS = require("aws-sdk");
 
 const getDynamoDBClient = () => {
-  const AWS = require("aws-sdk");
   const edgeRegion = process.env.CURRENT_AWS_REGION || "us-east-1";
   const dynamoDBRegion = edgeRegion.startsWith("us")
     ? "us-east-1"
@@ -11,10 +12,10 @@ const getDynamoDBClient = () => {
   // Only needed with local development.
 
   AWS.config.update({
-    // accessKeyId: "xxxx",
-    // secretAccessKey: "xxxx",
+    accessKeyId: "xxxx",
+    secretAccessKey: "xxxx",
     region: "us-east-1",
-    // endpoint: "http://localhost:8000",
+    endpoint: "http://localhost:8000",
   });
 
   const options = {
@@ -150,11 +151,11 @@ module.exports = {
    * @returns Returns a user as and object.
    **/
   getUserByWallet: async (userWallet) => {
+    console.log("USERWALLET: ", userWallet);
     const dbUser = await getDynamoDBClient()
       .query({
         TableName,
         // ProjectionExpression: "userWallet",
-
         KeyConditionExpression: "PK = :PK and SK = :SK",
         ExpressionAttributeValues: {
           ":PK": `USER#${userWallet}`,
@@ -162,7 +163,10 @@ module.exports = {
         },
       })
       .promise()
-      .then((data) => data.Items[0])
+      .then((data) => {
+        console.log(data.Items[0]);
+        return data.Items[0];
+      })
       .catch(console.error);
     return dbUser;
   },
@@ -343,7 +347,6 @@ module.exports = {
 
     // Call DynamoDB's scan API
     const output = executeScan(dynamoDbClient, scanInput).then((output) => {
-      console.info("Scan API call has been executed.", output);
       return output;
     });
 
@@ -536,35 +539,38 @@ module.exports = {
     }
     return output;
   },
-    /**
+
+  /**
    * @desc Access a user in the table by primary key on a GSI using `userName`.
    * @param {string} - function takes in a input string of the users userName
    * @dev This can be altered to included any additional attributes with 'ProjectionExpression'.
    * @example See docs to add additonal attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property
    * @returns Returns a user as and object.
    **/
-     submitBounty: async (bounty) => {
-       let {
-        userWallet,
-        contractID,
-        contractCreatedOn,
-        contractOwnerUserName,
-        contractTitle,
-        contractDescription,
-        contractStartDate,
-        contractEndDate,
-        contractDuration,
-        token,
-        contractAmount,
-        convertedAmount,
-        applicationDeadline,
-        contractIndustry,
-        contractExpertise,
-        contractStatus,
-        attachedFiles,
-      } = bounty;
+  submitBounty: async (bounty) => {
+    let {
+      userWallet,
+      contractID,
+      contractCreatedOn,
+      contractOwnerUserName,
+      contractTitle,
+      contractDescription,
+      contractStartDate,
+      contractEndDate,
+      contractDuration,
+      token,
+      contractAmount,
+      convertedAmount,
+      applicationDeadline,
+      contractIndustry,
+      contractExpertise,
+      contractStatus,
+      attachedFiles,
+    } = bounty;
 
-      await getDynamoDBClient()
+    // await uploadContractToS3(bounty);
+
+    await getDynamoDBClient()
       .update({
         TableName,
         Key: {
@@ -598,5 +604,5 @@ module.exports = {
         console.log(data);
       })
       .catch(console.error);
-    },
+  },
 };

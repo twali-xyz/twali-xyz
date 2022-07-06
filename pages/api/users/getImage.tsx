@@ -21,6 +21,7 @@ const getImageHandler: NextApiHandler = async (req, res) => {
     const params = {
       Bucket: "test-pfp-images",
       Key: `images/${req.query.uuid}/profileImage.jpg`, // File name you want to retrieve from S3
+      s3ForcePathStyle: true,
     };
 
     const data = await s3

@@ -48,6 +48,7 @@ export interface Bounty {
   contractStartDate: number;
   contractEndDate: number;
   contractDuration: number;
+  contractURI: string;
   tokenName: string;
   contractAmount: number;
   convertedAmount: number;
@@ -61,4 +62,5 @@ export interface Bounty {
   editBountyDetails: Function,
   editBountyHeader: Function,
   editBountyDescription: Function,
+  editBountyURI: Function
 }

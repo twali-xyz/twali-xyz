@@ -6,6 +6,54 @@ import * as React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
 import { UserProvider } from "../context/TwaliContext";
 import { twaliTheme } from "../styles/twaliTheme";
+import {
+  WagmiConfig,
+  createClient,
+  configureChains,
+  defaultChains,
+} from "wagmi";
+import { getDefaultProvider } from "ethers";
+import { alchemyProvider } from "wagmi/providers/alchemy";
+import { publicProvider } from "wagmi/providers/public";
+import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
+import { InjectedConnector } from "wagmi/connectors/injected";
+import { MetaMaskConnector } from "wagmi/connectors/metaMask";
+import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+const alchemyId = process.env.ALCHEMY_ID;
+
+// Configure chains & providers with the Alchemy provider.
+// Two popular providers are Alchemy (alchemy.com) and Infura (infura.io)
+const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
+  alchemyProvider({ alchemyId }),
+  publicProvider(),
+]);
+const client = createClient({
+  autoConnect: true,
+  connectors: [
+    new MetaMaskConnector({ chains }),
+    new CoinbaseWalletConnector({
+      chains,
+      options: {
+        appName: "twali-xyz",
+      },
+    }),
+    new WalletConnectConnector({
+      chains,
+      options: {
+        qrcode: true,
+      },
+    }),
+    new InjectedConnector({
+      chains,
+      options: {
+        name: "Injected",
+        shimDisconnect: true,
+      },
+    }),
+  ],
+  provider,
+  webSocketProvider,
+});
 
 function App({ Component, pageProps }: AppProps) {
   return (
@@ -27,11 +75,13 @@ function App({ Component, pageProps }: AppProps) {
     //   `,
     // }}
     // />
-    <UserProvider>
-      <ChakraProvider theme={twaliTheme}>
-        <Component {...pageProps} />
-      </ChakraProvider>
-    </UserProvider>
+    <WagmiConfig client={client}>
+      <UserProvider>
+        <ChakraProvider theme={twaliTheme}>
+          <Component {...pageProps} />
+        </ChakraProvider>
+      </UserProvider>
+    </WagmiConfig>
     // </>
   );
 }

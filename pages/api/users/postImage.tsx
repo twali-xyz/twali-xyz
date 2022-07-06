@@ -31,6 +31,7 @@ uploadImageHandler.post(async (req: any, res) => {
     Bucket: "test-pfp-images",
     Key: `images/${uuid}/profileImage.jpg`, // File name you want to save as in S3
     Body: fileStream,
+    s3ForcePathStyle: true,
   };
 
   let uploaded = s3.upload(params, function (err, data) {

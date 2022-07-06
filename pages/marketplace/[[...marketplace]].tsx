@@ -10,7 +10,10 @@ import { BountyList } from "../../components/Marketplace/BountyList";
 import { UserData } from "../../utils/interfaces";
 import UserPermissionsProvider from "../../components/UserPermissionsProvider/UserPermissionsProvider";
 import UserPermissionsRestricted from "../../components/UserPermissionsProvider/UserPermissionsRestricted";
-import { fetchPagePermission, pageDisconnectedFallback } from "../../utils/walletUtils";
+import {
+  fetchPagePermission,
+  pageDisconnectedFallback,
+} from "../../utils/walletUtils";
 
 const fetcher = (...args: Parameters<typeof fetch>) =>
   fetch(...args).then((res) => res.json());
@@ -157,44 +160,54 @@ export default function marketplace() {
     <>
       <title>twali.xyz - marketplace</title>
       <UserPermissionsProvider
-      fetchPermission={fetchPagePermission(
-        userState.userWallet ? userState.userWallet : null
-    )}>
-      <HeaderNav
-        userPage={userState}
-        whichPage="marketplace"
-        userWallet={userState.userWallet}
-        isConnectWalletBtn={!userState.userWallet}
-        setUserData={setUserData}
-      />
-            <UserPermissionsRestricted
-            to="edit"
-            key={`--SOW-builder-usr-permission`}
-            fallback={pageDisconnectedFallback()}
-          >
-      <Flex flexDir={"row"} pos={"absolute"} top={0} width="100%" zIndex={-1}>
-        <FilterInputs
-          filterParams={filterParams}
-          setFilterParams={setFilterParams}
+        fetchPermission={fetchPagePermission(
+          userState.userWallet ? userState.userWallet : null
+        )}
+      >
+        <HeaderNav
+          userPage={userState}
+          whichPage="marketplace"
+          userWallet={userState.userWallet}
+          isConnectWalletBtn={!userState.userWallet}
+          setUserData={setUserData}
         />
-        <VStack
-          paddingTop={"90px"}
-          height={"100vh"}
-          width={"100%"}
-          background={
-            "linear-gradient(65.14deg, #0F2922 10.35%, #1A232A 76.62%);"
-          }
+        <UserPermissionsRestricted
+          to="edit"
+          key={`--SOW-builder-usr-permission`}
+          fallback={pageDisconnectedFallback()}
         >
-          <SortBounty contracts={data} onChange={(val) => setSortParams(val)} />
-          <BountyList
-            contracts={data}
-            error={error}
-            sortParams={sortParams}
-            compare={compare}
-          />
-        </VStack>
-      </Flex>
-      </UserPermissionsRestricted>
+          <Flex
+            flexDir={"row"}
+            pos={"absolute"}
+            top={0}
+            width="100%"
+            zIndex={-1}
+          >
+            <FilterInputs
+              filterParams={filterParams}
+              setFilterParams={setFilterParams}
+            />
+            <VStack
+              paddingTop={"90px"}
+              height={"100vh"}
+              width={"100%"}
+              background={
+                "linear-gradient(65.14deg, #0F2922 10.35%, #1A232A 76.62%);"
+              }
+            >
+              <SortBounty
+                contracts={data}
+                onChange={(val) => setSortParams(val)}
+              />
+              <BountyList
+                contracts={data}
+                error={error}
+                sortParams={sortParams}
+                compare={compare}
+              />
+            </VStack>
+          </Flex>
+        </UserPermissionsRestricted>
       </UserPermissionsProvider>
     </>
   );

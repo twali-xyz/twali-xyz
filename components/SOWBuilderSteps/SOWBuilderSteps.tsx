@@ -1,20 +1,19 @@
 import { useState } from "react";
 import { Step, Steps } from "chakra-ui-steps";
 import Project from "../Project/Project";
-import { v4 as uuidv4 } from 'uuid';
 
 import {
   Heading,
   Button,
   HStack,
   CircularProgress,
-  Container, 
+  Container,
   VStack,
   Flex,
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import { UserData } from "../../utils/interfaces";
 import { statementOfWerk } from "./statementOfWerk";
 import { datesAndPricing } from "./datesAndPricing";
@@ -22,9 +21,10 @@ import { submissionOfWerk } from "./submissionOfWerk";
 import { setEventArray } from "../../utils/setEventArray";
 import { useToken } from "../../context/TokenContext";
 import { useBounty } from "../../context/BountyContext";
-
+import { ABI } from "../../utils/twaliContractABI";
 import useUser from "../../context/TwaliContext";
 import { convertDateToUnix } from "../../utils/marketplaceUtils";
+import { useContractWrite, useProvider, useWaitForTransaction } from "wagmi";
 
 const SOWBuilderSteps = (props) => {
   const router = useRouter();
@@ -34,8 +34,87 @@ const SOWBuilderSteps = (props) => {
   const [dueDate, setDueDate] = useState(new Date());
   const [dateRange, setDateRange] = useState([new Date(), new Date()]);
   const { tokenName, tokenAmount, calculatedUSD } = useToken();
-  const { setBounty, ...bountyState} = useBounty();
-  const toast = useToast()
+  const { setBounty, editBountyURI, ...bountyState } = useBounty();
+
+  const toast = useToast();
+  // contract factory to create clone contracts
+  //   MetaData: String ,
+  // PaymentAmount(In WEI): uint256 ,
+  // startDate (unix): unit256 ,
+  // endDate(unix): unit256
+  const provider = useProvider();
+  const {
+    data: contractData,
+    isError,
+    isLoading,
+    write,
+  } = useContractWrite({
+    addressOrName: "0xD31766Bba01E3cAA21D8eb2Db8830C78940Feb26",
+    contractInterface: ABI,
+    signerOrProvider: provider,
+    functionName: "createTwaliClone",
+    args: [
+      bountyState.contractURI,
+      bountyState.contractAmount,
+      bountyState.contractStartDate,
+      bountyState.contractEndDate,
+    ],
+  });
+
+  const {
+    data: txData,
+    isError: isTxError,
+    isLoading: txIsLoading,
+  } = useWaitForTransaction({
+    hash: contractData?.hash,
+    onSettled(contractData, error) {
+      console.log("Settled", { contractData, error });
+      if (contractData && !error) {
+        toast({
+          title: "Your bounty was submitted!",
+          description: `${bountyState.contractTitle} is up on the marketplace.`,
+          status: "success",
+          variant: "subtle",
+          duration: 5000,
+          isClosable: true,
+        });
+        let bounty = {
+          ...bountyState,
+          token: tokenName,
+          contractAmount: tokenAmount,
+          convertedAmount: calculatedUSD,
+          userWallet: userData.userWallet,
+          contractOwnerUserName: userData.userName,
+          contractID: bountyState.contractID,
+          contractCreatedOn: 1651968000,
+          contractStatus: "live",
+          attachedFiles: [],
+        };
+        const isValid = uploadSOWToDynamoDB(bounty);
+        if (isValid) {
+          isValid.then((valid) => {
+            console.log(valid.status);
+
+            if (valid.status === 200) {
+              setTimeout(() => {
+                Router.push("/marketplace");
+              }, 4000);
+            }
+          });
+        }
+      }
+      if (error) {
+        toast({
+          title: "Your bounty was not created due to an error!",
+          description: `${error}`,
+          status: "error",
+          variant: "subtle",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+    },
+  });
 
   let activeStep = props.activeStep;
   let nextStep = props.nextStep;
@@ -79,12 +158,11 @@ const SOWBuilderSteps = (props) => {
         ["contractStartDate"]: convertDateToUnix(dateRange[0]),
         ["contractEndDate"]: convertDateToUnix(dateRange[1]),
         ["applicationDeadline"]: convertDateToUnix(dueDate),
-        ["contractDuration"]: convertDateToUnix(dateRange[1]) - convertDateToUnix(dateRange[0])
+        ["contractDuration"]:
+          convertDateToUnix(dateRange[1]) - convertDateToUnix(dateRange[0]),
       });
     }
   };
-
-
 
   const steps = [
     {
@@ -93,13 +171,13 @@ const SOWBuilderSteps = (props) => {
     },
     {
       label: "Dates & Pricing",
-      content: datesAndPricing({ 
-        handleChange, 
-        dueDate, 
-        setDueDate, 
-        dateRange, 
-        setDateRange
-       }),
+      content: datesAndPricing({
+        handleChange,
+        dueDate,
+        setDueDate,
+        dateRange,
+        setDateRange,
+      }),
     },
     {
       label: "Review",
@@ -107,25 +185,36 @@ const SOWBuilderSteps = (props) => {
     {
       label: "Submission",
       content: submissionOfWerk({
-        handleChange
+        handleChange,
+        txIsLoading,
       }),
     },
   ];
 
-  const submitSOW = async (bounty) => {
-    let res = await fetch("/api/marketplace/submitBounty", {
+  const submitSOWToS3 = async (bounty) => {
+    // post the SOW object to an S3 bucket
+    let res = await fetch("/api/users/postSOW", {
       method: "POST",
       body: JSON.stringify({ bounty }),
     });
     return res;
-    console.log("BOUNTY CREATED BRUH", bounty);
+  };
+
+  const uploadSOWToDynamoDB = async (bounty) => {
+    // post the SOW object to an S3 bucket
+    let res = await fetch("/api/marketplace/submitBounty", {
+      method: "POST",
+      body: JSON.stringify({ bounty }),
+    });
+
+    return res;
   };
 
   const handleSubmit = () => {
     if (activeStep === 1) {
       handleDates(dateRange, dueDate);
       nextStep();
-    } else if (activeStep === 3) {
+    } else if (activeStep === 2) {
       let bounty = {
         ...bountyState,
         token: tokenName,
@@ -133,40 +222,32 @@ const SOWBuilderSteps = (props) => {
         convertedAmount: calculatedUSD,
         userWallet: userData.userWallet,
         contractOwnerUserName: userData.userName,
-        contractID: uuidv4(),
+        contractID: bountyState.contractID,
         contractCreatedOn: 1651968000,
         contractStatus: "live",
         attachedFiles: [],
-      }
+      };
       checkSubmissionValidity(bounty);
+      nextStep();
+    } else if (activeStep === 3) {
+      write();
     } else {
-      nextStep()
+      nextStep();
     }
-  }
+  };
 
   // Informs the user if the bounty is submitted or not
   // Error checks for main required fields
-  const checkSubmissionValidity = (bounty) => {
+  const checkSubmissionValidity = async (bounty) => {
     // if (userData.userName && userData.userName !== '') {
-      // setErrors(validate(userData));
-      try {
-      let isValid = submitSOW(bounty); // checks if the user name already exists in DB
-
-      // Displays a toast alert to inform the user - need a unique user name
-      isValid.then(valid => { 
-        if (valid.status == 200) {
-          setIsDisabled(true);
-          toast({
-            title: 'Your bounty was submitted!',
-            description: `${bounty.contractTitle} is up on the marketplace`,
-            status: 'success',
-            variant: 'subtle',
-            duration: 5000,
-            isClosable: true,
-          });
-          setTimeout(function () {
-            router.push('/marketplace');
-          }, 1000);
+    // setErrors(validate(userData));
+    try {
+      let isPostedToS3 = submitSOWToS3(bounty); // POST CONTRACT TO S3 BUCKET
+      // Displays a toast alert to inform the user - contract created
+      isPostedToS3.then(async (posted) => {
+        if (posted.status == 200) {
+          let s3URL = await posted.json();
+          setBounty({ ...bountyState, contractURI: s3URL });
         }
         // else if (activeStep <= 0 && !errors.userName && !errors.firstName && !errors.lastName && !errors.email) {
         //   setIsDisabled(false);
@@ -179,9 +260,10 @@ const SOWBuilderSteps = (props) => {
         //   updateAccType();
         // } else {
         //   setIsDisabled(true);
-        // }    
+        // }
+        console.log("S3 submitted");
       });
-    } catch(err) {
+    } catch (err) {
       console.log("Bounty wasn't submitted...");
     }
     // }
@@ -190,92 +272,97 @@ const SOWBuilderSteps = (props) => {
   return (
     <>
       {activeStep === 2 ? (
-        <Project activeStep={activeStep} prevStep={prevStep} nextStep={nextStep} steps={steps}/>
-      ): (
+        <Project
+          activeStep={activeStep}
+          prevStep={prevStep}
+          nextStep={handleSubmit}
+          steps={steps}
+        />
+      ) : (
         <>
-        <Container
-          maxW="container.xl"
-          pb="inherit"
-          px={0}
-          m="inherit"
-        >
-        <Flex h="full">
-            <VStack w="full" h="full" spacing={8} alignItems="flex-start">
-      <Heading
-        fontSize={"72px"}
-        lineHeight={"88px"}
-        marginTop={"24px"}
-        marginBottom={"-8px"}
-        alignSelf="flex-start"
-        fontFamily={"Scope Light"}
-        fontWeight={"400"}
-      >
-        Build your werk.
-      </Heading>
-      <Steps activeStep={activeStep} width="720px">
-        {steps.map(({ label, content }) => (
-          <Step label={label} key={label}>
-            {content}
-          </Step>
-        ))}
-      </Steps>
-      <HStack width={"100%"} justifyContent={"flex-end"}>
-        <Button
-          alignSelf="left"
-          mr={"24px"}
-          onClick={() => {
-            activeStep <= 0 ? router.push("/marketplace") : prevStep();
-          }}
-          pos={"relative"}
-          alignItems={"center"}
-          justifyContent={"center"}
-          variant={"secondary"}
-          size={"lg"}
-        >
-          <Text
-            display={"flex"}
-            width={"100%"}
-            height={"100%"}
-            justifyContent={"center"}
-            alignItems={"center"}
-          >
-            go back
-          </Text>
-        </Button>
-        <Button
-          disabled={false}
-          pos={"relative"}
-          alignSelf="center"
-          variant={"primary"}
-          size={"lg"}
-          onClick={handleSubmit}
-        >
-          <Text
-            display={"flex"}
-            width={"100%"}
-            height={"100%"}
-            justifyContent={"center"}
-            alignItems={"center"}
-          >
-            { activeStep === 1 ? 'preview': activeStep === 3 ? 'submit': 'continue'}
-          </Text>
+          <Container maxW="container.xl" pb="inherit" px={0} m="inherit">
+            <Flex h="full">
+              <VStack w="full" h="full" spacing={8} alignItems="flex-start">
+                <Heading
+                  fontSize={"72px"}
+                  lineHeight={"88px"}
+                  marginTop={"24px"}
+                  marginBottom={"-8px"}
+                  alignSelf="flex-start"
+                  fontFamily={"Scope Light"}
+                  fontWeight={"400"}
+                >
+                  Build your werk.
+                </Heading>
+                <Steps activeStep={activeStep} width="720px">
+                  {steps.map(({ label, content }) => (
+                    <Step label={label} key={label}>
+                      {content}
+                    </Step>
+                  ))}
+                </Steps>
+                <HStack width={"100%"} justifyContent={"flex-end"}>
+                  <Button
+                    alignSelf="left"
+                    mr={"24px"}
+                    onClick={() => {
+                      activeStep <= 0
+                        ? router.push("/marketplace")
+                        : prevStep();
+                    }}
+                    pos={"relative"}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                    variant={"secondary"}
+                    size={"lg"}
+                  >
+                    <Text
+                      display={"flex"}
+                      width={"100%"}
+                      height={"100%"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                    >
+                      go back
+                    </Text>
+                  </Button>
+                  <Button
+                    disabled={false}
+                    pos={"relative"}
+                    alignSelf="center"
+                    variant={"primary"}
+                    size={"lg"}
+                    onClick={handleSubmit}
+                  >
+                    <Text
+                      display={"flex"}
+                      width={"100%"}
+                      height={"100%"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                    >
+                      {activeStep === 1
+                        ? "preview"
+                        : activeStep === 3
+                        ? "submit"
+                        : "continue"}
+                    </Text>
 
-          {isSubmitted ? (
-            <CircularProgress
-              size="22px"
-              thickness="4px"
-              isIndeterminate
-              color="#3C2E26"
-            />
-          ) : null}
-        </Button>{" "}
-      </HStack>
-      </VStack>
-        </Flex>
-        </Container>
-      </>
-      )
-      }
+                    {isSubmitted ? (
+                      <CircularProgress
+                        size="22px"
+                        thickness="4px"
+                        isIndeterminate
+                        color="#3C2E26"
+                      />
+                    ) : null}
+                  </Button>{" "}
+                </HStack>
+              </VStack>
+            </Flex>
+          </Container>
+        </>
+      )}
     </>
   );
 };

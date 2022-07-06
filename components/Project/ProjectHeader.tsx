@@ -1,5 +1,14 @@
-import { Container, Text, Button, HStack, Heading, Box, Img, useDisclosure } from '@chakra-ui/react';
-import { Chip } from '../reusable/Chip';
+import {
+  Container,
+  Text,
+  Button,
+  HStack,
+  Heading,
+  Box,
+  Img,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { Chip } from "../reusable/Chip";
 import ProjectHeaderModal from "./ProjectHeaderModal/ProjectHeaderModal";
 import { useToken } from "../../context/TokenContext";
 import { useState } from "react";
@@ -16,11 +25,11 @@ const ProjectHeader = (props) => {
     // userWallet: "",
     // uuid: "",
   });
-  const { setBounty, ...bountyState} = useBounty();
+  const { setBounty, ...bountyState } = useBounty();
   const [bountyData, setBountyData] = useState<Bounty>({
     ...bountyState,
     contractOwnerUserName: userData.userName,
-    contractCreatedOn: 1651968000,
+    contractCreatedOn: Date.now(),
     contractStatus: "live",
     attachedFiles: [],
     setBounty,
@@ -31,28 +40,38 @@ const ProjectHeader = (props) => {
     onClose: onProjectHeaderModalClose,
   } = useDisclosure();
 
-    return (
-        <>
-        <Container
-              maxW="100%"
-              p={4}
-              marginLeft="2rem"
-              paddingBottom="2rem"
-              marginTop={"0 !important"}
-              backgroundColor={"inverse"}
-        >
+  return (
+    <>
+      <Container
+        maxW="100%"
+        p={4}
+        marginLeft="2rem"
+        paddingBottom="2rem"
+        marginTop={"0 !important"}
+        backgroundColor={"inverse"}
+      >
         <HStack marginTop={9}>
-        <Chip variant="created">Listed{" "}
+          <Chip variant="created">
+            Listed{" "}
             {Math.ceil(
               (new Date(Date.now()).getTime() -
-                new Date(Number(bountyState?.contractCreatedOn) * 1000).getTime()) /
+                new Date(
+                  Number(bountyState?.contractCreatedOn) * 1000
+                ).getTime()) /
                 (1000 * 3600 * 24)
             )}
-            d ago</Chip>
-        <Chip variant="status">{bountyState?.contractStatus}</Chip>
-        <Chip variant="type">{new Date(bountyState?.contractStartDate * 1000).toLocaleDateString("us-en")}</Chip>
-        <Chip variant="bounty">{tokenAmount} {tokenName}</Chip>
-        <Button
+            d ago
+          </Chip>
+          <Chip variant="status">{bountyState?.contractStatus}</Chip>
+          <Chip variant="type">
+            {new Date(bountyState?.contractStartDate * 1000).toLocaleDateString(
+              "us-en"
+            )}
+          </Chip>
+          <Chip variant="bounty">
+            {tokenAmount} {tokenName}
+          </Chip>
+          <Button
             onClick={onProjectHeaderModalOpen}
             alignSelf="flex-end"
             variant="ghost"
@@ -69,35 +88,40 @@ const ProjectHeader = (props) => {
               src={"twali-assets/editicon.png"}
             />
           </Button>
-          <ProjectHeaderModal isOpen={isProjectHeaderModalOpen} onClose={onProjectHeaderModalClose}/>
+          <ProjectHeaderModal
+            isOpen={isProjectHeaderModalOpen}
+            onClose={onProjectHeaderModalClose}
+          />
         </HStack>
         <Heading
-            color="zing"
-                    fontSize={"72px"}
-                    lineHeight={"88px"}
-                    marginTop={"24px"}
-                    marginBottom={"-8px"}
-                    alignSelf="flex-start"
-                    fontFamily={"Scope Light"}
-                    fontWeight={"400"}
-                  >
-                    {bountyState?.contractTitle}
-                  </Heading>
+          color="zing"
+          fontSize={"72px"}
+          lineHeight={"88px"}
+          marginTop={"24px"}
+          marginBottom={"-8px"}
+          alignSelf="flex-start"
+          fontFamily={"Scope Light"}
+          fontWeight={"400"}
+        >
+          {bountyState?.contractTitle}
+        </Heading>
 
-          <HStack marginTop={9} spacing={4}>
+        <HStack marginTop={9} spacing={4}>
           <Box width={8} height={8} background="gradient2" borderRadius="4px">
-          {/* <Img
+            {/* <Img
               src="step1_background.png"
             /> */}
           </Box>
-          <Text fontSize="sm">Created by {bountyData?.contractOwnerUserName}</Text>
+          <Text fontSize="sm">
+            Created by {bountyData?.contractOwnerUserName}
+          </Text>
           {/* <UserPermissionsRestricted to="edit" key={`--edit-project-header-permission`}> */}
-                    {/* </UserPermissionsRestricted> */}
+          {/* </UserPermissionsRestricted> */}
         </HStack>
-        </Container>
-        <hr className="twali-horizontal-line"/>
-        </>
-    )
-}
+      </Container>
+      <hr className="twali-horizontal-line" />
+    </>
+  );
+};
 
 export default ProjectHeader;

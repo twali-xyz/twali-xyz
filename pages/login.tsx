@@ -50,7 +50,10 @@ const LoginPage = (props) => {
 
     setIsSubmitted(true);
     try {
+      console.log(currAccount);
+
       let userData: UserData = await getUserByWallet(currAccount);
+      console.log(userData);
 
       if (userData && userData.userName && userData.userWallet) {
         router.push(`/${userData.userName}`);

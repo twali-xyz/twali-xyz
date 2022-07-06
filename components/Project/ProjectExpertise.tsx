@@ -1,5 +1,14 @@
-import { Container, Text, Button, HStack, Img, Flex, useDisclosure, VStack } from '@chakra-ui/react';
-import { Chip } from '../reusable/Chip';
+import {
+  Container,
+  Text,
+  Button,
+  HStack,
+  Img,
+  Flex,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react";
+import { Chip } from "../reusable/Chip";
 import ProjectExpertiseModal from "./ProjectExpertiseModal/ProjectExpertiseModal";
 import { useState } from "react";
 import { UserData } from "../../utils/interfaces";
@@ -7,31 +16,49 @@ import useUser from "../../context/TwaliContext";
 import { useBounty } from "../../context/BountyContext";
 
 const ProjectExpertise = (props) => {
-    const {
-        isOpen: isProjectExpertiseModalOpen,
-        onOpen: onProjectExpertiseModalOpen,
-        onClose: onProjectExpertiseModalClose,
-      } = useDisclosure();
-      const { ...userState } = useUser();
-      const [userData, setUserData] = useState<UserData>({
-        ...userState,
-        // userName: "",
-        // userWallet: "",
-        // uuid: "",
-      });
-      const { setBounty, ...bountyState} = useBounty();
+  const {
+    isOpen: isProjectExpertiseModalOpen,
+    onOpen: onProjectExpertiseModalOpen,
+    onClose: onProjectExpertiseModalClose,
+  } = useDisclosure();
+  const { ...userState } = useUser();
+  const [userData, setUserData] = useState<UserData>({
+    ...userState,
+    // userName: "",
+    // userWallet: "",
+    // uuid: "",
+  });
+  const { setBounty, ...bountyState } = useBounty();
 
-    return (
-        <>
-        <Container
-              maxW="500px"
-              p={4}
-              marginLeft="2rem"
-              marginTop={"0 !important"}
-              backgroundColor={"inverse"}
-        >
-                      <HStack alignSelf="flex-end" flexDirection="row-reverse">
-                <Button
+  function handleRemove(e, type) {
+    if (!e.target.value) return;
+    // without this an error is thrown when the svg within the chip button is clicked
+    if (type === "expertise") {
+      bountyState.contractExpertise.splice(
+        bountyState.contractExpertise.indexOf(e.target.value),
+        1
+      );
+    } else if (type === "industry") {
+      bountyState.contractIndustry.splice(
+        bountyState.contractIndustry.indexOf(e.target.value),
+        1
+      );
+    }
+    setBounty(bountyState);
+
+    console.log(bountyState.contractExpertise, bountyState.contractIndustry);
+  }
+  return (
+    <>
+      <Container
+        maxW="500px"
+        p={4}
+        marginLeft="2rem"
+        marginTop={"0 !important"}
+        backgroundColor={"inverse"}
+      >
+        <HStack alignSelf="flex-end" flexDirection="row-reverse">
+          <Button
             onClick={onProjectExpertiseModalOpen}
             alignSelf="flex-end"
             variant="ghost"
@@ -48,57 +75,100 @@ const ProjectExpertise = (props) => {
               src={"twali-assets/editicon.png"}
             />
           </Button>
-          <ProjectExpertiseModal isOpen={isProjectExpertiseModalOpen} onClose={onProjectExpertiseModalClose}/>
-          </HStack>
-            <VStack paddingRight={12} paddingTop={4}>
-        <Text alignSelf="flex-start" fontSize="sm" marginTop={12} marginBottom={6}>Industry</Text>
-        <Flex
-          flexDir={"row"}
-          width={"100%"}
-          justifyContent={"flex-start"}
-          m={0}
-          flexFlow={"wrap"}
-        >
-          {bountyState?.contractIndustry?.map((industry, idx) => {
-            if (idx == 0) {
-              return (
-                <Chip variant="button"
-                marginBottom={4}
-            >{industry}</Chip>
-              )} else {
-              return (
-                <Chip variant="button"
-                marginBottom={4} marginLeft={4}
-            >{industry}</Chip>
-              )}
-          })}
-        </Flex>
-        <Text alignSelf="flex-start" fontSize="sm" marginTop={6} marginBottom={6}>Expertise</Text>
-        <Flex
-          flexDir={"row"}
-          width={"100%"}
-          justifyContent={"flex-start"}
-          m={0}
-          flexFlow={"wrap"}
-        >
-        {bountyState?.contractExpertise?.map((expertise, idx) => {
-            if (idx == 0) {
-              return (
-                <Chip variant="button"
-                marginBottom={4}
-            >{expertise}</Chip>
-              )} else {
-              return (
-                <Chip variant="button"
-                marginBottom={4} marginLeft={4}
-            >{expertise}</Chip>
-              )}
-          })}
-        </Flex>
+          <ProjectExpertiseModal
+            isOpen={isProjectExpertiseModalOpen}
+            onClose={onProjectExpertiseModalClose}
+          />
+        </HStack>
+        <VStack paddingRight={12} paddingTop={4}>
+          <Text
+            alignSelf="flex-start"
+            fontSize="sm"
+            marginTop={6}
+            marginBottom={6}
+          >
+            Expertise
+          </Text>
+          <Flex
+            flexDir={"row"}
+            width={"100%"}
+            justifyContent={"flex-start"}
+            m={0}
+            flexFlow={"wrap"}
+          >
+            {bountyState?.contractExpertise?.map((expertise, idx) => {
+              if (expertise !== "") {
+                if (idx == 0) {
+                  return (
+                    <Chip
+                      variant="button"
+                      marginBottom={4}
+                      onClick={(e) => handleRemove(e, "expertise")}
+                    >
+                      {expertise}
+                    </Chip>
+                  );
+                } else {
+                  return (
+                    <Chip
+                      variant="button"
+                      marginBottom={4}
+                      marginLeft={4}
+                      onClick={(e) => handleRemove(e, "expertise")}
+                    >
+                      {expertise}
+                    </Chip>
+                  );
+                }
+              }
+            })}
+          </Flex>
+          <Text
+            alignSelf="flex-start"
+            fontSize="sm"
+            marginTop={12}
+            marginBottom={6}
+          >
+            Industry
+          </Text>
+          <Flex
+            flexDir={"row"}
+            width={"100%"}
+            justifyContent={"flex-start"}
+            m={0}
+            flexFlow={"wrap"}
+          >
+            {bountyState?.contractIndustry?.map((industry, idx) => {
+              if (industry !== "") {
+                if (idx == 0) {
+                  return (
+                    <Chip
+                      variant="button"
+                      marginBottom={4}
+                      onClick={(e) => handleRemove(e, "industry")}
+                    >
+                      {industry}
+                    </Chip>
+                  );
+                } else {
+                  return (
+                    <Chip
+                      variant="button"
+                      marginBottom={4}
+                      marginLeft={4}
+                      onClick={(e) => handleRemove(e, "idustry")}
+                    >
+                      {industry}
+                    </Chip>
+                  );
+                }
+              }
+            })}
+          </Flex>
         </VStack>
-        </Container>
-        </>
-    )
-}
+      </Container>
+    </>
+  );
+};
 
 export default ProjectExpertise;
