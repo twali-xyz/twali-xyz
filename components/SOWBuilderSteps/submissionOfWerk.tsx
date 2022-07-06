@@ -30,7 +30,6 @@ export const submissionOfWerk = ({ values }) => {
               fontWeight="semibold"
               as="h4"
               lineHeight="tight"
-              noOfLines={1}
               overflow="scroll"
             >
               <FormControl p={2} pb={0} id="statement-of-werk" isRequired>

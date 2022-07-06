@@ -1,4 +1,10 @@
-import { HStack, Button, Text, useDisclosure } from "@chakra-ui/react";
+import {
+  FormControl,
+  HStack,
+  Button,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
 import React from "react";
 import { Dropdown } from "../reusable/Dropdown";
 import SelectWerkModal from "./SelectWerkModal/SelectWerkModal";
@@ -28,7 +34,7 @@ export const SortBounty = ({ contracts, onChange }) => {
         values={""}
         name={"sort"}
         options={options}
-        width={"320px"}
+        width={"545px"}
         height={"40px"}
         marginRight={"12px"}
         borderRadius={"4px"} //styleName: Body/body16;
