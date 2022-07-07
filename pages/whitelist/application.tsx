@@ -1,6 +1,6 @@
 import { ApplicationStatus } from "./../../components/Whitelist/ApplicationStatus";
 import { WhitelistForm } from "./../../components/Whitelist/WhitelistForm";
-import { Box, Fade, Flex, Link, Text, useToast } from "@chakra-ui/react";
+import { Box, Flex, Link, Text, useToast } from "@chakra-ui/react";
 import React, { useEffect, useReducer, useState } from "react";
 import HeaderNav from "../../components/HeaderNav/HeaderNav";
 import useUser from "../../context/TwaliContext";
@@ -20,6 +20,11 @@ const whitelist = () => {
   const [whiteListStatus, setWhiteListStatus] = useState(""); // "", pending, approved, rejected
   const [state, dispatch] = useReducer(whitelistReducer, initialState);
 
+  // referrence for "go"/"submit" button to check if it is focused
+  // needed to prevent advancing two steps instead of one if user if focusing on the button while using enter to advance
+  const continueButtonRef = React.useRef(null);
+  const upArrowRef = React.useRef(null);
+  const downArrowRef = React.useRef(null);
   useEffect(() => {
     let status;
     if (!userWallet) {
@@ -180,6 +185,12 @@ const whitelist = () => {
   }
 
   function handleEnterPressed(event) {
+    if (
+      document.activeElement === continueButtonRef.current ||
+      document.activeElement === upArrowRef.current ||
+      document.activeElement === downArrowRef.current
+    )
+      return;
     if (event.key === "Enter" && step < 2) {
       setStep((prevStep) => prevStep + 1);
     }
@@ -191,15 +202,19 @@ const whitelist = () => {
     <>
       <HeaderNav whichPage="whitelist" step={0} userWallet={userWallet} />
       <Box onKeyPress={handleEnterPressed}>
-        {whiteListStatus === null ||
-        whiteListStatus === "" ||
-        whiteListStatus === "undefined" ? (
+        {(whiteListStatus === null ||
+          whiteListStatus === "" ||
+          whiteListStatus === "undefined") &&
+        questions[step] ? (
           <WhitelistForm
             questions={questions}
             handleChange={handleChange}
             step={step}
             setStep={setStep}
             submitApplication={submitApplication}
+            continueButtonRef={continueButtonRef}
+            upArrowRef={upArrowRef}
+            downArrowRef={downArrowRef}
             value={eval(questions[step]["name"])}
             values={Object.values(questions[0]).map((item, idx) => {
               return eval(item["name"]);

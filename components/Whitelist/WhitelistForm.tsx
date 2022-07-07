@@ -21,6 +21,9 @@ export const WhitelistForm = ({
   questions,
   value,
   values,
+  continueButtonRef,
+  downArrowRef,
+  upArrowRef,
 }) => {
   return (
     <Flex flexDir={["column", "column", "row"]}>
@@ -152,6 +155,7 @@ export const WhitelistForm = ({
               marginLeft={"0 !important"}
             >
               <Button
+                ref={continueButtonRef}
                 variant={"unstyled"}
                 height={"40px"}
                 width={"fit-content"}
@@ -205,6 +209,7 @@ export const WhitelistForm = ({
               step {step + 1} of {questions.length}
             </Text>
             <Button
+              ref={upArrowRef}
               variant={"unstyled"}
               width={"48px"}
               height={"48px"}
@@ -230,6 +235,7 @@ export const WhitelistForm = ({
               </svg>
             </Button>
             <Button
+              ref={downArrowRef}
               variant={"unstyled"}
               width={"48px"}
               height={"48px"}
