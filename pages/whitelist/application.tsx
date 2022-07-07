@@ -91,40 +91,6 @@ const whitelist = () => {
         </Flex>
       ),
     },
-    {
-      name: "referredBy",
-      placeholder: "type name here please...",
-      question: "5.  Who referred you? Full names only here, please!",
-      descriptionHeader: "What is the linkedIn profile used for?",
-      description: (
-        <Flex
-          width={"100%"}
-          height={"100%"}
-          justifyContent={"flex-start"}
-          alignItems={"flex-start"}
-          flexDir={"column"}
-        >
-          <Text mb={"32px"}>help (?)</Text>
-          <Fade in={step === 2}>
-            <Text fontSize={"16px"} fontWeight={"500"} mb={"8px"}>
-              Referrals at Twali
-            </Text>
-            <Flex flexDir={"column"} height={"210px"} justify={"space-around"}>
-              <Text fontSize={"16px"} fontWeight={"300"} color={"subtle"}>
-                Were you directed to us by someone in our community? Drop their
-                name below so we can say thanks!
-              </Text>
-              <Text fontSize={"16px"} fontWeight={"300"} color={"subtle"}>
-                No need to add here if you saw a tweet!
-              </Text>
-              <Text fontSize={"16px"} fontWeight={"300"} color={"subtle"}>
-                If not, just say "N/A"
-              </Text>
-            </Flex>
-          </Fade>
-        </Flex>
-      ),
-    },
   ];
 
   function handleChange(event) {
@@ -142,9 +108,6 @@ const whitelist = () => {
         break;
       case "discord":
         setDiscord(event.target.value);
-        break;
-      case "referredBy":
-        setReferredBy(event.target.value);
         break;
       default:
         break;

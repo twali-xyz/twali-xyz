@@ -166,7 +166,7 @@ export const WhitelistForm = ({
                     : submitApplication()
                 }
               >
-                {step < 2 ? "go" : "submit"}
+                {step < 1 ? "go" : "submit"}
               </Button>
               <Text
                 //styleName: Label/label14;
@@ -239,7 +239,7 @@ export const WhitelistForm = ({
               margin={"0 !important"}
               paddingLeft={"16px !important"}
               onClick={() =>
-                step < 2
+                step < 1
                   ? setStep((prevStep) => prevStep + 1)
                   : submitApplication()
               }
