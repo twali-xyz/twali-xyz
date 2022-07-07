@@ -23,7 +23,7 @@ const whitelist = () => {
 
   const [whiteListStatus, setWhiteListStatus] = useState(""); // "", pending, approved, rejected
   const [state, dispatch] = useReducer(whitelistReducer, initialState);
-
+  const [isSubmitted, setIsSubmitted] = useState("");
   // referrence for "go"/"submit" button to check if it is focused
   // needed to prevent advancing two steps instead of one if user if focusing on the button while using enter to advance
   const continueButtonRef = React.useRef(null);
@@ -54,19 +54,48 @@ const whitelist = () => {
       questions: [
         {
           name: "firstName",
-          placeholder: "type your first name here...",
+          placeholder: "type your first name name here...",
           question:
-            "1. Hi, I'm Twali, nice to meet you. What's your first name?",
+            "1. Hi, I'm Twali, nice to meet you. What's your full name?",
         },
         {
           name: "lastName",
           placeholder: "last name here",
-          question: "2. What's your last name?",
+          question: "What's your last name?",
         },
         {
           name: "email",
           placeholder: "email@xyz.com",
-          question: "3. What's your email?",
+          question: "2. What's your email?",
+        },
+      ],
+    },
+    {
+      descriptionHeader: "",
+      description: (
+        <Flex
+          width={"100%"}
+          height={"100%"}
+          justifyContent={"flex-start"}
+          alignItems={"flex-start"}
+          flexDir={"column"}
+        >
+          <Text mb={"32px"}>help (?)</Text>
+          <Text fontSize={"16px"} fontWeight={"500"} mb={"8px"}>
+            Why we need your LinkedIn?
+          </Text>
+          <Text fontSize={"16px"} fontWeight={"300"} color={"subtle"}>
+            We know it's trad, but this is the best way to understand who you
+            are and what you've done. Don't worry -- we're building the future
+            of work, which we hope will be a LinkedIn-free place.
+          </Text>
+        </Flex>
+      ),
+      questions: [
+        {
+          name: "linkedIn",
+          placeholder: "https://www.linkedin.com/in/twalixyz/",
+          question: "3. What's your linkedIn?",
         },
       ],
     },
@@ -102,11 +131,6 @@ const whitelist = () => {
       ),
       questions: [
         {
-          name: "linkedIn",
-          placeholder: "https://www.linkedin.com/in/twalixyz/",
-          question: "3. What's your linkedIn?",
-        },
-        {
           name: "discord",
           placeholder: "XYZ#1234",
           question: "4. What's your discord?",
@@ -116,8 +140,6 @@ const whitelist = () => {
   ];
 
   function handleChange(event) {
-    console.log(event.target.name);
-
     setUserWhitelistObj({
       ...userWhitelistObj,
       [event.target.name]: event.target.value,
@@ -161,8 +183,6 @@ const whitelist = () => {
         method: "PUT",
         body: JSON.stringify({ payload }),
       });
-
-      console.log("USER ADDED UP TO WHITELIST");
       setWhiteListStatus("submitted");
     };
     addUserToWhitelist(state);
@@ -192,10 +212,10 @@ const whitelist = () => {
       document.activeElement === downArrowRef.current
     )
       return;
-    if (event.key === "Enter" && step < 1) {
+    if (event.key === "Enter" && step < 2) {
       setStep((prevStep) => prevStep + 1);
     }
-    if (event.key === "Enter" && step >= 1) {
+    if (event.key === "Enter" && step >= 2) {
       submitApplication();
     }
   }
