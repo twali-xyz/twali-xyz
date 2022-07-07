@@ -19,12 +19,13 @@ export const WhitelistForm = ({
   setStep,
   submitApplication,
   questions,
-  value,
-  values,
+  userWhitelistObj,
   continueButtonRef,
   downArrowRef,
   upArrowRef,
 }) => {
+  console.log(questions[step]);
+
   return (
     <Flex flexDir={["column", "column", "row"]}>
       <Flex
@@ -36,7 +37,7 @@ export const WhitelistForm = ({
         backgroundSize={"cover"}
         backgroundPosition={"100% "}
       >
-        {step === 0 || questions[step]["description"] === null ? (
+        {questions[step]["description"] === null ? (
           <VStack height={"100%"} justify={"center"} alignItems={"center"}>
             <Text
               w={"full"}
@@ -59,7 +60,7 @@ export const WhitelistForm = ({
           </VStack>
         ) : (
           <HStack>
-            <Fade in={step === 1 || step === 2}>
+            <Fade in={step === 1}>
               <HStack
                 maxW={"470px"}
                 w={"100%"}
@@ -90,65 +91,38 @@ export const WhitelistForm = ({
           padding={"5%"}
         >
           <>
-            {step === 0
-              ? questions[step].map((item, idx) => {
-                  return (
-                    <FormControl
-                      key={idx}
-                      mt={"36px !important"}
-                      transition={"ease-in"}
-                    >
-                      <FormLabel>{item["question"]}</FormLabel>
-                      <Input
-                        name={item["name"]}
-                        value={values[idx]}
-                        onChange={handleChange}
-                        width={"50%"}
-                        float={"left"}
-                        marginLeft={"2.5%"}
-                        alignSelf={"flex-end"}
-                        borderColor={"zing"}
-                        borderRadius={0}
-                        borderTop={"white"}
-                        borderRight={"white"}
-                        borderLeft={"white"}
-                        _hover={{
-                          borderColor: "zing",
-                        }}
-                        textAlign={"start"}
-                        padding={0}
-                        placeholder={item["placeholder"]}
-                      ></Input>
-                    </FormControl>
-                  );
-                })
-              : step && (
-                  <FormControl>
-                    <FormLabel>{questions[step]["question"]}</FormLabel>
-                    <Input
-                      name={questions[step]["name"]}
-                      value={value}
-                      onChange={handleChange}
-                      width={step === 1 ? "55%" : "85%"}
-                      float={"left"}
-                      marginLeft={"2.5%"}
-                      alignSelf={"flex-end"}
-                      borderColor={"zing"}
-                      borderRadius={0}
-                      borderTop={"white"}
-                      borderRight={"white"}
-                      borderLeft={"white"}
-                      _hover={{
-                        borderColor: "zing",
-                      }}
-                      textAlign={"start"}
-                      padding={0}
-                      placeholder={questions[step]["placeholder"]}
-                      transitionProperty={"width"}
-                      transitionDuration={"1s"}
-                    ></Input>
-                  </FormControl>
-                )}
+            {questions[step]["questions"].map((question, idx) => {
+              console.log(question);
+
+              return (
+                <FormControl>
+                  <FormLabel mt={16} mb={6}>
+                    {question["question"]}
+                  </FormLabel>
+                  <Input
+                    name={question["name"]}
+                    value={userWhitelistObj[question["name"]] || ""}
+                    onChange={handleChange}
+                    width={"82%"}
+                    float={"left"}
+                    marginLeft={"2.5%"}
+                    alignSelf={"flex-end"}
+                    borderColor={"zing"}
+                    borderRadius={0}
+                    borderTop={"white"}
+                    borderRight={"white"}
+                    borderLeft={"white"}
+                    _hover={{
+                      borderColor: "zing",
+                    }}
+                    textAlign={"start"}
+                    padding={0}
+                    placeholder={question["placeholder"]}
+                  ></Input>
+                </FormControl>
+              );
+            })}
+
             <HStack
               alignSelf={"flex-start"}
               marginTop={"32px !important"}
@@ -165,12 +139,12 @@ export const WhitelistForm = ({
                 color={"inverse"}
                 marginLeft={"16px "}
                 onClick={() =>
-                  step < 2
+                  step < 1
                     ? setStep((prevStep) => prevStep + 1)
                     : submitApplication()
                 }
               >
-                {step < 1 ? "go" : "submit"}
+                {step < 1 ? "ok" : "submit"}
               </Button>
               <Text
                 //styleName: Label/label14;
