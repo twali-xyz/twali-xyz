@@ -7,6 +7,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import background from "../public/twali-assets/backgroundscreen.png";
+import logo from "../public/twali-assets/twali_rainbow.png";
 import HeaderNav from "../components/HeaderNav/HeaderNav";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -68,7 +69,7 @@ const LoadingPage = (props) => {
 
   return (
     <>
-      <title>twali.xyz - login</title>
+      <title>twali.xyz - loading</title>
       <Container
         width="100%"
         height="1024px"
@@ -102,7 +103,7 @@ const LoadingPage = (props) => {
             welcome to
           </Text>
           <Img
-            src="twali-assets/twali_rainbow.png"
+            src={`url(${logo.src})`}
             width={"300px"}
             height={"64.38px"}
             marginTop={"49px !important"}

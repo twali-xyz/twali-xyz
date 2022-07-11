@@ -19,7 +19,7 @@ import { useWhitelistFilter } from "../../hooks/useWhitelistFilter";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import HeaderNav from "../../components/HeaderNav/HeaderNav";
-import LoginPage from "../login";
+import LoadingPage from "../loading";
 
 const whitelist = () => {
   const [filterParams, setFilterParams] = useState();
@@ -130,25 +130,27 @@ const whitelist = () => {
   });
   const { disconnect } = useDisconnect();
 
-  if (!accountData)
+  if (!accountData && !loadingWhitelist)
     return (
-      <Flex
-        width={"100%"}
-        height={"100vh"}
-        justify={"center"}
-        alignItems={"center"}
-      >
-        {accountData && `Connected to ${accountData?.address}`}
-        <Button size={"lg"} variant={"primary"} onClick={() => connect()}>
-          Connect Wallet
-        </Button>
-        <br />
-      </Flex>
+      <>
+        <Flex
+          width={"100%"}
+          height={"100vh"}
+          justify={"center"}
+          alignItems={"center"}
+        >
+          {accountData && <Text> `Connected to ${accountData?.address}`</Text>}
+          <Button size={"lg"} variant={"primary"} onClick={() => connect()}>
+            Connect Wallet
+          </Button>
+          <br />
+        </Flex>
+      </>
     );
   if (loadingWhitelist) {
     return (
       <>
-        <LoginPage loaded={loadingWhitelist} />
+        <LoadingPage loaded={loadingWhitelist} />
       </>
     );
   }
