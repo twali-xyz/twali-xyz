@@ -48,18 +48,22 @@ const SOWBuilderSteps = (props) => {
     isError,
     isLoading,
     write,
-  } = useContractWrite({
-    addressOrName: "0xD31766Bba01E3cAA21D8eb2Db8830C78940Feb26",
-    contractInterface: ABI,
-    signerOrProvider: provider,
-    functionName: "createTwaliClone",
-    args: [
-      bountyState.contractURI,
-      bountyState.contractAmount,
-      bountyState.contractStartDate,
-      bountyState.contractEndDate,
-    ],
-  });
+  } = useContractWrite(
+    {
+      addressOrName: "0xD31766Bba01E3cAA21D8eb2Db8830C78940Feb26",
+      contractInterface: ABI,
+      signerOrProvider: provider,
+    },
+    "createTwaliClone",
+    {
+      args: [
+        bountyState.contractURI,
+        bountyState.contractAmount,
+        bountyState.contractStartDate,
+        bountyState.contractEndDate,
+      ],
+    }
+  );
 
   const {
     data: txData,
@@ -129,7 +133,10 @@ const SOWBuilderSteps = (props) => {
   });
 
   const handleChange = (evt) => {
-    evt.persist();
+    try {
+      evt.persist();
+    } catch (error) {}
+
     let strippedEventName = evt.target.name.substring(
       0,
       evt.target.name.length - 1
@@ -160,6 +167,9 @@ const SOWBuilderSteps = (props) => {
         ["applicationDeadline"]: convertDateToUnix(dueDate),
         ["contractDuration"]:
           convertDateToUnix(dateRange[1]) - convertDateToUnix(dateRange[0]),
+        // while dates are being set also set the contractOwnerUserName
+        ["contractOwnerUserName"]: userState.userName,
+        ["userWallet"]: userState.userWallet,
       });
     }
   };
