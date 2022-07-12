@@ -82,6 +82,7 @@ const ProjectDetails = (props) => {
               <ProjectDetailsModal
                 isOpen={isProjectDetailsModalOpen}
                 onClose={onProjectDetailsModalClose}
+                handleChange={props.handleChange}
               />
             </HStack>
             <HStack paddingTop="20px" paddingBottom="20px">
@@ -127,7 +128,7 @@ const ProjectDetails = (props) => {
                 Budget
               </Text>
               <Text fontSize="sm" color="primary">
-                {tokenAmount} {tokenName}
+                {bountyState.contractAmount} {bountyState.tokenName}
               </Text>
             </HStack>
           </Flex>

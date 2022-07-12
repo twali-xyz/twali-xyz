@@ -223,18 +223,25 @@ const SOWBuilderSteps = (props) => {
   const handleSubmit = () => {
     if (activeStep === 1) {
       handleDates(dateRange, dueDate);
+      setBounty({
+        ...bountyState,
+        tokenName: tokenName,
+        contractAmount: Number(tokenAmount),
+        convertedAmount: calculatedUSD,
+      });
       nextStep();
     } else if (activeStep === 2) {
       let bounty = {
         ...bountyState,
-        token: tokenName,
-        contractAmount: tokenAmount,
+        tokenName: tokenName,
+        contractAmount: Number(tokenAmount),
         convertedAmount: calculatedUSD,
         userWallet: userData.userWallet,
         contractOwnerUserName: userData.userName,
         contractID: bountyState.contractID,
-        contractCreatedOn: 1651968000,
-        contractStatus: "live",
+        contractCreatedOn: Date.now(),
+        contractStatus: "draft",
+        // attached files need to be added
         attachedFiles: [],
       };
       checkSubmissionValidity(bounty);
@@ -287,6 +294,7 @@ const SOWBuilderSteps = (props) => {
           prevStep={prevStep}
           nextStep={handleSubmit}
           steps={steps}
+          handleChange={handleChange}
         />
       ) : (
         <>

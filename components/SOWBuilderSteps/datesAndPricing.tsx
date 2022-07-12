@@ -128,7 +128,7 @@ export const datesAndPricing = ({
                     value={dueDate ? new Date(dueDate) : undefined}
                   />
                 </FormControl>
-                <WerkTokenDropdown handleChange={handleChange} />
+                <WerkTokenDropdown />
               </VStack>
             </Box>
           </Box>

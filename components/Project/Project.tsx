@@ -58,7 +58,7 @@ const Project = (props) => {
               <Flex flexDirection="row">
                 <Flex flexDirection="column" width="100%" maxWidth="550px">
                   <ProjectExpertise />
-                  <ProjectDetails />
+                  <ProjectDetails handleChange={props.handleChange} />
                 </Flex>
                 <div className="twali-vertical-line"></div>
                 <ProjectDescription />

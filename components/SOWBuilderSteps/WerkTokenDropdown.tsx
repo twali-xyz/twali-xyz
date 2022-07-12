@@ -19,7 +19,7 @@ import { useToken } from "../../context/TokenContext";
 import axios from "axios";
 import { useBounty } from "../../context/BountyContext";
 
-export const WerkTokenDropdown = ({ handleChange }) => {
+export const WerkTokenDropdown = () => {
   const {
     tokenName,
     setTokenName,
@@ -49,11 +49,6 @@ export const WerkTokenDropdown = ({ handleChange }) => {
         ).toFixed(2);
         console.log(value);
         setCalculatedUSD(value);
-        setBounty({
-          ...bountyState,
-          contractAmount: Number(evt.target.value),
-          convertedAmount: value,
-        });
       })
       .catch((error) => {
         console.log(error);
@@ -139,12 +134,6 @@ export const WerkTokenDropdown = ({ handleChange }) => {
                   minH="48px"
                   key={`token-menu-item--${idx}`}
                   onClick={() => {
-                    handleChange({
-                      target: {
-                        value: token.symbol.toUpperCase(),
-                        name: "tokenName",
-                      },
-                    });
                     handleMenuSelection(token);
                   }}
                 >
