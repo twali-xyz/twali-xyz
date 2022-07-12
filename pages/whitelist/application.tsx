@@ -12,14 +12,18 @@ const whitelist = () => {
   const router = useRouter();
   const { userWallet } = useUser();
   const [step, setStep] = useState(0);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [discord, setDiscord] = useState("");
-  const [linkedIn, setLinkedIn] = useState("");
-  const [referredBy, setReferredBy] = useState("");
+  const [userWhitelistObj, setUserWhitelistObj] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    discord: "",
+    linkedIn: "",
+    referredBy: "",
+  });
+
   const [whiteListStatus, setWhiteListStatus] = useState(""); // "", pending, approved, rejected
   const [state, dispatch] = useReducer(whitelistReducer, initialState);
-
+  const [isSubmitted, setIsSubmitted] = useState("");
   // referrence for "go"/"submit" button to check if it is focused
   // needed to prevent advancing two steps instead of one if user if focusing on the button while using enter to advance
   const continueButtonRef = React.useRef(null);
@@ -27,46 +31,76 @@ const whitelist = () => {
   const downArrowRef = React.useRef(null);
   useEffect(() => {
     let status;
+    let referrer;
     if (!userWallet) {
       // fetch userWallet
       // fetch whiteListStatus. not having a userWallet means the page
       // was accessed using a different method than the login button.
     } else {
       status = router.query["status"];
+      referrer = router.query["referred_by"];
     }
     setWhiteListStatus(String(status));
+    setUserWhitelistObj({
+      ...userWhitelistObj,
+      referredBy: referrer,
+    });
   }, [router.query]);
 
   const questions = [
-    [
-      {
-        name: "name",
-        placeholder: "type your name here...",
-        question: "1. Hi, I'm Twali, nice to meet you. What's your name?",
-        descriptionHeader: null,
-        description: null,
-      },
-      {
-        name: "email",
-        placeholder: "email@xyz.com",
-        question: "2. What's your email?",
-        descriptionHeader: null,
-        description: null,
-      },
-      {
-        name: "linkedIn",
-        placeholder: "https://www.linkedin.com/in/twalixyz/",
-        question: "3. What's your linkedIn?",
-        descriptionHeader: null,
-        description: null,
-      },
-    ],
     {
-      name: "discord",
-      placeholder: "XYZ#1234",
-      question: "4. What's your discord?",
+      descriptionHeader: null,
+      description: null,
+      questions: [
+        {
+          name: "firstName",
+          placeholder: "type your first name name here...",
+          question:
+            "1. Hi, I'm Twali, nice to meet you. What's your full name?",
+        },
+        {
+          name: "lastName",
+          placeholder: "last name here",
+          question: "What's your last name?",
+        },
+        {
+          name: "email",
+          placeholder: "email@xyz.com",
+          question: "2. What's your email?",
+        },
+      ],
+    },
+    {
       descriptionHeader: "",
-
+      description: (
+        <Flex
+          width={"100%"}
+          height={"100%"}
+          justifyContent={"flex-start"}
+          alignItems={"flex-start"}
+          flexDir={"column"}
+        >
+          <Text mb={"32px"}>help (?)</Text>
+          <Text fontSize={"16px"} fontWeight={"500"} mb={"8px"}>
+            Why we need your LinkedIn?
+          </Text>
+          <Text fontSize={"16px"} fontWeight={"300"} color={"subtle"}>
+            We know it's trad, but this is the best way to understand who you
+            are and what you've done. Don't worry -- we're building the future
+            of work, which we hope will be a LinkedIn-free place.
+          </Text>
+        </Flex>
+      ),
+      questions: [
+        {
+          name: "linkedIn",
+          placeholder: "https://www.linkedin.com/in/twalixyz/",
+          question: "3. What's your linkedIn?",
+        },
+      ],
+    },
+    {
+      descriptionHeader: "",
       description: (
         <Flex
           width={"100%"}
@@ -95,28 +129,21 @@ const whitelist = () => {
           </Link>
         </Flex>
       ),
+      questions: [
+        {
+          name: "discord",
+          placeholder: "XYZ#1234",
+          question: "4. What's your discord?",
+        },
+      ],
     },
   ];
 
   function handleChange(event) {
-    console.log(event.target.name);
-
-    switch (event.target.name) {
-      case "name":
-        setName(event.target.value);
-        break;
-      case "email":
-        setEmail(event.target.value);
-        break;
-      case "linkedIn":
-        setLinkedIn(event.target.value);
-        break;
-      case "discord":
-        setDiscord(event.target.value);
-        break;
-      default:
-        break;
-    }
+    setUserWhitelistObj({
+      ...userWhitelistObj,
+      [event.target.name]: event.target.value,
+    });
   }
 
   function addUser(newState) {
@@ -132,14 +159,9 @@ const whitelist = () => {
     if (validateInputs()) {
       addUser({
         userWallet: userWallet.toLocaleLowerCase(),
-        firstName: name,
-        lastName: "",
-        email: email,
-        linkedIn: linkedIn,
-        discord: discord,
-        referred_by: referredBy,
         whitelistStatus: "pending",
         applied_on: Date.now(),
+        ...userWhitelistObj,
       });
     } else {
       toast({
@@ -161,26 +183,25 @@ const whitelist = () => {
         method: "PUT",
         body: JSON.stringify({ payload }),
       });
-
-      console.log("USER ADDED UP TO WHITELIST");
       setWhiteListStatus("submitted");
     };
     addUserToWhitelist(state);
   }, [state]);
 
   function validateInputs() {
-    if (name === "" || email === "" || linkedIn === "") {
+    if (
+      userWhitelistObj.firstName === "" ||
+      userWhitelistObj.lastName === "" ||
+      userWhitelistObj.email === ""
+    ) {
       setStep(0);
       return false;
     }
-    if (discord === "") {
+    if (userWhitelistObj.discord === "" || userWhitelistObj.linkedIn === "") {
       setStep(1);
       return false;
     }
-    if (referredBy === "") {
-      setStep(2);
-      return false;
-    }
+
     return true;
   }
 
@@ -211,14 +232,11 @@ const whitelist = () => {
             handleChange={handleChange}
             step={step}
             setStep={setStep}
+            userWhitelistObj={userWhitelistObj}
             submitApplication={submitApplication}
             continueButtonRef={continueButtonRef}
             upArrowRef={upArrowRef}
             downArrowRef={downArrowRef}
-            value={eval(questions[step]["name"])}
-            values={Object.values(questions[0]).map((item, idx) => {
-              return eval(item["name"]);
-            })}
           />
         ) : (
           <ApplicationStatus whiteListStatus={whiteListStatus} />
