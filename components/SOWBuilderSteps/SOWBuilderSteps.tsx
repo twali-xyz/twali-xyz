@@ -166,6 +166,9 @@ const SOWBuilderSteps = (props) => {
         // while dates are being set also set the contractOwnerUserName
         ["contractOwnerUserName"]: userState.userName,
         ["userWallet"]: userState.userWallet,
+        ["tokenName"]: tokenName,
+        ["contractAmount"]: Number(tokenAmount),
+        ["convertedAmount"]: calculatedUSD,
       });
     }
   };
@@ -219,12 +222,6 @@ const SOWBuilderSteps = (props) => {
   const handleSubmit = () => {
     if (activeStep === 1) {
       handleDates(dateRange, dueDate);
-      setBounty({
-        ...bountyState,
-        tokenName: tokenName,
-        contractAmount: Number(tokenAmount),
-        convertedAmount: calculatedUSD,
-      });
       nextStep();
     } else if (activeStep === 2) {
       let bounty = {

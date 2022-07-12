@@ -12,7 +12,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { tokenConstants } from "../../utils/tokenConstants";
 import { TokenPriceList } from "../../utils/coingeckoEndpoints";
 import { useToken } from "../../context/TokenContext";
@@ -54,6 +54,11 @@ export const WerkTokenDropdown = () => {
         console.log(error);
       });
   };
+
+  // this is needed to update the converted amount if token name is changed
+  useEffect(() => {
+    handleAmountChange({ target: { value: tokenAmount } });
+  }, [tokenID]);
 
   return (
     <>
