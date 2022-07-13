@@ -82,7 +82,6 @@ const ProjectDetails = (props) => {
               <ProjectDetailsModal
                 isOpen={isProjectDetailsModalOpen}
                 onClose={onProjectDetailsModalClose}
-                handleChange={props.handleChange}
               />
             </HStack>
             <HStack paddingTop="20px" paddingBottom="20px">
