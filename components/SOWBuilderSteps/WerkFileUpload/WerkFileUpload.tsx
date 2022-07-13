@@ -24,11 +24,11 @@ import { useBounty } from "../../../context/BountyContext";
 import { UserData } from "../../../utils/interfaces";
 import useUser from "../../../context/TwaliContext";
 import axios from "axios";
+import path from "path";
 
 type WerkFileUploadProps = {};
 
 const WerkFileUpload = (props: WerkFileUploadProps) => {
-  const path = require("path");
   const [timestamp, setTimestamp] = useState(Date.now());
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
@@ -67,6 +67,10 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
       setIsSelected(true);
       setIsFileTooBig(false);
       setSelectedFiles(allFiles);
+      setBounty({
+        ...bountyState,
+        attachedFiles: allFiles.map((file) => path.parse(file.name).name),
+      });
     }
   };
 
