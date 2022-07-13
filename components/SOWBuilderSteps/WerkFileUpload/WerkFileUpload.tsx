@@ -67,10 +67,6 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
       setIsSelected(true);
       setIsFileTooBig(false);
       setSelectedFiles(allFiles);
-      setBounty({
-        ...bountyState,
-        attachedFiles: allFiles.map((file) => path.parse(file.name).name),
-      });
     }
   };
 
