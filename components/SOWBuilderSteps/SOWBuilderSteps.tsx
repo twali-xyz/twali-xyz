@@ -48,18 +48,22 @@ const SOWBuilderSteps = (props) => {
     isError,
     isLoading,
     write,
-  } = useContractWrite({
-    addressOrName: "0xD31766Bba01E3cAA21D8eb2Db8830C78940Feb26",
-    contractInterface: ABI,
-    signerOrProvider: provider,
-    functionName: "createTwaliClone",
-    args: [
-      bountyState.contractURI,
-      bountyState.contractAmount,
-      bountyState.contractStartDate,
-      bountyState.contractEndDate,
-    ],
-  });
+  } = useContractWrite(
+    {
+      addressOrName: "0xD31766Bba01E3cAA21D8eb2Db8830C78940Feb26",
+      contractInterface: ABI,
+      signerOrProvider: provider,
+    },
+    "createTwaliClone",
+    {
+      args: [
+        bountyState.contractURI,
+        bountyState.contractAmount,
+        bountyState.contractStartDate,
+        bountyState.contractEndDate,
+      ],
+    }
+  );
 
   const {
     data: txData,
@@ -67,7 +71,7 @@ const SOWBuilderSteps = (props) => {
     isLoading: txIsLoading,
   } = useWaitForTransaction({
     hash: contractData?.hash,
-    onSettled(contractData, error) {
+    async onSettled(contractData, error) {
       console.log("Settled", { contractData, error });
       if (contractData && !error) {
         toast({
@@ -90,7 +94,9 @@ const SOWBuilderSteps = (props) => {
           contractStatus: "live",
           attachedFiles: bountyState.attachedFiles,
         };
-        const isValid = uploadSOWToDynamoDB(bounty);
+        await updateSOWToLiveStatus(bounty);
+
+        const isValid = submitSOWToS3(bounty);
         if (isValid) {
           isValid.then((valid) => {
             console.log(valid.status);
@@ -210,13 +216,19 @@ const SOWBuilderSteps = (props) => {
   };
 
   const uploadSOWToDynamoDB = async (bounty) => {
-    // post the SOW object to an S3 bucket
     let res = await fetch("/api/marketplace/submitBounty", {
       method: "POST",
       body: JSON.stringify({ bounty }),
     });
 
     return res;
+  };
+
+  const updateSOWToLiveStatus = async (bounty) => {
+    let res = await fetch("/api/marketplace/submitBounty", {
+      method: "POST",
+      body: JSON.stringify({ bounty }),
+    });
   };
 
   const handleSubmit = () => {
@@ -251,9 +263,9 @@ const SOWBuilderSteps = (props) => {
     // if (userData.userName && userData.userName !== '') {
     // setErrors(validate(userData));
     try {
-      let isPostedToS3 = submitSOWToS3(bounty); // POST CONTRACT TO S3 BUCKET
+      let isPostedToDynamoDB = uploadSOWToDynamoDB(bounty); // POST CONTRACT TO S3 BUCKET
       // Displays a toast alert to inform the user - contract created
-      isPostedToS3.then(async (posted) => {
+      isPostedToDynamoDB.then(async (posted) => {
         if (posted.status == 200) {
           let s3URL = await posted.json();
           setBounty({ ...bountyState, contractURI: s3URL });
