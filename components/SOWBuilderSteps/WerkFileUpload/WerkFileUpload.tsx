@@ -262,13 +262,14 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
             justifyContent={"center"}
             alignItems={"center"}
           >
-            <AlertIcon />
+            <AlertIcon ml={5} />
             <Text
               fontFamily={"PP Telegraf"}
               fontSize="14px"
               lineHeight={"24px"}
               fontWeight={"400"}
               pos={"relative"}
+              whiteSpace={"pre-wrap"}
             >
               Oops! There was an error uploading your file. Check your
               connection and try again
