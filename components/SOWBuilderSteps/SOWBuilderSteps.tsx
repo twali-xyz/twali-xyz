@@ -86,9 +86,9 @@ const SOWBuilderSteps = (props) => {
           userWallet: userData.userWallet,
           contractOwnerUserName: userData.userName,
           contractID: bountyState.contractID,
-          contractCreatedOn: 1651968000,
+          contractCreatedOn: Date.now(),
           contractStatus: "live",
-          attachedFiles: [],
+          attachedFiles: bountyState.attachedFiles,
         };
         const isValid = uploadSOWToDynamoDB(bounty);
         if (isValid) {
@@ -234,8 +234,7 @@ const SOWBuilderSteps = (props) => {
         contractID: bountyState.contractID,
         contractCreatedOn: Date.now(),
         contractStatus: "draft",
-        // attached files need to be added
-        attachedFiles: [],
+        attachedFiles: bountyState.attachedFiles,
       };
       checkSubmissionValidity(bounty);
       nextStep();

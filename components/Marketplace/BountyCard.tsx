@@ -31,7 +31,6 @@ export const BountyCard = ({
   token,
   ...props
 }) => {
-
   return (
     <Box
       {...props}
@@ -71,13 +70,8 @@ export const BountyCard = ({
         </Box>
         <HStack mt={2}>
           <Chip borderRadius={"4px"} height={"28px"} variant={"created"}>
-            Listed{" "}
-            {Math.ceil(
-              (new Date(Date.now()).getTime() -
-                new Date(Number(created_on) * 1000).getTime()) /
-                (1000 * 3600 * 24)
-            )}
-            d ago
+            Listed {Math.ceil((Date.now() - created_on) / (1000 * 3600 * 24))}d
+            ago
           </Chip>
           <Chip borderRadius={"4px"} height={"28px"} variant={"status"}>
             {status}

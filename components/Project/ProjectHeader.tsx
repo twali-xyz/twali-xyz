@@ -30,7 +30,7 @@ const ProjectHeader = (props) => {
     ...bountyState,
     contractOwnerUserName: userData.userName,
     contractCreatedOn: Date.now(),
-    contractStatus: "live",
+    contractStatus: "draft",
     attachedFiles: [],
     setBounty,
   });

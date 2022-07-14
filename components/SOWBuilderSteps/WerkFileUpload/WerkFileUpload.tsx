@@ -37,7 +37,7 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isFileTooBig, setIsFileTooBig] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
-
+  const [isUploadError, setIsUploadError] = useState(false);
   const { setData, ...userState } = useUser();
   const { setBounty, editBountyDescription, ...bountyState } = useBounty();
   const [userData, setUserData] = useState<UserData>({
@@ -105,12 +105,22 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
         setTimestamp(Date.now());
         checkIfUploadIsCompleted(data);
         currAttachedFiles.push(path.parse(file.name).name);
+        setBounty({
+          ...bountyState,
+          attachedFiles: currAttachedFiles,
+        });
+        setIsUploaded(true);
       })
-      .catch((err) => console.log(err));
-    setBounty({
-      ...bountyState,
-      attachedFiles: currAttachedFiles,
-    });
+      .catch((err) => {
+        setIsUploadError(true);
+        let allFiles = selectedFiles.filter((currFile) => {
+          return currFile.name !== file.name;
+        });
+        setSelectedFile(null);
+        setIsSelected(false);
+        setSelectedFiles(allFiles);
+        console.log(err);
+      });
   };
 
   const handleRemoveWerkFile = (file) => {
@@ -130,6 +140,10 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
           return currFile.name !== file.name;
         });
         setSelectedFiles(allFiles);
+        setBounty({
+          ...bountyState,
+          attachedFiles: allFiles,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -141,8 +155,6 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
     if (selectedFile) {
       uploadFile(selectedFile);
       setIsSubmitted(false);
-      // todo: move to .then() in uploadFile() and add error handling/message
-      setIsUploaded(true);
     }
   };
 
@@ -240,6 +252,26 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
               pos={"relative"}
             >
               Oops! Your file is too big. Please upload again! (less than 1MB)
+            </Text>
+          </Alert>
+        ) : isUploadError ? (
+          <Alert
+            width={500}
+            status="error"
+            marginInlineStart="48px"
+            justifyContent={"center"}
+            alignItems={"center"}
+          >
+            <AlertIcon />
+            <Text
+              fontFamily={"PP Telegraf"}
+              fontSize="14px"
+              lineHeight={"24px"}
+              fontWeight={"400"}
+              pos={"relative"}
+            >
+              Oops! There was an error uploading your file. Check your
+              connection and try again
             </Text>
           </Alert>
         ) : isUploaded && !isFileTooBig ? (
