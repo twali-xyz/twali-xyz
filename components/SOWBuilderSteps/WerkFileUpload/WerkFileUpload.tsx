@@ -60,6 +60,7 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
     let finalFile = event.target.files[0];
     let allFiles = selectedFiles;
     const fileSize = Math.round(finalFile.size / 1024);
+
     if (fileSize >= 1024) {
       setIsFileTooBig(true);
     } else {
@@ -92,6 +93,7 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
     formData.append("userWallet", userData?.userWallet);
     formData.append("contractID", bountyState?.contractID);
     let currAttachedFiles = bountyState.attachedFiles;
+    console.log(formData);
 
     axios
       .request({
@@ -275,8 +277,8 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
               pos={"relative"}
               whiteSpace={"pre-wrap"}
             >
-              Oops! There was an error uploading your file. Check your
-              connection and try again
+              Oops! There was an error uploading your file. Please upload a
+              different file.
             </Text>
           </Alert>
         ) : isUploaded && !isFileTooBig ? (

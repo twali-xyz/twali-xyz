@@ -17,8 +17,6 @@ aws.config.update({
 const uploadWerkFileHandler = nc<NextApiRequest, NextApiResponse>();
 uploadWerkFileHandler.use(middleware);
 uploadWerkFileHandler.post(async (req: any, res) => {
-  console.log("POSTWERKFILE: ", req);
-
   const s3 = new aws.S3({
     region: "us-east-1",
   });
