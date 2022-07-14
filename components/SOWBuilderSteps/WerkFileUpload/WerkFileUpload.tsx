@@ -56,6 +56,7 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
 
   const changeHandler = (event) => {
     setIsUploaded(false);
+    setIsUploadError(false);
     let finalFile = event.target.files[0];
     let allFiles = selectedFiles;
     const fileSize = Math.round(finalFile.size / 1024);
@@ -119,6 +120,9 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
         setSelectedFile(null);
         setIsSelected(false);
         setSelectedFiles(allFiles);
+        setTimeout(function () {
+          setIsUploadError(false);
+        }, 3000);
         console.log(err);
       });
   };
