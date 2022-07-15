@@ -6,6 +6,7 @@ import {
   Img,
   Text,
   VStack,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 
 import DatePicker from "react-date-picker/dist/entry.nostyle";
@@ -16,6 +17,7 @@ import { MultiSelect } from "../reusable/MultiSelect";
 import { WerkTokenDropdown } from "./WerkTokenDropdown";
 import { useBounty } from "../../context/BountyContext";
 import { useEffect } from "react";
+import { useToken } from "../../context/TokenContext";
 
 export const datesAndPricing = ({
   handleChange,
@@ -23,22 +25,11 @@ export const datesAndPricing = ({
   setDueDate,
   dateRange,
   setDateRange,
+  formError,
 }) => {
   const { setBounty, ...bountyState } = useBounty();
+  const { tokenName, tokenAmount } = useToken();
 
-  useEffect(() => {
-    setBounty({
-      ...bountyState,
-      contractStartDate: new Date(dateRange[0]),
-      contractEndDate: new Date(dateRange[1]),
-    });
-  }, [dateRange]);
-  useEffect(() => {
-    setBounty({
-      ...bountyState,
-      applicationDeadline: dueDate,
-    });
-  }, [dueDate]);
   return (
     <form style={{ alignSelf: "start" }}>
       <HStack spacing={24}>
@@ -65,17 +56,25 @@ export const datesAndPricing = ({
             >
               {" "}
               <VStack alignItems="start" m={0} p={0}>
-                <FormControl p={2} id="werk-date-range">
+                <FormControl
+                  p={2}
+                  id="werk-date-range"
+                  height={"100px"}
+                  isRequired
+                  isInvalid={
+                    formError &&
+                    (!bountyState.contractStartDate ||
+                      !bountyState.contractEndDate)
+                  }
+                >
                   <FormLabel
                     fontSize={"16px"}
                     lineHeight={"24px"}
                     fontWeight={"400"}
                     fontFamily={"PP Telegraf"}
                   >
-                    <HStack spacing={8} paddingLeft={0}>
-                      <Text>Dates</Text>
-                      {/* <Text>End Date</Text> */}
-                    </HStack>
+                    Start Date - End Date
+                    {/* <Text>End Date</Text> */}
                   </FormLabel>
                   <DateRangePicker
                     //   onChange={setStartDate}
@@ -89,7 +88,20 @@ export const datesAndPricing = ({
                         alt="calendar"
                       />
                     }
-                    onChange={setDateRange}
+                    onChange={(range) => {
+                      setDateRange(range);
+                      let start;
+                      let end;
+                      if (range) {
+                        start = new Date(range[0]);
+                        end = new Date(range[1]);
+                      }
+                      setBounty({
+                        ...bountyState,
+                        contractStartDate: start || 0,
+                        contractEndDate: end || 0,
+                      });
+                    }}
                     name="dateRange"
                     selectRange={true}
                     value={
@@ -98,21 +110,29 @@ export const datesAndPricing = ({
                         : undefined
                     }
                   />
-                  {/* {errors.companyStart && !companyData.companyStart && (
-                      <Text fontSize="xs" fontWeight="400" color="red.500">
-                        {errors.companyStart}
-                      </Text>
-                    )} */}
+                  <FormErrorMessage
+                    fontSize="xs"
+                    fontWeight="400"
+                    color="red.500"
+                  >
+                    Start date and end date are required
+                  </FormErrorMessage>
                 </FormControl>
 
-                <FormControl p={2} id="werk-due-date">
+                <FormControl
+                  p={2}
+                  id="werk-due-date"
+                  height={"100px"}
+                  isRequired
+                  isInvalid={formError && !bountyState.applicationDeadline}
+                >
                   <FormLabel
                     fontSize={"16px"}
                     lineHeight={"24px"}
                     fontWeight={"400"}
                     fontFamily={"PP Telegraf"}
                   >
-                    Due Date
+                    Application Deadline
                   </FormLabel>
                   <DatePicker
                     calendarIcon={
@@ -124,11 +144,39 @@ export const datesAndPricing = ({
                         alt="calendar"
                       />
                     }
-                    onChange={setDueDate}
+                    onChange={(date) => {
+                      setDueDate(date);
+                      let newDate = 0;
+                      if (date) {
+                        newDate = date;
+                      }
+                      setBounty({
+                        ...bountyState,
+                        applicationDeadline: newDate,
+                      });
+                    }}
                     value={dueDate ? new Date(dueDate) : undefined}
                   />
+                  <FormErrorMessage
+                    fontSize="xs"
+                    fontWeight="400"
+                    color="red.500"
+                  >
+                    Application date is required
+                  </FormErrorMessage>
                 </FormControl>
-                <WerkTokenDropdown />
+                <FormControl
+                  isInvalid={formError && (!tokenName || !tokenAmount)}
+                >
+                  <WerkTokenDropdown />
+                  <FormErrorMessage
+                    fontSize="xs"
+                    fontWeight="400"
+                    color="red.500"
+                  >
+                    Please select a token and/or amount
+                  </FormErrorMessage>
+                </FormControl>
               </VStack>
             </Box>
           </Box>
@@ -157,23 +205,40 @@ export const datesAndPricing = ({
               lineHeight="tight"
               //   isTruncated
             >
-              <MultiSelect
-                name={"contractExpertise"}
-                formLabel={"Superpowers"}
-                handleChange={handleChange}
-                options={functionalExpertiseList}
-                maxSelections={3}
-                defaultValues={bountyState?.contractExpertise || []}
-              />
+              <FormControl
+                isInvalid={
+                  formError &&
+                  (!bountyState.contractExpertise ||
+                    !bountyState.contractIndustry ||
+                    bountyState.contractExpertise[0] === "" ||
+                    bountyState.contractIndustry[0] === "")
+                }
+              >
+                <MultiSelect
+                  name={"contractExpertise"}
+                  formLabel={"Superpowers"}
+                  handleChange={handleChange}
+                  options={functionalExpertiseList}
+                  maxSelections={3}
+                  defaultValues={bountyState?.contractExpertise || []}
+                />
 
-              <MultiSelect
-                name={"contractIndustry"}
-                formLabel={"Industry expertise"}
-                handleChange={handleChange}
-                defaultValues={bountyState?.contractIndustry || []}
-                options={industryExpertiseList}
-                maxSelections={3}
-              />
+                <MultiSelect
+                  name={"contractIndustry"}
+                  formLabel={"Industry expertise"}
+                  handleChange={handleChange}
+                  defaultValues={bountyState?.contractIndustry || []}
+                  options={industryExpertiseList}
+                  maxSelections={3}
+                />
+                <FormErrorMessage
+                  fontSize="xs"
+                  fontWeight="400"
+                  color="red.500"
+                >
+                  Please select at least 1 expertise and 1 industry
+                </FormErrorMessage>
+              </FormControl>
             </Box>
           </Box>
         </Box>

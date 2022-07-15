@@ -98,28 +98,11 @@ const ProjectExpertise = (props) => {
           >
             {bountyState?.contractExpertise?.map((expertise, idx) => {
               if (expertise !== "") {
-                if (idx == 0) {
-                  return (
-                    <Chip
-                      variant="button"
-                      marginBottom={4}
-                      onClick={(e) => handleRemove(e, "expertise")}
-                    >
-                      {expertise}
-                    </Chip>
-                  );
-                } else {
-                  return (
-                    <Chip
-                      variant="button"
-                      marginBottom={4}
-                      marginLeft={4}
-                      onClick={(e) => handleRemove(e, "expertise")}
-                    >
-                      {expertise}
-                    </Chip>
-                  );
-                }
+                return (
+                  <Chip variant="gradient" marginBottom={4} mr={4}>
+                    {expertise}
+                  </Chip>
+                );
               }
             })}
           </Flex>
@@ -140,28 +123,11 @@ const ProjectExpertise = (props) => {
           >
             {bountyState?.contractIndustry?.map((industry, idx) => {
               if (industry !== "") {
-                if (idx == 0) {
-                  return (
-                    <Chip
-                      variant="button"
-                      marginBottom={4}
-                      onClick={(e) => handleRemove(e, "industry")}
-                    >
-                      {industry}
-                    </Chip>
-                  );
-                } else {
-                  return (
-                    <Chip
-                      variant="button"
-                      marginBottom={4}
-                      marginLeft={4}
-                      onClick={(e) => handleRemove(e, "idustry")}
-                    >
-                      {industry}
-                    </Chip>
-                  );
-                }
+                return (
+                  <Chip variant="gradient" marginBottom={4} mr={4}>
+                    {industry}
+                  </Chip>
+                );
               }
             })}
           </Flex>

@@ -12,18 +12,19 @@ import {
   FormLabel,
   FormControl,
   Input,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { useBounty } from "../../../context/BountyContext";
 
 const ProjectHeaderModal = (props) => {
-  const { editBountyHeader, ...bountyState} = useBounty();
+  const { editBountyHeader, ...bountyState } = useBounty();
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [contractTitle, setContractTitle] = useState('');
-
+  const [contractTitle, setContractTitle] = useState(bountyState.contractTitle);
+  const [formError, setFormError] = useState(false);
   const handleChange = (evt) => {
     setContractTitle(evt.target.value);
-  }
+  };
 
   return (
     <>
@@ -39,11 +40,16 @@ const ProjectHeaderModal = (props) => {
           border={"1px solid rgba(88, 112, 112, 1)"}
           fontFamily={"PP Telegraf Light"}
         >
-        <ModalHeader mt={"20px"}>Title</ModalHeader>
+          <ModalHeader mt={"20px"}>Title</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form style={{ alignSelf: "center" }}>
-              <FormControl p={2} id="project-title" isRequired>
+              <FormControl
+                p={2}
+                id="project-title"
+                isRequired
+                isInvalid={formError && !contractTitle}
+              >
                 <FormLabel
                   fontSize={"16px"}
                   lineHeight={"24px"}
@@ -53,10 +59,10 @@ const ProjectHeaderModal = (props) => {
                 </FormLabel>
                 <Input
                   required
-                //   isInvalid={
-                //     errors.firstName &&
-                //     (!userState.firstName || !values.firstName)
-                //   }
+                  //   isInvalid={
+                  //     errors.firstName &&
+                  //     (!userState.firstName || !values.firstName)
+                  //   }
                   errorBorderColor="red.300"
                   placeholder="Title"
                   name="contractTitle"
@@ -69,17 +75,32 @@ const ProjectHeaderModal = (props) => {
                       {errors.firstName}
                     </Text>
                   )} */}
+                <FormErrorMessage
+                  fontSize="xs"
+                  fontWeight="400"
+                  color="red.500"
+                >
+                  Title is required
+                </FormErrorMessage>
               </FormControl>
             </form>
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="primary" size={"sm"} onClick={() => {
-              setIsSubmitted(true);
-              editBountyHeader(contractTitle);
-              props.onClose();
-              setIsSubmitted(false);
-              }}>
+            <Button
+              variant="primary"
+              size={"sm"}
+              onClick={() => {
+                if (!contractTitle) {
+                  setFormError(true);
+                  return;
+                }
+                setIsSubmitted(true);
+                editBountyHeader(contractTitle);
+                props.onClose();
+                setIsSubmitted(false);
+              }}
+            >
               Save{" "}
               {isSubmitted ? (
                 <CircularProgress
