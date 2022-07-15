@@ -559,6 +559,7 @@ module.exports = {
       contractEndDate,
       contractDuration,
       tokenName,
+      contractURI,
       contractAmount,
       convertedAmount,
       applicationDeadline,
@@ -569,7 +570,6 @@ module.exports = {
     } = bounty;
 
     // await uploadContractToS3(bounty);
-
     await getDynamoDBClient()
       .update({
         TableName,
@@ -578,7 +578,7 @@ module.exports = {
           SK: `CONTRACT#${contractID}`,
         },
         UpdateExpression:
-          "SET contract_id = :contract_id, contract_created_on = :contract_created_on, contractOwner_userName = :contractOwner_userName, contract_title = :contract_title, contract_description = :contract_description, contract_start_date = :contract_start_date, contract_end_date = :contract_end_date, contract_duration = :contract_duration, token_name = :token_name, contract_amount = :contract_amount, converted_amount = :converted_amount, application_deadline = :application_deadline, contract_industry = :contract_industry, contract_expertise = :contract_expertise, contract_status = :contract_status, attached_files = :attached_files",
+          "SET contract_id = :contract_id, contract_created_on = :contract_created_on, contractOwner_userName = :contractOwner_userName, contract_title = :contract_title, contract_description = :contract_description, contract_start_date = :contract_start_date, contract_end_date = :contract_end_date, contract_duration = :contract_duration, token_name = :token_name, contract_uri = :contract_uri, contract_amount = :contract_amount, converted_amount = :converted_amount, application_deadline = :application_deadline, contract_industry = :contract_industry, contract_expertise = :contract_expertise, contract_status = :contract_status, attached_files = :attached_files",
         // ConditionExpression: "",
         ExpressionAttributeValues: {
           ":contract_id": contractID,
@@ -589,6 +589,7 @@ module.exports = {
           ":contract_start_date": contractStartDate,
           ":contract_end_date": contractEndDate,
           ":contract_duration": contractDuration,
+          ":contract_uri": contractURI,
           ":token_name": tokenName,
           ":contract_amount": contractAmount,
           ":converted_amount": convertedAmount,

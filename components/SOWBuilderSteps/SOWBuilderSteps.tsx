@@ -27,12 +27,21 @@ import { convertDateToUnix } from "../../utils/marketplaceUtils";
 import { useContractWrite, useProvider, useWaitForTransaction } from "wagmi";
 
 const SOWBuilderSteps = (props) => {
+  const S3BaseURI =
+    "https://twali-contracts-bucket.s3.localhost.localstack.cloud:4566/twali-contracts-bucket/";
   const router = useRouter();
   const { setData, ...userState } = useUser();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [dueDate, setDueDate] = useState(new Date());
   const [dateRange, setDateRange] = useState([new Date(), new Date()]);
+  const [userData, setUserData] = useState<UserData>({
+    ...userState,
+    // userName: "",
+    // userWallet: "",
+    // uuid: "",
+    setData,
+  });
   const { tokenName, tokenAmount, calculatedUSD } = useToken();
   const { setBounty, editBountyURI, ...bountyState } = useBounty();
 
@@ -54,7 +63,7 @@ const SOWBuilderSteps = (props) => {
     signerOrProvider: provider,
     functionName: "createTwaliClone",
     args: [
-      bountyState.contractURI,
+      `${S3BaseURI}${userData.userWallet}/${bountyState.contractID}.json`,
       bountyState.contractAmount,
       bountyState.contractStartDate,
       bountyState.contractEndDate,
@@ -90,21 +99,22 @@ const SOWBuilderSteps = (props) => {
           contractStatus: "live",
           attachedFiles: bountyState.attachedFiles,
         };
-        await updateSOWToLiveStatus(bounty);
+        let URI;
 
         const isValid = submitSOWToS3(bounty);
         if (isValid) {
-          isValid.then((valid) => {
-            console.log(valid.status);
-
+          isValid.then(async (valid) => {
             if (valid.status === 200) {
-              setTimeout(() => {
-                Router.push("/marketplace");
-              }, 4000);
+              URI = await valid.json();
+              await updateSOWToLiveStatus({
+                ...bounty,
+                contractURI: URI,
+              });
             }
           });
         }
       }
+
       if (error) {
         toast({
           title: "Your bounty was not created due to an error!",
@@ -121,14 +131,6 @@ const SOWBuilderSteps = (props) => {
   let activeStep = props.activeStep;
   let nextStep = props.nextStep;
   let prevStep = props.prevStep;
-
-  const [userData, setUserData] = useState<UserData>({
-    ...userState,
-    // userName: "",
-    // userWallet: "",
-    // uuid: "",
-    setData,
-  });
 
   const handleChange = (evt) => {
     try {
@@ -171,6 +173,7 @@ const SOWBuilderSteps = (props) => {
         ["tokenName"]: tokenName,
         ["contractAmount"]: Number(tokenAmount),
         ["convertedAmount"]: calculatedUSD,
+        ["contractURI"]: `${S3BaseURI}${userData.userWallet}/${bountyState.contractID}.json`,
       });
     }
   };
@@ -225,6 +228,7 @@ const SOWBuilderSteps = (props) => {
       method: "POST",
       body: JSON.stringify({ bounty }),
     });
+    return res;
   };
 
   const handleSubmit = () => {
@@ -259,27 +263,21 @@ const SOWBuilderSteps = (props) => {
     // if (userData.userName && userData.userName !== '') {
     // setErrors(validate(userData));
     try {
-      let isPostedToDynamoDB = uploadSOWToDynamoDB(bounty); // POST CONTRACT TO S3 BUCKET
+      await uploadSOWToDynamoDB(bounty); // POST CONTRACT TO DYNAMODB
+
       // Displays a toast alert to inform the user - contract created
-      isPostedToDynamoDB.then(async (posted) => {
-        if (posted.status == 200) {
-          let s3URL = await posted.json();
-          setBounty({ ...bountyState, contractURI: s3URL });
-        }
-        // else if (activeStep <= 0 && !errors.userName && !errors.firstName && !errors.lastName && !errors.email) {
-        //   setIsDisabled(false);
-        //   nextStep();
-        // } else if (activeStep == 1 && !errors.businessType && !errors.businessName) {
-        //   setIsDisabled(false);
-        //   nextStep();
-        // } else if (activeStep > 1 && !errors.currTitle) {
-        //   setIsDisabled(false);
-        //   updateAccType();
-        // } else {
-        //   setIsDisabled(true);
-        // }
-        console.log("S3 submitted");
-      });
+      // else if (activeStep <= 0 && !errors.userName && !errors.firstName && !errors.lastName && !errors.email) {
+      //   setIsDisabled(false);
+      //   nextStep();
+      // } else if (activeStep == 1 && !errors.businessType && !errors.businessName) {
+      //   setIsDisabled(false);
+      //   nextStep();
+      // } else if (activeStep > 1 && !errors.currTitle) {
+      //   setIsDisabled(false);
+      //   updateAccType();
+      // } else {
+      //   setIsDisabled(true);
+      // }
     } catch (err) {
       console.log("Bounty wasn't submitted...");
     }
