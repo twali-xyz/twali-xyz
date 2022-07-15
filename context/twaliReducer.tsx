@@ -19,6 +19,7 @@ export const initialState = {
   functionalExpertise: [""],
   industryExpertise: [""],
   companyInfo: [],
+  txHash: "",
   uuid: "",
   editExpertise: Function(),
   editProfile: Function(),
