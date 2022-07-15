@@ -19,6 +19,8 @@ import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+import TokenProvider from "../context/TokenContext";
+import BountyProvider from "../context/BountyContext";
 const alchemyId = process.env.ALCHEMY_ID;
 
 // Configure chains & providers with the Alchemy provider.
@@ -77,9 +79,13 @@ function App({ Component, pageProps }: AppProps) {
     // />
     <WagmiConfig client={client}>
       <UserProvider>
-        <ChakraProvider theme={twaliTheme}>
-          <Component {...pageProps} />
-        </ChakraProvider>
+        <TokenProvider>
+          <BountyProvider>
+            <ChakraProvider theme={twaliTheme}>
+              <Component {...pageProps} />
+            </ChakraProvider>
+          </BountyProvider>
+        </TokenProvider>
       </UserProvider>
     </WagmiConfig>
     // </>

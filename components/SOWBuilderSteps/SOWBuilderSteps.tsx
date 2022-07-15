@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Step, Steps } from "chakra-ui-steps";
 import Project from "../Project/Project";
 
@@ -71,64 +71,13 @@ const SOWBuilderSteps = (props) => {
     ],
   });
 
-  const {
-    data: txData,
-    isError: isTxError,
-    isLoading: txIsLoading,
-  } = useWaitForTransaction({
-    hash: contractData?.hash,
-    async onSettled(contractData, error) {
-      console.log("Settled", { contractData, error });
-      if (contractData && !error) {
-        toast({
-          title: "Your bounty was submitted!",
-          description: `${bountyState.contractTitle} is up on the marketplace.`,
-          status: "success",
-          variant: "subtle",
-          duration: 6000,
-          isClosable: true,
-        });
-        let bounty = {
-          ...bountyState,
-          token: tokenName,
-          contractAmount: tokenAmount,
-          convertedAmount: calculatedUSD,
-          userWallet: userData.userWallet,
-          contractOwnerUserName: userData.userName,
-          contractID: bountyState.contractID,
-          contractCreatedOn: Date.now(),
-          contractStatus: "live",
-          attachedFiles: bountyState.attachedFiles,
-        };
-        let URI;
-
-        const isValid = submitSOWToS3(bounty);
-        if (isValid) {
-          isValid.then(async (valid) => {
-            if (valid.status === 200) {
-              URI = await valid.json();
-              await updateSOWToLiveStatus({
-                ...bounty,
-                contractURI: URI,
-              });
-            }
-          });
-        }
-      }
-
-      if (error) {
-        toast({
-          title: "Your bounty was not created due to an error!",
-          description: `${error}`,
-          status: "error",
-          variant: "subtle",
-          duration: 5000,
-          isClosable: true,
-        });
-      }
-    },
-  });
-
+  useEffect(() => {
+    if (!contractData) return;
+    setData({
+      ...userState,
+      txHash: contractData.hash,
+    });
+  }, [contractData?.hash]);
   let activeStep = props.activeStep;
   let nextStep = props.nextStep;
   let prevStep = props.prevStep;
@@ -203,19 +152,9 @@ const SOWBuilderSteps = (props) => {
       label: "Submission",
       content: submissionOfWerk({
         handleChange,
-        txIsLoading,
       }),
     },
   ];
-
-  const submitSOWToS3 = async (bounty) => {
-    // post the SOW object to an S3 bucket
-    let res = await fetch("/api/users/postSOW", {
-      method: "POST",
-      body: JSON.stringify({ bounty }),
-    });
-    return res;
-  };
 
   const uploadSOWToDynamoDB = async (bounty) => {
     let res = await fetch("/api/marketplace/submitBounty", {
@@ -223,14 +162,6 @@ const SOWBuilderSteps = (props) => {
       body: JSON.stringify({ bounty }),
     });
 
-    return res;
-  };
-
-  const updateSOWToLiveStatus = async (bounty) => {
-    let res = await fetch("/api/marketplace/submitBounty", {
-      method: "POST",
-      body: JSON.stringify({ bounty }),
-    });
     return res;
   };
 

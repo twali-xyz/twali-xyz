@@ -19,6 +19,7 @@ export interface UserData {
   functionalExpertise?: string[];
   industryExpertise?: string[];
   companyInfo?: CompanyInfo[];
+  txHash: string;
   uuid: string;
   editExpertise: Function,
   editProfile: Function,
