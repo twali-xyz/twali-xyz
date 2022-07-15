@@ -154,7 +154,7 @@ const ProjectDetailsModal = (props) => {
             >
               <WerkTokenDropdown />
               <FormErrorMessage fontSize="xs" fontWeight="400" color="red.500">
-                Token and amount are required {tokenName}
+                Token and amount are required
               </FormErrorMessage>
             </FormControl>
           </ModalBody>
