@@ -31,7 +31,6 @@ export const statementOfWerk = ({ values }) => {
               fontWeight="semibold"
               as="h4"
               lineHeight="tight"
-              noOfLines={1}
             >
               <FormControl p={2} pb={0} id="werk-title" isRequired>
                 <FormLabel
@@ -137,7 +136,6 @@ export const statementOfWerk = ({ values }) => {
               fontWeight="semibold"
               as="h4"
               lineHeight="tight"
-              noOfLines={1}
             >
               <FormControl p={2} pb={0} id="werk-title" isRequired>
                 <FormLabel

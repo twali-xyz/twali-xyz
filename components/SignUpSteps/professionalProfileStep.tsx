@@ -32,7 +32,6 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
             fontWeight="semibold"
             as="h4"
             lineHeight="tight"
-            noOfLines={1}
           >
             <FormControl p={2} pb={0} id="current-company-title" isRequired>
               <FormLabel

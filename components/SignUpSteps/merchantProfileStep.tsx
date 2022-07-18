@@ -33,7 +33,6 @@ export const merchantProfileStep = ({ handleChange, values, errors }) => {
             fontWeight="semibold"
             as="h4"
             lineHeight="tight"
-            noOfLines={1}
           >
             <FormControl p={2} id="business-type" isRequired>
               <HStack justifyContent="space-between">

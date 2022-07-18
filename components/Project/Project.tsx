@@ -60,7 +60,6 @@ const Project = (props) => {
               fontWeight="semibold"
               as="h4"
               lineHeight="tight"
-              noOfLines={1}
             >
               <ProjectHeader />
               <Flex flexDirection="row">
