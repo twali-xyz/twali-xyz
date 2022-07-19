@@ -29,14 +29,7 @@ const whitelist = () => {
 
   const { data: accountData } = useAccount();
 
-  const {
-    connect,
-    connectors,
-    error,
-    isLoading: isConnectorLoading,
-    pendingConnector,
-  } = useConnect();
-  const { disconnect } = useDisconnect();
+  const { connect, connectors, pendingConnector } = useConnect();
   const {
     data,
     isLoading: loadingWhitelist,
