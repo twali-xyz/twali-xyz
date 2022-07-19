@@ -16,8 +16,13 @@ import { SortApplicants } from "../../components/Admin/SortApplicants";
 import whitelistReducer, { initialState } from "../../context/WhitelistReducer";
 import { useWhitelist } from "../../hooks/useWhitelist";
 import { useWhitelistFilter } from "../../hooks/useWhitelistFilter";
-import { useAccount, useConnect, useDisconnect } from "wagmi";
-import { InjectedConnector } from "wagmi/connectors/injected";
+import {
+  useAccount,
+  useConnect,
+  useDisconnect,
+  useEnsAvatar,
+  useEnsName,
+} from "wagmi";
 import HeaderNav from "../../components/HeaderNav/HeaderNav";
 import LoadingPage from "../loading";
 
@@ -28,13 +33,19 @@ const whitelist = () => {
   const [loadingWallet, setLoadingWallet] = useState(null);
   const [loadingIDX, setLoadingIDX] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { data: accountData } = useAccount();
 
+  const { address, connector, isConnected } = useAccount();
+  const { data: ensAvatar } = useEnsAvatar({ addressOrName: address });
+  const { data: ensName } = useEnsName({ address });
   const {
-    data,
-    isLoading: loadingWhitelist,
-    isError,
-  } = useWhitelist(accountData?.address);
+    connect,
+    connectors,
+    error,
+    isLoading: isConnectorLoading,
+    pendingConnector,
+  } = useConnect();
+  const { disconnect } = useDisconnect();
+  const { data, isLoading: loadingWhitelist, isError } = useWhitelist(address);
   const {
     data: filteredData,
     isLoading,
@@ -64,15 +75,15 @@ const whitelist = () => {
     });
   }
 
-  function setWhitelistPending(payload) {
-    dispatch({
-      type: "PENDING",
-      payload: { ...payload },
-    });
-  }
+  // fixes hydration issue
+  const [hasMounted, setHasMounted] = React.useState(false);
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   // useEffect hook to sync dispatching with backend
   useEffect(() => {
+    if (!state.userWallet) return;
     const updateUserWhitelistStatus = async (payload) => {
       setLoadingWallet(state.userWallet);
       await fetch(`/api/admin/updateUser`, {
@@ -83,13 +94,27 @@ const whitelist = () => {
 
       if (query) {
         await mutate("/api/admin/filterWhitelist/" + query);
-        await mutate("/api/admin/retrieveWhitelist/" + accountData?.address);
+        await mutate("/api/admin/retrieveWhitelist/" + address);
       } else {
-        await mutate("/api/admin/retrieveWhitelist/" + accountData?.address);
+        await mutate("/api/admin/retrieveWhitelist/" + address);
       }
       setLoadingWallet(null);
     };
-    updateUserWhitelistStatus(state);
+
+    const updateReferralStatus = async (payload) => {
+      setLoadingWallet(state.userWallet);
+      await fetch(`/api/admin/updateReferral`, {
+        method: "PUT",
+        body: JSON.stringify({ payload }),
+      });
+      setLoadingWallet(null);
+    };
+    if (state.userWallet) {
+      updateUserWhitelistStatus(state);
+    }
+    if (!state.referral && state.whitelistStatus === "approved") {
+      updateReferralStatus(state);
+    }
   }, [state]);
 
   // set the filterParams based on the URL query params
@@ -125,12 +150,12 @@ const whitelist = () => {
     }
   }
 
-  const { connect } = useConnect({
-    connector: new InjectedConnector(),
-  });
-  const { disconnect } = useDisconnect();
+  // fixes hydration issue
+  if (!hasMounted) {
+    return null;
+  }
 
-  if (!accountData && !loadingWhitelist)
+  if (!address)
     return (
       <>
         <Flex
@@ -139,22 +164,29 @@ const whitelist = () => {
           justify={"center"}
           alignItems={"center"}
         >
-          {accountData && <Text> `Connected to ${accountData?.address}`</Text>}
-          <Button size={"lg"} variant={"primary"} onClick={() => connect()}>
-            Connect Wallet
-          </Button>
-          <br />
+          {address && <Text> `Connected to ${address}`</Text>}
+          <VStack>
+            {connectors.map((connector) => (
+              <Button
+                variant={"primary"}
+                width={"400px"}
+                disabled={!connector.ready}
+                key={connector.id}
+                onClick={() => connect({ connector })}
+              >
+                {connector.name}
+                {!connector.ready && " (unsupported)"}
+                {isLoading &&
+                  connector.id === pendingConnector?.id &&
+                  " (connecting)"}
+              </Button>
+            ))}
+          </VStack>
         </Flex>
       </>
     );
-  if (loadingWhitelist) {
-    return (
-      <>
-        <LoadingPage loaded={loadingWhitelist} />
-      </>
-    );
-  }
-  if (!data) {
+
+  if (address && isError) {
     return (
       <>
         <Flex
@@ -170,7 +202,7 @@ const whitelist = () => {
   }
   return (
     <>
-      <HeaderNav userWallet={accountData.address} />
+      <HeaderNav userWallet={address} />
       <Flex flexDir={"row"} pos={"absolute"} top={0} width="100%" zIndex={-1}>
         <FilterInputs
           filterParams={filterParams}

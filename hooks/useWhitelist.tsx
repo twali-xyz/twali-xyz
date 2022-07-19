@@ -5,7 +5,7 @@ const fetcher = (...args: Parameters<typeof fetch>) =>
 
 export const useWhitelist = (userId) => {
   const { data, error } = useSWR(
-    `/api/admin/retrieveWhitelist/${userId}`,
+    userId && `/api/admin/retrieveWhitelist/${userId}`,
     fetcher
   );
   return {

@@ -538,7 +538,6 @@ module.exports = {
    * @returns Returns object containing user data and whitelist status.
    **/
   getWhitelistStatus: async (userWallet) => {
-    console.log("USERWALLET: ", userWallet);
     const dbUser = await getDynamoDBClient()
       .query({
         TableName: "whitelist_table",
@@ -603,6 +602,25 @@ module.exports = {
         },
       })
       .promise()
+      .catch((err) => {console.log("ERROR: ", err)});
+  },
+
+  addReferralData: async (userWallet, referredBy) => {
+      console.log("🚀 ~ file: dynamodb.js ~ line 612 ~ addReferralData: ~ referredBy", referredBy)
+      await getDynamoDBClient()
+      .update({
+        TableName,
+        Key: {
+          PK: `USER#0xeba4797Ce6d748FC67Fa8448610934a0413CC3B9`,
+          SK: `USER#0xeba4797Ce6d748FC67Fa8448610934a0413CC3B9`,
+
+        },
+        UpdateExpression: "SET referredBy = list_append(#referredBy, :vals)",
+        ExpressionAttributeNames: {"#referredBy": "referredBy"},
+        ExpressionAttributeValues: {":vals": [userWallet]},
+        
+      })
+      .promise()
       .catch(console.error);
   },
 
@@ -611,9 +629,6 @@ module.exports = {
    * @param {object} - function takes an object as a the parameter with primary and attributes. Object will need to the primary key and any attributes that are being updated or created.
    */
   addWhitelistUser: async (payload) => {
-    console.log("ADD USER TO WHITELIST");
-    console.log({ ...payload });
-
     await getDynamoDBClient()
       .put({
         TableName: "whitelist_table",

@@ -8,7 +8,6 @@ const whitelistStatusHandler: NextApiHandler = async (req, res) => {
       JSON.parse(req.body)["payload"]["userWallet"],
       JSON.parse(req.body)["payload"]["whitelistStatus"]
     );
-    console.log("INFO: ", info);
 
     res.status(200).json(JSON.stringify(info));
   } catch {
