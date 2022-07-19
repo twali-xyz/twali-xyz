@@ -12,6 +12,8 @@ const whitelist = () => {
   const router = useRouter();
   const { userWallet } = useUser();
   const [step, setStep] = useState(0);
+  const [formError, setFormError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
   const [userWhitelistObj, setUserWhitelistObj] = useState({
     firstName: "",
     lastName: "",
@@ -54,7 +56,7 @@ const whitelist = () => {
       questions: [
         {
           name: "firstName",
-          placeholder: "type your first name name here...",
+          placeholder: "first name name here...",
           question:
             "1. Hi, I'm Twali, nice to meet you. What's your full name?",
         },
@@ -140,6 +142,8 @@ const whitelist = () => {
   ];
 
   function handleChange(event) {
+    setFormError(false);
+    setEmailError(false);
     setUserWhitelistObj({
       ...userWhitelistObj,
       [event.target.name]: event.target.value,
@@ -162,6 +166,15 @@ const whitelist = () => {
         whitelistStatus: "pending",
         applied_on: Date.now(),
         ...userWhitelistObj,
+      });
+    } else if (!state.userWallet) {
+      toast({
+        title: "Invalid",
+        description: "Please login to submit your application.",
+        status: "error",
+        variant: "subtle",
+        duration: 5000,
+        isClosable: true,
       });
     } else {
       toast({
@@ -190,39 +203,66 @@ const whitelist = () => {
 
   function validateInputs() {
     if (
-      userWhitelistObj.firstName === "" ||
-      userWhitelistObj.lastName === "" ||
-      userWhitelistObj.email === ""
+      (userWhitelistObj.firstName === "" ||
+        userWhitelistObj.lastName === "" ||
+        userWhitelistObj.email === "") &&
+      step === 0
     ) {
-      setStep(0);
-      return false;
-    }
-    if (userWhitelistObj.discord === "" || userWhitelistObj.linkedIn === "") {
-      setStep(1);
-      return false;
-    }
+      setFormError(true);
 
+      return false;
+    }
+    if (
+      !userWhitelistObj.email
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        ) &&
+      step === 0
+    ) {
+      setEmailError(true);
+      return false;
+    }
+    if (userWhitelistObj.linkedIn === "" && step === 1) {
+      setFormError(true);
+      return false;
+    }
+    if (userWhitelistObj.discord === "" && step === 2) {
+      setFormError(true);
+      return false;
+    }
     return true;
   }
 
-  function handleEnterPressed(event) {
-    if (
-      document.activeElement === continueButtonRef.current ||
-      document.activeElement === upArrowRef.current ||
-      document.activeElement === downArrowRef.current
-    )
-      return;
-    if (event.key === "Enter" && step < 2) {
-      setStep((prevStep) => prevStep + 1);
+  const handleStep = () => {
+    if (validateInputs()) {
+      if (step < 2) {
+        setStep(step + 1);
+      } else {
+        submitApplication();
+      }
     }
-    if (event.key === "Enter" && step >= 2) {
-      submitApplication();
+  };
+
+  function handleEnterPressed(event) {
+    if (event.key !== "Enter") return;
+
+    if (validateInputs()) {
+      if (
+        document.activeElement === continueButtonRef.current ||
+        document.activeElement === upArrowRef.current ||
+        document.activeElement === downArrowRef.current
+      )
+        return;
+      if (event.key === "Enter") {
+        handleStep();
+      }
     }
   }
   return (
     <>
       <HeaderNav whichPage="whitelist" step={0} userWallet={userWallet} />
-      <Box onKeyPress={handleEnterPressed}>
+      <Box onKeyPress={formError ? null : handleEnterPressed}>
         {(whiteListStatus === null ||
           whiteListStatus === "" ||
           whiteListStatus === "undefined") &&
@@ -232,11 +272,14 @@ const whitelist = () => {
             handleChange={handleChange}
             step={step}
             setStep={setStep}
+            formError={formError}
             userWhitelistObj={userWhitelistObj}
-            submitApplication={submitApplication}
             continueButtonRef={continueButtonRef}
             upArrowRef={upArrowRef}
             downArrowRef={downArrowRef}
+            validateInputs={validateInputs}
+            emailError={emailError}
+            handleStep={handleStep}
           />
         ) : (
           <ApplicationStatus whiteListStatus={whiteListStatus} />
