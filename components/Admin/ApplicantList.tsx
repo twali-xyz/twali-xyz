@@ -45,7 +45,6 @@ export const ApplicantList = ({
         <CircularProgress thickness="4px" isIndeterminate color="#3C2E26" />
       </Flex>
     );
-  console.log(!!whitelistApplicants?.length, whitelistApplicants);
 
   return (
     <VStack>
