@@ -16,15 +16,8 @@ import { SortApplicants } from "../../components/Admin/SortApplicants";
 import whitelistReducer, { initialState } from "../../context/WhitelistReducer";
 import { useWhitelist } from "../../hooks/useWhitelist";
 import { useWhitelistFilter } from "../../hooks/useWhitelistFilter";
-import {
-  useAccount,
-  useConnect,
-  useDisconnect,
-  useEnsAvatar,
-  useEnsName,
-} from "wagmi";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
 import HeaderNav from "../../components/HeaderNav/HeaderNav";
-import LoadingPage from "../loading";
 
 const whitelist = () => {
   const [filterParams, setFilterParams] = useState();
@@ -34,9 +27,8 @@ const whitelist = () => {
   const [loadingIDX, setLoadingIDX] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { address, connector, isConnected } = useAccount();
-  const { data: ensAvatar } = useEnsAvatar({ addressOrName: address });
-  const { data: ensName } = useEnsName({ address });
+  const { data: accountData } = useAccount();
+
   const {
     connect,
     connectors,
@@ -45,7 +37,11 @@ const whitelist = () => {
     pendingConnector,
   } = useConnect();
   const { disconnect } = useDisconnect();
-  const { data, isLoading: loadingWhitelist, isError } = useWhitelist(address);
+  const {
+    data,
+    isLoading: loadingWhitelist,
+    isError,
+  } = useWhitelist(accountData?.address);
   const {
     data: filteredData,
     isLoading,
@@ -94,9 +90,9 @@ const whitelist = () => {
 
       if (query) {
         await mutate("/api/admin/filterWhitelist/" + query);
-        await mutate("/api/admin/retrieveWhitelist/" + address);
+        await mutate("/api/admin/retrieveWhitelist/" + accountData?.address);
       } else {
-        await mutate("/api/admin/retrieveWhitelist/" + address);
+        await mutate("/api/admin/retrieveWhitelist/" + accountData?.address);
       }
       setLoadingWallet(null);
     };
@@ -155,7 +151,7 @@ const whitelist = () => {
     return null;
   }
 
-  if (!address)
+  if (!accountData?.address)
     return (
       <>
         <Flex
@@ -164,7 +160,9 @@ const whitelist = () => {
           justify={"center"}
           alignItems={"center"}
         >
-          {address && <Text> `Connected to ${address}`</Text>}
+          {accountData?.address && (
+            <Text> `Connected to ${accountData?.address}`</Text>
+          )}
           <VStack>
             {connectors.map((connector) => (
               <Button
@@ -186,7 +184,7 @@ const whitelist = () => {
       </>
     );
 
-  if (address && isError) {
+  if (accountData?.address && isError) {
     return (
       <>
         <Flex
@@ -202,7 +200,7 @@ const whitelist = () => {
   }
   return (
     <>
-      <HeaderNav userWallet={address} />
+      <HeaderNav userWallet={accountData?.address} />
       <Flex flexDir={"row"} pos={"absolute"} top={0} width="100%" zIndex={-1}>
         <FilterInputs
           filterParams={filterParams}
