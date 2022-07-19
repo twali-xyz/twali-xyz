@@ -53,13 +53,13 @@ const LoginPage = (props) => {
     const currAccount = accounts[0];
     console.log(currAccount);
 
-    userState.setData({ ...userState, userWallet: currAccount });
     setIsSubmitted(true);
 
     try {
       let userData: UserData = await getUserByWallet(currAccount);
 
       if (userData && userData.userName && userData.userWallet) {
+        userState.setData({ ...userData });
         router.push(`/${userData.userName}`);
         setIsSubmitted(false);
         return;
@@ -95,6 +95,9 @@ const LoginPage = (props) => {
           email: userWhiteList["email"],
           linkedIn: userWhiteList["linkedIn"],
           discord: userWhiteList["discord"],
+          referredBy: userWhiteList?.referredBy
+            ? userWhiteList["referredBy"]
+            : "",
         });
         router.push("/steps");
         return;

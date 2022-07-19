@@ -48,7 +48,11 @@ export function ProfileInfo({
               src={"twali-assets/editicon.png"}
             />
           </Button>
-          <EditProfileModal isOpen={isExpModalOpen} onClose={onExpModalClose} />
+          <EditProfileModal
+            isOpen={isExpModalOpen}
+            onClose={onExpModalClose}
+            userName={userState.userName}
+          />
         </UserPermissionsRestricted>
       </Flex>
       <HStack marginTop={10} marginBottom={0}>
