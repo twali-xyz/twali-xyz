@@ -266,6 +266,7 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
                   _placeholder={{ color: "subtle" }}
                   fontFamily={"PP Telegraf Light"}
                   name="linkedIn"
+                  value={values?.linkedIn || ""}
                   onChange={handleChange}
                 />
               </FormControl>

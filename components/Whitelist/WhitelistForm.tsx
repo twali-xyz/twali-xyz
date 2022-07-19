@@ -4,6 +4,7 @@ import {
   Fade,
   Flex,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   HStack,
   Img,
@@ -17,12 +18,15 @@ export const WhitelistForm = ({
   handleChange,
   step,
   setStep,
-  submitApplication,
   questions,
   userWhitelistObj,
   continueButtonRef,
   downArrowRef,
   upArrowRef,
+  formError,
+  validateInputs,
+  emailError,
+  handleStep,
 }) => {
   return (
     <Flex flexDir={["column", "column", "row"]}>
@@ -100,7 +104,17 @@ export const WhitelistForm = ({
                     .slice(0, 2)
                     .map((question, idx) => {
                       return (
-                        <FormControl key={idx} width={"42%"}>
+                        <FormControl
+                          key={idx}
+                          width={"42%"}
+                          isInvalid={
+                            formError && !userWhitelistObj[question.name]
+                          }
+                          display={"flex"}
+                          flexDir={"column"}
+                          height={"170px"}
+                          placeContent={"flex-end"}
+                        >
                           {idx === 0 ? (
                             <FormLabel mt={16} mb={6} whiteSpace={"nowrap"}>
                               {question["question"]}
@@ -123,17 +137,33 @@ export const WhitelistForm = ({
                             }}
                             textAlign={"start"}
                             padding={0}
+                            px={"4px !important"}
                             placeholder={question["placeholder"]}
                             transitionProperty={"width"}
                             transitionDuration={".75s"}
-                          ></Input>
+                          />
+                          <FormErrorMessage
+                            pos={"absolute"}
+                            bottom={"-24px"}
+                            fontSize="xs"
+                            fontWeight="400"
+                            color="red.500"
+                          >
+                            {question["name"]} is required
+                          </FormErrorMessage>
                         </FormControl>
                       );
                     })}
                 </HStack>
                 {questions[step]["questions"].slice(2).map((question, idx) => {
                   return (
-                    <FormControl key={idx}>
+                    <FormControl
+                      key={idx}
+                      isInvalid={
+                        (formError && !userWhitelistObj[question.name]) ||
+                        emailError
+                      }
+                    >
                       <FormLabel mt={16} mb={6}>
                         {question["question"]}
                       </FormLabel>
@@ -142,7 +172,6 @@ export const WhitelistForm = ({
                         value={userWhitelistObj[question["name"]] || ""}
                         onChange={handleChange}
                         float={"left"}
-                        marginLeft={"2.5%"}
                         alignSelf={"flex-end"}
                         borderColor={"zing"}
                         borderRadius={0}
@@ -154,11 +183,23 @@ export const WhitelistForm = ({
                         }}
                         textAlign={"start"}
                         padding={0}
+                        px={"4px !important"}
                         placeholder={question["placeholder"]}
                         width={step === 2 ? "55%" : "85%"}
                         transitionProperty={"width"}
                         transitionDuration={".75s"}
                       ></Input>
+                      <FormErrorMessage
+                        pos={"absolute"}
+                        bottom={"-24px"}
+                        fontSize="xs"
+                        fontWeight="400"
+                        color="red.500"
+                      >
+                        {question["name"] === "email"
+                          ? "Valid email is required"
+                          : question["name"] + " is required"}
+                      </FormErrorMessage>
                     </FormControl>
                   );
                 })}{" "}
@@ -166,7 +207,13 @@ export const WhitelistForm = ({
             ) : (
               questions[step]["questions"].map((question, idx) => {
                 return (
-                  <FormControl key={idx}>
+                  <FormControl
+                    key={idx}
+                    display={"flex"}
+                    flexDir={"column"}
+                    height={"196px"}
+                    isInvalid={formError && !userWhitelistObj[question.name]}
+                  >
                     <FormLabel mt={16} mb={6}>
                       {question["question"]}
                     </FormLabel>
@@ -175,8 +222,7 @@ export const WhitelistForm = ({
                       value={userWhitelistObj[question["name"]] || ""}
                       onChange={handleChange}
                       float={"left"}
-                      marginLeft={"2.5%"}
-                      alignSelf={"flex-end"}
+                      alignSelf={"flex-start"}
                       borderColor={"zing"}
                       borderRadius={0}
                       borderTop={"white"}
@@ -187,11 +233,19 @@ export const WhitelistForm = ({
                       }}
                       textAlign={"start"}
                       padding={0}
+                      px={"4px !important"}
                       placeholder={question["placeholder"]}
                       width={step === 2 ? "55%" : "85%"}
                       transitionProperty={"width"}
                       transitionDuration={".75s"}
-                    ></Input>
+                    />
+                    <FormErrorMessage
+                      fontSize="xs"
+                      color="red.500"
+                      fontWeight="400"
+                    >
+                      {question["name"]} is required
+                    </FormErrorMessage>
                   </FormControl>
                 );
               })
@@ -211,12 +265,8 @@ export const WhitelistForm = ({
                 padding={"16px, 24px, 13px, 24px"}
                 bgColor={"zing"}
                 color={"inverse"}
-                marginLeft={"16px "}
-                onClick={() =>
-                  step < 2
-                    ? setStep((prevStep) => prevStep + 1)
-                    : submitApplication()
-                }
+                marginLeft={"0px "}
+                onClick={() => (formError ? null : handleStep())}
               >
                 {step < 2 ? "ok" : "submit"}
               </Button>
@@ -265,7 +315,7 @@ export const WhitelistForm = ({
               border={"1px solid"}
               borderColor={"zing"}
               paddingLeft={"16px !important"}
-              onClick={() => step > 0 && setStep((prevStep) => prevStep - 1)}
+              onClick={() => step > 0 && setStep(step - 1)}
             >
               <svg
                 width="16"
@@ -292,11 +342,7 @@ export const WhitelistForm = ({
               borderColor={"zing"}
               margin={"0 !important"}
               paddingLeft={"16px !important"}
-              onClick={() =>
-                step < 2
-                  ? setStep((prevStep) => prevStep + 1)
-                  : submitApplication()
-              }
+              onClick={() => (validateInputs() ? handleStep() : null)}
             >
               <svg
                 width="16"
