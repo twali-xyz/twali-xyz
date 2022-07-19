@@ -5,6 +5,8 @@ const referralHandler: NextApiHandler = async (req, res) => {
   console.log(JSON.parse(req.body));
   try {
     let info = await data.addReferralData(
+      JSON.parse(req.body)["payload"]["userWallet"],
+
       JSON.parse(req.body)["payload"]["referredBy"]
     );
 

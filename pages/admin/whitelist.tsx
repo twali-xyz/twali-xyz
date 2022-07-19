@@ -112,7 +112,7 @@ const whitelist = () => {
     if (state.userWallet) {
       updateUserWhitelistStatus(state);
     }
-    if (!state.referral && state.whitelistStatus === "approved") {
+    if (state.referral && state.whitelistStatus === "approved") {
       updateReferralStatus(state);
     }
   }, [state]);

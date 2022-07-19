@@ -586,9 +586,6 @@ module.exports = {
    */
   updateWhitelistStatus: async (userWallet, newStatus) => {
     if (!userWallet) return;
-    console.log("UPDATE USER WHITELIST STATUS");
-    console.log(userWallet);
-    console.log(newStatus);
     await getDynamoDBClient()
       .update({
         TableName: "whitelist_table",
@@ -606,19 +603,18 @@ module.exports = {
   },
 
   addReferralData: async (userWallet, referredBy) => {
-      console.log("🚀 ~ file: dynamodb.js ~ line 612 ~ addReferralData: ~ referredBy", referredBy)
+    if (!userWallet || !referredBy) return;
+      let wallet = referredBy.toLowerCase()
       await getDynamoDBClient()
       .update({
         TableName,
         Key: {
-          PK: `USER#0xeba4797Ce6d748FC67Fa8448610934a0413CC3B9`,
-          SK: `USER#0xeba4797Ce6d748FC67Fa8448610934a0413CC3B9`,
+          PK: `USER#${wallet}`,
+          SK: `USER#${wallet}`,
 
         },
-        UpdateExpression: "SET referredBy = list_append(#referredBy, :vals)",
-        ExpressionAttributeNames: {"#referredBy": "referredBy"},
-        ExpressionAttributeValues: {":vals": [userWallet]},
-        
+        UpdateExpression: "SET referredUsers = list_append(:referredUsers, referredUsers)",
+        ExpressionAttributeValues: {":referredUsers": [userWallet]},
       })
       .promise()
       .catch(console.error);
