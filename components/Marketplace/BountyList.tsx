@@ -72,7 +72,7 @@ export const BountyList = ({ contracts, error, sortParams, compare }) => {
                     textDecor: "none",
                     cursor: "pointer",
                   }}
-                  href={`contracts/${contract_id}`}
+                  href={`projects/${contract_id}`}
                   key={idx}
                   width={"100%"}
                 >
