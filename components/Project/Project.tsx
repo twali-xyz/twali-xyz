@@ -10,13 +10,21 @@ import { useBounty } from "../../context/BountyContext";
 import { Bounty, Contract } from "../../utils/interfaces";
 import { useToken } from "../../context/TokenContext";
 
+interface ProjectProps {
+  activeStep?: number;
+  steps?: any;
+  prevStep?: Function;
+  nextStep?: Function;
+  projectData?: Contract;
+}
+
 const Project = ({
   activeStep,
   steps,
   prevStep,
   nextStep,
   projectData
-}) => {
+}: ProjectProps) => {
   const { setBounty, ...bountyState } = useBounty();
   const { setTokenAmount, setTokenName } = useToken();
   const [isBusy, setBusy] = useState(true);
