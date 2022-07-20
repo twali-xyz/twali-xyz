@@ -187,9 +187,7 @@ const SOWBuilderSteps = (props) => {
       nextStep();
     } else if (activeStep === 3) {
       write();
-    } else {
-      formValidation(bountyState);
-
+    } else if (formValidation(bountyState)) {
       nextStep();
     }
   };
@@ -234,8 +232,11 @@ const SOWBuilderSteps = (props) => {
         !bountyState.applicationDeadline ||
         tokenName === "Token" ||
         !tokenAmount ||
+        tokenAmount == 0 ||
         !bountyState.contractExpertise ||
-        !bountyState.contractIndustry
+        !bountyState.contractIndustry ||
+        !bountyState.contractExpertise.filter((item) => item !== "").length ||
+        !bountyState.contractIndustry.filter((item) => item !== "").length
       ) {
         setFormError(true);
         return 0;
