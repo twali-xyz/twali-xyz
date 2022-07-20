@@ -17,6 +17,7 @@ import useUser from "../../context/TwaliContext";
 import { useBounty } from "../../context/BountyContext";
 import { useToken } from "../../context/TokenContext";
 
+
 const HeaderNav = (props) => {
   const whichPage = props.whichPage;
   const isConnectWalletBtn = props.isConnectWalletBtn;

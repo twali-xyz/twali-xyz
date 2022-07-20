@@ -19,6 +19,7 @@ import { useBounty } from "../../context/BountyContext";
 import { useEffect } from "react";
 import { useToken } from "../../context/TokenContext";
 
+
 export const datesAndPricing = ({
   handleChange,
   dueDate,
@@ -118,7 +119,6 @@ export const datesAndPricing = ({
                     Start date and end date are required
                   </FormErrorMessage>
                 </FormControl>
-
                 <FormControl
                   p={2}
                   id="werk-due-date"

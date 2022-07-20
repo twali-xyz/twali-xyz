@@ -71,6 +71,7 @@ const SOWBuilderSteps = (props) => {
     ],
   });
 
+
   useEffect(() => {
     if (!contractData) return;
     setData({
@@ -162,6 +163,14 @@ const SOWBuilderSteps = (props) => {
       body: JSON.stringify({ bounty }),
     });
 
+    return res;
+  };
+
+  const updateSOWToLiveStatus = async (bounty) => {
+    let res = await fetch("/api/marketplace/submitBounty", {
+      method: "POST",
+      body: JSON.stringify({ bounty }),
+    });
     return res;
   };
 
