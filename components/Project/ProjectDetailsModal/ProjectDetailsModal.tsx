@@ -15,6 +15,7 @@ import {
   Text,
   Img,
   VStack,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 
 import DatePicker from "react-date-picker/dist/entry.nostyle";
@@ -29,6 +30,8 @@ const ProjectDetailsModal = (props) => {
   const { editBountyDetails, setBounty, ...bountyState } = useBounty();
   const { tokenName, tokenAmount, calculatedUSD } = useToken();
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const [formError, setFormError] = useState(false);
   const [dueDate, setDueDate] = useState(
     new Date(bountyState?.applicationDeadline * 1000)
   );
@@ -65,55 +68,70 @@ const ProjectDetailsModal = (props) => {
           <ModalHeader mt={"20px"}>Dates & Pricing</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormControl p={2} id="werk-date-range">
-              <VStack alignItems="start" m={0} p={0}>
-                <FormLabel
-                  fontSize={"16px"}
-                  lineHeight={"24px"}
-                  fontWeight={"400"}
-                  fontFamily={"PP Telegraf"}
-                >
-                  <HStack spacing={8} paddingLeft={0}>
-                    <Text>Dates</Text>
-                    {/* <Text>End Date</Text> */}
-                  </HStack>
-                </FormLabel>
-                <DateRangePicker
-                  //   onChange={setStartDate}
-                  //   className={ dateRange[0] && dateRange[1] ? 'date-range' : ''}
-                  calendarIcon={
-                    <Img
-                      // borderRadius="full"
-                      // backgroundColor="transparent"
-                      // width="16px"
-                      src="/twali-assets/calendar.svg"
-                      alt="calendar"
-                    />
-                  }
-                  onChange={setDateRange}
-                  selectRange={true}
-                  // defaultValue={bountyState?.contractStartDate && bountyState?.contractEndDate ? [new Date(bountyState?.contractStartDate * 1000),new Date(bountyState?.contractEndDate * 1000)]: ''}
-                  value={
-                    dateRange
-                      ? [new Date(dateRange[0]), new Date(dateRange[1])]
-                      : undefined
-                  }
-                />
-              </VStack>
-              {/* {errors.companyStart && !companyData.companyStart && (
-                      <Text fontSize="xs" fontWeight="400" color="red.500">
-                        {errors.companyStart}
-                      </Text>
-                    )} */}
-            </FormControl>
-
-            <FormControl p={2} id="werk-due-date">
+            <FormControl
+              p={2}
+              id="werk-date-range"
+              height={"108px"}
+              isRequired
+              isInvalid={formError && !dateRange}
+            >
               <FormLabel
                 fontSize={"16px"}
                 lineHeight={"24px"}
                 fontWeight={"400"}
                 fontFamily={"PP Telegraf"}
               >
+                Start Date - End Date
+                {/* <Text>End Date</Text> */}
+              </FormLabel>
+              <DateRangePicker
+                //   onChange={setStartDate}
+                //   className={ dateRange[0] && dateRange[1] ? 'date-range' : ''}
+                calendarIcon={
+                  <Img
+                    // borderRadius="full"
+                    // backgroundColor="transparent"
+                    // width="16px"
+                    src="/twali-assets/calendar.svg"
+                    alt="calendar"
+                  />
+                }
+                onChange={(range) => {
+                  setDateRange(range);
+                  let start;
+                  let end;
+                  if (range) {
+                    start = new Date(range[0]);
+                    end = new Date(range[1]);
+                  }
+                }}
+                name="dateRange"
+                selectRange={true}
+                value={
+                  dateRange
+                    ? [new Date(dateRange[0]), new Date(dateRange[1])]
+                    : undefined
+                }
+              />
+              <FormErrorMessage fontSize="xs" fontWeight="400" color="red.500">
+                Start date and end date are required
+              </FormErrorMessage>
+            </FormControl>
+
+            <FormControl
+              p={2}
+              id="werk-due-date"
+              height={"108px"}
+              isRequired
+              isInvalid={formError && !dueDate}
+            >
+              <FormLabel
+                fontSize={"16px"}
+                lineHeight={"24px"}
+                fontWeight={"400"}
+                fontFamily={"PP Telegraf"}
+              >
+                Application Deadline
                 Due Date
               </FormLabel>
               <DatePicker
@@ -129,8 +147,18 @@ const ProjectDetailsModal = (props) => {
                 onChange={setDueDate}
                 value={dueDate ? new Date(dueDate) : undefined}
               />
+              <FormErrorMessage fontSize="xs" fontWeight="400" color="red.500">
+                Application deadline is required
+              </FormErrorMessage>
             </FormControl>
-            <WerkTokenDropdown />
+            <FormControl
+              isInvalid={formError && (tokenName === "Token" || !tokenAmount)}
+            >
+              <WerkTokenDropdown />
+              <FormErrorMessage fontSize="xs" fontWeight="400" color="red.500">
+                Token and amount are required
+              </FormErrorMessage>
+            </FormControl>
           </ModalBody>
 
           <ModalFooter>
@@ -138,6 +166,15 @@ const ProjectDetailsModal = (props) => {
               variant="primary"
               size={"sm"}
               onClick={() => {
+                if (
+                  !dueDate ||
+                  !dateRange ||
+                  tokenName === "Token" ||
+                  !tokenAmount
+                ) {
+                  setFormError(true);
+                  return;
+                }
                 setIsSubmitted(true);
                 handleDates(dateRange, dueDate);
                 props.onClose();

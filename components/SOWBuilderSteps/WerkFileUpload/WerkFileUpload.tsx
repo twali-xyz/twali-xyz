@@ -165,7 +165,7 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
   };
 
   return (
-    <FormControl p={2} pb={0} id="werk-title" isRequired>
+    <FormControl p={2} pb={0} id="werk-title">
       <FormLabel
         marginBottom={1}
         pos={"relative"}

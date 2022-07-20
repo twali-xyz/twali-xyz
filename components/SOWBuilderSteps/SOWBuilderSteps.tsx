@@ -35,6 +35,7 @@ const SOWBuilderSteps = (props) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [dueDate, setDueDate] = useState(new Date());
   const [dateRange, setDateRange] = useState([new Date(), new Date()]);
+  const [formError, setFormError] = useState(false);
   const [userData, setUserData] = useState<UserData>({
     ...userState,
     // userName: "",
@@ -84,7 +85,7 @@ const SOWBuilderSteps = (props) => {
           description: `${bountyState.contractTitle} is up on the marketplace.`,
           status: "success",
           variant: "subtle",
-          duration: 5000,
+          duration: 6000,
           isClosable: true,
         });
         let bounty = {
@@ -133,6 +134,7 @@ const SOWBuilderSteps = (props) => {
   let prevStep = props.prevStep;
 
   const handleChange = (evt) => {
+    setFormError(false);
     try {
       evt.persist();
     } catch (error) {}
@@ -181,7 +183,7 @@ const SOWBuilderSteps = (props) => {
   const steps = [
     {
       label: "Statement of Werk",
-      content: statementOfWerk({ handleChange }),
+      content: statementOfWerk({ handleChange, formError }),
     },
     {
       label: "Dates & Pricing",
@@ -191,6 +193,7 @@ const SOWBuilderSteps = (props) => {
         setDueDate,
         dateRange,
         setDateRange,
+        formError,
       }),
     },
     {
@@ -232,6 +235,7 @@ const SOWBuilderSteps = (props) => {
   };
 
   const handleSubmit = () => {
+    if (!formValidation(bountyState)) return;
     if (activeStep === 1) {
       handleDates(dateRange, dueDate);
       nextStep();
@@ -253,6 +257,8 @@ const SOWBuilderSteps = (props) => {
     } else if (activeStep === 3) {
       write();
     } else {
+      formValidation(bountyState);
+
       nextStep();
     }
   };
@@ -284,6 +290,28 @@ const SOWBuilderSteps = (props) => {
     // }
   };
 
+  const formValidation = (bountyState) => {
+    if (activeStep === 0) {
+      if (!bountyState.contractTitle || !bountyState.contractDescription) {
+        setFormError(true);
+        return 0;
+      }
+    } else if (activeStep === 1) {
+      if (
+        !bountyState.contractStartDate ||
+        !bountyState.contractEndDate ||
+        !bountyState.applicationDeadline ||
+        tokenName === "Token" ||
+        !tokenAmount ||
+        !bountyState.contractExpertise ||
+        !bountyState.contractIndustry
+      ) {
+        setFormError(true);
+        return 0;
+      }
+    }
+    return 1;
+  };
   return (
     <>
       {activeStep === 2 ? (
@@ -293,6 +321,7 @@ const SOWBuilderSteps = (props) => {
           nextStep={handleSubmit}
           steps={steps}
           handleChange={handleChange}
+          formError={formError}
         />
       ) : (
         <>

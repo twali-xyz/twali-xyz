@@ -82,6 +82,7 @@ const ProjectDetails = (props) => {
               <ProjectDetailsModal
                 isOpen={isProjectDetailsModalOpen}
                 onClose={onProjectDetailsModalClose}
+                formError={props.formError}
               />
             </HStack>
             <HStack paddingTop="20px" paddingBottom="20px">

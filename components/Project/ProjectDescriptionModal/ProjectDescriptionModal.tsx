@@ -16,6 +16,7 @@ import {
   Textarea,
   Heading,
   VStack,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { useBounty } from "../../../context/BountyContext";
 import WerkFileUpload from "../../SOWBuilderSteps/WerkFileUpload/WerkFileUpload";
@@ -23,8 +24,11 @@ import WerkFileUpload from "../../SOWBuilderSteps/WerkFileUpload/WerkFileUpload"
 const ProjectDescriptionModal = (props) => {
   const finalRef = useRef();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const { editBountyDescription, ...bountyState} = useBounty();
-  const [contractDescription, setContractDescription] = useState('');
+  const [formError, setFormError] = useState(false);
+  const { editBountyDescription, ...bountyState } = useBounty();
+  const [contractDescription, setContractDescription] = useState(
+    bountyState.contractDescription
+  );
 
   return (
     <>
@@ -40,11 +44,16 @@ const ProjectDescriptionModal = (props) => {
           border={"1px solid rgba(88, 112, 112, 1)"}
           fontFamily={"PP Telegraf Light"}
         >
-        <ModalHeader mt={"20px"}>Statement of Werk</ModalHeader>
+          <ModalHeader mt={"20px"}>Statement of Werk</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form style={{ alignSelf: "center" }}>
-              <FormControl p={2} id="project-title" isRequired>
+              <FormControl
+                p={2}
+                id="project-title"
+                isRequired
+                isInvalid={formError && !contractDescription}
+              >
                 <FormLabel
                   fontSize={"16px"}
                   lineHeight={"24px"}
@@ -53,41 +62,59 @@ const ProjectDescriptionModal = (props) => {
                   Description
                 </FormLabel>
                 <Textarea
-                px={2}
-                fontSize="16px"
-                borderColor={"n3"}
-                height={"250px"}
-                borderRadius={"4px"}
-                marginBottom={"4px"}
-                // isInvalid={errors.currTitle}
-                errorBorderColor="red.300"
-                fontFamily={"PP Telegraf light"}
-                _placeholder={{ color: "subtle" }}
-                // value={values?.currTitle || ""}
-                defaultValue={bountyState?.contractDescription ? bountyState?.contractDescription : ''}
-                required
-                placeholder="Max Word Limit"
-                name="currTitle"
-                onChange={(evt) => setContractDescription(evt.target.value)}
-              />
+                  px={2}
+                  fontSize="16px"
+                  borderColor={"n3"}
+                  height={"250px"}
+                  borderRadius={"4px"}
+                  marginBottom={"4px"}
+                  // isInvalid={errors.currTitle}
+                  errorBorderColor="red.300"
+                  fontFamily={"PP Telegraf light"}
+                  _placeholder={{ color: "subtle" }}
+                  // value={values?.currTitle || ""}
+                  defaultValue={contractDescription ? contractDescription : ""}
+                  required
+                  placeholder="Max Word Limit"
+                  name="currTitle"
+                  onChange={(evt) => setContractDescription(evt.target.value)}
+                />
                 {/* {errors.firstName &&
                   (!userState.firstName || !values.firstName) && (
                     <Text fontSize="xs" fontWeight="400" color="red.500">
                       {errors.firstName}
                     </Text>
                   )} */}
+                <FormErrorMessage
+                  fontSize="xs"
+                  fontWeight="400"
+                  color="red.500"
+                >
+                  Description is required
+                </FormErrorMessage>
               </FormControl>
-              <WerkFileUpload/>
+              <WerkFileUpload />
             </form>
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="primary" size={"sm"} onClick={() => {
-              setIsSubmitted(true);
-              editBountyDescription(contractDescription, bountyState?.attachedFiles);
-              props.onClose();
-              setIsSubmitted(false);
-              }}>
+            <Button
+              variant="primary"
+              size={"sm"}
+              onClick={() => {
+                if (!contractDescription) {
+                  setFormError(true);
+                  return;
+                }
+                setIsSubmitted(true);
+                editBountyDescription(
+                  contractDescription,
+                  bountyState?.attachedFiles
+                );
+                props.onClose();
+                setIsSubmitted(false);
+              }}
+            >
               Save{" "}
               {isSubmitted ? (
                 <CircularProgress
