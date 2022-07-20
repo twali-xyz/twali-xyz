@@ -15,7 +15,7 @@ import {
   ListItem,
   ListIcon,
   Flex,
-  Img
+  Img,
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 import { truncate } from "../../../utils/marketplaceUtils";
@@ -24,10 +24,9 @@ import { useBounty } from "../../../context/BountyContext";
 import { UserData } from "../../../utils/interfaces";
 import useUser from "../../../context/TwaliContext";
 import axios from "axios";
+import path from "path";
 
-type WerkFileUploadProps = {
-
-};
+type WerkFileUploadProps = {};
 
 const WerkFileUpload = (props: WerkFileUploadProps) => {
   const [timestamp, setTimestamp] = useState(Date.now());
@@ -38,9 +37,9 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isFileTooBig, setIsFileTooBig] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
-
+  const [isUploadError, setIsUploadError] = useState(false);
   const { setData, ...userState } = useUser();
-  const { setBounty, editBountyDescription, ...bountyState} = useBounty();
+  const { setBounty, editBountyDescription, ...bountyState } = useBounty();
   const [userData, setUserData] = useState<UserData>({
     ...userState,
     // userName: "",
@@ -48,7 +47,6 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
     // uuid: "",
     setData,
   });
-
 
   const handleOpen = () => {
     if (inputRef.current) {
@@ -58,9 +56,11 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
 
   const changeHandler = (event) => {
     setIsUploaded(false);
+    setIsUploadError(false);
     let finalFile = event.target.files[0];
     let allFiles = selectedFiles;
     const fileSize = Math.round(finalFile.size / 1024);
+
     if (fileSize >= 1024) {
       setIsFileTooBig(true);
     } else {
@@ -92,6 +92,8 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
     formData.append("file", file);
     formData.append("userWallet", userData?.userWallet);
     formData.append("contractID", bountyState?.contractID);
+    let currAttachedFiles = bountyState.attachedFiles;
+    console.log(formData);
 
     axios
       .request({
@@ -105,12 +107,25 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
       .then((data) => {
         setTimestamp(Date.now());
         checkIfUploadIsCompleted(data);
-        let currAttachedFiles = bountyState.attachedFiles;
-        currAttachedFiles.push(file.name);
+        currAttachedFiles.push(path.parse(file.name).name);
         setBounty({
           ...bountyState,
-          attachedFiles: currAttachedFiles
+          attachedFiles: currAttachedFiles,
         });
+        setIsUploaded(true);
+      })
+      .catch((err) => {
+        setIsUploadError(true);
+        let allFiles = selectedFiles.filter((currFile) => {
+          return currFile.name !== file.name;
+        });
+        setSelectedFile(null);
+        setIsSelected(false);
+        setSelectedFiles(allFiles);
+        setTimeout(function () {
+          setIsUploadError(false);
+        }, 3000);
+        console.log(err);
       });
   };
 
@@ -127,21 +142,27 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
         data: formData,
       })
       .then((data) => {
-        let allFiles = selectedFiles.filter(currFile => {
+        let allFiles = selectedFiles.filter((currFile) => {
           return currFile.name !== file.name;
         });
         setSelectedFiles(allFiles);
+        setBounty({
+          ...bountyState,
+          attachedFiles: allFiles,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-  }
+  };
 
-    const handleSubmission = (evt) => {
-      evt.preventDefault();
-        if (selectedFile) {
-          uploadFile(selectedFile);
-          setIsSubmitted(false);
-          setIsUploaded(true);
-        }
+  const handleSubmission = (evt) => {
+    evt.preventDefault();
+    if (selectedFile) {
+      uploadFile(selectedFile);
+      setIsSubmitted(false);
     }
+  };
 
   return (
     <FormControl p={2} pb={0} id="werk-title" isRequired>
@@ -158,36 +179,38 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
       >
         Upload related files
       </FormLabel>
-        <VStack spacing={8}>
-            <input type='file'
-					   onChange={changeHandler}
-					  //  accept={acceptedFileTypes}
-					   name="attachedFiles"
-					   ref={inputRef}
-					   style={{display: 'none'}} />
-            
-            <Input
-                cursor="pointer"
-                px={2}
-                fontSize="16px"
-                borderColor={"n3"}
-                height={"40px"}
-                borderRadius={"4px"}
-                marginBottom={"4px"}
-                // isInvalid={errors.attachedFiles}
-                errorBorderColor="red.300"
-                fontFamily={"PP Telegraf light"}
-                _placeholder={{ color: "subtle" }}
-                // value={values?.attachedFiles || ""}
-                required
-                placeholder=".pdf, .word, .zip, .png, .jpeg"
-                name="attachedFiles"
-                onClick={handleOpen}
-                readOnly={true}
-                // onChange={changeHandler}
-                // ref={inputRef}
-              />
-              {/* <Text
+      <VStack spacing={8}>
+        <input
+          type="file"
+          onChange={changeHandler}
+          //  accept={acceptedFileTypes}
+          name="attachedFiles"
+          ref={inputRef}
+          style={{ display: "none" }}
+        />
+
+        <Input
+          cursor="pointer"
+          px={2}
+          fontSize="16px"
+          borderColor={"n3"}
+          height={"40px"}
+          borderRadius={"4px"}
+          marginBottom={"4px"}
+          // isInvalid={errors.attachedFiles}
+          errorBorderColor="red.300"
+          fontFamily={"PP Telegraf light"}
+          _placeholder={{ color: "subtle" }}
+          // value={values?.attachedFiles || ""}
+          required
+          placeholder=".pdf, .word, .zip, .png, .jpeg"
+          name="attachedFiles"
+          onClick={handleOpen}
+          readOnly={true}
+          // onChange={changeHandler}
+          // ref={inputRef}
+        />
+        {/* <Text
                 fontSize="xs"
                 height={"20.5px"}
                 fontWeight="400"
@@ -196,32 +219,35 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
               >
                 {errors.attachedFiles}
               </Text> */}
-              { selectedFiles ? (
-                  <List alignSelf="flex-start">
-                {selectedFiles.map((file, idx) => {
-                    return (
-                    <HStack spacing={2}>
-                    <Img
-                    src="twali-assets/circle-tick.svg"
-                    />
-                    <ListItem 
-                    fontSize='16px' 
+        {selectedFiles ? (
+          <List alignSelf="flex-start">
+            {selectedFiles.map((file, idx) => {
+              return (
+                <HStack spacing={2} key={file + idx}>
+                  <Img src="twali-assets/circle-tick.svg" />
+                  <ListItem
+                    fontSize="16px"
                     color="aqua"
                     fontFamily="PP Telegraf"
                     fontStyle="normal"
                     fontWeight="300"
                     lineHeight="24px"
                     letterSpacing="0.02em"
-                    >
-                      <Text>{truncate(file.name)}</Text>
-                      </ListItem>
-                      <ListIcon as={CloseIcon} color="whiteAlpha.400" fontSize="14px" onClick={() => handleRemoveWerkFile(file)}/>
-                      </HStack>
-                    )
-                })}
-                </List>
-              ): null}
-          {isFileTooBig ? (
+                  >
+                    <Text>{truncate(file.name)}</Text>
+                  </ListItem>
+                  <ListIcon
+                    as={CloseIcon}
+                    color="whiteAlpha.400"
+                    fontSize="14px"
+                    onClick={() => handleRemoveWerkFile(file)}
+                  />
+                </HStack>
+              );
+            })}
+          </List>
+        ) : null}
+        {isFileTooBig ? (
           <Alert width={500} status="error" marginInlineStart="48px">
             <AlertIcon />
             <Text
@@ -232,6 +258,27 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
               pos={"relative"}
             >
               Oops! Your file is too big. Please upload again! (less than 1MB)
+            </Text>
+          </Alert>
+        ) : isUploadError ? (
+          <Alert
+            width={500}
+            status="error"
+            marginInlineStart="48px"
+            justifyContent={"center"}
+            alignItems={"center"}
+          >
+            <AlertIcon ml={5} />
+            <Text
+              fontFamily={"PP Telegraf"}
+              fontSize="14px"
+              lineHeight={"24px"}
+              fontWeight={"400"}
+              pos={"relative"}
+              whiteSpace={"pre-wrap"}
+            >
+              Oops! There was an error uploading your file. Please upload a
+              different file.
             </Text>
           </Alert>
         ) : isUploaded && !isFileTooBig ? (
@@ -247,8 +294,8 @@ const WerkFileUpload = (props: WerkFileUploadProps) => {
               Your file was uploaded!
             </Text>
           </Alert>
-        ): null}
-          {isSelected && (
+        ) : null}
+        {isSelected && (
           <Button
             variant="primary"
             size={"md"}

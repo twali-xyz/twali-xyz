@@ -1,43 +1,55 @@
 import {
-    FormControl,
-    Box,
-    FormLabel,
-    HStack,
-    Img,
-    Text,
-    VStack,
-  } from "@chakra-ui/react";
+  FormControl,
+  Box,
+  FormLabel,
+  HStack,
+  Img,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 
-  import DatePicker from "react-date-picker/dist/entry.nostyle";
-  import DateRangePicker from "@wojtekmaj/react-daterange-picker/dist/entry.nostyle";
-  import { functionalExpertiseList } from "../../utils/functionalExpertiseConstants";
-  import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
-  import { MultiSelect } from "../reusable/MultiSelect";
-  import { WerkTokenDropdown } from "./WerkTokenDropdown";
-  import { useBounty } from "../../context/BountyContext";
+import DatePicker from "react-date-picker/dist/entry.nostyle";
+import DateRangePicker from "@wojtekmaj/react-daterange-picker/dist/entry.nostyle";
+import { functionalExpertiseList } from "../../utils/functionalExpertiseConstants";
+import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
+import { MultiSelect } from "../reusable/MultiSelect";
+import { WerkTokenDropdown } from "./WerkTokenDropdown";
+import { useBounty } from "../../context/BountyContext";
+import { useEffect } from "react";
 
-  export const datesAndPricing = ({ 
-    handleChange,
-    dueDate, 
-    setDueDate, 
-    dateRange, 
-    setDateRange,
-   }) => {
-    const { setBounty, ...bountyState} = useBounty();
+export const datesAndPricing = ({
+  handleChange,
+  dueDate,
+  setDueDate,
+  dateRange,
+  setDateRange,
+}) => {
+  const { setBounty, ...bountyState } = useBounty();
 
-    return (
-        <form 
-        style={{ alignSelf: "start" }}
-        >
-    <HStack spacing={24}>
+  useEffect(() => {
+    setBounty({
+      ...bountyState,
+      contractStartDate: new Date(dateRange[0]),
+      contractEndDate: new Date(dateRange[1]),
+    });
+  }, [dateRange]);
+  useEffect(() => {
+    setBounty({
+      ...bountyState,
+      applicationDeadline: dueDate,
+    });
+  }, [dueDate]);
+  return (
+    <form style={{ alignSelf: "start" }}>
+      <HStack spacing={24}>
         <Box
           maxWidth={"496px"}
-        //   h="100%"
+          //   h="100%"
           height="450px"
           w="xl"
           borderWidth="1px"
           borderRadius="lg"
-        //   overflow="hidden"
+          //   overflow="hidden"
           cursor="pointer"
           backgroundColor={"n6"}
           opacity={"90%"}
@@ -49,69 +61,79 @@ import {
               fontWeight="semibold"
               as="h4"
               lineHeight="tight"
-            //   isTruncated
-            >   <VStack alignItems="start" m={0} p={0}>
+              //   isTruncated
+            >
+              {" "}
+              <VStack alignItems="start" m={0} p={0}>
                 <FormControl p={2} id="werk-date-range">
-                        <FormLabel
-                        fontSize={"16px"}
-                        lineHeight={"24px"}
-                        fontWeight={"400"}
-                        fontFamily={"PP Telegraf"}
-                        >
-                        <HStack spacing={8} paddingLeft={0}>
-                        <Text>Dates</Text>
-                        {/* <Text>End Date</Text> */}
-                        </HStack>
-                        </FormLabel>                    
-                    <DateRangePicker
+                  <FormLabel
+                    fontSize={"16px"}
+                    lineHeight={"24px"}
+                    fontWeight={"400"}
+                    fontFamily={"PP Telegraf"}
+                  >
+                    <HStack spacing={8} paddingLeft={0}>
+                      <Text>Dates</Text>
+                      {/* <Text>End Date</Text> */}
+                    </HStack>
+                  </FormLabel>
+                  <DateRangePicker
                     //   onChange={setStartDate}
                     //   className={ dateRange[0] && dateRange[1] ? 'date-range' : ''}
-                      calendarIcon={<Img
+                    calendarIcon={
+                      <Img
                         // borderRadius="full"
                         // backgroundColor="transparent"
                         // width="16px"
                         src="/twali-assets/calendar.svg"
                         alt="calendar"
-                        />}
-                      onChange={setDateRange}
+                      />
+                    }
+                    onChange={setDateRange}
                     name="dateRange"
-                      selectRange={true}
-                      value={dateRange ? [new Date(dateRange[0]), new Date(dateRange[1])]: undefined}
-                    />
-                    {/* {errors.companyStart && !companyData.companyStart && (
+                    selectRange={true}
+                    value={
+                      dateRange
+                        ? [new Date(dateRange[0]), new Date(dateRange[1])]
+                        : undefined
+                    }
+                  />
+                  {/* {errors.companyStart && !companyData.companyStart && (
                       <Text fontSize="xs" fontWeight="400" color="red.500">
                         {errors.companyStart}
                       </Text>
                     )} */}
-                    </FormControl>
+                </FormControl>
 
-                    <FormControl p={2} id="werk-due-date">
-                    <FormLabel
-                        fontSize={"16px"}
-                        lineHeight={"24px"}
-                        fontWeight={"400"}
-                        fontFamily={"PP Telegraf"}
-                        >
-                        Due Date
-                        </FormLabel>
-                        <DatePicker
-                            calendarIcon={<Img
-                              // borderRadius="full"
-                              // backgroundColor="transparent"
-                              // width="16px"
-                              src="/twali-assets/calendar.svg"
-                              alt="calendar"
-                              />}
-                            onChange={setDueDate}
-                            value={dueDate ? new Date(dueDate): undefined}
-                        />
-                    </FormControl>
-                      <WerkTokenDropdown />
-                    </VStack>
+                <FormControl p={2} id="werk-due-date">
+                  <FormLabel
+                    fontSize={"16px"}
+                    lineHeight={"24px"}
+                    fontWeight={"400"}
+                    fontFamily={"PP Telegraf"}
+                  >
+                    Due Date
+                  </FormLabel>
+                  <DatePicker
+                    calendarIcon={
+                      <Img
+                        // borderRadius="full"
+                        // backgroundColor="transparent"
+                        // width="16px"
+                        src="/twali-assets/calendar.svg"
+                        alt="calendar"
+                      />
+                    }
+                    onChange={setDueDate}
+                    value={dueDate ? new Date(dueDate) : undefined}
+                  />
+                </FormControl>
+                <WerkTokenDropdown />
+              </VStack>
             </Box>
           </Box>
         </Box>
-      {/* </form>
+        {/* </form>
       <form 
       style={{ alignSelf: "start" }}
       > */}
@@ -121,7 +143,7 @@ import {
           w="xl"
           borderWidth="1px"
           borderRadius="lg"
-        //   overflow="hidden"
+          //   overflow="hidden"
           cursor="pointer"
           backgroundColor={"n6"}
           opacity={"90%"}
@@ -133,7 +155,7 @@ import {
               fontWeight="semibold"
               as="h4"
               lineHeight="tight"
-            //   isTruncated
+              //   isTruncated
             >
               <MultiSelect
                 name={"contractExpertise"}
@@ -155,8 +177,7 @@ import {
             </Box>
           </Box>
         </Box>
-        </HStack>
-      </form>
-    );
-  };
-  
+      </HStack>
+    </form>
+  );
+};

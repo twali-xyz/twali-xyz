@@ -127,7 +127,7 @@ const ProjectDetails = (props) => {
                 Budget
               </Text>
               <Text fontSize="sm" color="primary">
-                {tokenAmount} {tokenName}
+                {bountyState.contractAmount} {bountyState.tokenName}
               </Text>
             </HStack>
           </Flex>

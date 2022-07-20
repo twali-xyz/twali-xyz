@@ -10,6 +10,7 @@ import {
 import { useRouter } from "next/router";
 import { handleWalletConnect } from "../../utils/walletUtils";
 import Link from "next/link";
+import { useEnsName } from "wagmi";
 
 const HeaderNav = (props) => {
   const whichPage = props.whichPage;
@@ -17,6 +18,13 @@ const HeaderNav = (props) => {
   const setUserData = props.setUserData;
   const userPage = props.userPage;
   const userWallet = props.userWallet;
+  const {
+    data: ensData,
+    isError: ensError,
+    isLoading: ensLoading,
+  } = useEnsName({
+    address: userWallet,
+  });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const router = useRouter();
@@ -95,7 +103,7 @@ const HeaderNav = (props) => {
                 height={"32px"}
               >
                 <Flex
-                  pl={2}
+                  px={2}
                   mr={"0 !important"}
                   width={"100%"}
                   height={"100%"}
@@ -116,9 +124,9 @@ const HeaderNav = (props) => {
                     letterSpacing={"0.06em"}
                     textTransform={"uppercase"}
                     padding="4px 8px"
-                    isTruncated
+                    noOfLines={1}
                   >
-                    {userWallet}
+                    {ensData || userWallet}
                   </Text>
                 </Flex>
               </HStack>

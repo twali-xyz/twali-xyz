@@ -16,7 +16,7 @@ export const initialState = {
   applicationDeadline: 0,
   contractIndustry: [""],
   contractExpertise: [""],
-  contractStatus: "live",
+  contractStatus: "draft",
   contractURI: "",
   attachedFiles: [],
   setBounty: Function,

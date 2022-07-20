@@ -20,7 +20,6 @@ uploadWerkFileHandler.post(async (req: any, res) => {
   const s3 = new aws.S3({
     region: "us-east-1",
   });
-  console.log(req);
 
   let file = req.files.file[0];
   let userWallet = req.body.userWallet[0];
