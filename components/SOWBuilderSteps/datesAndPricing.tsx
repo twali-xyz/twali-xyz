@@ -19,6 +19,7 @@ import { useBounty } from "../../context/BountyContext";
 import { useEffect } from "react";
 import { useToken } from "../../context/TokenContext";
 
+
 export const datesAndPricing = ({
   handleChange,
   dueDate,
@@ -29,7 +30,6 @@ export const datesAndPricing = ({
 }) => {
   const { setBounty, ...bountyState } = useBounty();
   const { tokenName, tokenAmount } = useToken();
-
   return (
     <form style={{ alignSelf: "start" }}>
       <HStack spacing={24}>
@@ -75,6 +75,7 @@ export const datesAndPricing = ({
                   >
                     Start Date - End Date
                     {/* <Text>End Date</Text> */}
+
                   </FormLabel>
                   <DateRangePicker
                     //   onChange={setStartDate}
@@ -118,7 +119,6 @@ export const datesAndPricing = ({
                     Start date and end date are required
                   </FormErrorMessage>
                 </FormControl>
-
                 <FormControl
                   p={2}
                   id="werk-due-date"
