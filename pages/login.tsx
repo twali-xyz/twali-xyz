@@ -94,9 +94,20 @@ const LoginPage = (props) => {
             ? userWhiteList["referredBy"]
             : "",
         });
-        router.push("/steps");
-        return;
+        try {
+          let userData: UserData = await getUserByWallet(currAccount);
+
+          if (userData && userData.userName && userData.userWallet) {
+            router.push(`/${userData.userName}`);
+            setIsSubmitted(false);
+            return;
+          }
+        } catch (err) {
+          console.log("error: ", err);
+        }
       }
+      router.push("/steps");
+      return;
     } catch (err) {
       console.log("error: ", err);
       if (referredBy) {
