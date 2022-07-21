@@ -32,7 +32,7 @@ const whitelist = () => {
   } = useWhitelistStatus(userWallet);
   const [whiteListStatus, setWhiteListStatus] = useState(""); // "", pending, approved, rejected
   const [state, dispatch] = useReducer(whitelistReducer, initialState);
-  const [isSubmitted, setIsSubmitted] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
   // referrence for "go"/"submit" button to check if it is focused
   // needed to prevent advancing two steps instead of one if user if focusing on the button while using enter to advance
   const continueButtonRef = React.useRef(null);

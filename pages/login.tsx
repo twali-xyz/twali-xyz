@@ -96,7 +96,7 @@ const LoginPage = (props) => {
         });
         try {
           let userData: UserData = await getUserByWallet(currAccount);
-
+          userState.setData(userData);
           if (userData && userData.userName && userData.userWallet) {
             router.push(`/${userData.userName}`);
             setIsSubmitted(false);
