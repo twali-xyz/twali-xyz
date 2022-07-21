@@ -17,7 +17,7 @@ const getDynamoDBClient = () => {
     ? new AWS.DynamoDB.DocumentClient({
         region: "us-east-1",
         // Only needed with local development.
-        endpoint: "http://localhost:8000",
+        // endpoint: "http://localhost:8000",
       })
     : new AWS.DynamoDB.DocumentClient(options);
 
@@ -545,7 +545,7 @@ module.exports = {
 
         KeyConditionExpression: "userWallet = :PK",
         ExpressionAttributeValues: {
-          ":PK": `${userWallet}`,
+          ":PK": `${userWallet.toLowerCase()}`,
         },
       })
       .promise()
