@@ -63,6 +63,7 @@ export default function ProfileExpertise({
             <EditExpertiseModal
               isOpen={isProfileModalOpen}
               onClose={onProfileModalClose}
+              userName={userState.userName}
             />
           </UserPermissionsRestricted>
         </HStack>
