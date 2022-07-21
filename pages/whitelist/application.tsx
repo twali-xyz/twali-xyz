@@ -300,7 +300,8 @@ const whitelist = () => {
             />
           ) : (
             !isLoading &&
-            !isError && (
+            !isError &&
+            fetchedStatus?.whitelistStatus !== "approved" && (
               <>
                 <ApplicationStatus
                   whiteListStatus={
