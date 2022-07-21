@@ -215,7 +215,6 @@ export const pageDisconnectedFallback = () => {
             fontWeight="semibold"
             as="h4"
             lineHeight="tight"
-            noOfLines={1}
           >
             <Text
               marginTop="46px"

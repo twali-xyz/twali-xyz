@@ -119,6 +119,7 @@ const HeaderNav = (props) => {
                   letterSpacing={"0.06em"}
                   padding="4px 16px"
                 >
+<<<<<<< HEAD
                   {`${userWallet.substring(0, 5)}...${userWallet.substring(
                     userWallet.length - 4
                   )}`.toLowerCase()}
@@ -182,6 +183,22 @@ const HeaderNav = (props) => {
                     </Link>
                   </MenuList>
                 </Menu>
+=======
+                  <Text
+                    color={"fresh"}
+                    maxW={["80px", "190px"]}
+                    fontSize={"14px"}
+                    margin={"auto"}
+                    alignSelf={"center"}
+                    fontWeight={"700"}
+                    letterSpacing={"0.06em"}
+                    textTransform={"uppercase"}
+                    padding="4px 8px"
+                  >
+                    {userWallet}
+                  </Text>
+                </Flex>
+>>>>>>> staging
               </HStack>
             </>
           )

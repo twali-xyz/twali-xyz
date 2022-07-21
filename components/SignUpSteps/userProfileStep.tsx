@@ -24,7 +24,16 @@ export const userProfileStep = ({ handleChange, values, errors }) => {
         boxShadow={"8px 16px 24px 0px #062B2A8F"}
       >
         <Box p="4">
+<<<<<<< HEAD
           <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight">
+=======
+          <Box
+            mt="1"
+            fontWeight="semibold"
+            as="h4"
+            lineHeight="tight"
+          >
+>>>>>>> staging
             <HStack height={"90px"} spacing={2}>
               <FormControl px={2} py={1} mx={1} id="first-name" isRequired>
                 <FormLabel
