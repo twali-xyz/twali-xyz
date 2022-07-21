@@ -201,11 +201,13 @@ const whitelist = () => {
     if (!state.userWallet) return;
 
     const addUserToWhitelist = async (payload) => {
+      setIsSubmitted(true);
       await fetch(`/api/admin/addUser`, {
         method: "PUT",
         body: JSON.stringify({ payload }),
       });
-      setWhiteListStatus("submitted");
+      setWhiteListStatus("pending");
+      setIsSubmitted(false);
     };
     addUserToWhitelist(state);
   }, [state]);
@@ -297,6 +299,7 @@ const whitelist = () => {
               validateInputs={validateInputs}
               emailError={emailError}
               handleStep={handleStep}
+              isSubmitted={isSubmitted}
             />
           ) : (
             !isLoading &&

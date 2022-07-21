@@ -571,14 +571,6 @@ const CompanyModal = (props) => {
                 {userState.companyInfo.length === props.currCompany
                   ? "Cancel"
                   : "Delete"}
-                {isSubmitted ? (
-                  <CircularProgress
-                    size="22px"
-                    thickness="4px"
-                    isIndeterminate
-                    color="#3C2E26"
-                  />
-                ) : null}
               </Button>
               <Button
                 isDisabled={companyData?.companyName === "" || isDisabled}

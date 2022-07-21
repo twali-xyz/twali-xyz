@@ -26,16 +26,7 @@ export const statementOfWerk = ({ values }) => {
           boxShadow={"8px 16px 24px 0px #062B2A8F"}
         >
           <Box p="4">
-<<<<<<< HEAD
             <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight">
-=======
-            <Box
-              mt="1"
-              fontWeight="semibold"
-              as="h4"
-              lineHeight="tight"
-            >
->>>>>>> staging
               <FormControl p={2} pb={0} id="werk-title" isRequired>
                 <FormLabel
                   marginBottom={1}
@@ -135,16 +126,7 @@ export const statementOfWerk = ({ values }) => {
           alignSelf="baseline"
         >
           <Box p="4">
-<<<<<<< HEAD
             <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight">
-=======
-            <Box
-              mt="1"
-              fontWeight="semibold"
-              as="h4"
-              lineHeight="tight"
-            >
->>>>>>> staging
               <FormControl p={2} pb={0} id="werk-title" isRequired>
                 <FormLabel
                   marginBottom={1}
