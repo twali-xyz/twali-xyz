@@ -37,8 +37,6 @@ export default function marketplace() {
     let tempFilter = {};
 
     Object.entries(router.query).forEach((filterData) => {
-      console.log(filterData);
-
       let filterObjectArray = {};
       let [filterType, filterValues] = filterData;
 
@@ -67,7 +65,9 @@ export default function marketplace() {
   }, [router.asPath]);
 
   useEffect(() => {
-    userData && setData(JSON.parse(JSON.stringify(userData)));
+    userData &&
+      userData.userWallet &&
+      setData(JSON.parse(JSON.stringify(userData)));
   }, [userData]);
 
   const { data, error } = useSWR(`api/marketplace/contracts${query}`, fetcher);

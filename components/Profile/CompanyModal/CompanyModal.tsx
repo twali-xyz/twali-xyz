@@ -23,7 +23,7 @@ import {
   Img,
   Textarea,
 } from "@chakra-ui/react";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import DatePicker from "react-date-picker/dist/entry.nostyle";
 import { connect } from "../../../utils/walletUtils";
 import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
@@ -178,6 +178,7 @@ const CompanyModal = (props) => {
       method: "PUT",
       body: JSON.stringify({ userData }),
     });
+    mutate(`/api/users/${userState.userName}`);
     console.log("USER Company data UPDATED BRUH");
   };
 
