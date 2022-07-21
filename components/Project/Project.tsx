@@ -1,4 +1,4 @@
-import { Box, Container, Button, HStack, Text, Flex, CircularProgress } from "@chakra-ui/react";
+import { Box, Container, Button, HStack, Text, Textarea, Flex, CircularProgress } from "@chakra-ui/react";
 import { useEffect, useCallback, useState } from "react";
 import { Step, Steps } from "chakra-ui-steps";
 import { useRouter } from "next/router";
@@ -16,6 +16,7 @@ interface ProjectProps {
   prevStep?: Function;
   nextStep?: Function;
   projectData?: Contract;
+  isProjectPage?: boolean;
 }
 
 const Project = ({
@@ -23,7 +24,8 @@ const Project = ({
   steps,
   prevStep,
   nextStep,
-  projectData
+  projectData,
+  isProjectPage
 }: ProjectProps) => {
   const { setBounty, ...bountyState } = useBounty();
   const { setTokenAmount, setTokenName } = useToken();
@@ -81,7 +83,7 @@ const Project = ({
         p={4}
         marginTop={"0 !important"}
         backgroundColor={"inverse"}
-        paddingRight={24}
+        // paddingRight={24}
       >
       {activeStep? (
         <HStack
@@ -100,14 +102,14 @@ const Project = ({
         </HStack>
         ): null}
         <Box
-          w="6xl"
-          h="1257px"
+          h="1691px"
           marginLeft="54px"
           marginTop="4rem"
           marginBottom="4rem"
-          borderWidth="1px"
-          borderRadius="lg"
-          borderColor="#C7F83C"
+          borderWidth={isProjectPage ? "unset": "1px"}
+          borderRadius={isProjectPage ? "unset": "lg"}
+          borderColor={isProjectPage ? "unset": "#C7F83C"}
+          border={isProjectPage ? "none": ""}
           overflow="hidden"
           cursor="pointer"
           alignSelf={"center"}
@@ -121,13 +123,87 @@ const Project = ({
               isTruncated
             >
               <ProjectHeader />
+              <hr className="twali-horizontal-line" />
               <Flex flexDirection="row">
                 <Flex flexDirection="column" width="100%" maxWidth="550px">
                   <ProjectExpertise />
                   <ProjectDetails />
                 </Flex>
-                <div className="twali-vertical-line"></div>
+                <div className={isProjectPage ? "twali-vertical-line-page": "twali-vertical-line"}></div>
+                <Flex flexDirection="column" width="100%" maxWidth="550px">
                 <ProjectDescription />
+                {isProjectPage ? (
+                  <>
+                <Textarea
+                  fontFamily="PP Telegraf"
+                  fontWeight="500"
+                  fontSize="18px"
+                  color="subtle"
+                  borderRadius="1px" 
+                  border="solid"
+                  borderColor="#587070"
+                  padding="24px"
+                  marginLeft={16}
+                  width="587px"
+                  alignItems="center"
+                  height="343px"
+                  maxLength={200}
+                  placeholder="Apply to this werk posting by writing a 200 word max submission about why you want to do this werk"
+                />
+                <HStack width={"100%"} justifyContent={"flex-end"} marginTop="1.8rem" marginLeft="6rem">
+                  <Button
+                    alignSelf="left"
+                    mr={"24px"}
+                    onClick={() => console.log("save draft")}
+                    pos={"relative"}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                    variant={"secondary"}
+                    size={"lg"}
+                  >
+                    <Text
+                      display={"flex"}
+                      width={"100%"}
+                      height={"100%"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                    >
+                      save draft
+                    </Text>
+                  </Button>
+                  <Button
+                    // disabled={isDisabled}
+                    pos={"relative"}
+                    alignSelf="center"
+                    variant={"primary"}
+                    size={"lg"}
+                    onClick={() => {
+                      console.log('submit')
+                    }}
+                  >
+                    <Text
+                      display={"flex"}
+                      width={"100%"}
+                      height={"100%"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                    >
+                      submit
+                    </Text>
+
+                    {/* {isSubmitted ? (
+                    <CircularProgress
+                      size="22px"
+                      thickness="4px"
+                      isIndeterminate
+                      color="#3C2E26"
+                    />
+                  ) : null} */}
+                  </Button>{" "}
+                </HStack> 
+                </>
+                ): null}
+                </Flex>
               </Flex>
             </Box>
           </Box>
