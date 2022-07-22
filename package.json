@@ -8,14 +8,8 @@
     "start": "next start"
   },
   "dependencies": {
-    "@3id/connect": "^0.2.5",
-    "@apollo/client": "^3.5.6",
     "@aws-sdk/client-dynamodb": "^3.54.1",
     "@aws-sdk/util-dynamodb": "^3.54.1",
-    "@ceramicnetwork/3id-did-resolver": "^1.4.12",
-    "@ceramicnetwork/http-client": "^1.5.3",
-    "@ceramicnetwork/stream-tile": "^1.5.3",
-    "@ceramicstudio/idx": "^0.12.2",
     "@chakra-ui/icons": "^1.1.5",
     "@chakra-ui/react": "^1.8.3",
     "@chakra-ui/transition": "^1.4.1",
@@ -38,7 +32,6 @@
     "clearbit": "^1.3.5",
     "cors": "^2.8.5",
     "date-fns": "^2.11.1",
-    "dids": "^2.4.3",
     "ethers": "^5.6.8",
     "fs": "^0.0.1-security",
     "graphql": "^16.1.0",
