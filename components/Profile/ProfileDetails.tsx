@@ -18,27 +18,20 @@ import CompanyModal from "./CompanyModal/CompanyModal";
 import UserPermissionsProvider from "../UserPermissionsProvider/UserPermissionsProvider";
 import UserPermissionsRestricted from "../UserPermissionsProvider/UserPermissionsRestricted";
 import { fetchPermission } from "../../utils/profileUtils";
-import LoginPage from "../../pages/login";
 import HeaderNav from "../HeaderNav/HeaderNav";
 import { UserData } from "../../utils/interfaces";
 import { GetCompany } from "./GetCompany";
-import useUser from "../../context/TwaliContext";
+import LoadingPage from "../../pages/loading";
 
 const ProfileDetails = ({ user }) => {
   // Fallback for getStaticPaths, when fallback: true
   // Useful for an app that has a large number of static pages, and this prevents the build time from slowing down
   // More info in Nextjs docs here: https://nextjs.org/docs/api-reference/data-fetching/get-static-paths#fallback-true
   const router = useRouter();
-  const { setData, ...userState } = useUser();
-
   if (router.isFallback) {
-    return <LoginPage loaded={router.isFallback} />;
+    return <LoadingPage loaded={router.isFallback} />;
   }
   const [userData, setUserData] = useState<UserData>();
-
-  useEffect(() => {
-    userData && setData(JSON.parse(JSON.stringify(userData)));
-  }, [userData]);
 
   const {
     isOpen: isExpModalOpen,
@@ -62,31 +55,6 @@ const ProfileDetails = ({ user }) => {
   const [currentBadge, setCurrentBadge] = useState();
   const [loggedInUserAddress, setLoggedInUserAddress] = useState("");
   const [currCompany, setCurrCompany] = useState(0);
-
-  async function readProfile() {
-    try {
-      if (router.query?.view != "public") {
-        // does not require signing to get user's public data
-        const address = await connect(); // first address in the array
-
-        if (address) {
-          setLoggedInUserAddress(address);
-        }
-      } else {
-        setIsConnectWalletBtn(true);
-      }
-
-      // does not require signing to get user's public data
-      if (user && user.userWallet) {
-        setIsConnectWalletBtn(false);
-        setUserData(user);
-        setLoaded(true);
-      }
-    } catch (err) {
-      console.log("error: ", err);
-      setLoaded(false);
-    }
-  }
 
   // Display or hide the connect wallet btn depending on a state change
   useEffect(() => {
@@ -115,7 +83,7 @@ const ProfileDetails = ({ user }) => {
         }
       } catch (err) {
         console.log("error: ", err);
-          setLoaded(false);
+        setLoaded(false);
       }
     }
 
@@ -229,25 +197,25 @@ const ProfileDetails = ({ user }) => {
 
   function createWorkElements(number) {
     var elements = [];
-    let totalLen = userState.companyInfo ? userState.companyInfo.length : 0;
+    let totalLen = user.companyInfo ? user.companyInfo.length : 0;
     for (let i = 0; i < number; i++) {
       if (
-        userState.companyInfo &&
+        user.companyInfo &&
         i < totalLen &&
-        userState.companyInfo[i] &&
-        userState.companyInfo[i].companyName
+        user.companyInfo[i] &&
+        user.companyInfo[i].companyName
       ) {
         elements.push(
           <GetCompany
             key={`${i}--company-info`}
-            company={userState.companyInfo[i]}
-            companyName={userState.companyInfo[i].companyName}
+            company={user.companyInfo[i]}
+            companyName={user.companyInfo[i].companyName}
             currCompany={i}
             setCurrCompany={setCurrCompany}
             onCompanyModalOpen={onCompanyModalOpen}
           />
         );
-      } else {
+      } else if (i === user.companyInfo.length) {
         elements.push(
           <UserPermissionsRestricted
             to="edit"
@@ -290,17 +258,18 @@ const ProfileDetails = ({ user }) => {
   return (
     <>
       {!loaded ? (
-        <LoginPage loaded={!loaded} />
+        <LoadingPage loaded={!loaded} />
       ) : (
-        userState &&
-        userState.userName &&
-        userState.userWallet && (
+        user &&
+        user.userName &&
+        user.userWallet && (
           <>
             <HeaderNav
               whichPage="profile"
               isConnectWalletBtn={isConnectWalletBtn}
-              userPage={userState}
+              userPage={userData}
               userWallet={loggedInUserAddress}
+              userName={userData.userName}
             />
             <Container
               maxW="100%"
@@ -310,14 +279,11 @@ const ProfileDetails = ({ user }) => {
             >
               <UserPermissionsProvider
                 fetchPermission={fetchPermission(
-                  userState.userName,
+                  user.userName,
                   loggedInUserAddress ? loggedInUserAddress : null
                 )}
               >
-                <ProfileHeader
-                  userName={userState.userName}
-                  uuid={userState.uuid}
-                />
+                <ProfileHeader userName={user.userName} uuid={user.uuid} />
                 <Flex
                   w="full"
                   justifyContent={"space-around"}
@@ -329,6 +295,7 @@ const ProfileDetails = ({ user }) => {
                     onExpModalOpen={onExpModalOpen}
                     isExpModalOpen={isExpModalOpen}
                     onExpModalClose={onExpModalClose}
+                    userName={user.userName}
                   />
                   <Box alignSelf="flex-start" w="full" overflow="hidden">
                     {/* social media URLs */}

@@ -1,3 +1,4 @@
+import { Referral } from "./../reusable/Referral";
 import React, { useState } from "react";
 import {
   Button,
@@ -6,16 +7,23 @@ import {
   HStack,
   Text,
   Img,
+  Avatar,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { handleWalletConnect } from "../../utils/walletUtils";
 import Link from "next/link";
+import useUser from "../../context/TwaliContext";
 
 const HeaderNav = (props) => {
   const whichPage = props.whichPage;
   const isConnectWalletBtn = props.isConnectWalletBtn;
   const setUserData = props.setUserData;
   const userPage = props.userPage;
+  const { userName } = useUser();
   const userWallet = props.userWallet;
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -98,32 +106,81 @@ const HeaderNav = (props) => {
                 width={"fit-content"}
                 height={"32px"}
               >
-                <Flex
-                  pl={2}
-                  mr={"0 !important"}
-                  width={"100%"}
-                  height={"100%"}
-                  maxW={"160px"}
+                <Text
                   border={"1px solid"}
                   borderColor={"fresh"}
                   alignItems={"center"}
                   justifyItems={"center"}
                   borderRadius={32}
+                  color={"fresh"}
+                  fontSize={"14px"}
+                  fontWeight={"700"}
+                  letterSpacing={"0.06em"}
+                  padding="4px 16px"
                 >
-                  <Text
-                    color={"fresh"}
-                    maxW={["80px", "190px"]}
-                    fontSize={"14px"}
-                    margin={"auto"}
-                    alignSelf={"center"}
-                    fontWeight={"700"}
-                    letterSpacing={"0.06em"}
-                    textTransform={"uppercase"}
-                    padding="4px 8px"
-                  >
-                    {userWallet}
-                  </Text>
-                </Flex>
+                  {`${userWallet.substring(0, 5)}...${userWallet.substring(
+                    userWallet.length - 4
+                  )}`.toLowerCase()}
+                </Text>
+
+                <Menu>
+                  <MenuButton
+                    marginLeft={"16px !important"}
+                    height={"36px"}
+                    width={"36px"}
+                    as={Avatar}
+                    aria-label="Options"
+                    icon={<Avatar size={"sm"} src={""} />}
+                    variant="outline"
+                  />
+                  <MenuList bg={"n6"} boxShadow={"8px 16px 24px 0px #062B2A8F"}>
+                    <Link href={`/${userName}`}>
+                      <MenuItem
+                        color={"fresh"}
+                        fontFamily={"PP Telegraf Light"}
+                        textTransform={"capitalize"}
+                      >
+                        profile
+                      </MenuItem>
+                    </Link>
+                    <Link href={"/"}>
+                      <MenuItem
+                        color={"fresh"}
+                        fontFamily={"PP Telegraf Light"}
+                        textTransform={"capitalize"}
+                      >
+                        dashboard
+                      </MenuItem>
+                    </Link>
+                    <Link href={"/"}>
+                      <MenuItem
+                        color={"fresh"}
+                        fontFamily={"PP Telegraf Light"}
+                        textTransform={"capitalize"}
+                      >
+                        account settings
+                      </MenuItem>
+                    </Link>
+                    <Referral userWallet={userWallet}>
+                      <MenuItem
+                        color={"fresh"}
+                        fontFamily={"PP Telegraf Light"}
+                        textTransform={"capitalize"}
+                      >
+                        {"refer a friend"}
+                      </MenuItem>
+                    </Referral>
+                    <Link href={"/"}>
+                      <MenuItem
+                        color={"fresh"}
+                        fontFamily={"PP Telegraf Light"}
+                        textTransform={"capitalize"}
+                      >
+                        logout
+                      </MenuItem>
+                    </Link>
+                  </MenuList>
+                </Menu>
               </HStack>
             </>
           )

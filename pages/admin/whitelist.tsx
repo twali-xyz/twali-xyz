@@ -17,9 +17,7 @@ import whitelistReducer, { initialState } from "../../context/WhitelistReducer";
 import { useWhitelist } from "../../hooks/useWhitelist";
 import { useWhitelistFilter } from "../../hooks/useWhitelistFilter";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
-import { InjectedConnector } from "wagmi/connectors/injected";
 import HeaderNav from "../../components/HeaderNav/HeaderNav";
-import LoginPage from "../login";
 
 const whitelist = () => {
   const [filterParams, setFilterParams] = useState();
@@ -28,8 +26,10 @@ const whitelist = () => {
   const [loadingWallet, setLoadingWallet] = useState(null);
   const [loadingIDX, setLoadingIDX] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const { data: accountData } = useAccount();
 
+  const { connect, connectors, pendingConnector } = useConnect();
   const {
     data,
     isLoading: loadingWhitelist,
@@ -64,15 +64,15 @@ const whitelist = () => {
     });
   }
 
-  function setWhitelistPending(payload) {
-    dispatch({
-      type: "PENDING",
-      payload: { ...payload },
-    });
-  }
+  // fixes hydration issue
+  const [hasMounted, setHasMounted] = React.useState(false);
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   // useEffect hook to sync dispatching with backend
   useEffect(() => {
+    if (!state.userWallet) return;
     const updateUserWhitelistStatus = async (payload) => {
       setLoadingWallet(state.userWallet);
       await fetch(`/api/admin/updateUser`, {
@@ -89,7 +89,21 @@ const whitelist = () => {
       }
       setLoadingWallet(null);
     };
-    updateUserWhitelistStatus(state);
+
+    const updateReferralStatus = async (payload) => {
+      setLoadingWallet(state.userWallet);
+      await fetch(`/api/admin/updateReferral`, {
+        method: "PUT",
+        body: JSON.stringify({ payload }),
+      });
+      setLoadingWallet(null);
+    };
+    if (state.userWallet) {
+      updateUserWhitelistStatus(state);
+    }
+    if (state.referral && state.whitelistStatus === "approved") {
+      updateReferralStatus(state);
+    }
   }, [state]);
 
   // set the filterParams based on the URL query params
@@ -125,34 +139,45 @@ const whitelist = () => {
     }
   }
 
-  const { connect } = useConnect({
-    connector: new InjectedConnector(),
-  });
-  const { disconnect } = useDisconnect();
+  // fixes hydration issue
+  if (!hasMounted) {
+    return null;
+  }
 
-  if (!accountData)
-    return (
-      <Flex
-        width={"100%"}
-        height={"100vh"}
-        justify={"center"}
-        alignItems={"center"}
-      >
-        {accountData && `Connected to ${accountData?.address}`}
-        <Button size={"lg"} variant={"primary"} onClick={() => connect()}>
-          Connect Wallet
-        </Button>
-        <br />
-      </Flex>
-    );
-  if (loadingWhitelist) {
+  if (!accountData?.address)
     return (
       <>
-        <LoginPage loaded={loadingWhitelist} />
+        <Flex
+          width={"100%"}
+          height={"100vh"}
+          justify={"center"}
+          alignItems={"center"}
+        >
+          {accountData?.address && (
+            <Text> `Connected to ${accountData?.address}`</Text>
+          )}
+          <VStack>
+            {connectors.map((connector) => (
+              <Button
+                variant={"primary"}
+                width={"400px"}
+                disabled={!connector.ready}
+                key={connector.id}
+                onClick={() => connect({ connector })}
+              >
+                {connector.name}
+                {!connector.ready && " (unsupported)"}
+                {isLoading &&
+                  connector.id === pendingConnector?.id &&
+                  " (connecting)"}
+              </Button>
+            ))}
+          </VStack>
+        </Flex>
       </>
     );
-  }
-  if (!data) {
+
+  if (accountData?.address && isError) {
     return (
       <>
         <Flex
@@ -168,7 +193,7 @@ const whitelist = () => {
   }
   return (
     <>
-      <HeaderNav userWallet={accountData.address} />
+      <HeaderNav userWallet={accountData?.address} />
       <Flex flexDir={"row"} pos={"absolute"} top={0} width="100%" zIndex={-1}>
         <FilterInputs
           filterParams={filterParams}

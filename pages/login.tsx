@@ -3,38 +3,34 @@ import {
   CircularProgress,
   Container,
   Link,
-  Img,
   Text,
   VStack,
 } from "@chakra-ui/react";
+
 import background from "../public/twali-assets/backgroundscreen.png";
-import HeaderNav from "../components/HeaderNav/HeaderNav";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Web3 from "web3";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { UserData } from "../utils/interfaces";
-import useUser from "../context/TwaliContext";
-import { getUserByWallet, getUserWhitelistStatus, handleWalletConnectOnLogin } from "../utils/walletUtils";
 
+import { getUserByWallet, getUserWhitelistStatus } from "../utils/walletUtils";
+import { AccountSelection } from "../components/SignUpSteps/accountSelection";
+import useUser from "../context/TwaliContext";
 
 const LoginPage = (props) => {
-  const { ...userState } = useUser();
-  useEffect(() => {
-    setLoaded(!props.loaded);
-    checkForWallet();
-  }, []);
-
-  const [show, setShow] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [status, setStatus] = useState<string | JSX.Element>();
-  const toggleMenu = () => setShow(!show);
+  const router = useRouter();
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [loaded, setLoaded] = useState(false);
+  const { ...userState } = useUser();
+  const [referredBy, setReferredBy] = useState<string | string[]>();
+  console.log("ROUTER: ", router.query["referred_by"]);
+  useEffect(() => {
+    setLoaded(!props.loaded);
+    setReferredBy(router.query["referred_by"]);
+  }, [router.query]);
 
-
-  const router = useRouter();
   const handleWalletConnectOnLogin = async () => {
     const web3Modal = new Web3Modal({
       disableInjectedProvider: false,
@@ -57,13 +53,13 @@ const LoginPage = (props) => {
     const currAccount = accounts[0];
     console.log(currAccount);
 
-    userState.setData({ ...userState, userWallet: currAccount });
     setIsSubmitted(true);
 
     try {
       let userData: UserData = await getUserByWallet(currAccount);
 
       if (userData && userData.userName && userData.userWallet) {
+        userState.setData({ ...userData });
         router.push(`/${userData.userName}`);
         setIsSubmitted(false);
         return;
@@ -99,15 +95,21 @@ const LoginPage = (props) => {
           email: userWhiteList["email"],
           linkedIn: userWhiteList["linkedIn"],
           discord: userWhiteList["discord"],
+          referredBy: userWhiteList?.referredBy
+            ? userWhiteList["referredBy"]
+            : "",
         });
         router.push("/steps");
         return;
       }
     } catch (err) {
       console.log("error: ", err);
-      router.push("/whitelist/application");
-      setLoaded(true);
-
+      if (referredBy) {
+        router.push(`/whitelist/application?referred_by=${referredBy}`);
+      } else {
+        router.push("/whitelist/application");
+        setLoaded(true);
+      }
     }
   };
 
@@ -120,9 +122,7 @@ const LoginPage = (props) => {
             marginTop={"96px !important"}
             variant={"primary"}
             size={"lg"}
-            onClick={(event: any) =>
-              handleWalletConnectOnLogin()
-            }
+            onClick={(event: any) => handleWalletConnectOnLogin()}
           >
             Connect Wallet{" "}
             {isSubmitted ? (
@@ -162,18 +162,23 @@ const LoginPage = (props) => {
     }
   };
 
-const checkForWallet = async () => { 
-  const { status } = await connectWallet();
-  setStatus(status);
-};
-
+  const [accType, setAccType] = useState("");
+  const [btnActive, setBtnActive] = useState(0);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [isAccTypeSelection, setIsAccTypeSelection] = useState(true);
+  const [isAccTypeSelected, setIsAccTypeSelected] = useState(false);
+  const [accSelectionComplete, setAccSelectionComplete] = useState(false);
+  const selectUserAccType = (accType: string) => {
+    setAccType(accType);
+    setIsAccTypeSelected(true);
+  };
 
   return (
     <>
       <title>twali.xyz - login</title>
       <Container
         width="100%"
-        height="1024px"
+        height="100%"
         minH={"100vh"}
         maxW={"100%"}
         pos={"relative"}
@@ -181,33 +186,22 @@ const checkForWallet = async () => {
         bgPosition={"center"}
         bgImg={`url(${background.src})`}
       >
-        <HeaderNav whichPage="index" />
         <VStack
           width="100%"
-          minH={"100vh"}
           maxW={"100%"}
-          pos={"absolute"}
-          right={"1.9%"}
-          bottom={"4.5%"}
-          display={"flex"}
           flexDir={"column"}
           alignItems={"center"}
           justifyContent={"center"}
         >
-          <Text
-            alignSelf={"center"}
-            fontFamily={"GrandSlang"}
-            fontSize={"40px"}
-            lineHeight={"56px"}
-            letterSpacing={"wide"}
-          >
-            welcome to
-          </Text>
-          <Img
-            src="twali-assets/twali_rainbow.png"
-            width={"300px"}
-            height={"64.38px"}
-            marginTop={"49px !important"}
+          <AccountSelection
+            btnActive={btnActive}
+            referredBy={referredBy}
+            setBtnActive={setBtnActive}
+            selectUserAccType={selectUserAccType}
+            isAccTypeSelected={isAccTypeSelected}
+            onConnectWallet={handleWalletConnectOnLogin}
+            setIsAccTypeSelection={setIsAccTypeSelection}
+            setAccSelectionComplete={setAccSelectionComplete}
           />
           {!loaded ? (
             <CircularProgress
@@ -216,9 +210,10 @@ const checkForWallet = async () => {
               thickness="4px"
               isIndeterminate
               color="#3C2E26"
-            />) : 
-            <Text>{status}</Text>         
-        }
+            />
+          ) : (
+            <Text>{status}</Text>
+          )}
         </VStack>
       </Container>
     </>

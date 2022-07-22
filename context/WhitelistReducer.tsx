@@ -4,6 +4,7 @@ export const initialState = {
   lastName: "",
   email: "",
   linkedIn: "",
+  referredBy: "",
 };
 
 const whitelistReducer = (state, action) => {

@@ -138,6 +138,7 @@ export const ApplicantCard = ({
 
         <HStack alignSelf={"flex-end"}>
           <Button
+            disabled={whitelistStatus === "rejected"}
             onClick={() => {
               handleReject(payload);
             }}
@@ -146,6 +147,7 @@ export const ApplicantCard = ({
             reject
           </Button>
           <Button
+            disabled={whitelistStatus === "approved"}
             onClick={() => {
               handleApprove(payload);
             }}

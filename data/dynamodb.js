@@ -17,7 +17,7 @@ const getDynamoDBClient = () => {
     ? new AWS.DynamoDB.DocumentClient({
         region: "us-east-1",
         // Only needed with local development.
-        // endpoint: "http://localhost:8000",
+        endpoint: "http://localhost:8000",
       })
     : new AWS.DynamoDB.DocumentClient(options);
 
@@ -538,7 +538,6 @@ module.exports = {
    * @returns Returns object containing user data and whitelist status.
    **/
   getWhitelistStatus: async (userWallet) => {
-    console.log("USERWALLET: ", userWallet);
     const dbUser = await getDynamoDBClient()
       .query({
         TableName: "whitelist_table",
@@ -587,9 +586,6 @@ module.exports = {
    */
   updateWhitelistStatus: async (userWallet, newStatus) => {
     if (!userWallet) return;
-    console.log("UPDATE USER WHITELIST STATUS");
-    console.log(userWallet);
-    console.log(newStatus);
     await getDynamoDBClient()
       .update({
         TableName: "whitelist_table",
@@ -603,6 +599,24 @@ module.exports = {
         },
       })
       .promise()
+      .catch((err) => {console.log("ERROR: ", err)});
+  },
+
+  addReferralData: async (userWallet, referredBy) => {
+    if (!userWallet || !referredBy) return;
+      let wallet = referredBy.toLowerCase()
+      await getDynamoDBClient()
+      .update({
+        TableName,
+        Key: {
+          PK: `USER#${wallet}`,
+          SK: `USER#${wallet}`,
+
+        },
+        UpdateExpression: "SET referredUsers = list_append(:referredUsers, referredUsers)",
+        ExpressionAttributeValues: {":referredUsers": [userWallet]},
+      })
+      .promise()
       .catch(console.error);
   },
 
@@ -611,9 +625,6 @@ module.exports = {
    * @param {object} - function takes an object as a the parameter with primary and attributes. Object will need to the primary key and any attributes that are being updated or created.
    */
   addWhitelistUser: async (payload) => {
-    console.log("ADD USER TO WHITELIST");
-    console.log({ ...payload });
-
     await getDynamoDBClient()
       .put({
         TableName: "whitelist_table",

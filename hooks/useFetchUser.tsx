@@ -3,14 +3,14 @@ import useSWR from "swr";
 const fetcher = (...args: Parameters<typeof fetch>) =>
   fetch(...args).then((res) => res.json());
 
-export const useWhitelist = (userId) => {
-  const { data, error } = useSWR(
-    userId && `/api/admin/retrieveWhitelist/${userId}`,
-    fetcher
-  );
+function useFetchUser(userName) {
+  const { data, error } = useSWR(`/api/users/${userName}`, fetcher);
+
   return {
-    data: data,
+    user: data,
     isLoading: !error && !data,
     isError: error,
   };
-};
+}
+
+export default useFetchUser;

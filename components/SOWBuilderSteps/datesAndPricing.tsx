@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   FormControl,
   Box,
@@ -13,7 +13,6 @@ import DatePicker from "react-date-picker/dist/entry.nostyle";
 import DateRangePicker from "@wojtekmaj/react-daterange-picker/dist/entry.nostyle";
 import { functionalExpertiseList } from "../../utils/functionalExpertiseConstants";
 import { industryExpertiseList } from "../../utils/industryExpertiseConstants";
-import { setEventArray } from "../../utils/setEventArray";
 import { MultiSelect } from "../reusable/MultiSelect";
 import { WerkTokenDropdown } from "./WerkTokenDropdown";
 
