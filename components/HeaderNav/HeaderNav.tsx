@@ -25,7 +25,6 @@ const HeaderNav = (props) => {
   const userPage = props.userPage;
   const { userName } = useUser();
   const userWallet = props.userWallet;
-
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const router = useRouter();

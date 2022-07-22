@@ -8,10 +8,6 @@ twali-xyz-staging:
         CONTRACT_BUCKET: "twali-contracts-bucket"
         WHITELIST_TABLE: "whitelist_table"
     cloudfront:
-<<<<<<< HEAD
-      distributionId: E3D09AH5621VQX # for Staging env only, change for local testing
-    bucketName: yxv8apc-0cmrlof # for Staging env only, change for local testing
-=======
-      distributionId: EHZYCKLX3TYQ4  # for Staging env only, change for local testing
+      distributionId: EHZYCKLX3TYQ4 # for Staging env only, change for local testing
     bucketName: qdlwzqy-k2v6lc # for Staging env only, change for local testing
->>>>>>> staging
+
