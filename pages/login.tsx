@@ -1,11 +1,4 @@
-import {
-  Button,
-  CircularProgress,
-  Container,
-  Link,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { CircularProgress, Container, Text, VStack } from "@chakra-ui/react";
 
 import background from "../public/twali-assets/backgroundscreen.png";
 import React, { useEffect, useState } from "react";
@@ -23,7 +16,6 @@ const LoginPage = (props) => {
   const router = useRouter();
   const [accType, setAccType] = useState("");
   const [btnActive, setBtnActive] = useState(0);
-  const [isDisabled, setIsDisabled] = useState(false);
   const [isAccTypeSelection, setIsAccTypeSelection] = useState(true);
   const [isAccTypeSelected, setIsAccTypeSelected] = useState(false);
   const [accSelectionComplete, setAccSelectionComplete] = useState(false);
@@ -82,7 +74,6 @@ const LoginPage = (props) => {
         return;
       }
       if (userWhiteList["whitelistStatus"] === "approved") {
-        console.log("No profile, pls create one...");
         userState.setData({
           ...userState,
           firstName: userWhiteList["firstName"],
@@ -106,6 +97,7 @@ const LoginPage = (props) => {
           console.log("error: ", err);
         }
       }
+      console.log("No profile, pls create one...");
       router.push("/steps");
       return;
     } catch (err) {
@@ -116,18 +108,6 @@ const LoginPage = (props) => {
         router.push("/whitelist/application");
         setLoaded(true);
       }
-    }
-
-    try {
-      let userData: UserData = await getUserByWallet(currAccount);
-
-      if (userData && userData.userName && userData.userWallet) {
-        router.push(`/${userData.userName}`);
-        setIsSubmitted(false);
-        return;
-      }
-    } catch (err) {
-      console.log("error: ", err);
     }
   };
 
@@ -153,7 +133,6 @@ const LoginPage = (props) => {
         >
           <AccountSelection
             btnActive={btnActive}
-            referredBy={referredBy}
             setBtnActive={setBtnActive}
             selectUserAccType={selectUserAccType}
             isAccTypeSelected={isAccTypeSelected}
