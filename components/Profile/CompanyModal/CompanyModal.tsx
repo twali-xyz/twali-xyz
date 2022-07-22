@@ -146,26 +146,8 @@ const CompanyModal = (props) => {
 
   async function updateCompanyInfo() {
     const address = await connect(); // first address in the array
-    console.log(
-      "🚀 ~ file: CompanyModal.tsx ~ line 149 ~ updateCompanyInfo ~ address",
-      address
-    );
-
     if (address) {
       setIsSubmitted(true);
-
-      console.log(
-        "🚀 ~ file: CompanyModal.tsx ~ line 155 ~ updateCompanyInfo ~ userState.userWallet",
-        userState.userWallet
-      );
-      console.log(
-        "🚀 ~ file: CompanyModal.tsx ~ line 155 ~ updateCompanyInfo ~ companyData",
-        companyData
-      );
-      console.log(
-        "🚀 ~ file: CompanyModal.tsx ~ line 155 ~ updateCompanyInfo ~ userState.userName",
-        userState.userName
-      );
       if (userState.userWallet && userState.userName && companyData) {
         userState.companyInfo[props.currCompany] = companyData;
 
