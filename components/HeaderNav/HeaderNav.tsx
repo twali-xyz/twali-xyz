@@ -48,7 +48,8 @@ const HeaderNav = (props) => {
         src="/twali-assets/navbar_logo.png"
       />
       <HStack>
-        {whichPage !== "whitelist" &&
+        {false &&
+          whichPage !== "whitelist" &&
           whichPage !== "steps" &&
           whichPage !== "index" && (
             <HStack mr={10}>
@@ -123,64 +124,69 @@ const HeaderNav = (props) => {
                   )}`.toLowerCase()}
                 </Text>
 
-                <Menu>
-                  <MenuButton
-                    marginLeft={"16px !important"}
-                    height={"36px"}
-                    width={"36px"}
-                    as={Avatar}
-                    aria-label="Options"
-                    icon={<Avatar size={"sm"} src={""} />}
-                    variant="outline"
-                  />
-                  <MenuList bg={"n6"} boxShadow={"8px 16px 24px 0px #062B2A8F"}>
-                    <Link href={`/${userName}`}>
-                      <MenuItem
-                        color={"fresh"}
-                        fontFamily={"PP Telegraf Light"}
-                        textTransform={"capitalize"}
-                      >
-                        profile
-                      </MenuItem>
-                    </Link>
-                    <Link href={"/"}>
-                      <MenuItem
-                        color={"fresh"}
-                        fontFamily={"PP Telegraf Light"}
-                        textTransform={"capitalize"}
-                      >
-                        dashboard
-                      </MenuItem>
-                    </Link>
-                    <Link href={"/"}>
-                      <MenuItem
-                        color={"fresh"}
-                        fontFamily={"PP Telegraf Light"}
-                        textTransform={"capitalize"}
-                      >
-                        account settings
-                      </MenuItem>
-                    </Link>
-                    <Referral userWallet={userWallet}>
-                      <MenuItem
-                        color={"fresh"}
-                        fontFamily={"PP Telegraf Light"}
-                        textTransform={"capitalize"}
-                      >
-                        {"refer a friend"}
-                      </MenuItem>
-                    </Referral>
-                    <Link href={"/"}>
-                      <MenuItem
-                        color={"fresh"}
-                        fontFamily={"PP Telegraf Light"}
-                        textTransform={"capitalize"}
-                      >
-                        logout
-                      </MenuItem>
-                    </Link>
-                  </MenuList>
-                </Menu>
+                {whichPage !== "whitelist" && (
+                  <Menu>
+                    <MenuButton
+                      marginLeft={"16px !important"}
+                      height={"36px"}
+                      width={"36px"}
+                      as={Avatar}
+                      aria-label="Options"
+                      icon={<Avatar size={"sm"} src={""} />}
+                      variant="outline"
+                    />
+                    <MenuList
+                      bg={"n6"}
+                      boxShadow={"8px 16px 24px 0px #062B2A8F"}
+                    >
+                      <Link href={`/${userName}`}>
+                        <MenuItem
+                          color={"fresh"}
+                          fontFamily={"PP Telegraf Light"}
+                          textTransform={"capitalize"}
+                        >
+                          profile
+                        </MenuItem>
+                      </Link>
+                      <Link href={"/"}>
+                        <MenuItem
+                          color={"fresh"}
+                          fontFamily={"PP Telegraf Light"}
+                          textTransform={"capitalize"}
+                        >
+                          dashboard
+                        </MenuItem>
+                      </Link>
+                      <Link href={"/"}>
+                        <MenuItem
+                          color={"fresh"}
+                          fontFamily={"PP Telegraf Light"}
+                          textTransform={"capitalize"}
+                        >
+                          account settings
+                        </MenuItem>
+                      </Link>
+                      <Referral userWallet={userWallet}>
+                        <MenuItem
+                          color={"fresh"}
+                          fontFamily={"PP Telegraf Light"}
+                          textTransform={"capitalize"}
+                        >
+                          {"refer a friend"}
+                        </MenuItem>
+                      </Referral>
+                      <Link href={"/"}>
+                        <MenuItem
+                          color={"fresh"}
+                          fontFamily={"PP Telegraf Light"}
+                          textTransform={"capitalize"}
+                        >
+                          logout
+                        </MenuItem>
+                      </Link>
+                    </MenuList>
+                  </Menu>
+                )}
               </HStack>
             </>
           )
