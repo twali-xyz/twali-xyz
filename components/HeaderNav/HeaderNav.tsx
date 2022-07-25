@@ -48,7 +48,7 @@ const HeaderNav = (props) => {
         src="/twali-assets/navbar_logo.png"
       />
       <HStack>
-        {false &&
+        {true &&
           whichPage !== "whitelist" &&
           whichPage !== "steps" &&
           whichPage !== "index" && (
