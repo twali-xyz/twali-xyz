@@ -10,3 +10,4 @@ twali-xyz-staging:
     cloudfront:
       distributionId: EHZYCKLX3TYQ4 # for Staging env only, change for local testing
     bucketName: qdlwzqy-k2v6lc # for Staging env only, change for local testing
+

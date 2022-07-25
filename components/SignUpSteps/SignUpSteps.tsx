@@ -1,4 +1,3 @@
-import { AccountSelection } from "./accountSelection";
 import { useEffect, useState, useRef } from "react";
 import { Step, Steps, useSteps } from "chakra-ui-steps";
 import { connect } from "../../utils/walletUtils";
@@ -166,8 +165,6 @@ const SignUpSteps = () => {
   const createNewUser = async (address) => {
     userData.userWallet = address;
     // check if user doesnt already exsist with current address
-    userData.accType = accType;
-
     await fetch("/api/users/createUser", {
       method: "POST",
       body: JSON.stringify({ userData }),

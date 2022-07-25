@@ -3,6 +3,7 @@ import React from "react";
 import background from "../../public/twali-assets/step1_background.png";
 export const ApplicationStatus = ({ whiteListStatus }) => {
   const statusMap = {
+    approved: { header: "", body: "", svg: <></> },
     pending: {
       header: "Pending...",
       body: "your application is pending approval. keep on the lookout in your inbox for an update!",
@@ -158,7 +159,7 @@ export const ApplicationStatus = ({ whiteListStatus }) => {
       >
         <VStack alignItems={"flex-start"}>
           <Text fontSize={"40px"} fontFamily={"GrandSlang"} mb={"24px"}>
-            {statusMap[whiteListStatus]["header"]}
+            {statusMap[whiteListStatus] && statusMap[whiteListStatus]["header"]}
           </Text>
           <Text
             //styleName: Body/body18;
@@ -171,7 +172,7 @@ export const ApplicationStatus = ({ whiteListStatus }) => {
             textAlign={"left"}
             mb={"24px !important"}
           >
-            {statusMap[whiteListStatus]["body"]}
+            {statusMap[whiteListStatus] && statusMap[whiteListStatus]["body"]}
           </Text>
           <Link
             color={"aqua"}
@@ -213,7 +214,7 @@ export const ApplicationStatus = ({ whiteListStatus }) => {
             Website
           </Link>
         </VStack>
-        {statusMap[whiteListStatus]["svg"]}
+        {statusMap[whiteListStatus] && statusMap[whiteListStatus]["svg"]}
       </HStack>
     </Flex>
   );

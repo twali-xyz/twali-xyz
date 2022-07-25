@@ -1,11 +1,4 @@
-import {
-  Button,
-  CircularProgress,
-  Container,
-  Link,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { CircularProgress, Container, Text, VStack } from "@chakra-ui/react";
 
 import background from "../public/twali-assets/backgroundscreen.png";
 import React, { useEffect, useState } from "react";
@@ -21,6 +14,15 @@ import useUser from "../context/TwaliContext";
 
 const LoginPage = (props) => {
   const router = useRouter();
+  const [accType, setAccType] = useState("");
+  const [btnActive, setBtnActive] = useState(0);
+  const [isAccTypeSelection, setIsAccTypeSelection] = useState(true);
+  const [isAccTypeSelected, setIsAccTypeSelected] = useState(false);
+  const [accSelectionComplete, setAccSelectionComplete] = useState(false);
+  const selectUserAccType = (accType: string) => {
+    setAccType(accType);
+    setIsAccTypeSelected(true);
+  };
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [loaded, setLoaded] = useState(false);
   const { ...userState } = useUser();
@@ -51,26 +53,11 @@ const LoginPage = (props) => {
     const web3 = new Web3(provider);
     const accounts = await web3.eth.getAccounts();
     const currAccount = accounts[0];
-    console.log(currAccount);
-
+    userState.setData({ ...userState, userWallet: currAccount });
     setIsSubmitted(true);
 
     try {
-      let userData: UserData = await getUserByWallet(currAccount);
-
-      if (userData && userData.userName && userData.userWallet) {
-        userState.setData({ ...userData });
-        router.push(`/${userData.userName}`);
-        setIsSubmitted(false);
-        return;
-      }
-    } catch (err) {
-      console.log("error: ", err);
-    }
-
-    try {
       let userWhiteList = await getUserWhitelistStatus(currAccount);
-      console.log("DATA: ", userWhiteList["whitelistStatus"]);
       if (
         userWhiteList["whitelistStatus"] === null ||
         userWhiteList["whitelistStatus"] === "" ||
@@ -87,7 +74,6 @@ const LoginPage = (props) => {
         return;
       }
       if (userWhiteList["whitelistStatus"] === "approved") {
-        console.log("No profile, pls create one...");
         userState.setData({
           ...userState,
           firstName: userWhiteList["firstName"],
@@ -99,9 +85,21 @@ const LoginPage = (props) => {
             ? userWhiteList["referredBy"]
             : "",
         });
-        router.push("/steps");
-        return;
+        try {
+          let userData: UserData = await getUserByWallet(currAccount);
+          userState.setData(userData);
+          if (userData && userData.userName && userData.userWallet) {
+            router.push(`/${userData.userName}`);
+            setIsSubmitted(false);
+            return;
+          }
+        } catch (err) {
+          console.log("error: ", err);
+        }
       }
+      console.log("No profile, pls create one...");
+      router.push("/steps");
+      return;
     } catch (err) {
       console.log("error: ", err);
       if (referredBy) {
@@ -111,66 +109,6 @@ const LoginPage = (props) => {
         setLoaded(true);
       }
     }
-  };
-
-  const connectWallet = async () => {
-    if (typeof window.ethereum !== "undefined") {
-      return {
-        status: (
-          <Button
-            disabled={isDisabled}
-            marginTop={"96px !important"}
-            variant={"primary"}
-            size={"lg"}
-            onClick={(event: any) => handleWalletConnectOnLogin()}
-          >
-            Connect Wallet{" "}
-            {isSubmitted ? (
-              <CircularProgress
-                size="22px"
-                thickness="4px"
-                isIndeterminate
-                color="#3C2E26"
-              />
-            ) : null}
-          </Button>
-        ),
-      };
-    } else {
-      setIsDisabled(true);
-      return {
-        status: (
-          <VStack>
-            <Text marginTop={"48px !important"} fontSize={"20px"}>
-              {" "}
-              🦊{" "}
-              <Link target="_blank" href={`https://metamask.io/download.html`}>
-                You must install Metamask in your browser.
-              </Link>
-            </Text>
-            <Button
-              disabled={isDisabled}
-              marginTop={"24px !important"}
-              variant={"primary"}
-              size={"lg"}
-            >
-              Connect Wallet{" "}
-            </Button>
-          </VStack>
-        ),
-      };
-    }
-  };
-
-  const [accType, setAccType] = useState("");
-  const [btnActive, setBtnActive] = useState(0);
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [isAccTypeSelection, setIsAccTypeSelection] = useState(true);
-  const [isAccTypeSelected, setIsAccTypeSelected] = useState(false);
-  const [accSelectionComplete, setAccSelectionComplete] = useState(false);
-  const selectUserAccType = (accType: string) => {
-    setAccType(accType);
-    setIsAccTypeSelected(true);
   };
 
   return (
@@ -195,7 +133,6 @@ const LoginPage = (props) => {
         >
           <AccountSelection
             btnActive={btnActive}
-            referredBy={referredBy}
             setBtnActive={setBtnActive}
             selectUserAccType={selectUserAccType}
             isAccTypeSelected={isAccTypeSelected}

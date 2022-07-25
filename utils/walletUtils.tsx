@@ -69,7 +69,7 @@ export const handleWalletConnectOnLogin = async (
     }
   } catch (err) {
     console.log("error: ", err);
-    router.push("/steps");
+    router.push("/login");
     setLoaded(true);
   }
 };
@@ -129,7 +129,7 @@ export const handleWalletConnect = async (
     }
   } catch (err) {
     console.log("error: ", err);
-    router.push("/steps");
+    router.push("/login");
     setLoaded(true);
   }
 };

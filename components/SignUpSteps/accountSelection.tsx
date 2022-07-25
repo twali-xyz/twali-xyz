@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+import useUser from "../../context/TwaliContext";
 
 export function AccountSelection({
   btnActive,
@@ -22,10 +23,9 @@ export function AccountSelection({
   isAccTypeSelected,
   setIsAccTypeSelection,
   setAccSelectionComplete,
-  referredBy,
   onConnectWallet,
 }) {
-  const router = useRouter();
+  const { setData, ...userState } = useUser();
   const [viewPassword, setViewPassword] = useState(false);
   const [signIn, setSignIn] = useState(false);
   return (
@@ -54,6 +54,7 @@ export function AccountSelection({
           if (signIn) return;
           setBtnActive(1);
           selectUserAccType("Expert");
+          setData({ ...userState, accType: "expert" });
         }}
         backgroundImage={
           btnActive == 1 || btnActive == 0
@@ -177,6 +178,7 @@ export function AccountSelection({
         onClick={() => {
           setBtnActive(2);
           selectUserAccType("Client");
+          setData({ ...userState, accType: "client" });
         }}
         backgroundImage={
           btnActive == 2 ? "/twali-assets/step1_background.png" : null

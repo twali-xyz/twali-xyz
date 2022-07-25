@@ -6,11 +6,13 @@ import HeaderNav from "../../components/HeaderNav/HeaderNav";
 import useUser from "../../context/TwaliContext";
 import { useRouter } from "next/router";
 import whitelistReducer, { initialState } from "../../context/WhitelistReducer";
+import { pageDisconnectedFallback } from "../../utils/walletUtils";
+import { useWhitelistStatus } from "../../hooks/useWhitelistStatus";
 
 const whitelist = () => {
   const toast = useToast();
   const router = useRouter();
-  const { userWallet } = useUser();
+  const { setData, userWallet } = useUser();
   const [step, setStep] = useState(0);
   const [formError, setFormError] = useState(false);
   const [emailError, setEmailError] = useState(false);
@@ -23,9 +25,14 @@ const whitelist = () => {
     referredBy: "",
   });
 
+  const {
+    data: fetchedStatus,
+    isLoading,
+    isError,
+  } = useWhitelistStatus(userWallet);
   const [whiteListStatus, setWhiteListStatus] = useState(""); // "", pending, approved, rejected
   const [state, dispatch] = useReducer(whitelistReducer, initialState);
-  const [isSubmitted, setIsSubmitted] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
   // referrence for "go"/"submit" button to check if it is focused
   // needed to prevent advancing two steps instead of one if user if focusing on the button while using enter to advance
   const continueButtonRef = React.useRef(null);
@@ -34,20 +41,22 @@ const whitelist = () => {
   useEffect(() => {
     let status;
     let referrer;
-    if (!userWallet) {
-      // fetch userWallet
-      // fetch whiteListStatus. not having a userWallet means the page
-      // was accessed using a different method than the login button.
-    } else {
-      status = router.query["status"];
-      referrer = router.query["referred_by"];
-    }
+
+    status = router.query["status"];
+    referrer = router.query["referred_by"];
+
     setWhiteListStatus(String(status));
     setUserWhitelistObj({
       ...userWhitelistObj,
       referredBy: referrer,
     });
   }, [router.query]);
+
+  useEffect(() => {
+    if (fetchedStatus?.whitelistStatus === "approved") {
+      router.push("/login");
+    }
+  }, [fetchedStatus]);
 
   const questions = [
     {
@@ -192,11 +201,13 @@ const whitelist = () => {
     if (!state.userWallet) return;
 
     const addUserToWhitelist = async (payload) => {
+      setIsSubmitted(true);
       await fetch(`/api/admin/addUser`, {
         method: "PUT",
         body: JSON.stringify({ payload }),
       });
-      setWhiteListStatus("submitted");
+      setWhiteListStatus("pending");
+      setIsSubmitted(false);
     };
     addUserToWhitelist(state);
   }, [state]);
@@ -261,30 +272,52 @@ const whitelist = () => {
   }
   return (
     <>
-      <HeaderNav whichPage="whitelist" step={0} userWallet={userWallet} />
-      <Box onKeyPress={formError ? null : handleEnterPressed}>
-        {(whiteListStatus === null ||
-          whiteListStatus === "" ||
-          whiteListStatus === "undefined") &&
-        questions[step] ? (
-          <WhitelistForm
-            questions={questions}
-            handleChange={handleChange}
-            step={step}
-            setStep={setStep}
-            formError={formError}
-            userWhitelistObj={userWhitelistObj}
-            continueButtonRef={continueButtonRef}
-            upArrowRef={upArrowRef}
-            downArrowRef={downArrowRef}
-            validateInputs={validateInputs}
-            emailError={emailError}
-            handleStep={handleStep}
-          />
-        ) : (
-          <ApplicationStatus whiteListStatus={whiteListStatus} />
-        )}
-      </Box>
+      <HeaderNav
+        whichPage="whitelist"
+        userWallet={userWallet}
+        step={userWallet ? 0 : 1}
+        setUserData={setData}
+        isConnectWalletBtn={!userWallet}
+      />
+
+      {userWallet ? (
+        <Box onKeyPress={formError ? null : handleEnterPressed}>
+          {!fetchedStatus &&
+          !isLoading &&
+          !fetchedStatus?.whitelistStatus &&
+          questions[step] ? (
+            <WhitelistForm
+              questions={questions}
+              handleChange={handleChange}
+              step={step}
+              setStep={setStep}
+              formError={formError}
+              userWhitelistObj={userWhitelistObj}
+              continueButtonRef={continueButtonRef}
+              upArrowRef={upArrowRef}
+              downArrowRef={downArrowRef}
+              validateInputs={validateInputs}
+              emailError={emailError}
+              handleStep={handleStep}
+              isSubmitted={isSubmitted}
+            />
+          ) : (
+            !isLoading &&
+            !isError &&
+            fetchedStatus?.whitelistStatus !== "approved" && (
+              <>
+                <ApplicationStatus
+                  whiteListStatus={
+                    fetchedStatus?.whitelistStatus || whiteListStatus
+                  }
+                />
+              </>
+            )
+          )}
+        </Box>
+      ) : (
+        pageDisconnectedFallback()
+      )}
     </>
   );
 };

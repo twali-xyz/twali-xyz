@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Fade,
   Flex,
   FormControl,
@@ -27,6 +28,7 @@ export const WhitelistForm = ({
   validateInputs,
   emailError,
   handleStep,
+  isSubmitted,
 }) => {
   return (
     <Flex flexDir={["column", "column", "row"]}>
@@ -266,9 +268,20 @@ export const WhitelistForm = ({
                 bgColor={"zing"}
                 color={"inverse"}
                 marginLeft={"0px "}
-                onClick={() => (formError ? null : handleStep())}
+                onClick={() => (formError || isSubmitted ? null : handleStep())}
               >
-                {step < 2 ? "ok" : "submit"}
+                {step < 2 ? (
+                  "ok"
+                ) : isSubmitted ? (
+                  <CircularProgress
+                    size="22px"
+                    thickness="4px"
+                    isIndeterminate
+                    color="#3C2E26"
+                  />
+                ) : (
+                  "submit"
+                )}
               </Button>
               <Text
                 //styleName: Label/label14;

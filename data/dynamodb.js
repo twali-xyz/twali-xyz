@@ -545,7 +545,7 @@ module.exports = {
 
         KeyConditionExpression: "userWallet = :PK",
         ExpressionAttributeValues: {
-          ":PK": `${userWallet}`,
+          ":PK": `${userWallet.toLowerCase()}`,
         },
       })
       .promise()
