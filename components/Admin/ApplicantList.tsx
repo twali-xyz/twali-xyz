@@ -81,6 +81,7 @@ export const ApplicantList = ({
                   whitelistStatus={whitelistStatus}
                   handleApprove={handleApprove}
                   handleReject={handleReject}
+                  referredBy={whitelistApplicants[idx].referredBy}
                   loading={loadingWallet === userWallet}
                 />
               );
