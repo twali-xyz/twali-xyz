@@ -2,8 +2,6 @@ import { HStack, Link, Image } from "@chakra-ui/react";
 import React from "react";
 
 export function ProfileSocialMedia({ userData, ...props }) {
-  console.log(userData.twitter, userData.linkedIn);
-
   const splitTwitter = userData.twitter?.toLowerCase().split(/(twitter\.com)/);
   const splitLinkedIn = userData.linkedIn
     ?.toLowerCase()
@@ -15,8 +13,10 @@ export function ProfileSocialMedia({ userData, ...props }) {
         <Link
           href={
             splitLinkedIn.length > 1
-              ? `https://www.linkedIn.com/${splitLinkedIn[1]}`
-              : `https://www.linkedin.com/${userData.linkedIn}`
+              ? `https://www.linkedin.com/${
+                  splitLinkedIn[splitLinkedIn.indexOf("linkedin.com") + 1]
+                }`
+              : `https://www.linkedin.com/in/${userData.linkedIn}`
           }
           target="_blank"
           rel="noopener noreferrer"
@@ -32,13 +32,15 @@ export function ProfileSocialMedia({ userData, ...props }) {
       {userData.twitter && (
         <Link
           href={
-            `https://twitter.com${splitTwitter[2]}` ||
-            `https://twitter.com${splitTwitter[1]}` ||
-            `${splitTwitter[0]}`
+            splitTwitter.length > 1
+              ? `https://www.twitter.com/${
+                  splitTwitter[splitTwitter.indexOf("twitter.com") + 1]
+                }`
+              : `https://www.twitter.com/in/${userData.twitter}`
           }
           target="_blank"
           rel="noopener noreferrer"
-          marginLeft={userData.linkedIn ? "16px !important" : "initial"}
+          marginLeft={userData.twitter ? "16px !important" : "initial"}
         >
           <Image
             src="twali-assets/twitterLogo.png"

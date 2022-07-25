@@ -285,7 +285,8 @@ const whitelist = () => {
           {!fetchedStatus &&
           !isLoading &&
           !fetchedStatus?.whitelistStatus &&
-          questions[step] ? (
+          questions[step] &&
+          whiteListStatus !== "pending" ? (
             <WhitelistForm
               questions={questions}
               handleChange={handleChange}
@@ -303,7 +304,6 @@ const whitelist = () => {
             />
           ) : (
             !isLoading &&
-            !isError &&
             fetchedStatus?.whitelistStatus !== "approved" && (
               <>
                 <ApplicationStatus
