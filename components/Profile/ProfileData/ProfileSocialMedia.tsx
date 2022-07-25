@@ -2,6 +2,8 @@ import { HStack, Link, Image } from "@chakra-ui/react";
 import React from "react";
 
 export function ProfileSocialMedia({ userData, ...props }) {
+  console.log(userData.twitter, userData.linkedIn);
+
   const splitTwitter = userData.twitter?.toLowerCase().split(/(twitter\.com)/);
   const splitLinkedIn = userData.linkedIn
     ?.toLowerCase()
@@ -9,12 +11,12 @@ export function ProfileSocialMedia({ userData, ...props }) {
 
   return (
     <HStack width={"6rem"} {...props}>
-      {userData.linkedIn && (
+      {userData.linkedIn && userData.linkedIn !== "undefined" && (
         <Link
           href={
-            `https://linkedin.com${splitLinkedIn[2]}` ||
-            `https://linkedin.com${splitLinkedIn[1]}` ||
-            `${splitLinkedIn[0]}`
+            splitLinkedIn.length > 1
+              ? `https://www.linkedIn.com/${splitLinkedIn[1]}`
+              : `https://www.linkedin.com/${userData.linkedIn}`
           }
           target="_blank"
           rel="noopener noreferrer"

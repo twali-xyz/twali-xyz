@@ -58,7 +58,10 @@ const EditProfileModal = (props) => {
   }, [props.isOpen]);
 
   async function updateExperiences() {
-    setErrors(validate(values));
+    if (Object.entries(errors).length) {
+      console.log(Object.entries(errors).length);
+      return;
+    }
     const address = await connect(); // first address in the array
 
     if (address) {
@@ -150,6 +153,7 @@ const EditProfileModal = (props) => {
   };
   const handleChange = (evt) => {
     evt.persist();
+    setErrors(validate({ ...values, [evt.target.name]: evt.target.value }));
     const value = evt.target.value;
     setValues({
       ...values,
