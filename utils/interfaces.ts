@@ -88,7 +88,7 @@ export interface Contract {
 }
 
 export interface ProjectProposal {
-  expertUserName: string;
+  expertUserWallet: string;
   proposalDetails: string;
   applicationStatus: string;
   rejectionText?: string;

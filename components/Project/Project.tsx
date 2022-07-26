@@ -74,7 +74,7 @@ const Project = ({
   const handleApplicantSubmission = () => {
     if (userData && projectProposalDetails) {
       let proposal: ProjectProposal = {
-        expertUserName: userData.userName,
+        expertUserWallet: userData.userWallet,
         proposalDetails: projectProposalDetails,
         applicationStatus: "",
         rejectionText: ""
