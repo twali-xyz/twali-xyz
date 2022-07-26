@@ -47,6 +47,8 @@ const ProjectExpertise = (props) => {
 
     console.log(bountyState.contractExpertise, bountyState.contractIndustry);
   }
+
+  console.log(bountyState.contractExpertise, bountyState.contractIndustry);
   return (
     <>
       <Container
@@ -71,7 +73,7 @@ const ProjectExpertise = (props) => {
             <Img
               width={"20px"}
               height={"20px"}
-              src={"twali-assets/editicon.png"}
+              src={"/twali-assets/editicon.png"}
             />
           </Button>
           <ProjectExpertiseModal

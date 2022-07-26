@@ -7,7 +7,7 @@ import ProjectExpertise from "./ProjectExpertise";
 import ProjectDetails from "./ProjectDetails";
 import ProjectDescription from "./ProjectDescription";
 import { useBounty } from "../../context/BountyContext";
-import { Bounty, Contract } from "../../utils/interfaces";
+import { Bounty, Contract, ProjectProposal, UserData } from "../../utils/interfaces";
 import { useToken } from "../../context/TokenContext";
 
 interface ProjectProps {
@@ -17,6 +17,7 @@ interface ProjectProps {
   nextStep?: Function;
   projectData?: Contract;
   isProjectPage?: boolean;
+  userData?: UserData;
 }
 
 const Project = ({
@@ -25,11 +26,13 @@ const Project = ({
   prevStep,
   nextStep,
   projectData,
+  userData,
   isProjectPage
 }: ProjectProps) => {
   const { setBounty, ...bountyState } = useBounty();
   const { setTokenAmount, setTokenName } = useToken();
-  const [isBusy, setBusy] = useState(true);
+  const [projectProposalDetails, setProjectProposalDetails] = useState("");
+
 
   const router = useRouter();
   useEffect(() => {
@@ -37,6 +40,10 @@ const Project = ({
     console.log(projectData);
     if (projectData && projectData[0]) {
       console.log(projectData[0]);
+      if (typeof projectData[0].contract_industry === "string") { // checks if the backend returns a one value instead of array
+        projectData[0].contract_industry = [projectData[0].contract_industry];
+      }
+
       console.log('currrrr');
       setBounty({
         ...bountyState,
@@ -63,6 +70,35 @@ const Project = ({
       setTokenName(projectData[0].token_name);
     }
   }, [projectData]);
+
+  const handleApplicantSubmission = () => {
+    if (userData && projectProposalDetails) {
+      let proposal: ProjectProposal = {
+        expertUserName: userData.userName,
+        proposalDetails: projectProposalDetails,
+        applicationStatus: "",
+        rejectionText: ""
+      }
+
+      let proposalObj = {
+        proposal,
+        bountyState
+      }
+      submitProjectProposalToDB(proposalObj);
+      console.log(proposal);
+      console.log(proposalObj);
+    }
+  }
+
+  const submitProjectProposalToDB = async (proposalObj) => {
+    // post the SOW object to an S3 bucket
+    let res = await fetch("/api/projects/submitProjectProposal", {
+      method: "POST",
+      body: JSON.stringify({ proposalObj }),
+    });
+
+    return res;
+  };
 
   if (!projectData)
   return (
@@ -148,6 +184,10 @@ const Project = ({
                   alignItems="center"
                   height="343px"
                   maxLength={200}
+                  value={projectProposalDetails}
+                  onChange={((e) => {
+                    console.log(e);
+                    setProjectProposalDetails(e.target.value)})}
                   placeholder="Apply to this werk posting by writing a 200 word max submission about why you want to do this werk"
                 />
                 <HStack width={"100%"} justifyContent={"flex-end"} marginTop="1.8rem" marginLeft="6rem">
@@ -178,7 +218,7 @@ const Project = ({
                     variant={"primary"}
                     size={"lg"}
                     onClick={() => {
-                      console.log('submit')
+                      handleApplicantSubmission()
                     }}
                   >
                     <Text
