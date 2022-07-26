@@ -211,17 +211,19 @@ export function AccountSelection({
           I want to build a project
         </Text>
         <VStack pos={"relative"} top={"200px"}>
-          <Button
-            disabled={!isAccTypeSelected}
-            alignSelf="center"
-            variant={"primary"}
-            size={"lg"}
-            onClick={() => setSignIn(true)}
-            padding={"16px, 24px, 13px, 24px !important"}
-            visibility={btnActive == 2 ? "unset" : "hidden"}
-          >
-            Sign-In
-          </Button>
+          <Link href="mailto:degen@twali.xyz" isExternal>
+            <Button
+              disabled={!isAccTypeSelected}
+              alignSelf="center"
+              variant={"primary"}
+              size={"lg"}
+              // onClick={() => setSignIn(true)}
+              padding={"16px, 24px, 13px, 24px !important"}
+              visibility={btnActive == 2 ? "unset" : "hidden"}
+            >
+              Learn More
+            </Button>
+          </Link>
         </VStack>
       </VStack>
     </Flex>
