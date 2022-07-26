@@ -27,14 +27,10 @@ const whitelist = () => {
   const [loadingIDX, setLoadingIDX] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { data: accountData } = useAccount();
+  const { address } = useAccount();
 
   const { connect, connectors, pendingConnector } = useConnect();
-  const {
-    data,
-    isLoading: loadingWhitelist,
-    isError,
-  } = useWhitelist(accountData?.address);
+  const { data, isLoading: loadingWhitelist, isError } = useWhitelist(address);
   const {
     data: filteredData,
     isLoading,
@@ -83,9 +79,9 @@ const whitelist = () => {
 
       if (query) {
         await mutate("/api/admin/filterWhitelist/" + query);
-        await mutate("/api/admin/retrieveWhitelist/" + accountData?.address);
+        await mutate("/api/admin/retrieveWhitelist/" + address);
       } else {
-        await mutate("/api/admin/retrieveWhitelist/" + accountData?.address);
+        await mutate("/api/admin/retrieveWhitelist/" + address);
       }
       setLoadingWallet(null);
     };
@@ -144,7 +140,7 @@ const whitelist = () => {
     return null;
   }
 
-  if (!accountData?.address)
+  if (!address)
     return (
       <>
         <Flex
@@ -153,9 +149,7 @@ const whitelist = () => {
           justify={"center"}
           alignItems={"center"}
         >
-          {accountData?.address && (
-            <Text> `Connected to ${accountData?.address}`</Text>
-          )}
+          {address && <Text> `Connected to ${address}`</Text>}
           <VStack>
             {connectors.map((connector) => (
               <Button
@@ -177,7 +171,7 @@ const whitelist = () => {
       </>
     );
 
-  if (accountData?.address && isError) {
+  if (address && isError) {
     return (
       <>
         <Flex
@@ -193,7 +187,7 @@ const whitelist = () => {
   }
   return (
     <>
-      <HeaderNav userWallet={accountData?.address} />
+      <HeaderNav userWallet={address} />
       <Flex flexDir={"row"} pos={"absolute"} top={0} width="100%" zIndex={-1}>
         <FilterInputs
           filterParams={filterParams}
