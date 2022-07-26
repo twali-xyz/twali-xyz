@@ -211,7 +211,7 @@ export function AccountSelection({
           I want to build a project
         </Text>
         <VStack pos={"relative"} top={"200px"}>
-          <Link href="mailto:degen@twali.xyz" isExternal>
+          <Link href="https://airtable.com/shrixFXI3OXPAFJpw" isExternal>
             <Button
               disabled={!isAccTypeSelected}
               alignSelf="center"
