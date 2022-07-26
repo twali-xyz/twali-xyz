@@ -15,13 +15,13 @@ table = dynamodb.Table('Twali-core-test')
 try:
     table.put_item(
         Item={
-            "PK": "USER#0x0DF95D14A635058dd9Dc7dF51E4980b224b50Bd2",
-            "SK": "USER#0x0DF95D14A635058dd9Dc7dF51E4980b224b50Bd2",
-            "userWallet": "0x0DF95D14A635058dd9Dc7dF51E4980b224b50Bd2",
-            "userName": "nagmak",
+            "PK": "USER#0x3e1d10cf0af0386f03faa1db1b4e62a6752795d0",
+            "SK": "USER#0x3e1d10cf0af0386f03faa1db1b4e62a6752795d0",
+            "userWallet": "0x3e1d10cf0af0386f03faa1db1b4e62a6752795d0",
+            "userName": "NickGonzalezz__",
             "accType": "Expert",
             "business": "",
-            "bio": "",
+            "bio": "booiiiiiiiii this faastttt",
             "Location": "",
             "businessName": "",
             "businessType": "",
@@ -29,15 +29,15 @@ try:
             "createdAt": now,
             "currLocation": "",
             "currTitle": "Software Engineer",
-            "email": "nagma@twali.xyz",
-            "firstName": "Nagma",
-            "lastName": "Kapoor",
+            "email": "gonzaleznick5@gmail.com",
+            "firstName": "Nicholas Gonzalez",
+            "lastName": "Gonzalez",
             "functionalExpertise": "",
             "industryExpertise": "",
             "linkedIn": "",
-            "twitter": "https://twitter.com/notnagma",
+            "twitter": "https://twitter.com/nickgonzalez__",
             "uuid": useruuid,
-            "website": ""
+            "website": "https://memes.net"
         }
     )
     print("User created successfully.")
