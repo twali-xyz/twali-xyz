@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { handleWalletConnect } from "../../utils/walletUtils";
 import Link from "next/link";
 import useUser from "../../context/TwaliContext";
+import { disconnect } from "@wagmi/core";
 
 const HeaderNav = (props) => {
   const whichPage = props.whichPage;
@@ -48,7 +49,7 @@ const HeaderNav = (props) => {
         src="/twali-assets/navbar_logo.png"
       />
       <HStack>
-        {true &&
+        {false &&
           whichPage !== "whitelist" &&
           whichPage !== "steps" &&
           whichPage !== "index" && (
@@ -148,7 +149,7 @@ const HeaderNav = (props) => {
                           profile
                         </MenuItem>
                       </Link>
-                      <Link href={"/"}>
+                      {/* <Link href={"/"}>
                         <MenuItem
                           color={"fresh"}
                           fontFamily={"PP Telegraf Light"}
@@ -156,8 +157,8 @@ const HeaderNav = (props) => {
                         >
                           dashboard
                         </MenuItem>
-                      </Link>
-                      <Link href={"/"}>
+                      </Link> */}
+                      {/* <Link href={"/"}>
                         <MenuItem
                           color={"fresh"}
                           fontFamily={"PP Telegraf Light"}
@@ -165,7 +166,7 @@ const HeaderNav = (props) => {
                         >
                           account settings
                         </MenuItem>
-                      </Link>
+                      </Link> */}
                       <Referral userWallet={userWallet}>
                         <MenuItem
                           color={"fresh"}
@@ -180,6 +181,9 @@ const HeaderNav = (props) => {
                           color={"fresh"}
                           fontFamily={"PP Telegraf Light"}
                           textTransform={"capitalize"}
+                          onClick={() => {
+                            disconnect();
+                          }}
                         >
                           logout
                         </MenuItem>
