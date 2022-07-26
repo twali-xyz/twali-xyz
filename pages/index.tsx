@@ -27,11 +27,11 @@ const IndexPage = () => {
           borderTop={"none"}
           borderBottom={"2px solid #F9FFF260"}
         />
-        {/* <Link href="/login">
+        <Link href="/login">
           <Button variant={"primary"} pos={"absolute"} right={8} top={"135px"}>
             Launch app
           </Button>
-        </Link> */}
+        </Link>
         <Flex
           h="full"
           paddingX={["4%", "5%", "7%"]}
