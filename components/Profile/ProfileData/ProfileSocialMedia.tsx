@@ -9,12 +9,14 @@ export function ProfileSocialMedia({ userData, ...props }) {
 
   return (
     <HStack width={"6rem"} {...props}>
-      {userData.linkedIn && (
+      {userData.linkedIn && userData.linkedIn !== "undefined" && (
         <Link
           href={
-            `https://linkedin.com${splitLinkedIn[2]}` ||
-            `https://linkedin.com${splitLinkedIn[1]}` ||
-            `${splitLinkedIn[0]}`
+            splitLinkedIn.length > 1
+              ? `https://www.linkedin.com/${
+                  splitLinkedIn[splitLinkedIn.indexOf("linkedin.com") + 1]
+                }`
+              : `https://www.linkedin.com/in/${userData.linkedIn}`
           }
           target="_blank"
           rel="noopener noreferrer"
@@ -30,13 +32,15 @@ export function ProfileSocialMedia({ userData, ...props }) {
       {userData.twitter && (
         <Link
           href={
-            `https://twitter.com${splitTwitter[2]}` ||
-            `https://twitter.com${splitTwitter[1]}` ||
-            `${splitTwitter[0]}`
+            splitTwitter.length > 1
+              ? `https://www.twitter.com/${
+                  splitTwitter[splitTwitter.indexOf("twitter.com") + 1]
+                }`
+              : `https://www.twitter.com/in/${userData.twitter}`
           }
           target="_blank"
           rel="noopener noreferrer"
-          marginLeft={userData.linkedIn ? "16px !important" : "initial"}
+          marginLeft={userData.twitter ? "16px !important" : "initial"}
         >
           <Image
             src="twali-assets/twitterLogo.png"

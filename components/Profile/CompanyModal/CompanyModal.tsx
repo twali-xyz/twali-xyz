@@ -31,10 +31,14 @@ import { functionalExpertiseList } from "../../../utils/functionalExpertiseConst
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
 import useUser from "../../../context/TwaliContext";
 import useDebounce from "../../../utils/useDebounce";
+import useFetchUser from "../../../hooks/useFetchUser";
+import { useRouter } from "next/router";
 
 const CompanyModal = (props) => {
+  const router = useRouter();
   const finalRef = useRef();
-  const { editCompany, ...userState } = useUser();
+  const { editCompany } = useUser();
+  const { user: userState } = useFetchUser(router.query.userName);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [shouldFetch, setShouldFetch] = useState(false);
   const [logo, setlogo] = useState<any>();
@@ -126,15 +130,15 @@ const CompanyModal = (props) => {
   }
 
   async function deleteCompanyInfo(currCompany: number) {
-    if (userState.userWallet && userState.userName && companyData) {
-      userState.companyInfo.splice(currCompany, 1);
+    if (userState?.userWallet && userState?.userName && companyData) {
+      userState?.companyInfo.splice(currCompany, 1);
 
       let companyAttributes = {
-        companyData: userState.companyInfo,
-        userName: userState.userName,
+        companyData: userState?.companyInfo,
+        userName: userState?.userName,
         currCompany: props.currCompany,
       };
-      updateUserCompanyData(userState.userWallet, companyAttributes);
+      updateUserCompanyData(userState?.userWallet, companyAttributes);
       editCompany(companyAttributes.companyData);
       props.onClose();
       setlogo(false);
@@ -152,12 +156,12 @@ const CompanyModal = (props) => {
         userState.companyInfo[props.currCompany] = companyData;
 
         let companyAttributes = {
-          companyData: userState.companyInfo,
-          userName: userState.userName,
+          companyData: userState?.companyInfo,
+          userName: userState?.userName,
           currCompany: props.currCompany,
         };
         companyAttributes.companyData[props.currCompany].logo = logo;
-        updateUserCompanyData(userState.userWallet, companyAttributes);
+        updateUserCompanyData(userState?.userWallet, companyAttributes);
         editCompany(companyAttributes.companyData);
         props.onClose();
         setlogo(false);
@@ -178,7 +182,7 @@ const CompanyModal = (props) => {
       method: "PUT",
       body: JSON.stringify({ userData }),
     });
-    mutate(`/api/users/${userState.userName}`);
+    mutate(`/api/users/${userState?.userName}`);
     console.log("USER Company data UPDATED BRUH");
   };
 
@@ -239,7 +243,7 @@ const CompanyModal = (props) => {
     setIsDisabled(isDisabled);
   };
 
-  const companyModalView = (
+  const companyModalView = () => (
     <>
       <ModalContent
         backgroundColor={"n6"}
@@ -321,7 +325,7 @@ const CompanyModal = (props) => {
           border={"1px solid rgba(88, 112, 112, 1)"}
           fontFamily={"PP Telegraf"}
         >
-          <UserPermissionsRestricted to="edit" fallback={companyModalView}>
+          <UserPermissionsRestricted to="edit" fallback={companyModalView()}>
             <ModalHeader pb={0} mt={"20px"}>
               Update your work experience
             </ModalHeader>
@@ -561,14 +565,14 @@ const CompanyModal = (props) => {
                 mr={2}
                 isDisabled={isDisabled}
                 onClick={() => {
-                  userState.companyInfo.length === props.currCompany
+                  userState?.companyInfo.length === props.currCompany
                     ? props.onClose()
                     : deleteCompanyInfo(props.currCompany);
                 }}
                 variant="secondary"
                 size={"sm"}
               >
-                {userState.companyInfo.length === props.currCompany
+                {userState?.companyInfo.length === props.currCompany
                   ? "Cancel"
                   : "Delete"}
               </Button>
