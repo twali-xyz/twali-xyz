@@ -4,9 +4,9 @@ import {
   CircularProgress,
   HStack,
   Text,
+  Link,
   VStack,
 } from "@chakra-ui/react";
-import Link from "next/link";
 import React from "react";
 
 interface ApplicantCard {
@@ -19,6 +19,7 @@ interface ApplicantCard {
   userWallet: string;
   whitelistStatus: string;
   loaded: boolean;
+  referredBy: string;
 }
 
 /**
@@ -33,6 +34,7 @@ interface ApplicantCard {
  * @param {string} applied_on
  * @param {string} userWallet
  * @param {string} whitelistStatus
+ * @param {string} referredBy
  * @param {boolean} loaded
  *
  * @returns JSX ApplicantCard element
@@ -50,6 +52,7 @@ export const ApplicantCard = ({
   handleReject,
   handleApprove,
   loading,
+  referredBy,
   ...props
 }) => {
   // reject/approve based on userWallet
@@ -61,6 +64,7 @@ export const ApplicantCard = ({
     discord: discord,
     applied_on: applied_on,
     userWallet: userWallet,
+    referredBy: referredBy,
     whitelistStatus: whitelistStatus,
   };
 
@@ -100,10 +104,10 @@ export const ApplicantCard = ({
             </HStack>
             <HStack>
               <Text>linkedIn:</Text>
-              <Link href={linkedIn || ""}>
+              <Link href={linkedIn || ""} isExternal>
                 {linkedIn ? (
                   <Text _hover={{ cursor: "pointer" }} color={"aqua"}>
-                    profile
+                    link
                   </Text>
                 ) : (
                   "N/A"
@@ -111,7 +115,11 @@ export const ApplicantCard = ({
               </Link>
             </HStack>
           </VStack>
-          <VStack alignSelf={"flex-start"} alignItems={"flex-start"}>
+          <VStack
+            alignSelf={"flex-start"}
+            alignItems={"flex-start"}
+            minW={"325px"}
+          >
             <HStack>
               <Text alignSelf={"flex-start"}>Status:</Text>
 
@@ -131,7 +139,37 @@ export const ApplicantCard = ({
             </HStack>
             <HStack>
               <Text alignSelf={"flex-start"}>Wallet:</Text>
-              <Text alignSelf={"flex-start"}>{userWallet}</Text>
+              <Link
+                href={`https://etherscan.io/address/${userWallet}`}
+                isExternal
+              >
+                <Text alignSelf={"flex-start"} color={"aqua"}>
+                  {`${userWallet?.substring(0, 5)}...${userWallet?.substring(
+                    userWallet?.length - 4
+                  )}`.toLowerCase()}
+                </Text>
+              </Link>
+            </HStack>
+            <HStack>
+              {referredBy && (
+                <>
+                  {" "}
+                  <Text alignSelf={"flex-start"}>Referred by:</Text>
+                  <Link
+                    href={`https://etherscan.io/address/${referredBy}`}
+                    isExternal
+                  >
+                    <Text alignSelf={"flex-start"} color={"aqua"}>
+                      {`${referredBy?.substring(
+                        0,
+                        5
+                      )}...${referredBy?.substring(
+                        referredBy?.length - 4
+                      )}`.toLowerCase()}
+                    </Text>
+                  </Link>
+                </>
+              )}
             </HStack>
           </VStack>
         </HStack>

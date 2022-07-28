@@ -523,7 +523,9 @@ const CompanyModal = (props) => {
                     <Select
                       required
                       fontFamily={"PP Telegraf Light"}
-                      defaultValue={companyData.companyFunc}
+                      defaultValue={
+                        userState?.companyInfo[props.currCompany]?.companyFunc
+                      }
                       errorBorderColor="red.300"
                       placeholder="Select functional expertise"
                       name="companyFunc"
@@ -546,7 +548,10 @@ const CompanyModal = (props) => {
                     <Select
                       required
                       fontFamily={"PP Telegraf Light"}
-                      defaultValue={companyData.companyIndustry}
+                      defaultValue={
+                        userState?.companyInfo[props.currCompany]
+                          ?.companyIndustry
+                      }
                       errorBorderColor="red.300"
                       placeholder="Select industry expertise"
                       name="companyIndustry"
