@@ -200,57 +200,64 @@ export const WhitelistForm = ({
                       >
                         {question["name"] === "email"
                           ? "Valid email is required"
-                          : question["name"] + " is required"}
+                          : question["name"] + "is required"}
                       </FormErrorMessage>
                     </FormControl>
                   );
                 })}{" "}
               </VStack>
             ) : (
-              questions[step]["questions"].map((question, idx) => {
-                return (
-                  <FormControl
-                    key={idx}
-                    display={"flex"}
-                    flexDir={"column"}
-                    height={"196px"}
-                    isInvalid={formError && !userWhitelistObj[question.name]}
-                  >
-                    <FormLabel mt={16} mb={6}>
-                      {question["question"]}
-                    </FormLabel>
-                    <Input
-                      name={question["name"]}
-                      value={userWhitelistObj[question["name"]] || ""}
-                      onChange={handleChange}
-                      float={"left"}
-                      alignSelf={"flex-start"}
-                      borderColor={"zing"}
-                      borderRadius={0}
-                      borderTop={"white"}
-                      borderRight={"white"}
-                      borderLeft={"white"}
-                      _hover={{
-                        borderColor: "zing",
-                      }}
-                      textAlign={"start"}
-                      padding={0}
-                      px={"4px !important"}
-                      placeholder={question["placeholder"]}
-                      width={step === 2 ? "55%" : "85%"}
-                      transitionProperty={"width"}
-                      transitionDuration={".75s"}
-                    />
-                    <FormErrorMessage
-                      fontSize="xs"
-                      color="red.500"
-                      fontWeight="400"
+              <VStack width={"100%"} maxH={"350px"}>
+                {questions[step]["questions"].map((question, idx) => {
+                  return (
+                    <FormControl
+                      key={idx}
+                      display={"flex"}
+                      flexDir={"column"}
+                      height={"196px"}
+                      isInvalid={formError && !userWhitelistObj[question.name]}
                     >
-                      {question["name"]} is required
-                    </FormErrorMessage>
-                  </FormControl>
-                );
-              })
+                      <FormLabel mt={16} mb={6}>
+                        {question["question"]}
+                      </FormLabel>
+                      <Input
+                        name={question["name"]}
+                        value={userWhitelistObj[question["name"]] || ""}
+                        onChange={handleChange}
+                        float={"left"}
+                        alignSelf={"flex-start"}
+                        borderColor={"zing"}
+                        borderRadius={0}
+                        borderTop={"white"}
+                        borderRight={"white"}
+                        borderLeft={"white"}
+                        _hover={{
+                          borderColor: "zing",
+                        }}
+                        textAlign={"start"}
+                        padding={0}
+                        px={"4px !important"}
+                        placeholder={question["placeholder"]}
+                        width={step === 2 ? "55%" : "85%"}
+                        transitionProperty={"width"}
+                        transitionDuration={".75s"}
+                      />
+                      <FormErrorMessage
+                        pos={"absolute"}
+                        bottom={"-16px"}
+                        fontSize="xs"
+                        color="red.500"
+                        fontWeight="400"
+                      >
+                        {question["name"] === "linkedIn" ||
+                        question["name"] === "twitter"
+                          ? "At least one social URL is required"
+                          : question["name"] + "is required"}
+                      </FormErrorMessage>
+                    </FormControl>
+                  );
+                })}
+              </VStack>
             )}
 
             <HStack
@@ -268,7 +275,9 @@ export const WhitelistForm = ({
                 bgColor={"zing"}
                 color={"inverse"}
                 marginLeft={"0px "}
-                onClick={() => (formError || isSubmitted ? null : handleStep())}
+                onClick={() =>
+                  !validateInputs() || isSubmitted ? null : handleStep()
+                }
               >
                 {step < 2 ? (
                   "ok"
