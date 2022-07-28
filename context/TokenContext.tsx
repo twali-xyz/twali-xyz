@@ -27,7 +27,6 @@ const TokenContext = ({ children }) => {
     const [token, setToken] = useState('Token');
     const [tokenIcon, setTokenIcon] = useState('');
     const [tokenID, setTokenID] = useState('');
-    console.log('context token:', token);
 
 
     useEffect(() => {
