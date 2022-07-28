@@ -9,6 +9,16 @@ import whitelistReducer, { initialState } from "../../context/WhitelistReducer";
 import { pageDisconnectedFallback } from "../../utils/walletUtils";
 import { useWhitelistStatus } from "../../hooks/useWhitelistStatus";
 
+interface userWhitelistObj {
+  firstName: string;
+  lastName: string;
+  email: string;
+  discord: string;
+  linkedIn: string;
+  twitter: string;
+  referredBy: string;
+}
+
 const whitelist = () => {
   const toast = useToast();
   const router = useRouter();
@@ -16,12 +26,13 @@ const whitelist = () => {
   const [step, setStep] = useState(0);
   const [formError, setFormError] = useState(false);
   const [emailError, setEmailError] = useState(false);
-  const [userWhitelistObj, setUserWhitelistObj] = useState({
+  const [userWhitelistObj, setUserWhitelistObj] = useState<userWhitelistObj>({
     firstName: "",
     lastName: "",
     email: "",
     discord: "",
     linkedIn: "",
+    twitter: "",
     referredBy: "",
   });
 
@@ -108,6 +119,11 @@ const whitelist = () => {
           placeholder: "https://www.linkedin.com/in/twalixyz/",
           question: "3. What's your linkedIn?",
         },
+        {
+          name: "twitter",
+          placeholder: "https://www.twitter.com/twalixyz",
+          question: "4. What's your twitter?",
+        },
       ],
     },
     {
@@ -144,7 +160,7 @@ const whitelist = () => {
         {
           name: "discord",
           placeholder: "XYZ#1234",
-          question: "4. What's your discord?",
+          question: "5. What's your discord?",
         },
       ],
     },
@@ -234,7 +250,11 @@ const whitelist = () => {
       setEmailError(true);
       return false;
     }
-    if (userWhitelistObj.linkedIn === "" && step === 1) {
+    if (
+      userWhitelistObj.linkedIn === "" &&
+      userWhitelistObj.twitter === "" &&
+      step === 1
+    ) {
       setFormError(true);
       return false;
     }
