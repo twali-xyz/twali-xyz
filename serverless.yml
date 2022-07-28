@@ -1,4 +1,4 @@
-twali-xyz-staging:
+twali-xyz-production:
   component: "@sls-next/serverless-component@3.7.0-alpha.11"
   inputs:
     roleArn: "arn:aws:iam::517934542124:role/deploy-dev"
