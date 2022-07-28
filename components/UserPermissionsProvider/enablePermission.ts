@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import PermissionContext from "./UserPermissionsContext";
 import { Permission } from "../../utils/PermissionTypes";
 

@@ -1,4 +1,6 @@
 export interface UserData {
+  PK: string,
+  SK: string,
   userName: string;
   userWallet: string;
   accType: string;
@@ -14,6 +16,8 @@ export interface UserData {
   businessLocation: string;
   currTitle: string;
   currLocation?: string;
+  referredBy?: string;
+  referredUsers?: string[],
   functionalExpertise?: string[];
   industryExpertise?: string[];
   companyInfo?: CompanyInfo[];
@@ -33,5 +37,17 @@ export interface CompanyInfo {
   companyIndustry: string;
   companyDescription: string;
   logo: any;
-  currentStatus: Number;
+  currentStatus: number;
+}
+
+export interface WhitelistInfo {
+    firstName: "";
+    lastName: "";
+    email: "";
+    discord: "";
+    linkedIn: "";
+    referredBy: "";
+    applied_on: null;
+    userWallet: "";
+    status: "";
 }

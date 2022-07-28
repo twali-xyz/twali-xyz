@@ -27,13 +27,7 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
         boxShadow={"8px 16px 24px 0px #062B2A8F"}
       >
         <Box p="4">
-          <Box
-            mt="1"
-            fontWeight="semibold"
-            as="h4"
-            lineHeight="tight"
-            isTruncated
-          >
+          <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight">
             <FormControl p={2} pb={0} id="current-company-title" isRequired>
               <FormLabel
                 marginBottom={1}
@@ -103,7 +97,7 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
             <MultiSelect
               name={"functionalExpertise"}
               formLabel={"What's your superpower? (select max 3)"}
-              handleChange={handleChange}
+              onChange={handleChange}
               defaultValues={[]}
               options={functionalExpertiseList}
               maxSelections={3}
@@ -112,7 +106,7 @@ export const professionalProfileStep = ({ handleChange, values, errors }) => {
             <MultiSelect
               name={"industryExpertise"}
               formLabel={"Industry expertise (select max 3)"}
-              handleChange={handleChange}
+              onChange={handleChange}
               defaultValues={[]}
               options={industryExpertiseList}
               maxSelections={3}

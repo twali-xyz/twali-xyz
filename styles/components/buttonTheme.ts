@@ -69,11 +69,25 @@ export const ButtonStyle: ComponentStyleConfig ={
             color: "subtle",
             cursor: "not-allowed"
         },
+    },
+    dropdown: {
+        bg:"n6",
+        borderRadius:"none",
+        height:"48px",
+        border:"1px solid #587070",
+        fontFamily:"PP Telegraf Light",
+        fontSize:"16px !important",
+        textTransform:"capitalize",
+        fontWeight:"300",
+        color:"subtle",
+        _hover: {
+            borderColor: "zing"
+        }
         
   },
-      // 4. We can override existing variants
-      // solid: (props) => ({
-      //   bg: props.colorMode === "dark" ? "red.300" : "red.500",
-      // }),
+    //   4. We can override existing variants
+    //   solid: (props) => ({
+    //     bg: props.colorMode === "dark" ? "red.300" : "red.500",
+    //   }),
     },
   };

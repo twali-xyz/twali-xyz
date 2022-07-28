@@ -20,10 +20,13 @@ import { connect } from "../../../utils/walletUtils";
 import { listOfCountries } from "../../../utils/profileUtils";
 import useUser from "../../../context/TwaliContext";
 import { UserData } from "../../../utils/interfaces";
+import useFetchUser from "../../../hooks/useFetchUser";
+import { mutate } from "swr";
 
 const EditProfileModal = (props) => {
   const finalRef = useRef();
-  const { editProfile, ...userState } = useUser();
+  const { editProfile } = useUser();
+  const { user: userState } = useFetchUser(props.userName);
   const [values, setValues] = useState<UserData>();
   const [errors, setErrors] = useState({
     firstName: null,
@@ -55,7 +58,10 @@ const EditProfileModal = (props) => {
   }, [props.isOpen]);
 
   async function updateExperiences() {
-    setErrors(validate(values));
+    if (Object.entries(errors).length) {
+      console.log(Object.entries(errors).length);
+      return;
+    }
     const address = await connect(); // first address in the array
 
     if (address) {
@@ -98,6 +104,7 @@ const EditProfileModal = (props) => {
       body: JSON.stringify({ userData }),
     });
     console.log("USER profile UPDATED BRUH");
+    mutate("/api/users/" + userState.userName);
   };
 
   const validate = (values) => {
@@ -146,6 +153,7 @@ const EditProfileModal = (props) => {
   };
   const handleChange = (evt) => {
     evt.persist();
+    setErrors(validate({ ...values, [evt.target.name]: evt.target.value }));
     const value = evt.target.value;
     setValues({
       ...values,

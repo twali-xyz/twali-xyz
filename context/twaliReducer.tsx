@@ -1,4 +1,6 @@
 export const initialState = {
+  PK: "",
+  SK: "",
   userName: "",
   userWallet: "",
   accType: "",
@@ -14,6 +16,8 @@ export const initialState = {
   businessLocation: "",
   currTitle: "",
   currLocation: "",
+  referredBy: "",
+  referredUsers: [],
   functionalExpertise: [""],
   industryExpertise: [""],
   companyInfo: [],

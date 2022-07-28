@@ -1,16 +1,65 @@
 import "../styles/global.css";
 import "../styles/datePicker.css";
+import "../styles/dateRangePicker.css";
 import { AppProps } from "next/app";
 import * as React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { fab } from "@fortawesome/free-brands-svg-icons";
-import { fas } from "@fortawesome/free-solid-svg-icons";
 
 import { UserProvider } from "../context/TwaliContext";
+import TokenContext from "../context/TokenContext";
 import { twaliTheme } from "../styles/twaliTheme";
+import {
+  WagmiConfig,
+  createClient,
+  defaultChains,
+  configureChains,
+} from "wagmi";
 
-library.add(fab, fas);
+import { alchemyProvider } from "wagmi/providers/alchemy";
+import { publicProvider } from "wagmi/providers/public";
+
+import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
+import { InjectedConnector } from "wagmi/connectors/injected";
+import { MetaMaskConnector } from "wagmi/connectors/metaMask";
+import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+
+const alchemyId = process.env.ALCHEMY_ID;
+
+// Configure chains & providers with the Alchemy provider.
+// Two popular providers are Alchemy (alchemy.com) and Infura (infura.io)
+const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
+  alchemyProvider({ alchemyId }),
+  publicProvider(),
+]);
+
+// Set up client
+const client = createClient({
+  autoConnect: false,
+  connectors: [
+    new MetaMaskConnector({ chains }),
+    new CoinbaseWalletConnector({
+      chains,
+      options: {
+        appName: "wagmi",
+      },
+    }),
+    new WalletConnectConnector({
+      chains,
+      options: {
+        qrcode: true,
+      },
+    }),
+    new InjectedConnector({
+      chains,
+      options: {
+        name: "Injected",
+        shimDisconnect: true,
+      },
+    }),
+  ],
+  provider,
+  webSocketProvider,
+});
 
 function App({ Component, pageProps }: AppProps) {
   return (
@@ -33,9 +82,13 @@ function App({ Component, pageProps }: AppProps) {
     // }}
     // />
     <UserProvider>
-      <ChakraProvider theme={twaliTheme}>
-        <Component {...pageProps} />
-      </ChakraProvider>
+      <WagmiConfig client={client}>
+        <ChakraProvider theme={twaliTheme}>
+          <TokenContext>
+            <Component {...pageProps} />
+          </TokenContext>
+        </ChakraProvider>
+      </WagmiConfig>
     </UserProvider>
     // </>
   );

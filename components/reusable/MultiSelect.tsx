@@ -9,15 +9,15 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 
-export function MultiSelect({
+export const MultiSelect = ({
   formLabel,
   name,
-  handleChange,
+  onChange,
   options,
   defaultValues,
   maxSelections,
   ...props
-}) {
+}) => {
   // maxDisplayIndex tracks the index of the last element in the array that contains data
   const [maxDisplayIndex, setMaxDisplayIndex] = useState(0);
   const [count, setCount] = useState(
@@ -49,7 +49,7 @@ export function MultiSelect({
           <Selector
             key={`${i}--selector`}
             splitLabel={splitLabel}
-            handleChange={handleChange}
+            onChange={onChange}
             options={options}
             idx={i}
             defaultValue={defaultValues?.length ? defaultValues[i - 1] : null}
@@ -118,9 +118,9 @@ export function MultiSelect({
       ) : null}
     </FormControl>
   );
-}
+};
 
-function Selector({ splitLabel, handleChange, options, idx, defaultValue }) {
+function Selector({ splitLabel, onChange, options, idx, defaultValue }) {
   const [color, setColor] = useState("subtle");
   return (
     <Select
@@ -129,7 +129,7 @@ function Selector({ splitLabel, handleChange, options, idx, defaultValue }) {
       placeholder={`Select ${splitLabel[0]} ${splitLabel[1]}`}
       name={`${splitLabel[0]}${splitLabel[1] + idx}`}
       onChange={(e) => {
-        handleChange(e);
+        onChange(e);
         if (e.target.value) {
           setColor("fresh");
         } else {

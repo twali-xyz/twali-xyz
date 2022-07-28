@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import {
   Button,
-  Input,
   Modal,
   ModalOverlay,
   ModalHeader,
@@ -18,12 +17,15 @@ import { setEventArray } from "../../../utils/setEventArray";
 import useUser from "../../../context/TwaliContext";
 import { UserData } from "../../../utils/interfaces";
 import { MultiSelect } from "../../reusable/MultiSelect";
+import { mutate } from "swr";
+import useFetchUser from "../../../hooks/useFetchUser";
 
 const EditExpertiseModal = (props) => {
   const finalRef = useRef();
 
-  const { editExpertise, ...userState } = useUser();
+  const { editExpertise } = useUser();
 
+  const { user: userState } = useFetchUser(props.userName);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [values, setValues] = useState<UserData>();
 
@@ -33,14 +35,13 @@ const EditExpertiseModal = (props) => {
   });
 
   useEffect(() => {
-    if (!props.isOpen) return;
     setValues({
       ...userState,
       functionalExpertise: userState.functionalExpertise,
       industryExpertise: userState.industryExpertise,
       editExpertise,
     });
-  }, [props.isOpen]);
+  }, []);
 
   async function updateExperiences() {
     setErrors(validate(values));
@@ -86,6 +87,7 @@ const EditExpertiseModal = (props) => {
       body: JSON.stringify({ userData }),
     });
     console.log("USER expertise UPDATED BRUH");
+    mutate("/api/users/" + userState.userName);
   };
 
   const validate = (values) => {
@@ -131,7 +133,7 @@ const EditExpertiseModal = (props) => {
               <MultiSelect
                 name={"functionalExpertise"}
                 formLabel={"Superpowers"}
-                handleChange={handleChange}
+                onChange={handleChange}
                 options={functionalExpertiseList}
                 maxSelections={3}
                 defaultValues={values?.functionalExpertise || []}
@@ -140,7 +142,7 @@ const EditExpertiseModal = (props) => {
               <MultiSelect
                 name={"industryExpertise"}
                 formLabel={"Industry expertise"}
-                handleChange={handleChange}
+                onChange={handleChange}
                 defaultValues={values?.industryExpertise || []}
                 options={industryExpertiseList}
                 maxSelections={3}

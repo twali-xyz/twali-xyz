@@ -23,7 +23,7 @@ import {
   Img,
   Textarea,
 } from "@chakra-ui/react";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import DatePicker from "react-date-picker/dist/entry.nostyle";
 import { connect } from "../../../utils/walletUtils";
 import UserPermissionsRestricted from "../../UserPermissionsProvider/UserPermissionsRestricted";
@@ -31,10 +31,14 @@ import { functionalExpertiseList } from "../../../utils/functionalExpertiseConst
 import { industryExpertiseList } from "../../../utils/industryExpertiseConstants";
 import useUser from "../../../context/TwaliContext";
 import useDebounce from "../../../utils/useDebounce";
+import useFetchUser from "../../../hooks/useFetchUser";
+import { useRouter } from "next/router";
 
 const CompanyModal = (props) => {
+  const router = useRouter();
   const finalRef = useRef();
-  const { editCompany, ...userState } = useUser();
+  const { editCompany } = useUser();
+  const { user: userState } = useFetchUser(router.query.userName);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [shouldFetch, setShouldFetch] = useState(false);
   const [logo, setlogo] = useState<any>();
@@ -46,12 +50,13 @@ const CompanyModal = (props) => {
     companyEnd: "",
     companyFunc: "",
     companyIndustry: "",
+    currCompany: props.currCompany,
     logo: false,
   };
   const [compStart, setCompStart] = useState(undefined);
   const [compEnd, setCompEnd] = useState(undefined);
   const [companyData, setCompanyData] = useState<any>();
-  const [currentStatus, setCurrentStatus] = useState(0);
+  const [currentStatus, setCurrentStatus] = useState<number>(0);
   useEffect(() => {
     if (!props.isOpen) {
       setlogo(false);
@@ -70,7 +75,7 @@ const CompanyModal = (props) => {
       setCompStart(userState?.companyInfo[props.currCompany]?.companyStart);
       setCompEnd(userState?.companyInfo[props.currCompany]?.companyEnd);
       setCurrentStatus(
-        Number(userState?.companyInfo[props.currCompany]?.currentStatus) || 0
+        userState?.companyInfo[props.currCompany]?.currentStatus
       );
     }
   }, [props.isOpen]);
@@ -124,22 +129,39 @@ const CompanyModal = (props) => {
     );
   }
 
+  async function deleteCompanyInfo(currCompany: number) {
+    if (userState?.userWallet && userState?.userName && companyData) {
+      userState?.companyInfo.splice(currCompany, 1);
+
+      let companyAttributes = {
+        companyData: userState?.companyInfo,
+        userName: userState?.userName,
+        currCompany: props.currCompany,
+      };
+      updateUserCompanyData(userState?.userWallet, companyAttributes);
+      editCompany(companyAttributes.companyData);
+      props.onClose();
+      setlogo(false);
+      setCompanyData(emptyCompanyInfo);
+      setShouldFetch(false);
+      setIsSubmitted(false);
+    }
+  }
+
   async function updateCompanyInfo() {
     const address = await connect(); // first address in the array
-
     if (address) {
       setIsSubmitted(true);
-
       if (userState.userWallet && userState.userName && companyData) {
         userState.companyInfo[props.currCompany] = companyData;
 
         let companyAttributes = {
-          companyData: userState.companyInfo,
-          userName: userState.userName,
+          companyData: userState?.companyInfo,
+          userName: userState?.userName,
           currCompany: props.currCompany,
         };
         companyAttributes.companyData[props.currCompany].logo = logo;
-        updateUserCompanyData(userState.userWallet, companyAttributes);
+        updateUserCompanyData(userState?.userWallet, companyAttributes);
         editCompany(companyAttributes.companyData);
         props.onClose();
         setlogo(false);
@@ -148,6 +170,8 @@ const CompanyModal = (props) => {
         setIsSubmitted(false);
       } else {
         console.log("No profile, pls create one...");
+        setShouldFetch(false);
+        setIsSubmitted(false);
       }
     }
   }
@@ -158,6 +182,7 @@ const CompanyModal = (props) => {
       method: "PUT",
       body: JSON.stringify({ userData }),
     });
+    mutate(`/api/users/${userState?.userName}`);
     console.log("USER Company data UPDATED BRUH");
   };
 
@@ -218,7 +243,7 @@ const CompanyModal = (props) => {
     setIsDisabled(isDisabled);
   };
 
-  const companyModalView = (
+  const companyModalView = () => (
     <>
       <ModalContent
         backgroundColor={"n6"}
@@ -300,7 +325,7 @@ const CompanyModal = (props) => {
           border={"1px solid rgba(88, 112, 112, 1)"}
           fontFamily={"PP Telegraf"}
         >
-          <UserPermissionsRestricted to="edit" fallback={companyModalView}>
+          <UserPermissionsRestricted to="edit" fallback={companyModalView()}>
             <ModalHeader pb={0} mt={"20px"}>
               Update your work experience
             </ModalHeader>
@@ -313,6 +338,7 @@ const CompanyModal = (props) => {
                       <>
                         <CompanyInfoData
                           companyName={companyData.companyName}
+                          currCompany={props.currCompany}
                           isDisabled={setDisabled}
                           logo={logo}
                           setlogo={setlogo}
@@ -329,7 +355,10 @@ const CompanyModal = (props) => {
                       </Box>
                     ) : companyData.companyName ? (
                       <>
-                        <LogoFallBack companyName={companyData.companyName} />
+                        <LogoFallBack
+                          companyName={companyData.companyName}
+                          currCompany={props.currCompany}
+                        />
                       </>
                     ) : null}
                     <FormLabel
@@ -466,18 +495,23 @@ const CompanyModal = (props) => {
                       lineHeight={"24px"}
                       fontWeight={"400"}
                       fontFamily={"PP Telegraf"}
-                      mt={2}
                     >
                       I currently work here
                     </FormLabel>
                     <TwaliSlider
                       setCurrentStatus={setCurrentStatus}
                       currentStatus={currentStatus}
-                      defaultValue={companyData.currentStatus || 0}
-                      marks={["No", "Yes"]}
+                      defaultValue={
+                        userState?.companyInfo[props.currCompany]?.currentStatus
+                      }
+                      marks={[
+                        { mark: "No", value: 0 },
+                        { mark: "yes", value: 1 },
+                      ]}
+                      variant={"binary"}
                     />
                   </FormControl>
-                  <FormControl p={2} id="company-func">
+                  <FormControl mt={3} p={2} id="company-func">
                     <FormLabel
                       fontSize={"16px"}
                       lineHeight={"24px"}
@@ -489,7 +523,9 @@ const CompanyModal = (props) => {
                     <Select
                       required
                       fontFamily={"PP Telegraf Light"}
-                      defaultValue={companyData.companyFunc}
+                      defaultValue={
+                        userState?.companyInfo[props.currCompany]?.companyFunc
+                      }
                       errorBorderColor="red.300"
                       placeholder="Select functional expertise"
                       name="companyFunc"
@@ -512,7 +548,10 @@ const CompanyModal = (props) => {
                     <Select
                       required
                       fontFamily={"PP Telegraf Light"}
-                      defaultValue={companyData.companyIndustry}
+                      defaultValue={
+                        userState?.companyInfo[props.currCompany]
+                          ?.companyIndustry
+                      }
                       errorBorderColor="red.300"
                       placeholder="Select industry expertise"
                       name="companyIndustry"
@@ -528,7 +567,22 @@ const CompanyModal = (props) => {
             </ModalBody>
             <ModalFooter>
               <Button
+                mr={2}
                 isDisabled={isDisabled}
+                onClick={() => {
+                  userState?.companyInfo.length === props.currCompany
+                    ? props.onClose()
+                    : deleteCompanyInfo(props.currCompany);
+                }}
+                variant="secondary"
+                size={"sm"}
+              >
+                {userState?.companyInfo.length === props.currCompany
+                  ? "Cancel"
+                  : "Delete"}
+              </Button>
+              <Button
+                isDisabled={companyData?.companyName === "" || isDisabled}
                 onClick={() => {
                   updateCompanyInfo();
                 }}
@@ -597,7 +651,10 @@ function CompanyInfoData(props) {
         <>
           {props.companyName !== "" && (
             <>
-              <LogoFallBack companyName={props.companyName} />
+              <LogoFallBack
+                companyName={props.companyName}
+                currCompany={props.currCompany}
+              />
             </>
           )}
         </>
@@ -615,7 +672,11 @@ function LogoFallBack(props) {
           h={"1.75rem"}
           justifyContent={"center"}
           alignItems={"center"}
-          bgGradient="linear-gradient(to right, #d1913c, #ffd194)"
+          background={
+            props.currCompany < 5
+              ? `gradient${props.currCompany + 1}`
+              : "gradient2"
+          }
           borderRadius={"50%"}
         >
           <Text

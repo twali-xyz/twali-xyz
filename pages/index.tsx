@@ -9,7 +9,7 @@ import {
   Container,
 } from "@chakra-ui/react";
 import handAnimation from "../animations/twali-hand-2.json";
-import LottieAnimation from "../components/reusable/LottieAnimation";
+import { LottieAnimation } from "../components/reusable/LottieAnimation";
 import bodyAnimation from "../animations/twali-lottie-desktop.json";
 import ScrollingHeader from "../components/Landing/ScrollingHeader";
 
@@ -27,6 +27,11 @@ const IndexPage = () => {
           borderTop={"none"}
           borderBottom={"2px solid #F9FFF260"}
         />
+        <Link href="/login">
+          <Button variant={"primary"} pos={"absolute"} right={8} top={"135px"}>
+            Launch app
+          </Button>
+        </Link>
         <Flex
           h="full"
           paddingX={["4%", "5%", "7%"]}

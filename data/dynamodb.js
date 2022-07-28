@@ -8,25 +8,18 @@ const getDynamoDBClient = () => {
     ? "us-east-1"
     : "us-east-2";
 
-  // Only needed with local development.
-    AWS.config.update({
-      // accessKeyId: "xxxx",
-      // secretAccessKey: "xxxx",
-      region: "us-east-1",
-      // endpoint: "http://localhost:8000",
-    });
-
-
   const options = {
     convertEmptyValues: true,
-    region: dynamoDBRegion,
+    region: "us-east-1",
   };
 
-  const client = process.env.LOCAL_DYNAMO_DB_ENDPOINT
-    ? new AWS.DynamoDB.DocumentClient()
-    : // ...options,
-      // process.env.LOCAL_DYNAMO_DB_ENDPOINT
-      new AWS.DynamoDB.DocumentClient(options);
+  const client = !process.env.LOCAL_DYNAMO_DB_ENDPOINT
+    ? new AWS.DynamoDB.DocumentClient({
+        region: "us-east-1",
+        // Only needed with local development.
+        // endpoint: "http://localhost:8000",
+      })
+    : new AWS.DynamoDB.DocumentClient(options);
 
   return client;
 };
@@ -43,7 +36,8 @@ module.exports = {
       .get({
         TableName,
         Key: {
-          userWallet: userWallet,
+          PK: `USER#${userWallet}`,
+          SK: `USER#${userWallet}`,
         },
         ProjectionExpression: "UserNonce",
       })
@@ -85,6 +79,8 @@ module.exports = {
       .put({
         TableName,
         Item: {
+          PK: `USER#${userWallet}`,
+          SK: `USER#${userWallet}`,
           userName: userName,
           userWallet: userWallet,
           accType: accType,
@@ -128,7 +124,7 @@ module.exports = {
     const dbUser = await getDynamoDBClient()
       .query({
         TableName,
-        IndexName: "wallet_name_index",
+        IndexName: "userNameIndex",
         // ProjectionExpression: "userName",
         KeyConditionExpression: "userName = :userName",
         ExpressionAttributeValues: {
@@ -149,14 +145,15 @@ module.exports = {
    * @returns Returns a user as and object.
    **/
   getUserByWallet: async (userWallet) => {
-    console.log(userWallet);
     const dbUser = await getDynamoDBClient()
       .query({
         TableName,
         // ProjectionExpression: "userWallet",
-        KeyConditionExpression: "userWallet = :userWallet",
+
+        KeyConditionExpression: "PK = :PK and SK = :SK",
         ExpressionAttributeValues: {
-          ":userWallet": userWallet,
+          ":PK": `USER#${userWallet}`,
+          ":SK": `USER#${userWallet}`,
         },
       })
       .promise()
@@ -181,8 +178,8 @@ module.exports = {
       .update({
         TableName,
         Key: {
-          userWallet: userWallet,
-          userName: userName,
+          PK: `USER#${userWallet}`,
+          SK: `USER#${userWallet}`,
         },
         UpdateExpression:
           "SET functionalExpertise = :functionalExpertise, industryExpertise = :industryExpertise",
@@ -222,8 +219,8 @@ module.exports = {
       .update({
         TableName,
         Key: {
-          userWallet: userWallet,
-          userName: userName,
+          PK: `USER#${userWallet}`,
+          SK: `USER#${userWallet}`,
         },
         UpdateExpression:
           "SET firstName = :firstName, lastName = :lastName, currTitle = :currTitle, currLocation = :currLocation, bio = :bio, linkedIn = :linkedIn, twitter = :twitter, email = :email",
@@ -261,8 +258,8 @@ module.exports = {
       const params = {
         TableName,
         Key: {
-          userWallet: userWallet,
-          userName: userName,
+          PK: `USER#${userWallet}`,
+          SK: `USER#${userWallet}`,
         },
         UpdateExpression: "SET companyInfo = :updatedData",
         ExpressionAttributeValues: {
@@ -280,8 +277,8 @@ module.exports = {
       .update({
         TableName: params.TableName,
         Key: {
-          userWallet: userWallet,
-          userName: userName,
+          PK: `USER#${userWallet}`,
+          SK: `USER#${userWallet}`,
         },
         UpdateExpression: params.UpdateExpression,
         ExpressionAttributeValues: params.ExpressionAttributeValues,
@@ -311,25 +308,350 @@ module.exports = {
    * @dev Can implement a value check in the near future.
    * @returns Returns a boolean value
    */
-     userNameIsValid: async (userName) => {
-        const dbUser = await getDynamoDBClient()
-          .query({
-            TableName,
-            IndexName: "wallet_name_index",
-            // ProjectionExpression: "userName",
-            KeyConditionExpression: "userName = :userName",
-            ExpressionAttributeValues: {
-              ":userName": userName,
-            },
-          })
-          .promise()
-          .then((data) => data.Items[0])
-          .catch(console.error);
-        
-          if (dbUser && dbUser.userName !== undefined && dbUser.userName !== null) {
-            return true;
+  userNameIsValid: async (userName) => {
+    const dbUser = await getDynamoDBClient()
+      .query({
+        TableName,
+        IndexName: "userNameIndex",
+        // ProjectionExpression: "userName",
+        KeyConditionExpression: "userName = :userName",
+        ExpressionAttributeValues: {
+          ":userName": userName,
+        },
+      })
+      .promise()
+      .then((data) => data.Items[0])
+      .catch(console.error);
+
+    if (dbUser && dbUser.userName !== undefined && dbUser.userName !== null) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  /**
+   * @desc Takes in a query and filters contracts for the marketplace
+   * @dev
+   * @returns returns json object containing contracts
+   */
+  filterMarketplace: async (query) => {
+    // Create the DynamoDB Client with the region you want
+    const dynamoDbClient = getDynamoDBClient();
+
+    // Create the input for scan call
+    const scanInput = createScanInput(query);
+
+    // Call DynamoDB's scan API
+    const output = executeScan(dynamoDbClient, scanInput).then((output) => {
+      console.info("Scan API call has been executed.");
+      return output;
+    });
+
+    function createScanInput(query) {
+      // marketplace starts filterExpression with Status = Open
+      let FilterExpression = "#Status = :status";
+
+      let ExpressionAttributeValues = {
+        ":status": "live",
+      };
+      let ExpressionAttributeNames = {
+        "#Status": "contract_status",
+      };
+
+      Object.entries(query).forEach(([filterType, filter], idx) => {
+        if (filterType === "pid") return;
+        // queryPortions always come after the status so they begin with " And"
+        let queryPortion = " And";
+
+        // contains(#b3890, :b3890)
+        const arrayFilterString = `${queryPortion} (contains(#${filterType}, ${
+          typeof filter === "string"
+            ? `:${filterType}`
+            : filter
+                .map((item, itemID) => {
+                  return `:${filterType}${itemID}`;
+                })
+                .join(`) Or contains(#${filterType}, `)
+        }))`;
+        // for each filter type, create a portion of the query, add it to the filter expression,
+        // and add key/value to ExpressionAttributeNames
+        switch (filterType) {
+          case "industry":
+            queryPortion = arrayFilterString;
+            FilterExpression = FilterExpression + queryPortion;
+            ExpressionAttributeNames[`#${filterType}`] = "contract_industry";
+            break;
+
+          case "expertise":
+            queryPortion = arrayFilterString;
+            FilterExpression = FilterExpression + queryPortion;
+            ExpressionAttributeNames[`#${filterType}`] = "contract_expertise";
+            break;
+
+          case "duration":
+            queryPortion = `${queryPortion} #${filterType} BETWEEN :${filterType}0 AND :${filterType}1`;
+            FilterExpression = FilterExpression + queryPortion;
+            ExpressionAttributeNames[`#${filterType}`] = "contract_duration";
+            break;
+
+          case "budget":
+            queryPortion = `${queryPortion} #${filterType} BETWEEN :${filterType}0 AND :${filterType}1`;
+            FilterExpression = FilterExpression + queryPortion;
+            ExpressionAttributeNames[`#${filterType}`] = "converted_amount";
+            break;
+
+          case "startDate":
+            queryPortion = `${queryPortion} #${filterType} > :${filterType}`;
+            FilterExpression = FilterExpression + queryPortion;
+            ExpressionAttributeNames[`#${filterType}`] = "contract_start_date";
+            break;
+
+          default:
+            break;
+        }
+        // set ExpressionAttributeValues
+        if (typeof filter === "string") {
+          if (filterType === "startDate") {
+            ExpressionAttributeValues[`:${filterType}`] =
+              Date.parse(filter) / 1000;
           } else {
-            return false;
+            ExpressionAttributeValues[`:${filterType}`] = filter;
           }
-    },
+        } else {
+          filter.forEach((filterAttribute, idx) => {
+            if (filterType === "budget") {
+              ExpressionAttributeValues[`:${filterType}${idx}`] =
+                Number(filterAttribute);
+            } else if (filterType === "duration") {
+              ExpressionAttributeValues[`:${filterType}${idx}`] =
+                Number(filterAttribute) * 86400;
+            } else {
+              ExpressionAttributeValues[`:${filterType}${idx}`] =
+                filterAttribute;
+            }
+          });
+        }
+      });
+
+      return {
+        TableName,
+        ConsistentRead: false,
+        FilterExpression: FilterExpression,
+        ExpressionAttributeValues: ExpressionAttributeValues,
+        ExpressionAttributeNames: ExpressionAttributeNames,
+      };
+    }
+
+    async function executeScan(dynamoDbClient, scanInput) {
+      // Call DynamoDB's scan API
+      try {
+        const scanOutput = await dynamoDbClient.scan(scanInput).promise();
+        console.info("Scan successful.");
+        return scanOutput;
+        // Handle scanOutput
+      } catch (err) {
+        handleScanError(err);
+      }
+    }
+
+    // Handles errors during Scan execution. Use recommendations in error messages below to
+    // add error handling specific to your application use-case.
+    function handleScanError(err) {
+      if (!err) {
+        console.error("Encountered error object was empty");
+        return;
+      }
+      if (!err.code) {
+        console.error(
+          `An exception occurred, investigate and configure retry strategy. Error: ${JSON.stringify(
+            err
+          )}`
+        );
+        return;
+      }
+      // here are no API specific errors to handle for Scan, common DynamoDB API errors are handled below
+      handleCommonErrors(err);
+    }
+
+    function handleCommonErrors(err) {
+      switch (err.code) {
+        case "InternalServerError":
+          console.error(
+            `Internal Server Error, generally safe to retry with exponential back-off. Error: ${err.message}`
+          );
+          return;
+        case "ProvisionedThroughputExceededException":
+          console.error(
+            `Request rate is too high. If you're using a custom retry strategy make sure to retry with exponential back-off. ` +
+              `Otherwise consider reducing frequency of requests or increasing provisioned capacity for your table or secondary index. Error: ${err.message}`
+          );
+          return;
+        case "ResourceNotFoundException":
+          console.error(
+            `One of the tables was not found, verify table exists before retrying. Error: ${err.message}`
+          );
+          return;
+        case "ServiceUnavailable":
+          console.error(
+            `Had trouble reaching DynamoDB. generally safe to retry with exponential back-off. Error: ${err.message}`
+          );
+          return;
+        case "ThrottlingException":
+          console.error(
+            `Request denied due to throttling, generally safe to retry with exponential back-off. Error: ${err.message}`
+          );
+          return;
+        case "UnrecognizedClientException":
+          console.error(
+            `The request signature is incorrect most likely due to an invalid AWS access key ID or secret key, fix before retrying. ` +
+              `Error: ${err.message}`
+          );
+          return;
+        case "ValidationException":
+          console.error(
+            `The input fails to satisfy the constraints specified by DynamoDB, ` +
+              `fix input before retrying. Error: ${err.message}`
+          );
+          return;
+        case "RequestLimitExceeded":
+          console.error(
+            `Throughput exceeds the current throughput limit for your account, ` +
+              `increase account level throughput before retrying. Error: ${err.message}`
+          );
+          return;
+        default:
+          console.error(
+            `An exception occurred, investigate and configure retry strategy. Error: ${err.message}`
+          );
+          return;
+      }
+    }
+    return output;
+  },
+
+  /**
+   * @desc Find a user's whitelist status by primary key `userWallet`.
+   * @param {string} - function takes in a input string of the users userWallet
+   * @dev This can be altered to included any additional attributes with 'ProjectionExpression'.
+   * @example See docs to add additonal attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property
+   * @returns Returns object containing user data and whitelist status.
+   **/
+  getWhitelistStatus: async (userWallet) => {
+    const dbUser = await getDynamoDBClient()
+      .query({
+        TableName: "whitelist_table",
+        // ProjectionExpression: "userWallet",
+
+        KeyConditionExpression: "userWallet = :PK",
+        ExpressionAttributeValues: {
+          ":PK": `${userWallet.toLowerCase()}`,
+        },
+      })
+      .promise()
+      .then((data) => {
+        return data.Items[0];
+      })
+      .catch(console.error);
+    return dbUser;
+  },
+
+  getWhitelist: async (userId) => {
+    const authorizedUsers = [
+      "0x7a7f59056dc2d5116e07e0fbaf6a71bd77b326af",
+      "0xf34ddaf8984e115700aef4efdc5cb1bec69785d3",
+      "0x500e9cc58ffe0d590dfabcc62ea1bf737f243890",
+      "0xeba4797ce6d748fc67fa8448610934a0413cc3b9",
+      "0xe88b8f6d7396b8935e3d73d3f0cd6e1d655ea4ae",
+    ];
+    if (!authorizedUsers.includes(String(userId)?.toLowerCase())) {
+      return;
+    }
+    const whitelist = await getDynamoDBClient()
+      .scan({
+        TableName: "whitelist_table",
+      })
+      .promise()
+      .then((data) => data.Items)
+      .catch(console.error);
+    return whitelist;
+  },
+
+  /**
+   * @desc Gives admin ability to edit user whitelist status
+   * @param {string} userWallet - wallet address for user being updated
+   * @param {string} newStatus - the new status for the user whitelist
+   * @dev New items can be added to a user and does need to be predefined in the table. Any values in 'UpdateExpression' need to be defined will values within 'ExpressionAttributeValues'.
+   * @example See docs about editing existing attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#update-property
+   */
+  updateWhitelistStatus: async (userWallet, newStatus) => {
+    if (!userWallet) return;
+    await getDynamoDBClient()
+      .update({
+        TableName: "whitelist_table",
+        Key: {
+          userWallet: `${userWallet}`,
+        },
+        UpdateExpression: "SET whitelistStatus = :newStatus",
+        // ConditionExpression: "",
+        ExpressionAttributeValues: {
+          ":newStatus": newStatus,
+        },
+      })
+      .promise()
+      .catch((err) => {console.log("ERROR: ", err)});
+  },
+
+  addReferralData: async (userWallet, referredBy) => {
+    if (!userWallet || !referredBy) return;
+      let wallet = referredBy.toLowerCase()
+      await getDynamoDBClient()
+      .update({
+        TableName,
+        Key: {
+          PK: `USER#${wallet}`,
+          SK: `USER#${wallet}`,
+
+        },
+        UpdateExpression: "SET referredUsers = list_append(:referredUsers, referredUsers)",
+        ExpressionAttributeValues: {":referredUsers": [userWallet]},
+      })
+      .promise()
+      .catch(console.error);
+  },
+
+  /**
+   * @desc Allows admin to add user to the whitelist table
+   * @param {object} - function takes an object as a the parameter with primary and attributes. Object will need to the primary key and any attributes that are being updated or created.
+   */
+  addWhitelistUser: async (payload) => {
+    await getDynamoDBClient()
+      .put({
+        TableName: "whitelist_table",
+        Item: {
+          ...payload,
+        },
+      })
+      .promise();
+  },
+
+  fitlerWhitelist: async (whitelistStatus) => {
+    const whitelist = await getDynamoDBClient()
+      .scan({
+        TableName: "whitelist_table",
+        FilterExpression: "#whitelistStatus = :whitelistStatus",
+        ExpressionAttributeValues: {
+          ":whitelistStatus": whitelistStatus,
+        },
+        ExpressionAttributeNames: {
+          "#whitelistStatus": "whitelistStatus",
+        },
+      })
+      .promise()
+      .then((data) => {
+        return data.Items;
+      })
+      .catch(console.error);
+    return whitelist;
+  },
 };

@@ -1,6 +1,7 @@
 module.exports = {
   env: {
-    TABLE_NAME: "dev_staging_user_profile_test",
+    TABLE_NAME: "production_twali_core",
+    WHITELIST_TABLE: "whitelist_table",
   },
   webpack: (config) => {
     if (!process.env.BUNDLE_AWS_SDK) {

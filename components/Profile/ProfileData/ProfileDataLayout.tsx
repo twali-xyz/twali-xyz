@@ -4,17 +4,19 @@ import React from "react";
 import { ProfileSocialMedia } from "./ProfileSocialMedia";
 import useUser from "../../../context/TwaliContext";
 import ProfileExpertise from "./ProfileExpertise";
+import useFetchUser from "../../../hooks/useFetchUser";
 export function ProfileDataLayout({
   onExpModalOpen,
   isExpModalOpen,
   onExpModalClose,
+  userName,
 }) {
   const {
     isOpen: isProfileModalOpen,
-    onOpen: onProfileModalOpen,
+    onToggle: onProfileModalOpen,
     onClose: onProfileModalClose,
   } = useDisclosure();
-  const { ...userState } = useUser();
+  const { user: userState } = useFetchUser(userName);
   return (
     <VStack
       marginTop={0}

@@ -17,6 +17,9 @@ export const ChipStyle: ComponentStyleConfig = {
       display: "flex",
       alignItems: "center",
       p:"1px",
+      height: "34px",
+      width:"fit-content"
+
     },
     inner: {
         fontSize:"14px",
@@ -44,12 +47,87 @@ export const ChipStyle: ComponentStyleConfig = {
         background:"unset"
       }
     },
-    "button": {
+    "bounty": {
       outer: {
-        background:"gradient1"
+        background: "transparent",
+        height: "28px",
+        padding: "0px !important",
+        border: "1px solid #14C791BF",
+        borderRadius: "4px"
       },
       inner: {
-        background:"unset"
+        background: "#58F27A1A",
+        borderRadius: "4px",
+        lineHeight:"22px",
+        height: "inherit",
+        alignSelf: "center",
+        fontSize: "12px",
+        justifyContent: "center"
+      }
+    },
+    "status": {
+      outer: {
+        background:"transparent",
+        padding: "0px !important",
+        height: "28px",
+        border:"1px solid #3290D3",
+        borderRadius: "4px"
+      },
+      inner: {
+        background: "#3290D31A",
+        borderRadius: "4px",
+        height: "inherit",
+        lineHeight:"22px",
+        alignSelf: "center",
+        fontSize: "12px",
+        justifyContent: "center"
+
+      }
+    },
+    "created": {
+      outer: {
+        background: "transparent",
+        height: "28px",
+        padding: "0px !important",
+        border: "1px solid #98B2B2",
+        borderRadius: "4px"
+      },
+      inner: {
+        background: "#98B2B226",
+        borderRadius: "4px",
+        height: "inherit",
+        lineHeight:"22px",
+        alignSelf: "center",
+        fontSize: "12px",
+        justifyContent: "center"
+
+      }
+    },
+    "type": {
+      outer: {
+        background: "transparent",
+        height: "28px",
+        padding: "0px !important",
+        border: "1px solid #A096E8",
+        borderRadius: "4px"
+      },
+      inner: {
+        background: "#A096E81A",
+        borderRadius: "4px",
+        height: "inherit",
+        lineHeight:"22px",
+        alignSelf: "center",
+        fontSize: "12px",
+        justifyContent: "center"
+      }
+    },
+    "button": {
+      outer: {
+        background:"gradient1",
+      },
+      inner: {
+        background:"unset",
+        paddingRight: "4px"
       },
       button: {
         display: "flex",
@@ -62,7 +140,7 @@ export const ChipStyle: ComponentStyleConfig = {
         background: "rgba(10, 19, 19, 0.2)",
         borderRadius: "50%"
       }
-    }
+    },
   },
   // The default `size` or `variant` values
   defaultProps: {},
