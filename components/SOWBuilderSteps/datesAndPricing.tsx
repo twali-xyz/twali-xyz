@@ -30,6 +30,7 @@ export const datesAndPricing = ({
 }) => {
   const { setBounty, ...bountyState } = useBounty();
   const { tokenName, tokenAmount } = useToken();
+
   return (
     <form style={{ alignSelf: "start" }}>
       <HStack spacing={24}>
@@ -75,7 +76,6 @@ export const datesAndPricing = ({
                   >
                     Start Date - End Date
                     {/* <Text>End Date</Text> */}
-
                   </FormLabel>
                   <DateRangePicker
                     //   onChange={setStartDate}
@@ -166,7 +166,13 @@ export const datesAndPricing = ({
                   </FormErrorMessage>
                 </FormControl>
                 <FormControl
-                  isInvalid={formError && (!tokenName || !tokenAmount)}
+                  isInvalid={
+                    formError &&
+                    (!tokenName ||
+                      !tokenAmount ||
+                      tokenAmount == 0 ||
+                      tokenName === "Token")
+                  }
                 >
                   <WerkTokenDropdown />
                   <FormErrorMessage
@@ -210,8 +216,10 @@ export const datesAndPricing = ({
                   formError &&
                   (!bountyState.contractExpertise ||
                     !bountyState.contractIndustry ||
-                    bountyState.contractExpertise[0] === "" ||
-                    bountyState.contractIndustry[0] === "")
+                    !bountyState.contractExpertise.filter((item) => item !== "")
+                      .length ||
+                    !bountyState.contractIndustry.filter((item) => item !== "")
+                      .length)
                 }
               >
                 <MultiSelect

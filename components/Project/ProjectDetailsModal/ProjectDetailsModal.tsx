@@ -30,7 +30,6 @@ const ProjectDetailsModal = (props) => {
   const { editBountyDetails, setBounty, ...bountyState } = useBounty();
   const { tokenName, tokenAmount, calculatedUSD } = useToken();
   const [isSubmitted, setIsSubmitted] = useState(false);
-
   const [formError, setFormError] = useState(false);
   const [dueDate, setDueDate] = useState(
     new Date(bountyState?.applicationDeadline * 1000)
@@ -132,7 +131,6 @@ const ProjectDetailsModal = (props) => {
                 fontFamily={"PP Telegraf"}
               >
                 Application Deadline
-                Due Date
               </FormLabel>
               <DatePicker
                 calendarIcon={
