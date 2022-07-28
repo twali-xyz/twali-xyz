@@ -24,17 +24,23 @@ const ProjectPage = () => {
   const { setData, ...userState } = useUser();
   const [userData, setUserData] = useState<UserData>();
   console.log(currentProject)
+  const { data, error } = useSWR(
+    `/api/marketplace/contracts?contract_id=${currentProject.projectID}`,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: false,
+      // revalidateOnReconnect: false, // personally, I didn't need this one
+  }
+
+  );
 
   let projectData;
-  if (currentProject?.projectID) {
-    const { data, error } = useSWR(
-      `/api/marketplace/contracts?contract_id=${currentProject.projectID}`,
-      fetcher
-    );
-    console.log('fetch resylt', data);
-    console.log(error);
-    projectData = data;
-  }
+    if (currentProject && currentProject.projectID) {
+      console.log('fetch resylt', data);
+      console.log(error);
+      projectData = data;
+    }
 
   useEffect(() => {
     userData && setData(JSON.parse(JSON.stringify(userData)));
@@ -71,7 +77,7 @@ const ProjectPage = () => {
           key={`${currentProject.projectID}--project-page-usr-permission`}
           fallback={pageDisconnectedFallback()}
         >
-            <Project projectData={projectData} isProjectPage={true}/>
+        <Project projectData={projectData} userData={userData} isProjectPage={true}/>
         </UserPermissionsRestricted>
         </VStack>
       </Flex>

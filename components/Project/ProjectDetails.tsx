@@ -79,7 +79,7 @@ const ProjectDetails = (props) => {
                 <Img
                   width={"20px"}
                   height={"20px"}
-                  src={"twali-assets/editicon.png"}
+                  src={"/twali-assets/editicon.png"}
                 />
               </Button>
               <ProjectDetailsModal

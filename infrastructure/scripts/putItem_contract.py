@@ -1,6 +1,9 @@
 import boto3
 import time
+import uuid
 
+# uuid package to create a user unqiue ID
+contractuuid = str(uuid.uuid4())
 # getting current time to create a unix timestamp for DB when it was created.
 now = int(time.time())
 dynamodb = boto3.resource('dynamodb', endpoint_url='http://localhost:8000')
@@ -15,7 +18,7 @@ try:
             "PK": "USER#0x4949567a31ee75242ebcba5b101f4e65d0e6fe92",
             "SK": "#CONTRACT#0001",
             # TBD - if we create ID on creation with different format, (e.g., 0-100 or random).
-            "contract_id": "0021",
+            "contract_id": contractuuid,
             # using the now from line 5 to get current time in unix format.
             "contract_created_on": now,
             "contractOwner_userName": "NickGonzalez4__",

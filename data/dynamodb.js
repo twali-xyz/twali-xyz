@@ -417,6 +417,12 @@ module.exports = {
             ExpressionAttributeNames[`#${filterType}`] = "contract_start_date";
             break;
 
+          case "contract_id":
+            queryPortion = arrayFilterString;
+            FilterExpression = FilterExpression + queryPortion;
+            ExpressionAttributeNames[`#${filterType}`] = "contract_id";
+            break;
+
           default:
             break;
         }
@@ -605,4 +611,65 @@ module.exports = {
       })
       .catch(console.error);
   },
+    /**
+   * @desc Accesses a contract in the table and appends to the list of project proposals for that contract
+   * @param {submitProjectProposal} - function receives a proposal obj (from the expert that is applying) and a bounty obj (created by the contract owner)
+   * @dev This can be altered to included any additional attributes with 'ProjectionExpression'.
+   * @example See docs to add additonal attributes -> https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property
+   **/
+     submitProjectProposal: async (proposal, bounty) => {
+      console.log('submitProjectProposal');
+      console.log(proposal);
+      console.log(bounty);
+      // await uploadContractToS3(bounty);
+      await getDynamoDBClient()
+        .update({
+          TableName,
+          Key: {
+            PK: bounty.PK,
+            SK: bounty.SK,
+          },
+          ReturnValues: 'ALL_NEW',
+          UpdateExpression:
+            "SET contract_id = :contract_id,  #contract_proposals = list_append(if_not_exists(#contract_proposals, :empty_list), :proposal)",
+          ExpressionAttributeNames: {
+            "#contract_proposals": "contract_proposals",
+          },
+          ExpressionAttributeValues: {
+            ":contract_id": bounty.contractID,
+            ":proposal": [proposal],
+            ":empty_list": []
+          },
+        })
+        .promise()
+        .then((data) => {
+          console.log(data);
+          this.getBountyProposals(proposal);
+        })
+        .catch(console.error);
+    },
+  // /**
+  //  * @desc Checks if userName does not exsit in db table by checking if a return object is returned from DB.
+  //  * @dev Can implement a value check in the near future.
+  //  * @returns Returns a boolean value
+  //  */
+  // getBountyProposals: async (proposal) => {
+  //   const dbUser = await getDynamoDBClient()
+  //     .query({
+  //       TableName,
+  //       Key: {
+  //         PK: bounty.PK,
+  //         SK: bounty.SK,
+  //       },
+  //       FilterExpression: "contract_proposals = :contract_proposals",
+  //       ExpressionAttributeValues: {
+  //         ":contract_proposals": {
+  //           "S": [proposal]
+  //         }
+  //       },
+  //     })
+  //     .promise()
+  //     .then((data) => console.log(data))
+  //     .catch(console.error);
+  // },
 };

@@ -86,3 +86,10 @@ export interface Contract {
   contract_status: string;
   attached_files: any[];
 }
+
+export interface ProjectProposal {
+  expertUserWallet: string;
+  proposalDetails: string;
+  applicationStatus: string;
+  rejectionText?: string;
+}
