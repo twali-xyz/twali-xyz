@@ -1,6 +1,6 @@
 module.exports = {
   env: {
-    TABLE_NAME: "Twali-core-test",
+    TABLE_NAME: "production_twali_core",
     WHITELIST_TABLE: "whitelist_table",
   },
   webpack: (config) => {
