@@ -6,8 +6,8 @@ export function ProfileSocialMedia({ userData, ...props }) {
   const splitLinkedIn = userData.linkedIn
     ?.toLowerCase()
     .split(/(linkedin\.com)/);
-  const twitterUserName = userData.twitter.replace('@', '')
-  
+  const twitterUserName = userData.twitter.replace("@", "");
+
   return (
     <HStack width={"6rem"} {...props}>
       {userData.linkedIn && userData.linkedIn !== "undefined" && (
@@ -34,7 +34,7 @@ export function ProfileSocialMedia({ userData, ...props }) {
         <Link
           href={
             splitTwitter.length > 1
-              ? `https://www.twitter.com${
+              ? `https://www.twitter.com/${
                   splitTwitter[splitTwitter.indexOf("twitter.com") + 1]
                 }`
               : `https://www.twitter.com/${twitterUserName}`
