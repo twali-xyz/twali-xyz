@@ -5,7 +5,6 @@ twali-xyz-staging:
     build:
       env:
         TABLE_NAME: "production_twali_core"
-        CONTRACT_BUCKET: "twali-contracts-bucket"
         WHITELIST_TABLE: "whitelist_table"
     cloudfront:
       distributionId: EHZYCKLX3TYQ4 # for Staging env only, change for local testing
