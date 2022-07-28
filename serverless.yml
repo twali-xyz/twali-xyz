@@ -7,6 +7,5 @@ twali-xyz-staging:
         TABLE_NAME: "production_twali_core"
         WHITELIST_TABLE: "whitelist_table"
     cloudfront:
-      distributionId: EHZYCKLX3TYQ4 # for Staging env only, change for local testing
-    bucketName: qdlwzqy-k2v6lc # for Staging env only, change for local testing
-
+      distributionId: E1N063HBIE24ZH
+    bucketName: twali-production 

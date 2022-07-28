@@ -27,7 +27,7 @@ const LoginPage = (props) => {
   const [loaded, setLoaded] = useState(false);
   const { ...userState } = useUser();
   const [referredBy, setReferredBy] = useState<string | string[]>();
-  console.log("ROUTER: ", router.query["referred_by"]);
+  // console.log("ROUTER: ", router.query["referred_by"]);
   useEffect(() => {
     setLoaded(!props.loaded);
     setReferredBy(router.query["referred_by"]);

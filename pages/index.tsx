@@ -241,7 +241,7 @@ const IndexPage = () => {
                   anything?
                 </Text>
               </HStack>
-              <Button
+              {/* <Button
                 width={["167px", "207px"]}
                 height={["48px", "52px"]}
                 color={"cave"}
@@ -259,14 +259,14 @@ const IndexPage = () => {
                 boxShadow={"0px 4px 4px 0px #00000040"}
               >
                 <Link
-                  href="https://airtable.com/shrjjPJnyesvqcSeB"
+                  href="/login"
                   isExternal
                   _hover={{ textDecor: "none" }}
                   _focus={{ textDecor: "none" }}
                 >
                   apply here
                 </Link>
-              </Button>
+              </Button> */}
             </Flex>
             <HStack>
               <Text
