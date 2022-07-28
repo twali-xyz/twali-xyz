@@ -15,7 +15,7 @@ let dynamodb = new AWS.DynamoDB();
  *
  * **/
 let params = {
-  TableName: "Twali-core-test",
+  TableName: "production_twali_core",
   KeySchema: [
     { AttributeName: "userWallet", KeyType: "HASH" }, // Partition Key
     { AttributeName: "userName", KeyType: "RANGE" }, // Sort Ket
@@ -49,7 +49,7 @@ let params = {
 (async function () {
   await dynamodb.createTable(params).promise();
 
-  console.log("Twali-core-test");
+  console.log("production_twali_core");
 
   // Only a replicated instance for production. Not Supported by local.
   if (!process.env.LOCAL_DYNAMO_DB_ENDPOINT) {
@@ -62,7 +62,7 @@ let params = {
     console.log("Created table in us-east-1");
 
     const createGlobalTableParams = {
-      GlobalTableName: "main_user_profiles_db",
+      GlobalTableName: "production_twali_core",
       ReplicationGroup: [
         {
           RegionName: "us-east-1",

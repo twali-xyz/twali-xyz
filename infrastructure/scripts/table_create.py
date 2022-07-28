@@ -206,7 +206,7 @@ if __name__ == '__main__':
         Table.create_table()
         Table.secondary_index()
         Table.put_item(twali_core_test_put_item)
-        Table.batch_write('infrastructure/scripts/items.json')
+        Table.batch_write('../mock-data/items.json')
         print("Table created successfully.")
     except Exception as e:
         print("Could not create table. Error:")
@@ -218,4 +218,4 @@ if __name__ == '__main__':
     # Table.create_table()
     # Table.secondary_index()
     # Table.put_item(twali_core_test_put_item)
-    # Table.batch_write('infrastructure/scripts/items.json')
+    # Table.batch_write('../mock-data/items.json')

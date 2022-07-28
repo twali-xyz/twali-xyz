@@ -13,11 +13,11 @@ const getDynamoDBClient = () => {
     region: "us-east-1",
   };
 
-  const client = process.env.LOCAL_DYNAMO_DB_ENDPOINT
+  const client = !process.env.LOCAL_DYNAMO_DB_ENDPOINT
     ? new AWS.DynamoDB.DocumentClient({
         region: "us-east-1",
         // Only needed with local development.
-        endpoint: "http://localhost:8000",
+        // endpoint: "http://localhost:8000",
       })
     : new AWS.DynamoDB.DocumentClient(options);
 

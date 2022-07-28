@@ -4,7 +4,7 @@ twali-xyz-staging:
     roleArn: "arn:aws:iam::517934542124:role/deploy-dev"
     build:
       env:
-        TABLE_NAME: "Twali-core-test"
+        TABLE_NAME: "production_twali_core"
         CONTRACT_BUCKET: "twali-contracts-bucket"
         WHITELIST_TABLE: "whitelist_table"
     cloudfront:
