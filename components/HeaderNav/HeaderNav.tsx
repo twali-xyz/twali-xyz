@@ -1,5 +1,5 @@
 import { Referral } from "./../reusable/Referral";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   CircularProgress,
@@ -14,7 +14,7 @@ import {
   MenuItem,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { handleWalletConnect } from "../../utils/walletUtils";
+import { getUserByWallet, handleWalletConnect } from "../../utils/walletUtils";
 import Link from "next/link";
 import useUser from "../../context/TwaliContext";
 import { disconnect } from "@wagmi/core";
@@ -24,12 +24,18 @@ const HeaderNav = (props) => {
   const isConnectWalletBtn = props.isConnectWalletBtn;
   const setUserData = props.setUserData;
   const userPage = props.userPage;
-  const { userName } = useUser();
-  const userWallet = props.userWallet;
+  const { userName, userWallet } = useUser();
+
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const router = useRouter();
 
+  useEffect(() => {
+    props.userWallet &&
+      getUserByWallet(props.userWallet).then((user) => {
+        user && props.setUserData(user);
+      });
+  }, [userWallet]);
   return (
     <Flex
       height={"80px"}

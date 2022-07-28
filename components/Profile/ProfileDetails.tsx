@@ -22,6 +22,7 @@ import HeaderNav from "../HeaderNav/HeaderNav";
 import { UserData } from "../../utils/interfaces";
 import { GetCompany } from "./GetCompany";
 import LoadingPage from "../../pages/loading";
+import useUser from "../../context/TwaliContext";
 
 const ProfileDetails = ({ user }) => {
   // Fallback for getStaticPaths, when fallback: true
@@ -31,6 +32,7 @@ const ProfileDetails = ({ user }) => {
   if (router.isFallback) {
     return <LoadingPage loaded={router.isFallback} />;
   }
+  const { setData } = useUser();
   const [userData, setUserData] = useState<UserData>();
 
   const {
@@ -270,6 +272,7 @@ const ProfileDetails = ({ user }) => {
               userPage={userData}
               userWallet={loggedInUserAddress}
               userName={userData.userName}
+              setUserData={setData}
             />
             <Container
               maxW="100%"
