@@ -64,3 +64,25 @@ export interface Bounty {
   editBountyDescription: Function,
   editBountyURI: Function
 }
+
+export interface Contract {
+  PK: string;
+  SK: string;
+  application_deadline: number;
+  contractOwner_userName: string;
+  contract_created_on: number;
+  contract_id: string;
+  contract_description: string;
+  contract_duration: string;
+  contract_start_date: number;
+  contract_end_date: number;
+  contract_title: string;
+  token_name: string;
+  contract_amount: number;
+  converted_amount: number;
+  applicationDeadline: number;
+  contract_industry: string[];
+  contract_expertise: string[];
+  contract_status: string;
+  attached_files: any[];
+}

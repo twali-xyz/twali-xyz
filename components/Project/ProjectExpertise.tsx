@@ -29,7 +29,6 @@ const ProjectExpertise = (props) => {
     // uuid: "",
   });
   const { setBounty, ...bountyState } = useBounty();
-
   function handleRemove(e, type) {
     if (!e.target.value) return;
     // without this an error is thrown when the svg within the chip button is clicked

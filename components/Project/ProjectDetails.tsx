@@ -34,6 +34,9 @@ const ProjectDetails = (props) => {
     onClose: onProjectDetailsModalClose,
   } = useDisclosure();
 
+  console.log('Project Expertise: ', bountyState.contractAmount);
+
+
   return (
     <>
       <Container

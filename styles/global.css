@@ -82,12 +82,30 @@ select:focus {
   background-color: rgb(88, 112, 112);
 }
 
+.twali-horizontal-line-page {
+  width: 300px;
+  margin: 0;
+  padding: 0;
+  padding-right: 100%;
+  background-color: rgb(88, 112, 112);
+}
+
+
 .twali-vertical-line {
   border-left-width: 1px;
   border-left-style: solid;
   border-left-color: rgb(88, 112, 112);
   height: 830px;
   position: relative;
+}
+
+.twali-vertical-line-page {
+  border-left-width: 1px;
+  border-left-style: solid;
+  border-left-color: rgb(88, 112, 112);
+  height: 1207px;
+  position: absolute;
+  margin-left: 570px;
 }
 
 @font-face {

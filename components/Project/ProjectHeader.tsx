@@ -119,7 +119,6 @@ const ProjectHeader = (props) => {
           {/* </UserPermissionsRestricted> */}
         </HStack>
       </Container>
-      <hr className="twali-horizontal-line" />
     </>
   );
 };
